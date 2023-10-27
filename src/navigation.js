@@ -6,12 +6,12 @@ export const headerData = {
       text: 'Über uns',
       links: [
         {
-          text: 'SaaS',
+          text: 'Leitbild',
           href: getPermalink('/homes/saas'),
         },
         {
-          text: 'Startup',
-          href: getPermalink('/homes/startup'),
+          text: 'Unser Pfarrer',
+          href: getPermalink('#pfarrer'),
         },
         {
           text: 'Mobile App',
