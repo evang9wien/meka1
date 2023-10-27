@@ -72,6 +72,13 @@
 			"status": 308
 		},
 		{
+			"src": "/\\/termine/",
+			"headers": {
+				"Location": "/termine"
+			},
+			"status": 308
+		},
+		{
 			"src": "/\\/about/",
 			"headers": {
 				"Location": "/about"

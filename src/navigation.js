@@ -87,28 +87,8 @@ export const headerData = {
     },
     {
       text: 'Termine',
-      links: [
-        {
-          text: 'Blog List',
-          href: getBlogPermalink(),
-        },
-        {
-          text: 'Article',
-          href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
-        },
-        {
-          text: 'Article (with MDX)',
-          href: getPermalink('markdown-elements-demo-post', 'post'),
-        },
-        {
-          text: 'Category Page',
-          href: getPermalink('tutorials', 'category'),
-        },
-        {
-          text: 'Kirche',
-          href: getPermalink('astro', 'tag'),
-        },
-      ],
+      href: getPermalink('/termine'),
+      
     },
     {
       text: 'Kirche',
