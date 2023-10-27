@@ -1,8 +1,8 @@
 ---
 publishDate: 2023-08-12T00:00:00Z
-title: Get started with AstroWind to create a website using Astro and Tailwind CSS
-excerpt: Start your web journey with AstroWind – harness Astro and Tailwind CSS for a stunning site. Explore our guide now.
-image: https://images.unsplash.com/photo-1516996087931-5ae405802f9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+title: Workshop für dich LUV beginnt wieder
+excerpt: Für spirituell Interessierte starten wir wieder unseren LUV-Workshop am Dienstag, 17. Oktober 2023 um 19 Uhr geht es los. Weitere Informationen dazu hier auf unserer Website.
+image: https://www.evang9.wien/root/wp-content/uploads/2023/01/LUV-Cover_200.jpg
 category: Tutorials
 tags:
   - astro

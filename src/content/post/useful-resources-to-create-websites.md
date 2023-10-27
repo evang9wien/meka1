@@ -1,8 +1,8 @@
 ---
 publishDate: 2023-08-09T00:00:00Z
-title: Useful tools and resources to create a professional website
-excerpt: Explore vital tools and resources for a sleek website. From design to functionality, our guide elevates your online presence.
-image: https://images.unsplash.com/photo-1637144113536-9c6e917be447?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80
+title: Wir feiern Gottesdienst an jedem Sonntag
+excerpt: Herzlich willkommen zu unseren Gottesdiensten. Wir feiern jeden Sonntag um 10 Uhr mit guter Musik, inspirierenden Predigten und in netter Gesellschaft. Am 1. und 3. Sonntag feiern wir miteinander Abendmahl. Im Anschluss gibt es bei Kaffee, Tee und Kuchen die Möglichkeit, miteinander ins Gespräch zu kommen.
+image: https://www.evang9.wien/root/wp-content/uploads/2021/02/GoDi.png
 tags:
   - front-end
   - tools

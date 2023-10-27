@@ -1,8 +1,8 @@
 ---
 publishDate: 2023-08-06T00:00:00Z
-title: How to customize AstroWind template to suit your branding
-excerpt: Personalize AstroWind template for your brand. Our guide unlocks seamless customization steps for a unique online presence.
-image: https://images.unsplash.com/photo-1546984575-757f4f7c13cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+title: Gemeindevertretungs-wahlen 2023
+excerpt: In den Pfarrgemeinden unserer Evangelischen Kirche werden im Herbst 2023 die Gemeindevertretungen unsere „Gemeinde-Parlamente“ neu gewählt. Natürlich auch bei uns in der Messiaskapelle! Alle Informationen zur Wahl finden Sie laufend aktualisiert hier.
+image: https://www.evang9.wien/root/wp-content/uploads/2023/08/Wahl_200.png
 tags:
   - astro
   - tailwind css
