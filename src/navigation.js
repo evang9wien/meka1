@@ -3,7 +3,7 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: 'Homes',
+      text: 'Über uns',
       links: [
         {
           text: 'SaaS',
@@ -24,7 +24,7 @@ export const headerData = {
       ],
     },
     {
-      text: 'Pages',
+      text: 'Gottesdienste',
       links: [
         {
           text: 'Features (Anchor Link)',
@@ -57,7 +57,7 @@ export const headerData = {
       ],
     },
     {
-      text: 'Landing',
+      text: 'Angebote',
       links: [
         {
           text: 'Lead Generation',
@@ -86,7 +86,7 @@ export const headerData = {
       ],
     },
     {
-      text: 'Blog',
+      text: 'Termine',
       links: [
         {
           text: 'Blog List',
@@ -105,17 +105,17 @@ export const headerData = {
           href: getPermalink('tutorials', 'category'),
         },
         {
-          text: 'Tag Page',
+          text: 'Kirche',
           href: getPermalink('astro', 'tag'),
         },
       ],
     },
     {
-      text: 'Widgets',
+      text: 'Kirche',
       href: '#',
     },
   ],
-  actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
+  actions: [{ text: 'Mitarbeiten', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
 };
 
 export const footerData = {
