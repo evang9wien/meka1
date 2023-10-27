@@ -2,6 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
 import Note from '~/components/widgets/Note.astro';
 import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
@@ -13,7 +14,7 @@ import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
+  title: 'Willkommen in der Evangelischen Pfarrgemeinde am Alsergrund',
   ignoreTitleTemplate: true,
 };
 ---
@@ -48,6 +49,38 @@ const metadata = {
     information={`Hier gibt es regelmässig Aktuelles.
                 `}
   />
+
+  <!-- Hero2 Widget ******************* -->
+
+  <Hero2
+    
+    actions={[
+      { variant: 'primary', target: '_blank', text: 'Get Started', href: 'https://github.com/onwidget/astrowind' },
+      { text: 'Learn more', href: '#features' },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2021/11/IMG_8487-2-1365x2048.jpg',
+      alt: 'Unser Pfarrer',
+    }}
+  >
+    <Fragment slot="title">
+      Unser Pfarrer
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Stefan Fleischner-Janits ist seit 1. September 2021 Pfarrer der Messiaskapelle. 
+      Seine Aufgaben in unserer Gemeinde sind vielfältig. Er feiert mit uns Gottesdienste, tauft und beerdigt, 
+      hält Kontakt zu den Mitgliedern und Mitarbeiter:innen, steht für seelsorgerliche Gespräche zur Verfügung, 
+      bringt den Konfirmand:innen unseren Glauben näher und denkt mit Kindern über Gott und die Welt nach. 
+      Darüber hinaus unterrichtet er Evangelische Religion am BG9 in der Wasagasse.<br/>
+
+      Pfarrer Stefan Fleischner-Janits steht gerne für persönliche und vertrauliche Gespräche zur Verfügung.
+      <br/>
+      <span class="font-semibold">
+      Vereinbaren Sie gerne einen Gesprächstermin per Mail: stefan.fleischner-janits@evang.at oder per Telefon: 0699/ 188 77 791.
+    </span>   
+    </Fragment>
+  </Hero2>
 
   <!-- Note Widget ******************* -->
 

@@ -2,7 +2,7 @@
 publishDate: 2023-08-06T00:00:00Z
 title: Gemeindevertretungs-wahlen 2023
 excerpt: In den Pfarrgemeinden unserer Evangelischen Kirche werden im Herbst 2023 die Gemeindevertretungen unsere „Gemeinde-Parlamente“ neu gewählt. Natürlich auch bei uns in der Messiaskapelle! Alle Informationen zur Wahl finden Sie laufend aktualisiert hier.
-image: https://www.evang9.wien/root/wp-content/uploads/2023/08/Wahl_200.png
+image: https://www.evang9.wien/root/wp-content/uploads/2023/05/230123_a4_plakat_gemeindevertretungswahlen-1448x2048.jpg
 tags:
   - astro
   - tailwind css
@@ -13,9 +13,23 @@ metadata:
 
 ## Congue justo vulputate nascetur convallis varius orci fringilla nulla pharetr
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit, augue malesuada natoque in ad erat aliquam facilisi, lacus rhoncus mattis nostra et a. Mauris malesuada rutrum dis libero egestas mus vulputate, fermentum ad morbi phasellus faucibus tellus leo urna, blandit ullamcorper diam imperdiet dictumst litora. Fringilla eros malesuada lobortis mi odio metus leo, blandit imperdiet augue fames aliquam ultricies tortor massa, duis magnis hendrerit id magna sociosqu. Aptent mi imperdiet id sapien suscipit ut netus turpis, lacinia ac porttitor potenti dui taciti at egestas, fermentum neque nascetur sodales tortor nunc congue.
+In den Pfarrgemeinden unserer Evangelischen Kirche werden im Herbst 2023 die Gemeindevertretungen – unsere „Gemeinde-Parlamente“ – neu gewählt. Natürlich auch bei uns in der Messiaskapelle!
 
-Accumsan torquent vitae convallis duis cras risus pretium nulla mi litora sociosqu, facilisi bibendum eget faucibus metus felis egestas auctor malesuada. Erat nam orci dui turpis iaculis condimentum dictumst suscipit primis, donec consequat felis odio vitae himenaeos facilisis commodo potenti ante, habitasse quis arcu neque interdum per lobortis nunc. Ultricies lobortis ullamcorper sagittis et sollicitudin sociis sed dignissim posuere, nisi pharetra erat varius id aenean lacinia commodo morbi primis, ornare diam proin nunc volutpat nec dui egestas.
+Unsere Wahltermine: Sonntag, 15. Oktober 2023; Sonntag, 22. Oktober 2023 sowie Sonntag, 5. November 2023 jeweils im Anschluss an unseren Gottesdienst (ca 11.15 bis 12 Uhr).
+
+Hier finden Sie den Wahlvorschlag des Presybteriums für die Gemeindevertretungswahl 2023.
+
+Die konstituierende Gemeindevertretungssitzung finden am Sonntag, 19. November 2023 um 11.30 Uhr statt (im Anschluss an den Gottesdienst).
+
+Nach Bekanntgabe des Wahlergebnisses (hier auf dieser Seite) am 5. November 2023 am Nachmittag besteht die Möglichkeit, die Wahl innerhalb von zwei Wochen anzufechten.
+
+Jede und jeder Wahlberechtigte hat die Möglichkeit der schriftlichen Anfechtung der Wahl beim Revisionssenat der Evangelischen Kirche A. und H.B.
+
+Weitere Informationen zur Wahl werden hier laufend aktualisiert und fristgerecht kommuniziert.
+
+Was uns in unserer Gemeinde auszeichnet ist die Vielfalt aller Menschen, die sich hier versammeln und ihre unterschiedlichen Perspektiven, Lebenswelten und Erfahrungen miteinbringen.  Auch ihre Meinung ist gefragt! In zahlreichen Gremien und Arbeitsgruppen können Möglichkeiten erarbeitet werden, wie unsere Gemeinde zu einem lebendigen Ort für viele werden kann. Unsere Gemeinde lebt von Ihren Blickwinkeln, die gerade sie einbringen können, damit wir als Kirche ein lebendiger Ort des Miteinanders bleiben können. Bringen Sie sich ein.
+
+Alle Informationen zur Wahl bekommen Sie hier auf der Seite unserer Kirche sowie bei Pfarrer Stefan Fleischner-Janits.
 
 ## Mauris velit laoreet vitae cursus augue
 
