@@ -14,11 +14,11 @@ export const headerData = {
           href: getPermalink('#pfarrer'),
         },
         {
-          text: 'Mobile App',
+          text: 'Das Presbyterium',
           href: getPermalink('/homes/mobile-app'),
         },
         {
-          text: 'Personal',
+          text: 'Lektor_innen',
           href: getPermalink('/homes/personal'),
         },
       ],
@@ -27,32 +27,20 @@ export const headerData = {
       text: 'Gottesdienste',
       links: [
         {
-          text: 'Features (Anchor Link)',
+          text: 'Sonntags um 10',
           href: getPermalink('/#features'),
         },
         {
-          text: 'Services',
+          text: 'Sontags um 19 Uhr: OASE',
           href: getPermalink('/services'),
         },
         {
-          text: 'Pricing',
+          text: 'Termine',
           href: getPermalink('/pricing'),
         },
         {
-          text: 'About us',
+          text: 'Zum Nachhören',
           href: getPermalink('/about'),
-        },
-        {
-          text: 'Contact',
-          href: getPermalink('/contact'),
-        },
-        {
-          text: 'Terms',
-          href: getPermalink('/terms'),
-        },
-        {
-          text: 'Privacy policy',
-          href: getPermalink('/privacy'),
         },
       ],
     },
@@ -60,27 +48,27 @@ export const headerData = {
       text: 'Angebote',
       links: [
         {
-          text: 'Lead Generation',
+          text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
           href: getPermalink('/landing/lead-generation'),
         },
         {
-          text: 'Long-form Sales',
+          text: 'Für Familien: Kirche Kunterbunt',
           href: getPermalink('/landing/sales'),
         },
         {
-          text: 'Click-Through',
+          text: 'LUV - Ein Workshop für dich',
           href: getPermalink('/landing/click-through'),
         },
         {
-          text: 'Product Details (or Services)',
+          text: 'Pfarrer to go',
           href: getPermalink('/landing/product'),
         },
         {
-          text: 'Coming Soon or Pre-Launch',
+          text: 'MEKA Classic',
           href: getPermalink('/landing/pre-launch'),
         },
         {
-          text: 'Subscription',
+          text: 'Zuversichtstraining',
           href: getPermalink('/landing/subscription'),
         },
       ],
@@ -93,6 +81,32 @@ export const headerData = {
     {
       text: 'Kirche',
       href: '#',
+      links: [
+        {
+          text: 'Taufe',
+          href: getPermalink('/#features'),
+        },
+        {
+          text: 'Konfirmation',
+          href: getPermalink('/services'),
+        },
+        {
+          text: 'Hochzeit',
+          href: getPermalink('/pricing'),
+        },
+        {
+          text: 'Eintritt',
+          href: getPermalink('/about'),
+        },
+        {
+          text: 'Gemeindewechsel',
+          href: getPermalink('/about'),
+        },
+        {
+          text: 'Todesfall',
+          href: getPermalink('/about'),
+        },
+      ],
     },
   ],
   actions: [{ text: 'Mitarbeiten', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
