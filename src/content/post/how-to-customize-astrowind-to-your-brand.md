@@ -1,7 +1,7 @@
 ---
 publishDate: 2023-08-06T00:00:00Z
 title: Gemeindevertretungs-wahlen 2023
-excerpt: In den Pfarrgemeinden unserer Evangelischen Kirche werden im Herbst 2023 die Gemeindevertretungen unsere „Gemeinde-Parlamente“ neu gewählt. Natürlich auch bei uns in der Messiaskapelle! Alle Informationen zur Wahl finden Sie laufend aktualisiert hier.
+excerpt: In den evang. Pfarrgemeinden unserer Evangelischen Kirche werden im Herbst 2023 die Gemeindevertretungen unsere „Gemeinde-Parlamente“ neu gewählt. Natürlich auch bei uns in der Messiaskapelle! Alle Informationen zur Wahl finden Sie laufend aktualisiert hier.
 image: https://www.evang9.wien/root/wp-content/uploads/2023/05/230123_a4_plakat_gemeindevertretungswahlen-1448x2048.jpg
 tags:
   - astro
