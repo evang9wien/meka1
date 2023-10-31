@@ -10,8 +10,7 @@ import icon from 'astro-icon';
 import tasks from './src/utils/tasks';
 import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 import { ANALYTICS, SITE } from './src/utils/config.ts';
-import vercel from "@astrojs/vercel/serverless";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) => ANALYTICS.vendors.googleAnalytics.id && ANALYTICS.vendors.googleAnalytics.partytown ? Array.isArray(items) ? items.map(item => item()) : [items()] : [];
 
 // https://astro.build/config
@@ -51,5 +50,4 @@ export default defineConfig({
       }
     }
   },
-  adapter: vercel()
-});
+ });
