@@ -1,7 +1,7 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
+  # Trigger the workflow every time you push to the `main` branch 
   # Using a different branch name? Replace `main` with your branch’s name
   push:
     branches: [ main ]
