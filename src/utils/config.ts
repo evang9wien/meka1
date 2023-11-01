@@ -84,7 +84,7 @@ const getSite = () => {
   const _default = {
     name: DEFAULT_SITE_NAME,
     site: 'https://eidmanna.github.io',
-    base: '/meka1',
+    base: '/',
     trailingSlash: false,
 
     googleSiteVerificationId: '',
