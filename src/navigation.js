@@ -50,10 +50,11 @@ export const headerData = {
     },
     {
       text: 'Angebote',
+      
       links: [
         {
           text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
-          href: getPermalink('/landing/lead-generation'),
+          href: getPermalink('/angebote'),
         },
         {
           text: 'Für Familien: Kirche Kunterbunt',
