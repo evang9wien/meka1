@@ -7,7 +7,7 @@ export const headerData = {
       links: [
         {
           text: 'Leitbild',
-          href: getPermalink('/homes/saas'),
+          href: getPermalink('#leitbild'),
         },
         {
           text: 'Unser Pfarrer',
@@ -15,11 +15,11 @@ export const headerData = {
         },
         {
           text: 'Das Presbyterium',
-          href: getPermalink('/presbyterium'),
+          href: getPermalink('#presbyterium'),
         },
         {
           text: 'Lektor_innen',
-          href: getPermalink('/homes/personal'),
+          href: getPermalink('#lektoren'),
         },
         {
           text: 'Bilder aus der Messiaskapelle',

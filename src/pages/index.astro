@@ -12,7 +12,7 @@ import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import MekaBilder from '~/pages/mekabilder.astro'
+import MekaBilder from '~/pages/mekabilder.astro';
 import Gallery from '~/components/widgets/Gallery.astro';
 
 const metadata = {
@@ -24,27 +24,21 @@ const metadata = {
 <Layout metadata={metadata}>
   <!-- Hero Widget ******************* -->
 
-  <Hero
-    
-    image={{ src: '~/assets/images/cropped-eingang-3.png', alt: 'Eingang Image' }}
-  >
-  
+  <Hero image={{ src: '~/assets/images/cropped-eingang-3.png', alt: 'Eingang Image' }}>
     <Fragment slot="title">
       Willkommen in der
       <span class="text-accent dark:text-white highlight">Evangelischen</span> Pfarrgemeinde am Alsergrund
-      
     </Fragment>
 
     <Fragment slot="subtitle">
-      
-        
-          Willkommen in der <span class="font-semibold">Evangelischen Messiaskapelle</span>. Schön, dass Sie unsere Website besuchen! Wir sind eine moderne, dynamische und offene Gemeinde – zumindestens arbeiten wir daran mit viel Leidenschaft. 
-      Die frohe Botschaft von der Liebe Gottes in die Welt zu tragen und zu leben, verstehen wir als unseren Auftrag.         
+      Willkommen in der <span class="font-semibold">Evangelischen Messiaskapelle</span>. Schön, dass Sie unsere Website
+      besuchen! Wir sind eine moderne, dynamische und offene Gemeinde – zumindestens arbeiten wir daran mit viel
+      Leidenschaft. Die frohe Botschaft von der Liebe Gottes in die Welt zu tragen und zu leben, verstehen wir als
+      unseren Auftrag.
     </Fragment>
-  
   </Hero>
 
-  <!-- HighlightedPosts Widget ******* -->
+  <!-- Neuigkeiten -->
 
   <BlogLatestPosts
     title="Neuigkeiten aus der Seegasse"
@@ -52,104 +46,130 @@ const metadata = {
                 `}
   />
 
-  <!-- Hero2 Widget ******************* -->
+  <!-- Leitbild -->
 
   <Hero2
+    id="leitbild"
+    actions={[]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2023/02/wiru%CC%88berunsplakat-1448x2048.png',
+      alt: 'Leitbild',
+    }}
+  >
+    <Fragment slot="title">Leitbild</Fragment>
 
-   id="pfarrer"
-    actions={[
-      { variant: 'primary', target: '_blank', text: 'Get Started', href: 'https://github.com/onwidget/astrowind' },
-      { text: 'Learn more', href: '#features' },
-    ]}
+    <Fragment slot="subtitle">
+      <span class="font-semibold">
+        Um die Messiaskapelle kennen zu lernen, wird man hinter diese Fassade schauen müssen. Und auch hinter der
+        Fassade sind es besonders die Menschen, die die Messiaskapelle ausmachen. Wir freuen uns auf Sie!
+      </span>
+      <br /><br/>
+       Wir sind eine junge, dynamische Gemeinde – im Zentrum unseres Glaubens sind wir Gott und seinem Wort in der
+      heiligen Schrift eng verbunden. Unsere äußeren Formen sind modern und zeitgemäß; im Mittelpunkt steht für uns
+      Christus, der lebendige Sohn Gottes.
+      
+      <br/>
+      
+      Wir wollen mit unserer Gemeindearbeit dazu beitragen, dass immer mehr Menschen zu souveränen und mündigen
+      Christ_innen, Bibelleser_innen werden. Dabei ist uns eine besonders große Vielfalt, sei es im Angebot, sei es in
+      den Menschen, die zu uns gehören und sei es in den Glaubensformen, die hier gelebt werden, wichtig.
+      <br />
+       Keine Vielfalt gibt es darin, wer Herr unserer Kirche ist: wir vertrauen auf das überraschende Eingreifen Gottes.
+      <br/><br/>
+      <span class="font-semibold"> Kommen Sie und erleben Sie die Messiaskapelle!</span>
+    </Fragment>
+  </Hero2>
+  <!-- Pfarrer -->
+
+  <Hero2
+    id="pfarrer"
+    actions={[]}
     image={{
       src: 'https://www.evang9.wien/root/wp-content/uploads/2021/11/IMG_8487-2-1365x2048.jpg',
       alt: 'Unser Pfarrer',
     }}
   >
-    <Fragment slot="title">
-      Unser Pfarrer
-    </Fragment>
+    <Fragment slot="title">Unser Pfarrer</Fragment>
 
     <Fragment slot="subtitle">
-      Stefan Fleischner-Janits ist seit 1. September 2021 Pfarrer der Messiaskapelle. 
-      Seine Aufgaben in unserer Gemeinde sind vielfältig. Er feiert mit uns Gottesdienste, tauft und beerdigt, 
-      hält Kontakt zu den Mitgliedern und Mitarbeiter:innen, steht für seelsorgerliche Gespräche zur Verfügung, 
-      bringt den Konfirmand:innen unseren Glauben näher und denkt mit Kindern über Gott und die Welt nach. 
-      Darüber hinaus unterrichtet er Evangelische Religion am BG9 in der Wasagasse.<br/>
+      Stefan Fleischner-Janits ist seit 1. September 2021 Pfarrer der Messiaskapelle. Seine Aufgaben in unserer Gemeinde
+      sind vielfältig. Er feiert mit uns Gottesdienste, tauft und beerdigt, hält Kontakt zu den Mitgliedern und
+      Mitarbeiter:innen, steht für seelsorgerliche Gespräche zur Verfügung, bringt den Konfirmand:innen unseren Glauben
+      näher und denkt mit Kindern über Gott und die Welt nach. Darüber hinaus unterrichtet er Evangelische Religion am
+      BG9 in der Wasagasse.<br />
 
-      Pfarrer Stefan Fleischner-Janits steht gerne für persönliche und vertrauliche Gespräche zur Verfügung.
-      <br/>
+       Pfarrer Stefan Fleischner-Janits steht gerne für persönliche und vertrauliche Gespräche zur Verfügung.
+      <br />
       <span class="font-semibold">
-      Vereinbaren Sie gerne einen Gesprächstermin per Mail: stefan.fleischner-janits@evang.at oder per Telefon: 0699/ 188 77 791.
-    </span>   
+        Vereinbaren Sie gerne einen Gesprächstermin per Mail: stefan.fleischner-janits@evang.at oder per Telefon: 0699/
+        188 77 791.
+      </span>
     </Fragment>
   </Hero2>
 
-  <MekaBilder></MekaBilder>
-  <!-- Note Widget ******************* -->
+  <!-- Presbyterium ******************* -->
   <Gallery
-  title="Das Presbyterium"
-  tagline="Leitungsgremium"
-  subtitle="Das Presbyterium besteht aus dem Pfarrer der Gemeinde und den von der Gemeindevertretung gewählten Vertreter*innen. Als Leitungsteam der Pfarrgemeinde treffen wir nicht nur wichtige Entscheidungen in Bezug auf das Leben der Messiaskapelle, als Gremium arbeiten wir vor allem zum Wohl der Gemeinde zusammen. Und dabei Vertrauen wir auf Gottes Segen und seine treue Begleitung. <br\><br\>Unsere Presbyter*innen besuchen regelmäßig den Gottesdienst und freuen sich, direkt angesprochen zu werden."
-  columns={4}
-  classes={{ subtitleClass: 'text-left' }}
-  items={[
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web4.png',
-      description: ''        
-    },
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web2.png',
-      description: ''        
-    },
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web3.png',
-      description: ''        
-    },
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2021/06/regina.png',
-      description: ''        
-    },
-    
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2021/06/PB_Hermann.png',
-      description: ''        
-    },
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web5.png',
-      description: ''        
-    },
-    
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web.png',
-      description: ''        
-    },
-    {        
-      image: '',
-      description: ''        
-    },
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2022/04/mike.png',
-      description: 'Mike Doyle'        
-    },
-    {        
-      image: 'https://www.evang9.wien/root/wp-content/uploads/2021/09/IMG_8481-2-1365x2048.jpg',
-      description: 'Stefan Fleischner-Janits – Pfarrer'        
-    },
+    id="presbyterium"
+    title="Das Presbyterium"
+    tagline="Leitungsgremium"
+    subtitle="Das Presbyterium besteht aus dem Pfarrer der Gemeinde und den von der Gemeindevertretung gewählten Vertreter*innen. Als Leitungsteam der Pfarrgemeinde treffen wir nicht nur wichtige Entscheidungen in Bezug auf das Leben der Messiaskapelle, als Gremium arbeiten wir vor allem zum Wohl der Gemeinde zusammen. Und dabei Vertrauen wir auf Gottes Segen und seine treue Begleitung. <br\><br\>Unsere Presbyter*innen besuchen regelmäßig den Gottesdienst und freuen sich, direkt angesprochen zu werden."
+    columns={4}
+    classes={{ subtitleClass: 'text-left' }}
+    items={[
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web4.png',
+        description: '',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web2.png',
+        description: '',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web3.png',
+        description: '',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2021/06/regina.png',
+        description: '',
+      },
+
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2021/06/PB_Hermann.png',
+        description: '',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web5.png',
+        description: '',
+      },
+
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web.png',
+        description: '',
+      },
+      {
+        image: '',
+        description: '',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2022/04/mike.png',
+        description: 'Mike Doyle',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2021/09/IMG_8481-2-1365x2048.jpg',
+        description: 'Stefan Fleischner-Janits – Pfarrer',
+      },
     ]}
   />
 
-
   <Features
-    
-    
+    id="Lektoren"  
     tagline="Lesepredigten"
     title="Lektor_innen"
     subtitle="Ob in Zeiten mit oder ohne Pfarrer_in versuchen wir Abwechslung und unterschiedliche Themenschwerpunkte in die Gottesdienste zu bringen. Jeder_r unserer Lektor_innen bringt seine persönlichen Erfahrungen mit Gott mit und beschäftigt sich privat und beruflich mit unterschiedlichen Dingen. So ist jede Predigt auf besondere Art von dem_der Vortragenden geprägt."
   >
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment> 
+    </Fragment>
   </Features>
 
   <!-- Content Widget **************** -->
@@ -164,18 +184,15 @@ const metadata = {
       },
       {
         title: 'In der Messiaskapelle seit',
-        description:
-          '1993',
+        description: '1993',
       },
       {
         title: 'Lektorin seit',
-        description:
-          "2003",
+        description: '2003',
       },
       {
         title: 'Schwerpunkte',
-        description:
-          'Yes you can – mit Gottes Hilfe!',
+        description: 'Yes you can – mit Gottes Hilfe!',
       },
       {
         title: 'Ein wichtiges Zitat',
@@ -203,27 +220,20 @@ const metadata = {
     items={[
       {
         title: 'Beruf',
-        description: `Meine Arbeit dreht sich um Nachhaltigkeit, Lebensmittel, Konsum, E-Mobilität und vieles mehr`,
+        description: `Pfarrer im Ruhestand`,
       },
       {
         title: 'In der Messiaskapelle seit',
-        description:
-          '1993',
+        description: '1992',
       },
-      {
-        title: 'Lektorin seit',
-        description:
-          "2003",
-      },
+
       {
         title: 'Schwerpunkte',
-        description:
-          'Yes you can – mit Gottes Hilfe!',
+        description: 'zeitgemäße Rede über das Wort Gottes',
       },
       {
         title: 'Ein wichtiges Zitat',
-        description:
-          'Jesus Christus spricht: „Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht mehr in der Finsternis umherirren, sondern wird das Licht des Lebens haben.” (Joh 8,12)',
+        description: 'Gottes Geist führt immer in die Weite, nie in die Enge',
       },
     ]}
     image={{
@@ -243,27 +253,23 @@ const metadata = {
     items={[
       {
         title: 'Beruf',
-        description: `Meine Arbeit dreht sich um Nachhaltigkeit, Lebensmittel, Konsum, E-Mobilität und vieles mehr`,
+        description: `Unternehmer`,
       },
       {
         title: 'In der Messiaskapelle seit',
-        description:
-          '1993',
+        description: '2014',
       },
       {
         title: 'Lektorin seit',
-        description:
-          "2003",
+        description: '2009',
       },
       {
         title: 'Schwerpunkte',
-        description:
-          'Yes you can – mit Gottes Hilfe!',
+        description: 'Christliches Leben im Hier und Jetzt',
       },
       {
         title: 'Ein wichtiges Zitat',
-        description:
-          'Jesus Christus spricht: „Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht mehr in der Finsternis umherirren, sondern wird das Licht des Lebens haben.” (Joh 8,12)',
+        description: 'Du stellst meine Füße auf weiten Raum (Psalm 31;9)',
       },
     ]}
     image={{
@@ -290,23 +296,19 @@ const metadata = {
       },
       {
         title: 'In der Messiaskapelle seit',
-        description:
-          '1993',
+        description: '1993',
       },
       {
         title: 'Lektorin seit',
-        description:
-          "2003",
+        description: '2003',
       },
       {
         title: 'Schwerpunkte',
-        description:
-          'Glaube, Liebe, Hoffnung, Seelsorge',
+        description: 'Glaube, Liebe, Hoffnung, Seelsorge',
       },
       {
         title: 'Ein wichtiges Zitat',
-        description:
-          '366mal "Fürchtet euch nicht!"',
+        description: '366mal "Fürchtet euch nicht!"',
       },
     ]}
     image={{
@@ -321,178 +323,5 @@ const metadata = {
     </Fragment>
   </Content>
 
-  <!-- Steps Widget ****************** -->
-
-  <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</em>',
-        description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS"
-    tagline="Components"
-    items={[
-      {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
-      },
-      {
-        title: 'Heros',
-        description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
-      },
-      {
-        title: 'Features',
-        description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
-      },
-      {
-        title: 'Content',
-        description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
-      },
-      {
-        title: 'Call-to-Action',
-        description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
-      },
-      {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
-
-  
-
-  <!-- FAQs Widget ******************* -->
-
-  <FAQs
-    title="Frequently Asked Questions"
-    subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
-    tagline="FAQs"
-    classes={{ container: 'max-w-6xl' }}
-    items={[
-      {
-        title: 'Why AstroWind?',
-        description:
-          "Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He's a demon on wheels.",
-      },
-      {
-        title: 'What do I need to start?',
-        description:
-          'Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it’s actually our duty to future generations.',
-      },
-      {
-        title: 'How to install the Astro + Tailwind CSS template?',
-        description:
-          "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows.",
-      },
-      {
-        title: "What's something that you don't understand?",
-        description:
-          "A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I didn't even know we were calling him Big Bear.",
-      },
-      {
-        title: 'What is something that you would like to try again?',
-        description:
-          "A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly don't know who you're talking to, so let me clue you in.",
-      },
-      {
-        title: 'If you could only ask one question to each person you meet, what would that question be?',
-        description:
-          "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
-      },
-    ]}
-  />
-
-  <!-- Stats Widget ****************** -->
-
-  <Stats
-    stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
-    ]}
-  />
-
-  <!-- CallToAction Widget *********** -->
-
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/onwidget/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-    ]}
-  >
-    <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
-    </Fragment>
-  </CallToAction>
+  <MekaBilder />
 </Layout>
