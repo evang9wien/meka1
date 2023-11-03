@@ -23,7 +23,7 @@ export const headerData = {
         },
         {
           text: 'Bilder aus der Messiaskapelle',
-          href: getPermalink('/homes/gallery'),
+          href: getPermalink('/mekabilder'),
         },
       ],
     },

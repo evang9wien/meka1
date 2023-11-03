@@ -1,0 +1,53 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Gallery from '~/components/widgets/Gallery.astro';
+const metadata = {
+  title: 'Gallery',
+  ignoreTitleTemplate: true,
+};
+
+---
+<Layout metadata={metadata}>
+    <Gallery
+    title="Bilder aus der Messiaskapelle"
+    tagline="Impressionen"
+    columns={4}
+    items={[
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Kircheneingang.png',
+        description: 'Herzlich willkommen!'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Ja-Altar.png',
+        description: 'Manchmal steht bei uns das JA! zum Glauben an Gott wortwörtlich in der Mitte.'
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Mitarbeiterin-malt.png',
+        description: 'Um die Kinderkirche schön zu gestalten helfen alle mit.'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/kinderkirche-kirche-mit-kindern.png',
+        description: 'Kinderkirche – Kirche MIT Kindern.'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/s-1024x682.jpg',
+        description: 'Kircheneingang'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/f.jpg',
+        description: 'Kircheneingang'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/m.jpg',
+        description: 'Kircheneingang'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/h.jpg',
+        description: 'Kircheneingang'        
+      },
+      
+      
+    ]}
+  />
+
+</Layout>
