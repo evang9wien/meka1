@@ -1,13 +1,10 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
+
 import Gallery from '~/components/widgets/Gallery.astro';
-const metadata = {
-  title: 'Gallery',
-  ignoreTitleTemplate: true,
-};
+
 
 ---
-<Layout metadata={metadata}>
+
     <Gallery
     title="Bilder aus der Messiaskapelle"
     tagline="Impressionen"
@@ -31,23 +28,22 @@ const metadata = {
       },
       {        
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/s-1024x682.jpg',
-        description: 'Kircheneingang'        
+        description: 'Unsere Adventgottesdienste haben eine besondere Stimmung.'        
       },
       {        
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/f.jpg',
-        description: 'Kircheneingang'        
+        description: 'Auch im Inneren heißen wir Sie nochmal willkommen!'        
       },
       {        
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/m.jpg',
-        description: 'Kircheneingang'        
+        description: 'Die Bibel – das Wort Gottes im Zentrum des Gottesdienst.'        
       },
       {        
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/h.jpg',
-        description: 'Kircheneingang'        
+        description: 'Gemeinsam Gottesdienste feiern.'        
       },
       
       
     ]}
   />
 
-</Layout>

@@ -15,7 +15,7 @@ export const headerData = {
         },
         {
           text: 'Das Presbyterium',
-          href: getPermalink('/homes/mobile-app'),
+          href: getPermalink('/presbyterium'),
         },
         {
           text: 'Lektor_innen',
@@ -23,7 +23,7 @@ export const headerData = {
         },
         {
           text: 'Bilder aus der Messiaskapelle',
-          href: getPermalink('/mekabilder'),
+          href: getPermalink('/mekabilderpage'),
         },
       ],
     },

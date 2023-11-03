@@ -65,12 +65,15 @@ const {
               />
             )}
             {(image) && (
-              <div class="relative">
-                <img src={image} alt="Logo" class="rounded-lg" />                  
+              
+                <figure>
+                  <img src={image} alt="Logo" class="rounded-lg" />
+                  {(description) && (                  
+                  <figurecation class="w-full absolute pt-12 pb-3 px-1.5 bottom-0 left-1/2 transform -translate-x-1/2  text-xs text-center text-white bg-gradient-to-b from-transparent to-gray-900 rounded-lg">{description}</figurecation>
+                  )}
+                  </figure>
                 
-                <span class="absolute bottom-1 left-1/2 transform -translate-x-1/2  text-xs text-center text-white">{description}</span>
-                
-              </div>
+              
             )}
             <div
               class={twMerge(
