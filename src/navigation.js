@@ -21,6 +21,10 @@ export const headerData = {
           text: 'Lektor_innen',
           href: getPermalink('/homes/personal'),
         },
+        {
+          text: 'Bilder aus der Messiaskapelle',
+          href: getPermalink('/homes/gallery'),
+        },
       ],
     },
     {
