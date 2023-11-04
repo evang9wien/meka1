@@ -78,11 +78,7 @@ export const headerData = {
         },
       ],
     },
-    {
-      text: 'Termine',
-      href: getPermalink('/termine'),
-      
-    },
+   
     {
       text: 'Kirche',
       href: '#',
@@ -113,8 +109,39 @@ export const headerData = {
         },
       ],
     },
+    {
+      text: 'Mitarbeiten',
+      href: getPermalink('/termine'),
+      links: [
+        {
+          text: 'Mitarbeiten',
+          href: getPermalink('/#features'),
+        },
+        {
+          text: 'Mitarbeiterliste',
+          href: getPermalink('/services'),
+        },
+        {
+          text: 'Kirchenservice',
+          href: getPermalink('/pricing'),
+        },
+        {
+          text: 'Comboplan',
+          href: getPermalink('/about'),
+        },
+        {
+          text: 'Comboplan eintragen',
+          href: getPermalink('/about'),
+        },
+        {
+          text: 'Lieder',
+          href: getPermalink('/about'),
+        },
+      ],
+      
+    },
   ],
-  actions: [{ text: 'Mitarbeiten', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
+  actions: [{ text: 'Termine', href: getPermalink('/termine') }],
 };
 
 export const footerData = {
