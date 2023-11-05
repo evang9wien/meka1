@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Comboplan from '~/components/svelte/Comboplan.svelte';
+
+const metadata = {
+  title: 'Contact',
+};
+---
+
+<Layout metadata={metadata}>
+<Comboplan client:load/>
+</Layout>

@@ -127,7 +127,7 @@ export const headerData = {
         },
         {
           text: 'Comboplan',
-          href: getPermalink('/about'),
+          href: getPermalink('/comboplanpage'),
         },
         {
           text: 'Comboplan eintragen',

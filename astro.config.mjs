@@ -10,8 +10,10 @@ import icon from 'astro-icon';
 import tasks from './src/utils/tasks';
 import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 import { ANALYTICS, SITE } from './src/utils/config.ts';
- const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import svelte from "@astrojs/svelte";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) => ANALYTICS.vendors.googleAnalytics.id && ANALYTICS.vendors.googleAnalytics.partytown ? Array.isArray(items) ? items.map(item => item()) : [items()] : [];
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -39,7 +41,7 @@ export default defineConfig({
     JavaScript: true,
     SVG: true,
     Logger: 1
-  })],
+  }), svelte()],
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin]
   },
@@ -49,5 +51,5 @@ export default defineConfig({
         '~': path.resolve(__dirname, './src')
       }
     }
-  },
- });
+  }
+});
