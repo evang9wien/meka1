@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Comboplan from '~/components/svelte/Comboplan.svelte';
+import Comboliederauswahl from '~/components/svelte/Comboliederauswahl.svelte';
 
 const metadata = {
   title: 'Contact',
@@ -10,6 +10,7 @@ const metadata = {
   <link rel="stylesheet" href="https://unpkg.com/svelte-material-ui/bare.css"/>
   <link rel="stylesheet" href="https://unpkg.com/@material/typography@13.0.0/dist/mdc.typography.css"/>
 </head>
+
 <Layout metadata={metadata}>
-<Comboplan client:load/>
+<Comboliederauswahl client:load/>
 </Layout>

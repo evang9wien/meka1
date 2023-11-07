@@ -6,10 +6,10 @@
     let termine;
     onMount(() => {
       axios
-        .get("https://www.evang9.wien/comborest/combo.php?month=3")
+        .get("https://www.evang9.wien/root/wp-json/combo/v1/combo?month=3")
         .then(response => {
-          // termine = JSON.parse(response.data);
-          termine = response.data;
+          termine = JSON.parse(response.data);
+          // termine = response.data;
         });
     });
   

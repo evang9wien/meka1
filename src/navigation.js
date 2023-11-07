@@ -131,11 +131,11 @@ export const headerData = {
         },
         {
           text: 'Comboplan eintragen',
-          href: getPermalink('/about'),
+          href: getPermalink('/combotestpage'),
         },
         {
           text: 'Lieder',
-          href: getPermalink('/about'),
+          href: getPermalink('/comboliederauswahlpage'),
         },
       ],
       
