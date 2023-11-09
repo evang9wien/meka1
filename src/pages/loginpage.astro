@@ -1,0 +1,15 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Login from '~/components/svelte/Login.svelte';
+
+const metadata = {
+  title: 'Login',
+};
+---
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/svelte-material-ui/bare.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/@material/typography@13.0.0/dist/mdc.typography.css"/>  
+</head>
+<Layout metadata={metadata}>
+  <Login client:load/>
+</Layout>

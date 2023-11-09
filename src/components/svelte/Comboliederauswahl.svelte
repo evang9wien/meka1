@@ -14,15 +14,17 @@
     let liederauswahl;
     let termine;
     let verantwortlich;
-    onMount(() => {        
+    onMount(() => {
+        const token = localStorage.getItem("jwt");
+            const authConfig = {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            }        
         axios
             .get(
-                "https://www.evang9.wien/root/wp-json/combo/v1/comboliederauswahl",                
-                { 
-                    headers: {
-                        Cookie: "wp-settings-1=libraryContent%3Dbrowse%26amphidetb%3D1%26ampmfold%3Do; wp-settings-time-1=1671808428; wordpress_test_cookie=WP%20Cookie%20check; wordpress_logged_in_32497b81bace5c58c260b8cdaaa2fcc0=wordpressadmin%7C1699386937%7CGyopCo1CvN8SFS90X0NhKmpX3illzqSiLxDyoyAuZ8k%7C3ad7db7c6723a343f0e0776557322ef89959d01d74de2a608a9dfab3ae904a1d;"
-                    },
-                })
+                "https://www.evang9.wien/root/wp-json/combo/v2/comboliederauswahl", authConfig
+                )
             .then((response) => {
                 liederauswahl = JSON.parse(response.data);
                 if (liederauswahl[0]) {
@@ -47,10 +49,16 @@
         window.setTimeout(() => {
             // console.log(JSON.stringify(selectedTermin));
             liederauswahl = undefined;
+            const token = localStorage.getItem("jwt");
+            const authConfig = {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            }
             axios
                 .get(
-                    "https://www.evang9.wien/root/wp-json/combo/v1/comboliederauswahl?date=" +
-                        selectedTermin
+                    "https://www.evang9.wien/root/wp-json/combo/v2/comboliederauswahl?date=" +
+                        selectedTermin, authConfig
                 )
                 .then((response) => {
                     liederauswahl = JSON.parse(response.data);
@@ -63,13 +71,13 @@
         }, 300);
     };
 </script>
-
+<center>
 <div>
     {#if termine}
         <img
             class="prediger_img"
             alt="prediger"
-            src="/comboapps/img/{getImage(verantwortlich)}"
+            src="https://www.evang9.wien/comboapps/img/{getImage(verantwortlich)}"
         />
 
         <Select
@@ -111,7 +119,7 @@
                                 <img
                                     title="Noten"
                                     alt="Noten"
-                                    src="/graphics/baseline-music_note-24px.svg"
+                                    src="https://www.evang9.wien/graphics/baseline-music_note-24px.svg"
                                 />
                                 {lied.Titel}
                             </a>
@@ -139,7 +147,7 @@
         </div>
     {/if}
 </div>
-
+</center>
 <style>
     audio::-webkit-media-controls-panel {
         background-color: #ffffff;

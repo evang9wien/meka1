@@ -118,6 +118,10 @@ export const headerData = {
           href: getPermalink('/#features'),
         },
         {
+          text: 'Login',
+          href: getPermalink('/loginpage'),
+        },
+        {
           text: 'Mitarbeiterliste',
           href: getPermalink('/services'),
         },
