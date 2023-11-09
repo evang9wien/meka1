@@ -42,6 +42,62 @@
             });
     });
 
+    const openPdf = (file) => {
+        // console.log("open pdf");
+        const token = localStorage.getItem("jwt");
+        if(token) {
+            //let anchor = document.createElement("a");
+            // document.body.appendChild(anchor);
+            let headers = new Headers();
+            headers.append('Authorization', 'Bearer ' + token);
+
+            fetch(file, { headers })
+                .then(response => response.blob())
+                .then(blobby => {
+                    // console.log("Resp Test:", blobby);
+                    let objectUrl = window.URL.createObjectURL(blobby);
+                    window.open(objectUrl, '_blank');
+                    // anchor.href = objectUrl;
+                    // anchor.download = 'some-file.pdf';
+                    // anchor.click();
+                    window.URL.revokeObjectURL(objectUrl);
+            });
+        
+        };
+    }
+    
+    let source;
+
+    const stopMp3 = () => {
+        if(source) {
+            source.stop();
+        }
+    }
+
+    const openMp3 = (file) => {
+        // const URL = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/Yodel_Sound_Effect.mp3';
+       
+        if(source) {
+            source.stop();
+        }
+        const context = new AudioContext();
+        source = context.createBufferSource();
+        source.connect(context.destination);
+    
+        // const playButton = document.querySelector('#play');
+        const token = localStorage.getItem("jwt");    
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + token);
+
+        window.fetch(file, { headers })
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => context.decodeAudioData(arrayBuffer))
+            .then(audioBuffer => {                
+                source.buffer = audioBuffer;                
+                source.start();
+            });
+    }
+
     const handleSelect = (sel) => {
         if(lastSelectedTermin == selectedTermin) 
             return;
@@ -112,26 +168,29 @@
                     <Row>
                         <Cell>{lied.Beschreibung}</Cell>
                         <Cell>
-                            <a
-                                href="/root/wp-json/combo/v1/combolied/{lied.Dateiname}?lied={lied.Dateiname}&type=pdf"
+                            <IconButton class="material-icons"
+                                on:click={() => {
+                                    const file = "https://www.evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=pdf";
+                                    openPdf(file);
+                                    }
+                                }
+                                
                                 target="Noten"
-                            >
-                                <img
-                                    title="Noten"
-                                    alt="Noten"
-                                    src="https://www.evang9.wien/graphics/baseline-music_note-24px.svg"
-                                />
-                                {lied.Titel}
-                            </a>
-                            <br />
+                            >music_note</IconButton>
+                            {lied.Titel}
+                            
                             {#if lied.MP3 != "0"}
-                                <audio
-                                    id="player{lied.lied_liste_nummer}"
-                                    src="/root/wp-json/combo/v1/combolied/{lied.Dateiname}?lied={lied.Dateiname}&type=mp3"
-                                    type="audio/mpeg"
-                                    controls
-                                    preload="none"
-                                />
+                            <IconButton class="material-icons"
+                                on:click={() => {
+                                    const file = "https://www.evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=mp3";
+                                    openMp3(file);
+                                    }
+                                }                               
+                            >play_arrow</IconButton>
+                            <IconButton class="material-icons"
+                                on:click={stopMp3}                               
+                            >stop</IconButton>
+                               
                             {/if}
                         </Cell>
                     </Row>
