@@ -23,7 +23,7 @@
             }        
         axios
             .get(
-                "https://www.evang9.wien/root/wp-json/combo/v2/comboliederauswahl", authConfig
+                "https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl", authConfig
                 )
             .then((response) => {
                 liederauswahl = JSON.parse(response.data);
@@ -36,7 +36,7 @@
                 // console.log(liederauswahl);
             });
         axios
-            .get("https://www.evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10")
+            .get("https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10")
             .then((response) => {
                 termine = JSON.parse(response.data);
             });
@@ -113,7 +113,7 @@
             }
             axios
                 .get(
-                    "https://www.evang9.wien/root/wp-json/combo/v2/comboliederauswahl?date=" +
+                    "https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl?date=" +
                         selectedTermin, authConfig
                 )
                 .then((response) => {
@@ -133,7 +133,7 @@
         <img
             class="prediger_img"
             alt="prediger"
-            src="https://www.evang9.wien/comboapps/img/{getImage(verantwortlich)}"
+            src="https://evang9.wien/comboapps/img/{getImage(verantwortlich)}"
         />
 
         <Select
@@ -170,7 +170,7 @@
                         <Cell>
                             <IconButton class="material-icons"
                                 on:click={() => {
-                                    const file = "https://www.evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=pdf";
+                                    const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=pdf";
                                     openPdf(file);
                                     }
                                 }
@@ -182,7 +182,7 @@
                             {#if lied.MP3 != "0"}
                             <IconButton class="material-icons"
                                 on:click={() => {
-                                    const file = "https://www.evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=mp3";
+                                    const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=mp3";
                                     openMp3(file);
                                     }
                                 }                               
