@@ -119,7 +119,7 @@ export const headerData = {
         },
         {
           text: 'Login',
-          href: getPermalink('/loginpage'),
+          href: getPermalink('/combo/loginpage'),
         },
         {
           text: 'Mitarbeiterliste',

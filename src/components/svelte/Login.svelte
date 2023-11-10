@@ -2,12 +2,15 @@
     import { onMount } from "svelte";
     import axios from "axios";
     import Button, { Label } from "@smui/button";
+    import Paper, { Title } from "@smui/paper";
     import Textfield from '@smui/textfield';
     import Icon from '@smui/textfield/icon';
     import HelperText from '@smui/textfield/helper-text';
 
     let name='';
     let password='';
+
+    let loginSucess = false;
 
     const login = () => {
       console.log('Login');
@@ -18,44 +21,34 @@
         password: password
         })
         .then(response => {
-            const token = response.data.token;
-            console.log("Resp Token:", response);
-            console.log(token);
+            const token = response.data.token;            
             localStorage.setItem("jwt", token);
-            
-            const authConfig = {
-              headers: {
-                  Authorization: "Bearer " + token
-              }
-            }
-
-            axios
-            .get("https://www.evang9.wien/root/wp-json/combo/v2/combohello",authConfig)  
-            .then(response => {
-              console.log("Resp Hello:", response);
-            });          
+            loginSucess = true;
 
         });
 
-    };
+   };
   
     
   </script>
-  <center>
-    <div>Login</div>
-    <Textfield bind:value={name} label="Name">
-      
-      <HelperText slot="helper">Name</HelperText>
-    </Textfield>
-    <Textfield
-       type="password"
-       bind:value={password} 
-       label="Password">
-      
-      <HelperText slot="helper">Password</HelperText>
-    </Textfield>
-    <Button on:click={login}>
-      <Label>Login</Label>
-      </Button>
-
+  <center>    
+    <Paper>
+      <Title>Login</Title>
+      {#if !loginSucess}      
+        <Textfield bind:value={name} label="Name">                
+        </Textfield>
+        <br/>
+        <Textfield
+          type="password"
+          bind:value={password} 
+          label="Password">
+        </Textfield>
+        <br/>
+        <Button on:click={login}>
+          <Label>Login</Label>
+        </Button>
+      {:else}
+        Login erfolgreich  
+      {/if}
+    </Paper>
   </center>
