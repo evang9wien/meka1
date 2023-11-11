@@ -50,14 +50,20 @@
             // document.body.appendChild(anchor);
             let headers = new Headers();
             headers.append('Authorization', 'Bearer ' + token);
+            headers.append('Content-Type','application/json');
             //var windowReference = window.open();
             fetch(file, { headers })
                 .then(response => response.blob())
                 .then(blobby => {
                     // console.log("Resp Test:", blobby);
-                    let objectUrl = window.URL.createObjectURL(blobby);                    
-                    window.open(objectUrl, '_blank');
-                    
+                    const pdfBlob = new Blob([blobby],{type: 'application/pdf'})
+                    let objectUrl = window.URL.createObjectURL(pdfBlob);                    
+                    // window.open(objectUrl, '_blank');
+                    let link = document.createElement('a');
+                    link.href = objectUrl;
+                    link.target='_blank';
+                    // link.download =
+                    link.click(); 
                     // window.open(objectUrl, '_blank');
                     // windowReference.location = objectUrl;
                     // anchor.href = objectUrl;
@@ -91,6 +97,7 @@
         const token = localStorage.getItem("jwt");    
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + token);
+        headers.append('Content-Type','application/json');
 
         window.fetch(file, { headers })
             .then(response => response.arrayBuffer())
