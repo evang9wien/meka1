@@ -50,13 +50,14 @@
             // document.body.appendChild(anchor);
             let headers = new Headers();
             headers.append('Authorization', 'Bearer ' + token);
-
+            var windowReference = window.open();
             fetch(file, { headers })
                 .then(response => response.blob())
                 .then(blobby => {
                     // console.log("Resp Test:", blobby);
                     let objectUrl = window.URL.createObjectURL(blobby);
-                    window.open(objectUrl, '_blank');
+                    // window.open(objectUrl, '_blank');
+                    windowReference.location = objectUrl;
                     // anchor.href = objectUrl;
                     // anchor.download = 'some-file.pdf';
                     // anchor.click();
