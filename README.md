@@ -4,6 +4,11 @@ Header set Access-Control-Allow-Credentials true
     Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE,OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 
+<IfModule mod_headers.c>  
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+
 
 <img src="https://raw.githubusercontent.com/onwidget/.github/main/resources/astrowind/lighthouse-score.png" align="right"
      alt="AstroWind Lighthouse Score" width="100" height="358">

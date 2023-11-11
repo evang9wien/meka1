@@ -55,10 +55,9 @@
                 .then(response => response.blob())
                 .then(blobby => {
                     // console.log("Resp Test:", blobby);
-                    let objectUrl = window.URL.createObjectURL(blobby);
-                    setTimeout(() => {
-                      window.open(objectUrl, '_blank');
-                    })
+                    let objectUrl = window.URL.createObjectURL(blobby);                    
+                    window.open(objectUrl, '_blank');
+                    
                     // window.open(objectUrl, '_blank');
                     // windowReference.location = objectUrl;
                     // anchor.href = objectUrl;
