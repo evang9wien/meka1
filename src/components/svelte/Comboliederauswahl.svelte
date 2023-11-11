@@ -8,22 +8,19 @@
     import CircularProgress from "@smui/circular-progress";
     import Button, { Label } from "@smui/button";
     import IconButton from "@smui/icon-button";
+    import {getAuthHeader, isUserAuth} from './auth.js';
 
     let selectedTermin;
     let lastSelectedTermin;
     let liederauswahl;
     let termine;
     let verantwortlich;
-    onMount(() => {
-        const token = localStorage.getItem("jwt");
-            const authConfig = {
-                headers: {
-                    Authorization: "Bearer " + token
-                }
-            }        
+    let userAuth;
+    onMount(() => { 
+        userAuth = isUserAuth();            
         axios
             .get(
-                "https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl", authConfig
+                "https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl", getAuthHeader()
                 )
             .then((response) => {
                 liederauswahl = JSON.parse(response.data);
@@ -43,32 +40,24 @@
     });
 
     const openPdf = (file) => {
-        // console.log("open pdf");
+
         const token = localStorage.getItem("jwt");
         if(token) {
-            //let anchor = document.createElement("a");
-            // document.body.appendChild(anchor);
             let headers = new Headers();
             headers.append('Authorization', 'Bearer ' + token);
             headers.append('Content-Type','application/json');
-            //var windowReference = window.open();
             fetch(file, { headers })
-                .then(response => response.blob())
-                .then(blobby => {
-                    // console.log("Resp Test:", blobby);
-                    const pdfBlob = new Blob([blobby],{type: 'application/pdf'})
-                    let objectUrl = window.URL.createObjectURL(pdfBlob);                    
-                    // window.open(objectUrl, '_blank');
+                .then(async response => ({
+                    filename: 'downloaded.pdf',                                       
+                    blob: await response.blob()
+                }))
+                .then(resObj => {                    
+                    const pdfBlob = new Blob([resObj.blob],{type: 'application/pdf'})
+                    let objectUrl = window.URL.createObjectURL(pdfBlob);                                        
                     let link = document.createElement('a');
                     link.href = objectUrl;
-                    link.target='_blank';
-                    // link.download =
-                    link.click(); 
-                    // window.open(objectUrl, '_blank');
-                    // windowReference.location = objectUrl;
-                    // anchor.href = objectUrl;
-                    // anchor.download = 'some-file.pdf';
-                    // anchor.click();
+                    link.target='_blank';                    
+                    link.click();                     
                     window.URL.revokeObjectURL(objectUrl);
             });
         
@@ -83,8 +72,7 @@
         }
     }
 
-    const openMp3 = (file) => {
-        // const URL = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/Yodel_Sound_Effect.mp3';
+    const openMp3 = (file) => {      
        
         if(source) {
             source.stop();
@@ -138,6 +126,7 @@
     };
 </script>
 <center>
+{#if userAuth}    
 <div>
     {#if termine}
         <img
@@ -216,11 +205,11 @@
         </div>
     {/if}
 </div>
+{:else}
+Bitte zuerst einloggen.
+{/if}
 </center>
-<style>
-    audio::-webkit-media-controls-panel {
-        background-color: #ffffff;
-    }
+<style>   
     img.prediger_img {
         width: 48px;
         height: 48px;

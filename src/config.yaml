@@ -10,7 +10,7 @@ site:
 metadata:
   title:
     default: Evangelische Messiaskapelle
-    template: '%s — AstroWind'
+    template: '%s — Evang9'
   description: "Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund "
   robots:
     index: true
