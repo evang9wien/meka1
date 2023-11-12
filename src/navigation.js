@@ -44,7 +44,7 @@ export const headerData = {
         },
         {
           text: 'Zum Nachhören',
-          href: getPermalink('/about'),
+          href: getPermalink('/predigtpage'),
         },
       ],
     },
