@@ -1,0 +1,15 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import ComboplanEdit from '~/components/svelte/ComboplanEdit.svelte';
+import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
+
+const metadata = {
+  title: 'Liederauswahl',
+};
+---
+
+<SvelteHeader></SvelteHeader>
+
+<Layout metadata={metadata}>
+  <ComboplanEdit client:load />
+</Layout>

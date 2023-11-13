@@ -135,11 +135,19 @@ export const headerData = {
         },
         {
           text: 'Comboplan eintragen',
-          href: getPermalink('/combo/combotestpage'),
+          href: getPermalink('/combo/comboplaneditpage'),
         },
         {
           text: 'Lieder',
           href: getPermalink('/combo/comboliederauswahlpage'),
+        },
+        {
+          text: 'Liederlist',
+          href: getPermalink('/combo/comboliederlistepage'),
+        },
+        {
+          text: 'Liederchronik',
+          href: getPermalink('/combo/comboliederchronikpage'),
         },
       ],
       

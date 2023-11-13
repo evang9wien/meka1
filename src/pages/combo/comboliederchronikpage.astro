@@ -1,0 +1,15 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import ComboLiederChronik from '~/components/svelte/ComboLiederChronik.svelte';
+import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
+
+const metadata = {
+  title: 'Liederauswahl',
+};
+---
+
+<SvelteHeader></SvelteHeader>
+
+<Layout metadata={metadata}>
+  <ComboLiederChronik client:load />
+</Layout>
