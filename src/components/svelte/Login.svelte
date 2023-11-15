@@ -1,12 +1,10 @@
 <script>
     import { onMount } from "svelte";
     import axios from "axios";
-    import Button, { Label } from "@smui/button";
-    import Paper, { Title } from "@smui/paper";
-    import Textfield from '@smui/textfield';
-    import Icon from '@smui/textfield/icon';
-    import HelperText from '@smui/textfield/helper-text';
-
+    import { GradientButton } from 'flowbite-svelte';
+    import { Label, Input } from 'flowbite-svelte';
+    import { Card } from 'flowbite-svelte';
+    
     let name='';
     let password='';
 
@@ -31,24 +29,23 @@
   
     
   </script>
-  <center>    
-    <Paper>
-      <Title>Login</Title>
-      {#if !loginSucess}      
-        <Textfield bind:value={name} label="Name">                
-        </Textfield>
-        <br/>
-        <Textfield
-          type="password"
-          bind:value={password} 
-          label="Password">
-        </Textfield>
-        <br/>
-        <Button on:click={login}>
-          <Label>Login</Label>
-        </Button>
+    <div class="flex justify-center">
+    <Card class="mb-6">
+      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Login für Mitarbeiter</h5>
+      <!-- <Title>Login</Title> -->
+      {#if !loginSucess}
+        <div class="mb-6">
+          <Label for="default-input-n" class="block mb-2">Name</Label>
+          <Input bind:value={name} id="default-input-n" placeholder="Name" />
+        </div>
+        <div class="mb-6">
+          <Label for="default-input-p" class="block mb-2">Password</Label>
+          <Input bind:value={password} id="default-input-p" type="password" placeholder="Password" />
+        </div>              
+        <GradientButton class="mb-6" color="cyanToBlue" on:click={login}>Login</GradientButton>
       {:else}
         Login erfolgreich  
       {/if}
-    </Paper>
-  </center>
+    </Card>
+    </div>
+  

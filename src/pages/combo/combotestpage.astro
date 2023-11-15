@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Combotest from '~/components/svelte/Combotest.svelte';
+// import Combotest from '~/components/svelte/Combotest.svelte';
 import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
@@ -9,5 +9,5 @@ const metadata = {
 ---
 <SvelteHeader></SvelteHeader>
 <Layout metadata={metadata}>
-<Combotest client:load/>
+  <!-- <Combotest client:only="svelte"/> -->
 </Layout>
