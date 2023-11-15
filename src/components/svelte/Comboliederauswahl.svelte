@@ -1,22 +1,31 @@
 <script>
     import { onMount } from "svelte";
     import axios from "axios";
-    import Icon from "@smui/select/icon";
-    import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
-    import Select, { Option } from "@smui/select";
+    import { Label, Select } from 'flowbite-svelte';
+    import { Button } from 'flowbite-svelte';
+    import { Card } from 'flowbite-svelte';
+    
+    import { MicrophoneOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+    import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
     import { getImage, getLongName } from "./predigt/PredigtConstants.js";
-    import CircularProgress from "@smui/circular-progress";
-    import Button, { Label } from "@smui/button";
-    import IconButton from "@smui/icon-button";
+
+    // import Icon from "@smui/select/icon";
+    // import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
+    // import Select, { Option } from "@smui/select";
+    
+    // import CircularProgress from "@smui/circular-progress";    
+    // import IconButton from "@smui/icon-button";
     import {getAuthHeader, isUserAuth} from './auth.js';
 
     let selectedTermin;
     let lastSelectedTermin;
     let liederauswahl;
     let termine;
+    let termineSelect;
     let verantwortlich;
     let userAuth;
     onMount(() => { 
+        console.log('onMount');
         userAuth = isUserAuth();            
         axios
             .get(
@@ -36,6 +45,8 @@
             .get("https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10")
             .then((response) => {
                 termine = JSON.parse(response.data);
+                termineSelect = termine.map( t => ({name:t.Termin, value: t}));
+                console.log(termineSelect);
             });
     });
 
@@ -101,7 +112,7 @@
             return;
         lastSelectedTermin = selectedTermin;    
         window.setTimeout(() => {
-            // console.log(JSON.stringify(selectedTermin));
+            console.log(JSON.stringify(selectedTermin));
             liederauswahl = undefined;
             const token = localStorage.getItem("jwt");
             const authConfig = {
@@ -125,7 +136,8 @@
         }, 300);
     };
 </script>
-<center>
+<div class=" ">
+<Card class="w-full max-w-md ">
 {#if userAuth}    
 <div>
     {#if termine}
@@ -135,80 +147,79 @@
             src="https://evang9.wien/comboapps/img/{getImage(verantwortlich)}"
         />
 
+        <Label>
+            Termin    
         <Select
-            label="Termin"
+            items={termineSelect}
             bind:value={selectedTermin}
-            on:click={handleSelect}
+            on:change={handleSelect}
         >
-            <Icon class="material-icons" slot="leadingIcon">event</Icon>
+            <!-- <Icon class="material-icons" slot="leadingIcon">event</Icon> -->
 
-            <Option value="" />
+            <!-- <Option value="" />
             {#each termine as termin}
                 <Option value={termin.Termin}>
                     {termin.Termin}
                 </Option>
-            {/each}
+            {/each} -->
         </Select>
+        </Label>
         <!-- <IconButton class="material-icons" on:click={handleSelect}>check</IconButton>         -->
     {/if}
 </div>
 <br />
 <div>
     {#if liederauswahl}
-        <DataTable table$aria-label="Liederliste" style="max-width: 100%;">
-            <Head>
-                <Row>
-                    <Cell>Lied</Cell>
-                    <Cell>Noten / Hörprobe</Cell>
-                </Row>
-            </Head>
-            <Body>
+        <Table striped="true">
+            <TableHead>
+                
+                    <TableHeadCell>Lied</TableHeadCell>
+                    <TableHeadCell>Noten / Hörprobe</TableHeadCell>
+                
+            </TableHead>
+            <TableBody>
                 {#each liederauswahl as lied}
-                    <Row>
-                        <Cell>{lied.Beschreibung}</Cell>
-                        <Cell>
-                            <IconButton class="material-icons"
-                                on:click={() => {
-                                    const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=pdf";
-                                    openPdf(file);
-                                    }
+                    <TableBodyRow>
+                        <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
+                        <TableBodyCell class="w-4">
+                            <div class="flex flex-row">
+                            <MicrophoneOutline size="md"                            
+                            on:click={() => {
+                                const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=pdf";
+                                openPdf(file);
                                 }
-                                
-                                target="Noten"
-                            >music_note</IconButton>
+                            }/>
+                            
                             {lied.Titel}
                             
                             {#if lied.MP3 != "0"}
-                            <IconButton class="material-icons"
-                                on:click={() => {
-                                    const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=mp3";
-                                    openMp3(file);
-                                    }
-                                }                               
-                            >play_arrow</IconButton>
-                            <IconButton class="material-icons"
-                                on:click={stopMp3}                               
-                            >stop</IconButton>
-                               
+                            <PlaySolid size="md" on:click={() => {
+                                const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=mp3";
+                                openMp3(file);
+                                }
+                            }></PlaySolid>
+                            <PauseSolid size="md" on:click={stopMp3} ></PauseSolid>
                             {/if}
-                        </Cell>
-                    </Row>
+                        </div>
+                        </TableBodyCell>
+                    </TableBodyRow>
                 {/each}
-            </Body>
-        </DataTable>
+            </TableBody>
+        </Table>
     {:else}
         <div style="display: flex; justify-content: center">
-            <CircularProgress
+            <!-- <CircularProgress
                 style="height: 32px; width: 32px;"
                 indeterminate
-            />
+            /> -->
         </div>
     {/if}
 </div>
 {:else}
 Bitte zuerst einloggen.
 {/if}
-</center>
+</Card>
+</div>
 <style>   
     img.prediger_img {
         width: 48px;
