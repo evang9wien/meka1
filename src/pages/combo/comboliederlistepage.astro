@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-// import ComboLiederListe from '~/components/svelte/ComboLiederListe.svelte';
+import ComboLiederListe from '~/components/svelte/ComboLiederListe.svelte';
 import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
@@ -11,5 +11,5 @@ const metadata = {
 <SvelteHeader></SvelteHeader>
 
 <Layout metadata={metadata}>
-  <!-- <ComboLiederListe client:load /> -->
+  <ComboLiederListe client:load />
 </Layout>

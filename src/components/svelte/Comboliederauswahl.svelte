@@ -10,14 +10,10 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
-
-  // import Icon from "@smui/select/icon";
-  // import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
-  // import Select, { Option } from "@smui/select";
-
-  // import CircularProgress from "@smui/circular-progress";
-  // import IconButton from "@smui/icon-button";
+  
   import { getAuthHeader, isUserAuth } from './auth.js';
+  import { openMp3, stopMp3 } from './mp3.js';
+  import { openPdf } from './pdf.js';
 
   let selectedTermin;
   let lastSelectedTermin;
@@ -46,60 +42,7 @@
     });
   });
 
-  const openPdf = (file) => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      let headers = new Headers();
-      headers.append('Authorization', 'Bearer ' + token);
-      headers.append('Content-Type', 'application/json');
-      fetch(file, { headers })
-        .then(async (response) => ({
-          filename: 'downloaded.pdf',
-          blob: await response.blob(),
-        }))
-        .then((resObj) => {
-          const pdfBlob = new Blob([resObj.blob], { type: 'application/pdf' });
-          let objectUrl = window.URL.createObjectURL(pdfBlob);
-          let link = document.createElement('a');
-          link.href = objectUrl;
-          link.target = '_blank';
-          link.click();
-          window.URL.revokeObjectURL(objectUrl);
-        });
-    }
-  };
-
-  let source;
-
-  const stopMp3 = () => {
-    if (source) {
-      source.stop();
-    }
-  };
-
-  const openMp3 = (file) => {
-    if (source) {
-      source.stop();
-    }
-    const context = new AudioContext();
-    source = context.createBufferSource();
-    source.connect(context.destination);
-
-    // const playButton = document.querySelector('#play');
-    const token = localStorage.getItem('jwt');
-    let headers = new Headers();
-    headers.append('Authorization', 'Bearer ' + token);
-    headers.append('Content-Type', 'application/json');
-
-    window
-      .fetch(file, { headers })
-      .then((response) => response.arrayBuffer())
-      .then((arrayBuffer) => context.decodeAudioData(arrayBuffer))
-      .then((audioBuffer) => {
-        source.buffer = audioBuffer;
-        source.start();
-      });
-  };
+  
 
   const handleSelect = (sel) => {
     console.log(sel);
@@ -133,7 +76,7 @@
 </script>
 
 <div class="flex justify-center mb-6">
-  <Card class="lg:max-w-screen-lg md:max-w-screen-md">
+  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
     {#if userAuth}
       <div>
         {#if termine}
@@ -145,7 +88,12 @@
                 <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
               </div>
             </div>
-            <Select items={termine} bind:value={selectedTermin} on:input={handleSelect} placeholder="Bitte Termin auswählen ..."/>
+            <Select
+              items={termine}
+              bind:value={selectedTermin}
+              on:input={handleSelect}
+              placeholder="Bitte Termin auswählen ..."
+            />
           </Label>
         {/if}
       </div>

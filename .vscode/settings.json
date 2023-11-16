@@ -18,6 +18,9 @@
     "./.vscode/astrowind/config-schema.json": "/src/config.yaml"
   },
   "[svelte]": {
-    "editor.defaultFormatter": "svelte.svelte-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "svelte.plugin.svelte.format.enable": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
 }
