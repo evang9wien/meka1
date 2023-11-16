@@ -5,7 +5,7 @@
     import { Button } from 'flowbite-svelte';
     import { Card } from 'flowbite-svelte';
     
-    import { MicrophoneOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+    import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
     import { getImage, getLongName } from "./predigt/PredigtConstants.js";
 
@@ -183,7 +183,7 @@
                         <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
                         <TableBodyCell class="w-4">
                             <div class="flex flex-row">
-                            <MicrophoneOutline size="md"                            
+                            <FileMusicOutline size="md"                            
                             on:click={() => {
                                 const file = "https://evang9.wien/root/wp-json/combo/v2/combolied/" + lied.Dateiname +"?lied=" + lied.Dateiname +"&type=pdf";
                                 openPdf(file);
