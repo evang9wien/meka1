@@ -1,5 +1,7 @@
 # 🚀 AstroWind
 
+https://flowbite-svelte-icons.vercel.app/outline
+
 Header set Access-Control-Allow-Credentials true   
     Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE,OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization"
