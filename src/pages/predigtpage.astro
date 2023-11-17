@@ -1,13 +1,14 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-// import Predigten from '~/components/svelte/predigt/PredigtEdit.svelte';
+import Predigten from '~/components/svelte/predigt/PredigtEdit.svelte';
 import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
   title: 'Zum Nachhören',
 };
 ---
-<SvelteHeader></SvelteHeader>
+
+<SvelteHeader />
 <Layout metadata={metadata}>
-<!-- <Predigten client:load/> -->
+  <Predigten client:load />
 </Layout>

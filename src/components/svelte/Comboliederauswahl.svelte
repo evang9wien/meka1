@@ -9,8 +9,9 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
+
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
-  
+
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
@@ -41,8 +42,6 @@
       console.log(termine);
     });
   });
-
-  
 
   const handleSelect = (sel) => {
     console.log(sel);
@@ -155,7 +154,7 @@
             </TableBody>
           </Table>
         {:else}
-          <div style="display: flex; justify-content: center">
+          <div>
             <Spinner />
           </div>
         {/if}
