@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-// import ComboplanEdit from '~/components/svelte/ComboplanEdit.svelte';
+import ComboplanEdit from '~/components/svelte/ComboplanEdit.svelte';
 import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
@@ -8,8 +8,8 @@ const metadata = {
 };
 ---
 
-<SvelteHeader></SvelteHeader>
+<SvelteHeader />
 
 <Layout metadata={metadata}>
-  <!-- <ComboplanEdit client:load /> -->
+  <ComboplanEdit client:load />
 </Layout>

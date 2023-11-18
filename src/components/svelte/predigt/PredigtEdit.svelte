@@ -157,7 +157,9 @@
                 {#if getName(predigt.split('_')[0]) != ''}
                   <TableBodyRow>
                     <TableBodyCell>
-                      <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImg(predigt.split('_')[0])}" />
+                      <div class="w-12">
+                        <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImg(predigt.split('_')[0])}" />
+                      </div>
                     </TableBodyCell>
                     <TableBodyCell>
                       {predigt.split('_')[0]} <br />
@@ -166,6 +168,7 @@
                     <TableBodyCell>
                       <audio
                         id="player{predigt}"
+                        class="bg-white"
                         src="https://evang9.wien/predigten/{predigt}"
                         controls="controls"
                         preload="none"
@@ -178,12 +181,12 @@
           </Table>
         {:else}
           <Card>
-            <Spinner />
+            <Spinner color="gray" />
           </Card>
         {/if}
       {:else}
         <div>
-          <Spinner />
+          <Spinner color="gray" />
         </div>
       {/if}
     </div>
@@ -194,7 +197,7 @@
   audio::-webkit-media-controls-panel {
     background-color: #ffffff;
   }
-  audio {
+  /*audio {
     padding-top: 5px;
-  }
+  } */
 </style>

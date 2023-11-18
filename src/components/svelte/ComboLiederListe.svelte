@@ -205,7 +205,7 @@
           </Table>
         {:else}
           <div>
-            <Spinner />
+            <Spinner color="gray" />
           </div>
         {/if}
       </div>
