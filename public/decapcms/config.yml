@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: eidmanna/meka1
   branch: main
 
 media_folder: 'src/assets/images'
