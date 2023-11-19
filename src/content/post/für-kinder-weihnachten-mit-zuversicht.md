@@ -16,6 +16,8 @@ Die „MS Zuversicht“ wird ab 17. November wieder in der Seegasse vor Anker ge
 
 Eure Caro
 
+![](https://www.evang9.wien/root/wp-content/uploads/2022/05/Seegassen-Matrosinnen.png)
+
 - - -
 
 **Ahoi! Die „MS-Zuversicht“ geht wieder im Herbst 2023 in der Seegasse vor Anker und zwar in der Messiaskapelle**.
