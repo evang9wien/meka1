@@ -12,4 +12,6 @@ author: eidmann
 
 Wir laden wieder zu einem inspirierenden, interaktiven Themenabend mit Schwerpunkt „Auswirkungen der Klimakrise auf unser persönliches Leben“ ein. Am Samstag, 25. November um 18.30 Uhr
 
+<https://www.evang9.wien/root/wp-content/uploads/2023/11/231125_Creation-Only-Plakat.pdf>
+
 <!--EndFragment-->
