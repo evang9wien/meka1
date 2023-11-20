@@ -1,66 +1,77 @@
-    <script>
-    import { onMount } from "svelte";
-    import axios from "axios";
-    import moment from 'moment';
-  
-    let termine;
-    onMount(() => {
-      axios
-        .get("https://www.evang9.wien/root/wp-json/combo/v1/combo?month=3")
-        .then(response => {
-          termine = JSON.parse(response.data);
-          // termine = response.data;
-        });
+<script>
+  import { onMount } from 'svelte';
+  import axios from 'axios';
+  import moment from 'moment';
+  import { getImage, getLongName } from './predigt/PredigtConstants.js';
+
+  import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
+  import { Button, ButtonGroup } from 'flowbite-svelte';
+  import { Card } from 'flowbite-svelte';
+  import { MicrophoneOutline, EditOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+  import { Spinner } from 'flowbite-svelte';
+  import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
+
+  let termine;
+  onMount(() => {
+    axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combo?month=3').then((response) => {
+      termine = JSON.parse(response.data);
+      // termine = response.data;
     });
-  
-    let formatDate = date => {
-      const options = {
-        weekday: "short",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric"
-      };
-      return new Date(date)
-        .toLocaleDateString("de-DE", options)
-        .replace(/,/g, "");
+  });
+
+  let formatDate = (date) => {
+    const options = {
+      weekday: 'short',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
     };
-  </script>
-  
-  <center>
-    <table class="ma_list">
-      <tbody>
-        <tr class="table_header">
-          <td>Termin</td>
-          <td>AM</td>
-          <td>Bemerkung</td>
-          <td>Pred.</td>
-          <td>Tasten</td>
-          <td>Melodie</td>
-          <td>Drums</td>
-          <td>Bass</td>
-          <td>Git.</td>
-        </tr>
-        {#if termine}
+    return new Date(date).toLocaleDateString('de-DE', options).replace(/,/g, '');
+  };
+</script>
+
+<div class="flex justify-center mb-6">
+  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+    {#if termine}
+      <Table striped={true}>
+        <TableHead>
+          <TableHeadCell>Termin</TableHeadCell>
+          <TableHeadCell>Bemerkung</TableHeadCell>
+          <TableHeadCell>Tasten</TableHeadCell>
+          <TableHeadCell>Melodie</TableHeadCell>
+          <TableHeadCell>Drums</TableHeadCell>
+          <TableHeadCell>Bass</TableHeadCell>
+          <TableHeadCell>Git.</TableHeadCell>
+        </TableHead>
+        <TableBody>
           {#each termine as termin}
-            <tr>
-              <td>{formatDate(moment(termin.Termin).toDate())}</td>
-              <td>{termin.Abendmahl == 1 ? 'Y' : ''}</td>
-              <td>{termin.Zusatzinfo}</td>
-              <td>{termin.Verantwortlich}</td>
-              <td>{termin.Tasten}</td>
-              <td>{termin.Melodie}</td>
-              <td>{termin.Drums}</td>
-              <td>{termin.Bass}</td>
-              <td>{termin.Gitarre}</td>
-            </tr>
+            <TableBodyRow>
+              <TableBodyCell>
+                <div class="flex flex-col place-items-center">
+                  <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImage(termin.Verantwortlich)}" />
+                  <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
+                  {formatDate(moment(termin.Termin).toDate())}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-col">
+                  <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
+                  <div>{termin.Zusatzinfo}</div>
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>{termin.Tasten}</TableBodyCell>
+              <TableBodyCell>{termin.Melodie}</TableBodyCell>
+              <TableBodyCell>{termin.Drums}</TableBodyCell>
+              <TableBodyCell>{termin.Bass}</TableBodyCell>
+              <TableBodyCell>{termin.Gitarre}</TableBodyCell>
+            </TableBodyRow>
           {/each}
-        {:else}
-          <tr>
-            <td colspan="100">loading.....</td>
-          </tr>
-        {/if}
-      </tbody>
-    </table>
-  </center>
-  
+        </TableBody>
+      </Table>
+    {:else}
+      <Spinner color="gray" />
+    {/if}
+  </Card>
+</div>
