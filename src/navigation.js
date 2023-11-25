@@ -50,7 +50,7 @@ export const headerData = {
     },
     {
       text: 'Angebote',
-      
+
       links: [
         {
           text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
@@ -78,34 +78,34 @@ export const headerData = {
         },
       ],
     },
-   
+
     {
       text: 'Kirche',
       href: '#',
       links: [
         {
           text: 'Taufe',
-          href: getPermalink('/kirche'),
+          href: getPermalink('/kirche/taufe'),
         },
         {
           text: 'Konfirmation',
-          href: getPermalink('/services'),
+          href: getPermalink('/kirche/konfirmation'),
         },
         {
           text: 'Hochzeit',
-          href: getPermalink('/pricing'),
+          href: getPermalink('/kirche/hochzeit'),
         },
         {
           text: 'Eintritt',
-          href: getPermalink('/about'),
+          href: getPermalink('/kirche/eintritt'),
         },
         {
           text: 'Gemeindewechsel',
-          href: getPermalink('/about'),
+          href: getPermalink('/kirche/gemeindewechsel'),
         },
         {
           text: 'Todesfall',
-          href: getPermalink('/about'),
+          href: getPermalink('/kirche/todesfall'),
         },
       ],
     },
@@ -150,16 +150,13 @@ export const headerData = {
           href: getPermalink('/combo/comboliederchronikpage'),
         },
       ],
-      
     },
   ],
   actions: [{ text: 'Termine', href: getPermalink('/termine') }],
 };
 
 export const footerData = {
-  links: [
-    
-  ],
+  links: [],
   secondaryLinks: [
     { text: 'Kontakt', href: getPermalink('/terms') },
     { text: 'Impressum', href: getPermalink('/privacy') },
