@@ -1,0 +1,18 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import BlogCategoryPosts from '~/components/widgets/BlogCategoryPosts.astro';
+
+const metadata = {
+  title: 'Gallery',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <BlogCategoryPosts
+    title="Neuigkeiten aus der Seegasse"
+    information={`Hier gibt es regelmässig Aktuelles.
+                `}
+    categories={['kinder']}
+  />
+</Layout>

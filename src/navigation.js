@@ -50,7 +50,7 @@ export const headerData = {
     },
     {
       text: 'Angebote',
-      
+
       links: [
         {
           text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
@@ -58,7 +58,7 @@ export const headerData = {
         },
         {
           text: 'Für Familien: Kirche Kunterbunt',
-          href: getPermalink('/landing/sales'),
+          href: getPermalink('/mekaangebotepage'),
         },
         {
           text: 'LUV - Ein Workshop für dich',
@@ -78,7 +78,7 @@ export const headerData = {
         },
       ],
     },
-   
+
     {
       text: 'Kirche',
       href: '#',
@@ -150,16 +150,13 @@ export const headerData = {
           href: getPermalink('/combo/comboliederchronikpage'),
         },
       ],
-      
     },
   ],
   actions: [{ text: 'Termine', href: getPermalink('/termine') }],
 };
 
 export const footerData = {
-  links: [
-    
-  ],
+  links: [],
   secondaryLinks: [
     { text: 'Kontakt', href: getPermalink('/terms') },
     { text: 'Impressum', href: getPermalink('/privacy') },
