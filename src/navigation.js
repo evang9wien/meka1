@@ -85,7 +85,7 @@ export const headerData = {
       links: [
         {
           text: 'Taufe',
-          href: getPermalink('/#features'),
+          href: getPermalink('/kirche'),
         },
         {
           text: 'Konfirmation',
