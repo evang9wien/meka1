@@ -1,0 +1,106 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import MekaBilder from '../mekabilder.astro';
+import Gallery from '~/components/widgets/Gallery.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+const metadata = {
+  title: 'Konfirmation',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <Features3
+    title="Konfirmation"
+    subtitle="Mit 13 bzw. 14 Jahren werden Jugendliche in unserer Gemeinde konfirmiert."
+    columns={3}
+    isBeforeContent={true}
+    items={[
+      {
+        title: 'Konfi-Jahr',
+        description:
+          'Das Konfi-Jahr geht Hand in Hand mit der Konfirmation. Die Vorbereitung in den Kursen dient dazu, dich ganz persönlich mit dem christlichen Glauben auseinanderzusetzen.',
+        icon: 'tabler:template',
+      },
+      {
+        title: 'Fragen an Gott',
+        description:
+          'Wenn du Gott eine Fragen stellen könntest, was würdest du fragen? \
+            Ganz ohne Leistungsdruck oder Glaubenszwang, darfst du deine Meinung einbringen und Zeit zum Nachdenken haben. Viele Inputs sollen dir helfen, deinen Glaubensweg zu finden.',
+        icon: 'tabler:template',
+      },
+      {
+        title: 'Teil der Gemeinde',
+        description:
+          'Neu sein. Kennenlernen. Reinwachsen. Das betrifft den Gottesdienst, die anderen Leute dort, \
+          und was in der Kirche halt alles so los ist. Freund:innen. Dazugehören. Mitmachen. \
+          Zum Beispiel beim Kindergottesdienst, oder bei der Café-Bar nach dem Gottesdienst! \
+          Glaube hat eben auch viel mit Gemeinde zu tun. Um unsere Gemeinde gut kennen zu lernen, wirst du in viele Aufgabengebiete hineinschuppern dürfen.',
+        icon: 'tabler:template',
+      },
+      {
+        title: 'Brot und Spiele',
+        description:
+          'Exkursionen statt immer nur in der Kirche. Unterricht, bei dem du involviert bist. Eine Jause zwischendurch. \
+          Junge, engagierte Mitarbeiter*innen begleiten dich durch das Jahr.',
+        icon: 'tabler:template',
+      },
+      {
+        title: 'Ein Schritt zum Erwachsenwerden',
+        description:
+          'Am Tag der Konfirmation wirst du nicht plötzlich um drei Jahre älter. Trotzdem: Die Konfirmation kann für dich so ein Schritt sein, der sagt: \
+          Ich mach‘ mir meine eigene Meinung! „Ja, ich will“ – oder auch nicht! Ein Schritt zum Erwachsenwerden eben.',
+        icon: 'tabler:template',
+      },
+      {
+        title: 'Mitarbeiten',
+        description:
+          'Wer hat noch nicht, wer will nochmal? \
+          Deine Konfirmation ist einmalig. Das heißt aber nicht, dass es nachher aus sein muss: \
+          Es geht weiter – und wenn du magst, mit dir!! Du kannst als Trainee die Konfirmand_innen im nächsten Jahr begleiten – das kann heißen, \
+          dass du zum Ausprobieren einfach ein bisserl reinschnuppern willst, \
+          oder vielleicht magst du einmal ein Spiel vorbereiten oder bei einer Andacht mitmachen? Wenn du Lust hast, frag‘ eine*n Mitarbeiter*in!',
+        icon: 'tabler:template',
+      },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-12.01.19-18-03-28.png',
+      alt: 'Taufe',
+    }}
+  />
+  <Gallery
+    title="Bilder aus der Konfi-Zeit"
+    tagline="Impressionen"
+    columns={3}
+    items={[
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-21.10.18-13-05-28.png',
+        description: 'Herzlich willkommen!'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-17.03.18-17-39-59.png',
+        description: 'Herzlich willkommen!'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-17.03.18-14-53-07.png',
+        description: 'Herzlich willkommen!'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-18.05.19-16-31-34.png',
+        description: 'Herzlich willkommen!'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-27.04.19-18-39-39.png',
+        description: 'Herzlich willkommen!'        
+      },
+      {        
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-13.01.19-11-36-33.png',
+        description: 'Herzlich willkommen!'        
+      },
+
+      
+
+
+    ]}
+    />
+</Layout>

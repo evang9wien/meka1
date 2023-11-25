@@ -85,27 +85,27 @@ export const headerData = {
       links: [
         {
           text: 'Taufe',
-          href: getPermalink('/#features'),
+          href: getPermalink('/kirche/taufe'),
         },
         {
           text: 'Konfirmation',
-          href: getPermalink('/services'),
+          href: getPermalink('/kirche/konfirmation'),
         },
         {
           text: 'Hochzeit',
-          href: getPermalink('/pricing'),
+          href: getPermalink('/kirche/hochzeit'),
         },
         {
           text: 'Eintritt',
-          href: getPermalink('/about'),
+          href: getPermalink('/kirche/eintritt'),
         },
         {
           text: 'Gemeindewechsel',
-          href: getPermalink('/about'),
+          href: getPermalink('/kirche/gemeindewechsel'),
         },
         {
           text: 'Todesfall',
-          href: getPermalink('/about'),
+          href: getPermalink('/kirche/todesfall'),
         },
       ],
     },
