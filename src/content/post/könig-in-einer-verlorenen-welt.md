@@ -19,4 +19,5 @@ Wir sollen „die Tore weit und die Türen hoch“ (Psalm 24) machen, um ihn zu 
 Im Advent und zu Weihnachten werden wir einmal mehr ermutigt, unser Vertrauen auf Christus zu setzen, dessen Geburt wir zu Weihnachten feiern. Er bringt Segen und Gerechtigkeit. Vertrauen muss freilich nach und nach wachsen. Und Vertrauen kann erschüttert werden. In diesem Spannungsfeld bewegt sich der christliche Glaube. Unsere Gottesdienste und Angebote im Advent und zu Weihnachten laden dazu ein, sich gemeinsam in diesem Raum des Glaubens zu bewegen, dem Geheimnis von Weihnachten auf die Spur zu kommen und dem „König der Ehre“ zu begegnen.
 
 Einen gesegneten Advent und fröhliche Weihnachten
+
 Ihr Pfarrer Stefan Fleischner-Janits
