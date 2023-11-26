@@ -1,24 +1,27 @@
 ---
-title: "Für Kinder: Weihnachten mit Zuversicht"
+title: 'Für Kinder: Weihnachten mit Zuversicht'
 excerpt: Kinder ab 8 Jahren sind eingeladen, sich gemeinsam mit Skipper Caro auf
   die Suche nach dem „Weihnachtsschatz“ zu begeben.  Das Zuversichtstraining
   startet wieder am 17. November.
 category: kinder
+tags:
+  - news
 image: https://www.evang9.wien/root/wp-content/uploads/2023/11/Zuversicht_200.png
 publishDate: 2023-11-19T22:25:13.068Z
 author: eidmann
 ---
+
 <!--StartFragment-->
 
-**Ahoi, ihr Landratten und Pirat*innen!**
+**Ahoi, ihr Landratten und Pirat\*innen!**
 
-Die „MS Zuversicht“ wird ab 17. November wieder in der Seegasse vor Anker gehen! Kinder ab 8 Jahren sind eingeladen, sich gemeinsam mit Skipper Caro auf die Suche nach dem „Weihnachtsschatz“ zu begeben. Wir suchen persönliche Schätze und erfinden kleine Szenen. Damit wollen wir gemeinsam ein kleines Theaterstück entwickeln, das uns direkt zum „Weihnachtsschatz“ führen wird. Im Weihnachtsgottesdienst am 24. Dezember um 15:00 werden wir unseren Familien und Freund*innen von unserem Abenteuer erzählen. Kommt mit! Ich freue mich auf euch! 
+Die „MS Zuversicht“ wird ab 17. November wieder in der Seegasse vor Anker gehen! Kinder ab 8 Jahren sind eingeladen, sich gemeinsam mit Skipper Caro auf die Suche nach dem „Weihnachtsschatz“ zu begeben. Wir suchen persönliche Schätze und erfinden kleine Szenen. Damit wollen wir gemeinsam ein kleines Theaterstück entwickeln, das uns direkt zum „Weihnachtsschatz“ führen wird. Im Weihnachtsgottesdienst am 24. Dezember um 15:00 werden wir unseren Familien und Freund\*innen von unserem Abenteuer erzählen. Kommt mit! Ich freue mich auf euch!
 
 Eure Caro
 
 ![](https://www.evang9.wien/root/wp-content/uploads/2022/05/Seegassen-Matrosinnen.png)
 
-- - -
+---
 
 **Ahoi! Die „MS-Zuversicht“ geht wieder im Herbst 2023 in der Seegasse vor Anker und zwar in der Messiaskapelle**.
 
@@ -33,7 +36,7 @@ Sonntag, 24. Dezember 2023 um 15 Uhr (Weihnachtsgottesdienst für die ganze Fami
 
 **Weitere Infos bei Pfarrer Stefan Fleischner-Janits: [pfarrer@evang9.wien](mailto:pfarrer@evang9.wien)**
 
-- - -
+---
 
 **Liebe Eltern!**\
 Wir starten ein neues Angebot für Kinder unserer Gemeinde (und alle, die Interesse haben).

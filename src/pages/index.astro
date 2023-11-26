@@ -8,7 +8,8 @@ import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import Content from '~/components/widgets/Content.astro';
-import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+import BlogTagPosts from '~/components/widgets/BlogTagPosts.astro';
+import BlogCategoryPosts from '~/components/widgets/BlogCategoryPosts.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
@@ -40,11 +41,15 @@ const metadata = {
 
   <!-- Neuigkeiten -->
 
-  <BlogLatestPosts
+  <BlogTagPosts
     title="Neuigkeiten aus der Seegasse"
     information={`Hier gibt es regelmässig Aktuelles.
                 `}
+    tags={['news']}
   />
+
+  <!-- Impulse -->
+  <BlogTagPosts title="Impulse" information={`Impulse, Gedanke, Ideen ... `} tags={['impuls']} />
 
   <!-- Leitbild -->
 
@@ -63,19 +68,21 @@ const metadata = {
         Um die Messiaskapelle kennen zu lernen, wird man hinter diese Fassade schauen müssen. Und auch hinter der
         Fassade sind es besonders die Menschen, die die Messiaskapelle ausmachen. Wir freuen uns auf Sie!
       </span>
-      <br /><br/>
+      <br /><br />
        Wir sind eine junge, dynamische Gemeinde – im Zentrum unseres Glaubens sind wir Gott und seinem Wort in der
       heiligen Schrift eng verbunden. Unsere äußeren Formen sind modern und zeitgemäß; im Mittelpunkt steht für uns
       Christus, der lebendige Sohn Gottes.
-      
-      <br/>
-      
-      Wir wollen mit unserer Gemeindearbeit dazu beitragen, dass immer mehr Menschen zu souveränen und mündigen
-      Christ_innen, Bibelleser_innen werden. Dabei ist uns eine besonders große Vielfalt, sei es im Angebot, sei es in
-      den Menschen, die zu uns gehören und sei es in den Glaubensformen, die hier gelebt werden, wichtig.
+
+      <br />
+
+       Wir wollen mit unserer Gemeindearbeit dazu beitragen, dass immer mehr Menschen zu souveränen und mündigen Christ_innen,
+      Bibelleser_innen werden. Dabei ist uns eine besonders große Vielfalt, sei es im Angebot, sei es in den Menschen, die
+      zu uns gehören und sei es in den Glaubensformen, die hier gelebt werden, wichtig.
       <br />
        Keine Vielfalt gibt es darin, wer Herr unserer Kirche ist: wir vertrauen auf das überraschende Eingreifen Gottes.
-      <br/><br/>
+
+
+      <br /><br />
       <span class="font-semibold"> Kommen Sie und erleben Sie die Messiaskapelle!</span>
     </Fragment>
   </Hero2>
@@ -146,7 +153,7 @@ const metadata = {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Presbies-Vorlage-Web.png',
         description: '',
       },
-      
+
       {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2022/04/mike.png',
         description: 'Mike Doyle',
@@ -159,7 +166,7 @@ const metadata = {
   />
 
   <Features
-    id="lektoren"  
+    id="lektoren"
     tagline="Lesepredigten"
     title="Lektor_innen"
     subtitle="Ob in Zeiten mit oder ohne Pfarrer_in versuchen wir Abwechslung und unterschiedliche Themenschwerpunkte in die Gottesdienste zu bringen. Jeder_r unserer Lektor_innen bringt seine persönlichen Erfahrungen mit Gott mit und beschäftigt sich privat und beruflich mit unterschiedlichen Dingen. So ist jede Predigt auf besondere Art von dem_der Vortragenden geprägt."
