@@ -6,6 +6,8 @@ excerpt: "Er hat es tatsächlich geschafft: der Rechtspopulist und selbsternannt
   wirtschaftspolitische Ansichten, die – diplomatisch gesprochen – auf
   unterschiedliche Resonanz stoßen ..."
 category: impuls
+tags:
+  - impuls
 image: https://www.evang9.wien/root/wp-content/uploads/2023/11/chainsaw-2192631.jpg
 publishDate: 2023-11-26T21:32:39.382Z
 author: stfj
