@@ -158,9 +158,9 @@ export const headerData = {
 export const footerData = {
   links: [],
   secondaryLinks: [
-    { text: 'Kontakt', href: getPermalink('/terms') },
-    { text: 'Impressum', href: getPermalink('/privacy') },
-    { text: 'DSGVO', href: getPermalink('/privacy') },
+    { text: 'Kontakt', href: getPermalink('/kontakt') },
+    { text: 'Impressum', href: getPermalink('/impressum') },
+    { text: 'DSGVO', href: getPermalink('/dsvo') },
   ],
   socialLinks: [
     { ariaLabel: 'X', icon: 'tabler:brand-x', href: '#' },
