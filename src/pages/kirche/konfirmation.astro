@@ -3,6 +3,8 @@ import Layout from '~/layouts/PageLayout.astro';
 import MekaBilder from '../mekabilder.astro';
 import Gallery from '~/components/widgets/Gallery.astro';
 import Features3 from '~/components/widgets/Features3.astro';
+import BlogTagPosts from '~/components/widgets/BlogTagPosts.astro';
+
 const metadata = {
   title: 'Konfirmation',
   ignoreTitleTemplate: true,
@@ -64,43 +66,45 @@ const metadata = {
       },
     ]}
     image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-12.01.19-18-03-28.png',
-      alt: 'Taufe',
+      src: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'Konfirmation',
     }}
+  />
+  <BlogTagPosts
+    title="Konfirmation in der Seegasse"
+    information={`Hier gibt es regelmässig aktuelle Informationen zur Konfizeit.
+                `}
+    tags={['konfi']}
   />
   <Gallery
     title="Bilder aus der Konfi-Zeit"
     tagline="Impressionen"
     columns={3}
     items={[
-      {        
+      {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-21.10.18-13-05-28.png',
-        description: 'Herzlich willkommen!'        
+        description: 'Herzlich willkommen!',
       },
-      {        
+      {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-17.03.18-17-39-59.png',
-        description: 'Herzlich willkommen!'        
+        description: 'Herzlich willkommen!',
       },
-      {        
+      {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-17.03.18-14-53-07.png',
-        description: 'Herzlich willkommen!'        
+        description: 'Herzlich willkommen!',
       },
-      {        
+      {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-18.05.19-16-31-34.png',
-        description: 'Herzlich willkommen!'        
+        description: 'Herzlich willkommen!',
       },
-      {        
+      {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-27.04.19-18-39-39.png',
-        description: 'Herzlich willkommen!'        
+        description: 'Herzlich willkommen!',
       },
-      {        
+      {
         image: 'https://www.evang9.wien/root/wp-content/uploads/2019/09/Foto-13.01.19-11-36-33.png',
-        description: 'Herzlich willkommen!'        
+        description: 'Herzlich willkommen!',
       },
-
-      
-
-
     ]}
-    />
+  />
 </Layout>
