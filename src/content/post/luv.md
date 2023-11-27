@@ -5,7 +5,7 @@ excerpt: Für spirituell Interessierte starten wir wieder unseren LUV-Workshop a
 image: https://www.evang9.wien/root/wp-content/uploads/2023/01/LUV-Cover_200.jpg
 category: Tutorials
 tags:
-  - news
+  - luv
 metadata:
   canonical: https://astrowind.vercel.app/get-started-website-with-astro-tailwind-css
 ---
