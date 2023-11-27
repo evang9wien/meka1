@@ -1,11 +1,12 @@
 ---
 publishDate: 2023-11-27T00:00:00Z
 title: Advent und Weihnachten 2023
-excerpt: Im Advent bereiten wir uns auf Weihnachten vor. Bei unseren Angeboten im Dezember ist für jeden etwas dabei. Weitere Informationen finden Sie hier.
+excerpt: 'Im Advent bereiten wir uns auf Weihnachten vor. Bei unseren Angeboten im Dezember ist für jeden etwas dabei. Weitere Informationen finden Sie hier.'
 image: https://www.evang9.wien/root/wp-content/uploads/2023/11/Weihanchten23.png
 tags:
-  - news 
+  - news
 ---
+
 ## Wir feiern auch in diesem Jahr Weihnachten und wollen uns im Advent gemeinsam auf vielfältige Art und Weise auf das Fest vorbereiten.
 
 Wir laden herzlich ein zu unseren Gottesdiensten im Advent und zu Weihnachten.
@@ -22,7 +23,7 @@ Am **Heiligen Abend** (24. Dezember 2023) laden wir um **15 Uhr zur Kinderweihna
 
 Unseren **Gottesdienst zum Christtag** feiern wir am 25. Dezember um 18 Uhr in der Messiaskapelle.
 
-Gemeinsam mit der Gemeinde in der Inneren Stadt feiern wir **Gottesdienst am 26. Dezember um 10 Uhr in der Lutherischen Stadtkirche**. 
+Gemeinsam mit der Gemeinde in der Inneren Stadt feiern wir **Gottesdienst am 26. Dezember um 10 Uhr in der Lutherischen Stadtkirche**.
 
 Am Sonntag, 31. Dezember feiern wir wie gewohnt um 10 Uhr Gottesdienst in der Messiaskapelle.
 
