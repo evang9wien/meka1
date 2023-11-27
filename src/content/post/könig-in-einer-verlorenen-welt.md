@@ -6,7 +6,7 @@ excerpt: 'Er hat es tatsächlich geschafft: der Rechtspopulist und selbsternannt
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2023/11/chainsaw-2192631.jpg
+image: https://www.evang9.wien/root/wp-content/uploads/2023/11/chainsaw-Bearbeitet-e1701082145764.jpg
 publishDate: 2023-11-26T21:32:39.382Z
 author: stfj
 ---
