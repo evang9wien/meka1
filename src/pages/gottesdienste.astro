@@ -19,6 +19,42 @@ const metadata = {
 <Layout metadata={metadata}>
   <!-- Hero Widget ******************* -->
 
+  <Hero
+    title="Sonntags um 10"
+    tagline="Jeden Sonntag laden wir zum gemeinsamen Gottesdienst um 10 Uhr ein."
+    actions={[]}
+    image={{ src: 'https://www.evang9.wien/root/wp-content/uploads/2022/11/img_8_1665922896567.jpg', alt: 'Godi' }}
+  >
+    <Fragment slot="subtitle">
+      Herzlich willkommen zu unseren Gottesdiensten. Wir feiern jeden Sonntag um 10 Uhr mit guter Musik, inspirierenden
+      Predigten und in netter Gesellschaft. Am 1. und 3. Sonntag feiern wir miteinander Abendmahl. Im Anschluss gibt es
+      bei Kaffee, Tee und Kuchen die Möglichkeit, miteinander ins Gespräch zu kommen.
+    </Fragment>
+  </Hero>
+  <Hero
+    id="oase"
+    title="Sonntag um 19 Uhr: OASE"
+    tagline="Einmal im Monat laden wir im Wintersemester zu einem OASE-Gottesdienst ein."
+    actions={[]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2022/11/221104_OASE_Plakat-e1692778894979-845x1024.png',
+      alt: 'Godi',
+    }}
+  >
+    <Fragment slot="subtitle">
+      <div class="text-left">
+        Gott begegnen in meditativer Atmosphäre, in Bibellesung und kurzem Impuls sowie mit Ruhe und Zeit für das
+        persönliche Gebet. <br />
+        <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Jeweils Sonntags um 19 Uhr am:</h2>
+        <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+          <li>3. Dezember 2023</li>
+          <li>7. Jänner 2024</li>
+          <li>4. Februar 2024</li>
+          <li>3. März 2023</li>
+        </ul>
+      </div>
+    </Fragment>
+  </Hero>
   <Hero title="Termine" actions={[]}>
     <Fragment slot="subtitle">
       Hier ist verlässlichste Information über unsere laufenden Termine. Falls die Gemeindezeitung abweicht, stimmen

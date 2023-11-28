@@ -32,15 +32,15 @@ export const headerData = {
       links: [
         {
           text: 'Sonntags um 10',
-          href: getPermalink('/#features'),
+          href: getPermalink('/gottesdienste'),
         },
         {
           text: 'Sontags um 19 Uhr: OASE',
-          href: getPermalink('/services'),
+          href: getPermalink('/gottesdienste#oase'),
         },
         {
           text: 'Termine',
-          href: getPermalink('/pricing'),
+          href: getPermalink('/termine'),
         },
         {
           text: 'Zum Nachhören',
