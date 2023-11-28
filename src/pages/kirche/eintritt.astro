@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import MekaBilder from '../mekabilder.astro';
+import Steps from '~/components/widgets/Steps.astro';
 import Features3 from '~/components/widgets/Features3.astro';
 const metadata = {
   title: 'Eintritt',
@@ -10,45 +11,53 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <Features3
-    title="Taufe"
-    subtitle="Wir freuen uns! Taufen sind ganz wichtige und sehr persönliche Feiern, deshalb wird jede Taufe genau vorbesprochen und vorbereitet."
+    title="Eintritt in die evangelische Kirche"
+    subtitle="Herzlich willkommen und wir freuen uns, daß Sie sich für unsere Evangelische Kirche interessieren!"
     columns={3}
     isBeforeContent={true}
     items={[
       {
-        title: 'Amtshandlung',
-        description:
-          'Für Amtshandlungen ist in der Evangelischen Kirche in Österreich immer die Pfarrgemeinde zuständig, zu der Sie gehören. Dies wird in der Regel die Gemeinde sein, in der Ihr Wohnsitz liegt. Gehören Sie nicht zu unserer Gemeinde, und möchten eine Amtshandlung in unserer Kirche vornehmen lassen, benötigen Sie dazu die Delegation Ihrer Gemeinde, aus der Ihre Mitgliedschaft hervorgeht.',
+        title: 'Termin',
+        description: 'Bitte vereinbaren Sie einen persönlichen Termin mit unserem Pfarrer/unserer Pfarrerin.',
         icon: 'tabler:template',
       },
       {
-        title: 'Kontakt',
-        description:
-          'Bitte nehmen Sie mit uns Kontakt auf. Bei der Gestaltung von Tauffeiern gibt es viele Möglichkeiten und wir werden gemeinsam mit Ihnen und den Pat_innen dieses Fest in unserer Kirche vorbereiten. Ein Besprechungstermin mit den Pat_innen gemeinsam sollte eingeplant werden. (Beispiel für einen Ablauf: Taufablauf )',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Unterlagen',
-        description:
-          'Geburtsurkunde des Täuflings Taufschein und Heiratsurkunde der Eltern oder Geburtsurkunde bei alleinerziehenden Frauen/Männern. Taufscheine der Pat_innen',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Pat_innen',
-        description:
-          'Pat_innen müssen einem christlichen Bekenntnis angehören. Bitte beachten sie, daß es sinnvoll ist, wenn mindestens ein Pate/eine Patin der evangelischen Kirche angehört. Sollten die Eltern nicht Mitglieder der evangelischen Kirche sein oder keinem religiösen Bekenntnis mehr angehören, so muss in diesem Fall zumindest ein Pate/eine Patin der evangelischen Kirche angehören.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Besuch',
+        title: 'Empfehlenswert',
         description:
           'Empfehlenswert (und damit Sie die Messiaskapelle kennenlernen können) ist ein Besuch unserer Gottesdienste – jeweils Sonntag um 10 Uhr.',
         icon: 'tabler:template',
       },
+      {
+        title: 'Amtshandlung',
+        description:
+          'Für Amtshandlungen ist in der Evangelischen Kirche in Österreich immer die Pfarrgemeinde zuständig, zu der Sie gehören. Dies wird in der Regel die Gemeinde sein, in der Ihr Wohnsitz liegt. \
+Gehören Sie nicht zu unserer Gemeinde, und möchten eine Amtshandlung in unserer Kirche vornehmen lassen, benötigen Sie dazu die Delegation Ihrer Gemeinde, aus der Ihre Mitgliedschaft hervorgeht.',
+        icon: 'tabler:template',
+      },
     ]}
     image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2023/11/taufe2.jpeg',
-      alt: 'Taufe',
+      src: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'Eintritt',
+    }}
+  />
+  <Steps
+    title="Benötigte Unterlagen"
+    items={[
+      {
+        title: 'Taufschein',
+        description: '',
+        icon: 'tabler:package',
+      },
+      {
+        title:
+          'Bestätigung des Austrittes aus einer anderen Kirche (wird durch den Magistrat der Stadt Wien bestätigt)',
+        description: '',
+        icon: 'tabler:letter-case',
+      },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-02-1024x1024.png',
+      alt: 'Steps image',
     }}
   />
 </Layout>

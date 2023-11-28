@@ -2,6 +2,8 @@
 import Layout from '~/layouts/PageLayout.astro';
 import MekaBilder from '../mekabilder.astro';
 import Features3 from '~/components/widgets/Features3.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
 const metadata = {
   title: 'Gemeindewechsel',
   ignoreTitleTemplate: true,
@@ -11,44 +13,48 @@ const metadata = {
 <Layout metadata={metadata}>
   <Features3
     title="Gemeindewechsel"
-    subtitle="Wir freuen uns! Taufen sind ganz wichtige und sehr persönliche Feiern, deshalb wird jede Taufe genau vorbesprochen und vorbereitet."
+    subtitle=""
     columns={3}
     isBeforeContent={true}
     items={[
       {
-        title: 'Amtshandlung',
-        description:
-          'Für Amtshandlungen ist in der Evangelischen Kirche in Österreich immer die Pfarrgemeinde zuständig, zu der Sie gehören. Dies wird in der Regel die Gemeinde sein, in der Ihr Wohnsitz liegt. Gehören Sie nicht zu unserer Gemeinde, und möchten eine Amtshandlung in unserer Kirche vornehmen lassen, benötigen Sie dazu die Delegation Ihrer Gemeinde, aus der Ihre Mitgliedschaft hervorgeht.',
+        title: 'Umgezogen',
+        description: 'Sie sind umgezogen, möchten aber weiterhin der Messiaskapelle als  Kirchengemeinde angehören?',
         icon: 'tabler:template',
       },
       {
-        title: 'Kontakt',
-        description:
-          'Bitte nehmen Sie mit uns Kontakt auf. Bei der Gestaltung von Tauffeiern gibt es viele Möglichkeiten und wir werden gemeinsam mit Ihnen und den Pat_innen dieses Fest in unserer Kirche vorbereiten. Ein Besprechungstermin mit den Pat_innen gemeinsam sollte eingeplant werden. (Beispiel für einen Ablauf: Taufablauf )',
+        title: 'Wechsel',
+        description: 'Sie  möchten der Messiaskapelle als  Kirchengemeinde angehören?',
         icon: 'tabler:template',
       },
       {
-        title: 'Unterlagen',
-        description:
-          'Geburtsurkunde des Täuflings Taufschein und Heiratsurkunde der Eltern oder Geburtsurkunde bei alleinerziehenden Frauen/Männern. Taufscheine der Pat_innen',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Pat_innen',
-        description:
-          'Pat_innen müssen einem christlichen Bekenntnis angehören. Bitte beachten sie, daß es sinnvoll ist, wenn mindestens ein Pate/eine Patin der evangelischen Kirche angehört. Sollten die Eltern nicht Mitglieder der evangelischen Kirche sein oder keinem religiösen Bekenntnis mehr angehören, so muss in diesem Fall zumindest ein Pate/eine Patin der evangelischen Kirche angehören.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Besuch',
-        description:
-          'Empfehlenswert (und damit Sie die Messiaskapelle kennenlernen können) ist ein Besuch unserer Gottesdienste – jeweils Sonntag um 10 Uhr.',
+        title: 'Antrag',
+        description: 'Stellen Sie einen „Antrag auf Veränderung der Pfarrgemeindezugehörigkeit“!',
         icon: 'tabler:template',
       },
     ]}
     image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2023/11/taufe2.jpeg',
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/02/cropped-eingang-3.png',
       alt: 'Taufe',
     }}
   />
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Download',
+        href: 'https://evang9.wien/root/wp-content/uploads/2019/04/antrag.pdf',
+        target: '_blank',
+        icon: 'tabler:download',
+      },
+    ]}
+  >
+    <Fragment slot="title">
+    Antrag
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      „Antrag auf Veränderung der Pfarrgemeindezugehörigkeit“!
+    </Fragment>
+  </CallToAction>
 </Layout>

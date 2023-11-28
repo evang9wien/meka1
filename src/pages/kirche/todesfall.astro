@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import MekaBilder from '../mekabilder.astro';
+import Steps from '~/components/widgets/Steps.astro';
 import Features3 from '~/components/widgets/Features3.astro';
 const metadata = {
   title: 'Todesfall',
@@ -11,32 +12,36 @@ const metadata = {
 <Layout metadata={metadata}>
   <Features3
     title="Todesfall"
-    subtitle="Wir freuen uns! Taufen sind ganz wichtige und sehr persönliche Feiern, deshalb wird jede Taufe genau vorbesprochen und vorbereitet."
+    subtitle="Es tut uns leid, dass Sie einen nahestehenden Menschen verloren haben."
     columns={3}
     isBeforeContent={true}
     items={[
       {
-        title: 'Amtshandlung',
+        title: 'Begräbnistermin',
         description:
-          'Für Amtshandlungen ist in der Evangelischen Kirche in Österreich immer die Pfarrgemeinde zuständig, zu der Sie gehören. Dies wird in der Regel die Gemeinde sein, in der Ihr Wohnsitz liegt. Gehören Sie nicht zu unserer Gemeinde, und möchten eine Amtshandlung in unserer Kirche vornehmen lassen, benötigen Sie dazu die Delegation Ihrer Gemeinde, aus der Ihre Mitgliedschaft hervorgeht.',
+          'Wenn Sie an einem bestimmten Begräbnistermin interessiert sind, bitten Sie bei der Aufnahme um sofortigen Kontakt mit unserem Pfarramt Tel.: 512-83-92.',
         icon: 'tabler:template',
       },
       {
-        title: 'Kontakt',
+        title: 'Formalitäten ',
         description:
-          'Bitte nehmen Sie mit uns Kontakt auf. Bei der Gestaltung von Tauffeiern gibt es viele Möglichkeiten und wir werden gemeinsam mit Ihnen und den Pat_innen dieses Fest in unserer Kirche vorbereiten. Ein Besprechungstermin mit den Pat_innen gemeinsam sollte eingeplant werden. (Beispiel für einen Ablauf: Taufablauf )',
+          'Grundsätzlich wenden Sie sich in Wien zunächst an ein Bestattungsunternehmen. Wenn diese Formalitäten erledigt sind, dann nehmen wir gerne mit Ihnen Kontakt auf und besprechen die weitere Vorgehensweise persönlich.',
         icon: 'tabler:template',
       },
       {
-        title: 'Unterlagen',
+        title: 'Lebenslauf',
         description:
-          'Geburtsurkunde des Täuflings Taufschein und Heiratsurkunde der Eltern oder Geburtsurkunde bei alleinerziehenden Frauen/Männern. Taufscheine der Pat_innen',
+        'Hilfreich ist es, wenn Sie einen Lebenslauf der/des Verstorbenen vorbereiten. Wir wissen, \
+        daß rund um einen Todesfall viele Amtswege zu erledigen und manche Äußerlichkeiten beachtet\
+         werden müssen. Als Kirche bemühen wir uns aber in erster Linie die menschliche Komponente \
+         im Auge zu behalten und die christliche Auferstehungshoffnung in den Mittelpunkt unserer Bemühungen zu stellen.\
+          ',
         icon: 'tabler:template',
       },
       {
-        title: 'Pat_innen',
+        title: 'Seelsorge',
         description:
-          'Pat_innen müssen einem christlichen Bekenntnis angehören. Bitte beachten sie, daß es sinnvoll ist, wenn mindestens ein Pate/eine Patin der evangelischen Kirche angehört. Sollten die Eltern nicht Mitglieder der evangelischen Kirche sein oder keinem religiösen Bekenntnis mehr angehören, so muss in diesem Fall zumindest ein Pate/eine Patin der evangelischen Kirche angehören.',
+          'Für seelsorgerliche Gespräche steht unser_e Pfarrer_in gerne zur Verfügung.',
         icon: 'tabler:template',
       },
       {
@@ -47,8 +52,23 @@ const metadata = {
       },
     ]}
     image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2023/11/taufe2.jpeg',
+      src: 'https://images.unsplash.com/flagged/photo-1580354088777-25d6128a414b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       alt: 'Taufe',
+    }}
+  />
+  <Steps
+    title="Benötigte Unterlagen"
+    items={[
+      {
+        title: 'Lebenslauf der/des Verstorbenen',
+        description: '',
+        icon: 'tabler:package',
+      },
+      
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-03-1024x1024.png',
+      alt: 'Steps image',
     }}
   />
 </Layout>
