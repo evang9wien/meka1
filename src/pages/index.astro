@@ -1,5 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import { getPermalink } from '~/utils/permalinks';
 
 import Hero from '~/components/widgets/Hero.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
@@ -25,17 +26,26 @@ const metadata = {
 <Layout metadata={metadata}>
   <!-- Hero Widget ******************* -->
 
-  <Hero 
-    
-    image={{ src: '~/assets/images/cropped-eingang-3.png', alt: 'Eingang Image' }}>
+  <Hero
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Angebote',
+        href: getPermalink('/angebote'),
+        icon: 'tabler:calendar-plus',
+      },
+      { text: 'Termine', href: getPermalink('/termine') },
+    ]}
+    image={{ src: '~/assets/images/cropped-eingang-3.png', alt: 'Eingang Image' }}
+  >
     <Fragment slot="title">
       Willkommen in der
       <span class="text-accent dark:text-white highlight">Evangelischen</span> Pfarrgemeinde am Alsergrund
     </Fragment>
 
     <Fragment slot="subtitle">
-      Schön, dass Sie unsere Website besuchen! Wir sind eine moderne, dynamische und offene Gemeinde. Die frohe Botschaft von der Liebe Gottes in die Welt zu tragen und zu leben, verstehen wir als
-      unseren Auftrag.
+      Schön, dass Sie unsere Website besuchen! Wir sind eine moderne, dynamische und offene Gemeinde. Die frohe
+      Botschaft von der Liebe Gottes in die Welt zu tragen und zu leben, verstehen wir als unseren Auftrag.
     </Fragment>
   </Hero>
 
