@@ -57,24 +57,20 @@ export const headerData = {
           href: getPermalink('/angebote'),
         },
         {
-          text: 'Für Familien: Kirche Kunterbunt',
-          href: getPermalink('/mekaangebotepage'),
-        },
-        {
-          text: 'LUV - Ein Workshop für dich',
-          href: getPermalink('/landing/click-through'),
+          text: 'Angebote',
+          href: getPermalink('/angebote#angebot'),
         },
         {
           text: 'Pfarrer to go',
-          href: getPermalink('/landing/product'),
+          href: getPermalink('/angebote#angebot'),
         },
         {
           text: 'MEKA Classic',
-          href: getPermalink('/landing/pre-launch'),
+          href: getPermalink('/angebote#angebot'),
         },
         {
-          text: 'Zuversichtstraining',
-          href: getPermalink('/landing/subscription'),
+          text: 'Zuversichtstraining goes Christmas',
+          href: getPermalink('/angebote#angebot'),
         },
       ],
     },

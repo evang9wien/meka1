@@ -5,6 +5,7 @@ excerpt: 'Im Advent bereiten wir uns auf Weihnachten vor. Bei unseren Angeboten 
 image: https://www.evang9.wien/root/wp-content/uploads/2023/11/Weihanchten23.png
 tags:
   - news
+  - angebot
 ---
 
 ## Wir feiern auch in diesem Jahr Weihnachten und wollen uns im Advent gemeinsam auf vielfältige Art und Weise auf das Fest vorbereiten.
