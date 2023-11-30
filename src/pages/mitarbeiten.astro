@@ -1,0 +1,123 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import BlogTagPosts from '~/components/widgets/BlogTagPosts.astro';
+import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import MekaBilder from './mekabilder.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
+const metadata = {
+  title: 'Angebote',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <Features
+    id="mitarbeiten"
+    tagline="Mitarbeiten"
+    title="Helfende Hand"
+    subtitle="Bei uns gibt es sehr viele Möglichkeiten mitzuarbeiten! Und wir freuen uns wirklich über \
+    jede und jeden, die/der hilft, unser Gemeindeleben schöner zu gestalten. <br/> Und jede helfende Hand entlastet die, die schon mithelfen. \
+    Möchten Sie mithelfen? Am besten sprechen Sie einfach jemanden vor oder nach dem Gottesdienst an oder Sie melden \
+    sich bei den für den jeweiligen Bereich Zuständigen."
+  />
+  <Content
+    isAfterContent
+    items={[
+      {
+        title: 'Gäste begrüßen',
+        description: ``,
+      },
+      {
+        title: 'Kuchen backen',
+        description: '',
+      },
+      {
+        title: 'Kaffee verteilen',
+        description: '',
+      },
+      {
+        title: 'Vorlesen',
+        description: '',
+      },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/junge-mitarbeiterin-300x300.png',
+      alt: 'KS',
+    }}
+  >
+    <Fragment slot="content"><span class="font-semibold text-3xl md:text-4xl">Kirchenservice</span></Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+  <Content
+    isReversed
+    isAfterContent
+    items={[
+      {
+        title: 'Kinder begleiten',
+        description: ``,
+      },
+      {
+        title: 'Vorlesen',
+        description: '',
+      },
+      {
+        title: 'Getränke verteilen',
+        description: '',
+      },
+      {
+        title: 'Mitbastelnn',
+        description: '',
+      },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Mitarbeiterin-bemalt-wand-300x300.png',
+      alt: 'KS',
+    }}
+  >
+    <Fragment slot="content"><h2 class="font-semibold text-3xl md:text-4xl">Kinder-Kirche</h2></Fragment>
+  </Content>
+  <Content
+    isAfterContent
+    items={[
+      {
+        title: 'Piano',
+        description: ``,
+      },
+      {
+        title: 'Guitarre',
+        description: '',
+      },
+      {
+        title: 'Voice',
+        description: '',
+      },
+      {
+        title: 'Drums',
+        description: '',
+      },
+      {
+        title: 'Bass',
+        description: '',
+      },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/geigerin-spielt-musik-300x300.png',
+      alt: 'KS',
+    }}
+  >
+    <Fragment slot="content">
+      <h2 class="font-semibold text-3xl md:text-4xl">Musik – mitspielen in der Combo</h2><br /><br />
+       Alle , die ein Musikinstrument spielen können oder eine schöne Gesangsstimme haben, sind herzlich willkommen.
+    </Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+</Layout>

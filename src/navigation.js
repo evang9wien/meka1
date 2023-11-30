@@ -111,19 +111,30 @@ export const headerData = {
       links: [
         {
           text: 'Mitarbeiten',
-          href: getPermalink('/#features'),
+          href: getPermalink('/mitarbeiten'),
+        },       
+        {
+          text: 'Kirchenservice',
+          href: getPermalink('/kirchenservice'),
         },
+        {
+          text: 'Combo',
+          href: getPermalink('/combo'),
+        },
+      ],
+    },
+  ],
+  actions: [{ text: 'Termine', href: getPermalink('/termine') }],
+};
+
+export const footerData = {
+  links: [
+    {
+      title: 'Combo',
+      links: [
         {
           text: 'Login',
           href: getPermalink('/combo/loginpage'),
-        },
-        {
-          text: 'Mitarbeiterliste',
-          href: getPermalink('/services'),
-        },
-        {
-          text: 'Kirchenservice',
-          href: getPermalink('/pricing'),
         },
         {
           text: 'Comboplan',
@@ -147,12 +158,24 @@ export const headerData = {
         },
       ],
     },
+    {
+      title: 'Kirchenservice',
+      links: [
+        {
+          text: 'Login',
+          href: getPermalink('/combo/loginpage'),
+        },
+        {
+          text: 'Mitarbeiterliste',
+          href: getPermalink('/'),
+        },
+        {
+          text: 'Kirchenservice',
+          href: getPermalink('/'),
+        },
+      ],
+    },
   ],
-  actions: [{ text: 'Termine', href: getPermalink('/termine') }],
-};
-
-export const footerData = {
-  links: [],
   secondaryLinks: [
     { text: 'Kontakt', href: getPermalink('/kontakt') },
     { text: 'Impressum', href: getPermalink('/impressum') },
