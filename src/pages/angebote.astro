@@ -2,6 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import BlogTagPosts from '~/components/widgets/BlogTagPosts.astro';
+import Content from '~/components/widgets/Content.astro';
 import MekaBilder from './mekabilder.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
 const metadata = {
@@ -45,7 +46,7 @@ const metadata = {
     }}
   />
 
-  <div id="angebot"></div>
+  <Content id="angebot" classes={{ container: 'p-0 md:p-0 lg:p-0' }} />
   <BlogTagPosts
     title="Angebote"
     linkText="Alle Angebote"
