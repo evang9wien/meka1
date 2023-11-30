@@ -1,6 +1,6 @@
 site:
   name: Evangelische Messiaskapelle
-  site: 'https://eidmanna.github.io'
+  site: 'https://evang9.wien'
   base: '/meka1'
   trailingSlash: false
 
@@ -11,7 +11,7 @@ metadata:
   title:
     default: Evangelische Messiaskapelle
     template: '%s — Evang9'
-  description: "Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund "
+  description: 'Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund '
   robots:
     index: true
     follow: true

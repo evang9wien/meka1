@@ -112,7 +112,7 @@ export const headerData = {
         {
           text: 'Mitarbeiten',
           href: getPermalink('/mitarbeiten'),
-        },       
+        },
         {
           text: 'Kirchenservice',
           href: getPermalink('/kirchenservice'),
@@ -171,7 +171,7 @@ export const footerData = {
         },
         {
           text: 'Kirchenservice',
-          href: getPermalink('/'),
+          href: 'https://www.evang9.wien/root/kirchenservice/',
         },
       ],
     },
@@ -188,7 +188,5 @@ export const footerData = {
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/onwidget/astrowind' },
   ],
-  footNote: `
-  Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund © 2023
-  `,
+  footNote: `Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund © 2023`,
 };
