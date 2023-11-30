@@ -124,7 +124,7 @@
     <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
     {#if userAuth}
       <div class="flex flex-row">
-        <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Name"
+        <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>
 
         <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSave} disabled={!selectedmember}
