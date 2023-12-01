@@ -2,7 +2,9 @@
 import Layout from '~/layouts/PageLayout.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import BlogTagPosts from '~/components/widgets/BlogTagPosts.astro';
+import BlogHighlightedPosts from '~/components/widgets/BlogHighlightedPosts.astro';
 import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
 import MekaBilder from './mekabilder.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
 const metadata = {
@@ -44,7 +46,11 @@ const metadata = {
       src: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/f.jpg',
       alt: 'Steps image',
     }}
-  />
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Steps>
 
   <Content id="angebot" classes={{ container: 'p-0 md:p-0 lg:p-0' }} />
   <BlogTagPosts
@@ -53,4 +59,67 @@ const metadata = {
     information={`Hier gibt es regelmässig Aktuelles.`}
     tags={['angebot']}
   />
+
+  <!-- Pfarrer2go -->
+  <Features
+    id="pfarrer2go"
+    tagline="Reden"
+    title="Pfarrer to go"
+    subtitle="Es gibt viele gute Gründe, unser neues Angebot „Pfarrer to go“ in Anspruch zu nehmen. Gerade für Menschen, die neu in unserer Gemeinde sind, ist es eine gute Möglichkeit, unseren Pfarrer und unsere Gemeinde kennenzulernen. Pfarrer Stefan nimmt sich gerne Zeit für einen Spaziergang und ein gutes Gespräch. Wenn gewünscht, fällt dieses Gespräch selbstverständlich auch unter die seelsorgerliche Schweigepflicht. \
+     \
+    "
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features>
+  <Content
+    isAfterContent
+    items={[
+      {
+        title: 'Mal mit jemanden reden, der einfach nur zuhört?',
+        description: ``,
+      },
+      {
+        title: 'Den Pfarrer persönlich kennenlernen?',
+        description: '',
+      },
+      {
+        title: 'Über die Gemeinde und unsere Kirche sprechen?',
+        description: '',
+      },
+      {
+        title: 'Gemeinsam über Gott und die Welt philosophieren und theologisieren?',
+        description: '',
+      },
+      {
+        title: 'Oder einfach Lust auf einen guten Kaffee und einen schönen Spaziergang in netter Gesellschaft?',
+        description: '',
+      },
+      {
+        title: 'Pfarrer to go',
+        description:
+          'Die Terminvereinbarung erfolgt ganz unkompliziert per Mail (pfarrer@evang9.wien), per Telefon (0699 188 77 791) oder persönlich im Anschluss an den Sonntagsgottesdienst. Um den Kaffee kümmert sich unser Pfarrer höchstpersönlich, der dafür gerne seine langjährige Expertise als Mitarbeiter einer amerikanischen Kaffeehauskette einbringt. 😉 Und selbstverständlich gibt es auch heiße Schokolade und verschiedene Sorten Tee.',
+      },
+    ]}
+    image={{
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2022/06/Pfarrertogoneu.png',
+      alt: 'KS',
+    }}
+  >
+    <Fragment slot="content"><span class="font-semibold text-3xl md:text-4xl">Kirchenservice</span></Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!--
+  <BlogHighlightedPosts
+    title="MEKA Classic"
+    linkText="Alle Angebote"
+    information={`Hier gibt es regelmässig Aktuelles.`}
+    postIds={['mekaclassic.md']}
+  />
+   -->
 </Layout>

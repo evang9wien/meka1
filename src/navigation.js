@@ -62,15 +62,15 @@ export const headerData = {
         },
         {
           text: 'Pfarrer to go',
-          href: getPermalink('/angebote#angebot'),
+          href: getPermalink('/angebote#pfarrer2go'),
         },
         {
           text: 'MEKA Classic',
-          href: getPermalink('/angebote#angebot'),
+          href: getPermalink('/mekaclassic'),
         },
         {
           text: 'Zuversichtstraining goes Christmas',
-          href: getPermalink('/angebote#angebot'),
+          href: getPermalink('/zuversichtgoeschristmas'),
         },
       ],
     },
