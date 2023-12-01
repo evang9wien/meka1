@@ -1,7 +1,7 @@
 site:
   name: Evangelische Messiaskapelle
   site: 'https://evang9.wien'
-  base: '/meka1'
+  base: '/pages'
   trailingSlash: false
 
   googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
