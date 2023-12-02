@@ -72,4 +72,8 @@ import Gallery from '~/components/widgets/Gallery.astro';
       description: 'Weihnachtskarte 2016',
     },
   ]}
-/>
+>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Gallery>

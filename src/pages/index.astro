@@ -57,7 +57,11 @@ const metadata = {
     linkText="Alle Neuigkeiten"
     information={`Für weitere Informationen jeweils auf das Bild klicken`}
     tags={['news']}
-  />
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </BlogTagPosts>
 
   <!-- Impulse -->
   <BlogTagPosts
@@ -70,7 +74,7 @@ const metadata = {
   <!-- Leitbild -->
   <Features2
     id="leitbild"
-    title="HERZLICH WILLKOMMEN IN DER MESSIASKAPELLE"
+    title="Herzlich Willkommen in der Messiaskapelle"
     tagline="Leitbild"
     items={[
       {
@@ -229,18 +233,18 @@ const metadata = {
         description: 'Stefan Fleischner-Janits – Pfarrer',
       },
     ]}
-  />
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Gallery>
 
   <Features
     id="lektoren"
     tagline="Lesepredigten"
     title="Lektor_innen"
     subtitle="Ob in Zeiten mit oder ohne Pfarrer_in versuchen wir Abwechslung und unterschiedliche Themenschwerpunkte in die Gottesdienste zu bringen. Jeder_r unserer Lektor_innen bringt seine persönlichen Erfahrungen mit Gott mit und beschäftigt sich privat und beruflich mit unterschiedlichen Dingen. So ist jede Predigt auf besondere Art von dem_der Vortragenden geprägt."
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features>
+  />
 
   <!-- Content Widget **************** -->
   <!-- Content Widget **************** -->
@@ -312,10 +316,6 @@ const metadata = {
     }}
   >
     <Fragment slot="content"><span class="font-semibold">Harald Geschl, Pfarrer i.R.</span></Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
   </Content>
 
   <Content
@@ -387,10 +387,6 @@ const metadata = {
     }}
   >
     <Fragment slot="content"><span class="font-semibold">Lektor Wolfgang Waldschütz.</span></Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
   </Content>
 
   <MekaBilder />
