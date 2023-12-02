@@ -153,7 +153,7 @@ export const footerData = {
           href: getPermalink('/combo/comboplaneditpage'),
         },
         {
-          text: 'Lieder',
+          text: 'Liederauswahl',
           href: getPermalink('/combo/comboliederauswahlpage'),
         },
         {
