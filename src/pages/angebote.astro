@@ -7,6 +7,8 @@ import Content from '~/components/widgets/Content.astro';
 import Features from '~/components/widgets/Features.astro';
 import MekaBilder from './mekabilder.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
+import Gallery from '~/components/widgets/Gallery.astro';
+
 const metadata = {
   title: 'Angebote',
   ignoreTitleTemplate: true,
@@ -14,7 +16,14 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
+  <BlogTagPosts
+    title="Angebote"
+    linkText="Alle Angebote der Messiaskapelle"
+    information={`Für weitere Informationen auf das Bild klicken.`}
+    tags={['angebot']}
+  />
   <Steps
+    id="neuindergemeinde"
     title="NEU IN DER GEMEINDE? WILLKOMMEN!"
     items={[
       {
@@ -52,68 +61,72 @@ const metadata = {
     </Fragment>
   </Steps>
 
-  <Content id="angebot" classes={{ container: 'p-0 md:p-0 lg:p-0' }} />
-  <BlogTagPosts
-    title="Angebote"
-    linkText="Alle Angebote"
-    information={`Hier gibt es regelmässig Aktuelles.`}
-    tags={['angebot']}
-  />
+  <!-- <Content id="angebot" classes={{ container: 'p-0 md:p-0 lg:p-0' }} /> -->
 
   <!-- Pfarrer2go -->
-  <Features
-    id="pfarrer2go"
-    tagline="Reden"
-    title="Pfarrer to go"
-    subtitle="Es gibt viele gute Gründe, unser neues Angebot „Pfarrer to go“ in Anspruch zu nehmen. Gerade für Menschen, die neu in unserer Gemeinde sind, ist es eine gute Möglichkeit, unseren Pfarrer und unsere Gemeinde kennenzulernen. Pfarrer Stefan nimmt sich gerne Zeit für einen Spaziergang und ein gutes Gespräch. Wenn gewünscht, fällt dieses Gespräch selbstverständlich auch unter die seelsorgerliche Schweigepflicht. \
-     \
-    "
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features>
+
   <Content
-    isAfterContent
+    id="graetzloase"
+    tagline="Reden, Entspannen, Essen ... für alle"
+    title="Grätzloase in der Seegasse"
+    isReversed
     items={[
       {
-        title: 'Mal mit jemanden reden, der einfach nur zuhört?',
-        description: ``,
+        title: 'Grätzloase',
+        description: `Weitere Informationen zum Projekt Grätzloase finden Sie auch hier: www.graetzloase.at`,
       },
       {
-        title: 'Den Pfarrer persönlich kennenlernen?',
-        description: '',
+        title: 'Bezirkszeitung',
+        description: 'Einen Bericht über die Eröffnung unserer Grätzloase finden Sie hier in der Bezirkszeitung.',
       },
       {
-        title: 'Über die Gemeinde und unsere Kirche sprechen?',
-        description: '',
-      },
-      {
-        title: 'Gemeinsam über Gott und die Welt philosophieren und theologisieren?',
-        description: '',
-      },
-      {
-        title: 'Oder einfach Lust auf einen guten Kaffee und einen schönen Spaziergang in netter Gesellschaft?',
-        description: '',
-      },
-      {
-        title: 'Pfarrer to go',
-        description:
-          'Die Terminvereinbarung erfolgt ganz unkompliziert per Mail (pfarrer@evang9.wien), per Telefon (0699 188 77 791) oder persönlich im Anschluss an den Sonntagsgottesdienst. Um den Kaffee kümmert sich unser Pfarrer höchstpersönlich, der dafür gerne seine langjährige Expertise als Mitarbeiter einer amerikanischen Kaffeehauskette einbringt. 😉 Und selbstverständlich gibt es auch heiße Schokolade und verschiedene Sorten Tee.',
+        title: 'Öffnungszeiten',
+        description: 'Sie ist täglich geöffnet von 6 bis 22 Uhr. Die Benutzung erfolgt auf eigene Gefahr.',
       },
     ]}
     image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2022/06/Pfarrertogoneu.png',
+      src: 'https://www.evang9.wien/root/wp-content/uploads/2023/04/Hinweisschild-Gra%CC%88tzloase-724x1024.png',
       alt: 'KS',
     }}
   >
-    <Fragment slot="content"><span class="font-semibold text-3xl md:text-4xl">Pfarrer to go</span></Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    <Fragment slot="content">
+      „Ich finde die Idee der Grätzloase grundsätzlich sehr gut – ein konsumfreier Ort der dazu einlädt, sich
+      auszuruhen, miteinander ins Gespräch zu kommen, die Nachbar:innen kennenzulernen. Als Pfarrgemeinde vor Ort wollen
+      wir zu einem guten Miteinander im Grätzl beitragen. Dazu braucht es Räume, die öffentlich & einfach zugänglich
+      sind. Auch das Thema Hitze wird eine immer größere Herausforderung. Mit der Grätzloase machen wir aus einen
+      Hot-Spot Betonparkplatz mit Auto einen Cool Space durch Holz & Begrünung“, erklärt unser Pfarrer Stefan in einem
+      Interview mit der Instagram-Seite der Initiative Grätzloase.
+    </Fragment>
+    <Fragment slot="subtitle">
+      Herzlich willkommen in unserer „Seeoase“. Anfang April haben wir die von uns initiierte Grätzloase vor unserem
+      Kircheneingang in der Seegasse 16a (1090 Wien) errichtet, gefördert von der Lokal Agenda 21 und der Stadt Wien.
+      Unsere Seeoase ist für alle da: zum Kaffeetrinken, zum Ausruhen, zum Plaudern mit Nachbar:innen und vieles mehr.
+      Sie ist täglich geöffnet von 6 bis 22 Uhr. Die Benutzung erfolgt auf eigene Gefahr.
     </Fragment>
   </Content>
-
+  <Gallery
+    title=""
+    tagline=""
+    columns={4}
+    items={[
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Kircheneingang.png',
+        description: 'Herzlich willkommen!',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2023/05/gra%CC%88tzloase-1-1024x768.jpg',
+        description: 'Blumen',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2023/05/IMG_1562-1024x768.jpg',
+        description: 'Reden',
+      },
+      {
+        image: 'https://www.evang9.wien/root/wp-content/uploads/2023/04/Hinweisschild-Gra%CC%88tzloase-724x1024.png',
+        description: 'Plakat',
+      },
+    ]}
+  />
   <!--
   <BlogHighlightedPosts
     title="MEKA Classic"

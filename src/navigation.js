@@ -25,6 +25,10 @@ export const headerData = {
           text: 'Bilder aus der Messiaskapelle',
           href: getPermalink('/mekabilderpage'),
         },
+        {
+          text: 'Grätzloase in der Seegasse',
+          href: getPermalink('/angebote#graetzloase'),
+        },
       ],
     },
     {
@@ -54,7 +58,7 @@ export const headerData = {
       links: [
         {
           text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
-          href: getPermalink('/angebote'),
+          href: getPermalink('/angebote#neuindergemeinde'),
         },
         {
           text: 'Angebote',
@@ -63,6 +67,10 @@ export const headerData = {
         {
           text: 'Pfarrer to go',
           href: getPermalink('/angebote#pfarrer2go'),
+        },
+        {
+          text: 'Grätzloase in der Seegasse',
+          href: getPermalink('/angebote#graetzloase'),
         },
         {
           text: 'MEKA Classic',
