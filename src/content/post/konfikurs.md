@@ -7,7 +7,7 @@ category: konfi
 tags:
   - konfi
 image: https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-05-1024x1024.png
-publishDate: 2023-09-09T00:00:00Z
+publishDate: 2023-12-03T23:34:56.948Z
 author: andreas
 ---
 
