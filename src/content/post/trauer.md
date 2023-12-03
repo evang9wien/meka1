@@ -1,7 +1,6 @@
 ---
 title: 'Trauer: Kein Problem'
-excerpt: '„Jetzt trägst du noch immer schwarz?“, wurde eine Bekannte einst bei einer Familienfeier gefragt.
-Damals lag der Verlust ihres Ehemanns schon mehr als ein halbes Jahr zurück. Seit dem Tod ...'
+excerpt: '„Jetzt trägst du noch immer schwarz?“, wurde eine Bekannte einst bei einer Familienfeier gefragt. Damals lag der Verlust ihres Ehemanns schon mehr als ein halbes Jahr zurück. Seit dem Tod ...'
 category: impuls
 tags:
   - impuls
