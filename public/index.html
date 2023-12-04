@@ -9,9 +9,11 @@
   </head>
   <body>
     <!-- Include the script that builds the page and powers Decap CMS -->
-    Decap CMS
+   
+    <a href="https://evang9-wien.netlify.app/decapcms/index.html"> Decap CMS</a>
     <script>
   if (window.netlifyIdentity) {
+    console.log('Netlify');
     window.netlifyIdentity.on("init", user => {
       if (!user) {
         window.netlifyIdentity.on("login", () => {
