@@ -187,6 +187,19 @@ export const footerData = {
         },
       ],
     },
+    {
+      title: 'Admin',
+      links: [
+        {
+          text: 'DecapCMS',
+          href: 'https://evang9-wien.netlify.app/decapcms/index.html',
+        },
+        {
+          text: 'Github',
+          href: 'https://github.com/evang9wien/meka1',
+        },
+      ],
+    },
   ],
   secondaryLinks: [
     { text: 'Kontakt', href: getPermalink('/kontakt') },
