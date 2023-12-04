@@ -29,7 +29,7 @@ collections:
       - { label: 'Content', name: 'body', widget: 'markdown' }
   - name: 'impulse'
     label: 'Impulse'
-    folder: 'src/content/impulse'
+    folder: 'src/content/post/impulse'
     create: true
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
