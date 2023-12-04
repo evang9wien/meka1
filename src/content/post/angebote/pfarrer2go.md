@@ -3,7 +3,7 @@ title: Jetzt im Angebot Pfarrer to go
 excerpt: 'Mal mit jemanden reden, der einfach nur zuhört?'
 category: angebote
 tags:
-  - angebote
+  - angebot
 image: https://www.evang9.wien/root/wp-content/uploads/2022/06/Pfarrertogoneu.png
 publishDate: 2023-9-26T21:32:39.382Z
 author: stfj
