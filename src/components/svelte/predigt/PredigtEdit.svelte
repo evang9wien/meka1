@@ -3,22 +3,17 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Label, Select } from 'flowbite-svelte';
-  import { Button } from 'flowbite-svelte';
+
+  import { GradientButton } from 'flowbite-svelte';
+  import { Fileupload, Helper } from 'flowbite-svelte';
+  import { Alert } from 'flowbite-svelte';
+  import { InfoCircleSolid } from 'flowbite-svelte-icons';
   import { Card } from 'flowbite-svelte';
 
-  import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  // import Icon from "@smui/select/icon";
-  // import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
-  // import Select, { Option } from "@smui/select";
-  // import Button , { Label } from "@smui/button";
-  // import Dialog, { Title , Content as DialogContent, Actions as DialogActions} from "@smui/dialog";
-  // import CircularProgress from "@smui/circular-progress";
-  // import LinearProgress from '@smui/linear-progress';
-  // import Card, { Content, Actions, PrimaryAction, ActionButtons, ActionIcons } from "@smui/card";
   import { getAuthHeader, isUserAuth } from '../auth.js';
 
   import { getImage, getLongName } from './PredigtConstants.js';
@@ -33,6 +28,7 @@
   onMount(() => {
     axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=0').then((response) => {
       termine = JSON.parse(response.data);
+      termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
     });
 
     axios.get('https://www.evang9.wien/root/wp-json/combo/v2/ispredigtedit', getAuthHeader()).then((response) => {
@@ -51,8 +47,10 @@
   }
 
   function submitForm() {
+    console.log('submit form');
+    open = false;
     if (selectedTermin == '' || files == undefined) {
-      // alert("Bitte den Termin auswählen.");
+      // alert('Bitte den Termin auswählen.');
       open = true;
       return;
     }
@@ -72,16 +70,15 @@
     })
       .then((response) => {
         console.log(response);
+        selectedTermin = '';
+        files = undefined;
         loadPredigten();
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  function predigtSpeichern() {
-    const form = document.getElementById('predigt_form');
-    form.submit();
-  }
+
   function getName(termin) {
     const name = termine.filter((f) => f.Termin == termin && f.Veranstaltung == 'GD');
 
@@ -122,25 +119,20 @@
         {#if predigtEdit}
           <form id="predigtform" on:submit|preventDefault={submitForm}>
             <Card>
-              <!-- <Content>Administrator-Modus: Bitte die Predigt als mp3 Datei und den Temin auswählen!</Content>
-            <Actions>
-              <ActionButtons>
-                <input type="file" bind:files class="file-upload" />
+              Administrator-Modus:
+              {#if open}
+                <Alert border class="mb-2">
+                  <InfoCircleSolid slot="icon" class="w-4 h-4" color="red" />
+                  <span class="font-medium">Achtung!</span>
+                  Bitte den Termin und die Predigt (in mp3 Format) auswählen.
+                </Alert>
+              {/if}
+              <Label class="pb-2">Upload der Predigt</Label>
+              <Select class="mb-2" placeholder="Termin" bind:value={selectedTermin} items={termine}></Select>
+              <Fileupload bind:files class="mb-2" />
+              <Helper class="mb-2">Bitte die Predigt als mp3 Datei auswählen!.</Helper>
 
-                <Select label="Termin" bind:value={selectedTermin}>
-                  <Option value="" />
-                  {#each termine as termin}
-                    <Option value={termin.Termin}>
-                      {termin.Termin}
-                    </Option>
-                  {/each}
-                </Select>
-
-                <Button on:click={predigtSpeichern} variant="raised">
-                  <Label>Speichern</Label>
-                </Button>
-              </ActionButtons>
-            </Actions> -->
+              <GradientButton color="cyanToBlue" type="submit">Speichern</GradientButton>
             </Card>
           </form>
           <br />
