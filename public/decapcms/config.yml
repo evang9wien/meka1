@@ -4,6 +4,9 @@ backend:
 
 media_folder: 'src/assets/images'
 public_folder: '/astro'
+site_url: https://evang9.wien/pages
+display_url: https://evang9.wien/pages
+logo_url: https://evang9.wien/pages/astro/cropped-Logo-fu%CC%88r-Menue-4.b5831af2_KekJs.webp
 
 collections:
   - name: 'post'
