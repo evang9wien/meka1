@@ -17,7 +17,7 @@
   import { openPdf } from './pdf.js';
 
   let selectedTermin;
-  let lastSelectedTermin;
+  // let lastSelectedTermin;
   let liederauswahl;
   let termine;
 
@@ -26,33 +26,46 @@
 
   let liederreihenfolge;
 
-  const handleLiederAuswahl = (liederauswahl) => {
+  const handleLiederAuswahl = () => {
     if (liederauswahl[0]) {
       const lied1 = liederauswahl[0];
       selectedTermin = lied1.Termin_Liedliste;
-      lastSelectedTermin = selectedTermin;
+      // lastSelectedTermin = selectedTermin;
       verantwortlich = lied1.Verantwortlich;
     }
-    console.log(liederauswahl);
+    const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
+    console.log('Termin:', termin);
+
+    const liedReihenfolgeToday = liederreihenfolge
+      .filter((l) => l[termin.Abendmahl == '1' ? 'GD_mit_Abendmahl' : 'GD_ohne_Abendmahl'] == '1')
+      .map((l) => {
+        return { lied_im_GD_nummer: l.Reihenfolge, ...l };
+      });
+    console.log('Lieder heute: ', liedReihenfolgeToday);
+    liederauswahl = liedReihenfolgeToday.map((l) => {
+      const lied = liederauswahl.find((la) => la.lied_im_GD_nummer == l.lied_im_GD_nummer);
+      return lied ? lied : l;
+    });
+    console.log('Liederauswahl: ', liederauswahl);
   };
 
   onMount(() => {
     console.log('onMount');
     userAuth = isUserAuth();
-    axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
-      liederauswahl = JSON.parse(response.data);
-      handleLiederAuswahl(liederauswahl);
+    axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederreihenfolge', getAuthHeader()).then((response) => {
+      // liederreihenfolge mit und ohne AM
+      liederreihenfolge = JSON.parse(response.data);
+      console.log('Liederreihenfolge: ', liederreihenfolge);
+      axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
+        liederauswahl = JSON.parse(response.data);
+        handleLiederAuswahl();
+      });
     });
+
     axios.get('https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
       termine = JSON.parse(response.data);
       termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
       console.log(termine);
-    });
-
-    axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederreihenfolge', getAuthHeader()).then((response) => {
-      // liederreihenfolge mit und ohne AM
-      liederreihenfolge = JSON.parse(response.data);
-      console.log(liederreihenfolge);
     });
   });
 
@@ -61,11 +74,11 @@
 
     window.setTimeout(() => {
       console.log('Sel: ', selectedTermin);
-      console.log('lastSel: ', lastSelectedTermin);
+      // console.log('lastSel: ', lastSelectedTermin);
 
-      if (lastSelectedTermin == selectedTermin) return;
-      lastSelectedTermin = selectedTermin;
-      console.log(JSON.stringify(selectedTermin));
+      // if (lastSelectedTermin == selectedTermin) return;
+      // lastSelectedTermin = selectedTermin;
+      // console.log(JSON.stringify(selectedTermin));
       liederauswahl = undefined;
       const token = localStorage.getItem('jwt');
       const authConfig = {
@@ -119,27 +132,29 @@
                 <TableBodyRow>
                   <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
                   <TableBodyCell class="w-4">
-                    <div class="flex flex-row">
-                      <FileMusicOutline
-                        size="md"
-                        class="mr-2"
-                        on:click={() => {
-                          const file =
-                            'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
-                            lied.Dateiname +
-                            '?lied=' +
-                            lied.Dateiname +
-                            '&type=pdf';
-                          openPdf(file);
-                        }}
-                      />
-                      <div class="mr-2">
-                        {lied.Titel}
+                    {#if lied.lied_liste_nummer}
+                      <div class="flex flex-row">
+                        <FileMusicOutline
+                          size="md"
+                          class="mr-2"
+                          on:click={() => {
+                            const file =
+                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                              lied.Dateiname +
+                              '?lied=' +
+                              lied.Dateiname +
+                              '&type=pdf';
+                            openPdf(file);
+                          }}
+                        />
+                        <div class="mr-2">
+                          {lied.Titel}
+                        </div>
                       </div>
-                    </div>
+                    {/if}
                   </TableBodyCell>
                   <TableBodyCell>
-                    {#if lied.MP3 != '0'}
+                    {#if lied.lied_liste_nummer && lied.MP3 != '0'}
                       <div class="flex flex-row">
                         <PlaySolid
                           size="md"
