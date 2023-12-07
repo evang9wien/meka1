@@ -208,7 +208,7 @@ export const footerData = {
   secondaryLinks: [
     { text: 'Kontakt', href: getPermalink('/kontakt') },
     { text: 'Impressum', href: getPermalink('/impressum') },
-    { text: 'DSGVO', href: getPermalink('/dsvo') },
+    { text: 'DSGVO', href: getPermalink('/dsgvo') },
   ],
   socialLinks: [
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: 'https://www.instagram.com/pfarrerin.mini/' },
