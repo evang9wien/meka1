@@ -2,7 +2,7 @@
 publishDate: 2023-11-27T00:00:00Z
 title: Advent und Weihnachten 2023
 excerpt: 'Im Advent bereiten wir uns auf Weihnachten vor. Bei unseren Angeboten im Dezember ist für jeden etwas dabei. Weitere Informationen finden Sie hier.'
-image: https://www.evang9.wien/root/wp-content/uploads/2023/11/Weihanchten23.png
+image: https://www.evang9.wien/root/wp-content/uploads/2023/11/Macht-hoch-die-Tu%CC%88r-724x1024.png
 tags:
   - news
   - angebot
