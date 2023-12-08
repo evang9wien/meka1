@@ -53,7 +53,7 @@
     const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
     console.log('Termin:', termin);
 
-    (liedReihenfolgeSelected = liederReihenfolgeDBTemplate
+    liedReihenfolgeSelected = liederReihenfolgeDBTemplate
       // GD mit oder ohne AM
       .filter((l) => l[termin.Abendmahl == '1' ? 'GD_mit_Abendmahl' : 'GD_ohne_Abendmahl'] == '1')
 
@@ -62,7 +62,7 @@
         // Anzahl der selben LiederElemente in der DBAuswahl
         const liederElemente = liederDBAuswahl.filter((l) => l.lied_im_GD_nummer == current.Reihenfolge);
 
-        console.log('Lieder pro Element: ', liederElemente);
+        // console.log('Lieder pro Element: ', liederElemente);
 
         // es gibt noch keine Auswahl
         if (liederElemente.length == 0) {
@@ -76,19 +76,11 @@
         }));
 
         return res.concat(result);
-      }, [])),
-      //
-
-      console.log('Lieder2Save: ', liedReihenfolgeSelected);
+      }, []);
+    //
+    liederListeDuplicatesCheck();
+    console.log('Lieder2Save: ', liedReihenfolgeSelected);
     console.log('Lieder geladen: ', liederDBAuswahl);
-    //   .map((l) => ({ lied_im_GD_nummer: l.Reihenfolge, ComboLied: comboLiederDef.includes(l.Reihenfolge), ...l }));
-
-    //   console.log('Lieder heute: ', liedReihenfolgeSelected);
-    // liederDBAuswahl = liedReihenfolgeSelected.map((l) => {
-    //   const lied = liederDBAuswahl.find((la) => la.lied_im_GD_nummer == l.lied_im_GD_nummer);
-    //   return lied ? lied : l;
-    // });
-    // console.log('LiederDBAuswahl: ', liederDBAuswahl);
   };
 
   onMount(() => {
@@ -98,7 +90,7 @@
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
       comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
-      console.log(comboLieder);
+      // console.log(comboLieder);
       axios
         .get('https://evang9.wien/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader())
         .then((response) => {
@@ -116,12 +108,12 @@
     axios.get('https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
       termine = JSON.parse(response.data);
       termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
-      console.log(termine);
+      // console.log(termine);
     });
   });
 
   const handleSelectDate = (sel) => {
-    console.log(sel);
+    // console.log(sel);
 
     window.setTimeout(() => {
       console.log('Sel: ', selectedTermin);
@@ -162,10 +154,38 @@
 
   const addLied = (lied) => {
     console.log('Add: ', lied);
+    liederListeDuplicatesCheck();
   };
 
   const removeLied = (lied) => {
-    liedReihenfolgeSelected = liedReihenfolgeSelected.filter((l) => l != lied);
+    window.setTimeout(() => {
+      if (lied.duplicate) liedReihenfolgeSelected = liedReihenfolgeSelected.filter((l) => l != lied);
+      else {
+        delete lied.selectedLied;
+        delete lied.selectedLiedID;
+        // workaround: force UI refresh
+        liedReihenfolgeSelected = liedReihenfolgeSelected;
+      }
+      liederListeDuplicatesCheck();
+      console.log('Dupl: ', liedReihenfolgeSelected);
+    });
+  };
+
+  const liederListeDuplicatesCheck = () => {
+    liedReihenfolgeSelected.forEach((l) => {
+      l.duplicate = false;
+    });
+
+    var seen = new Set();
+    const duplicates = liedReihenfolgeSelected.filter((item) => seen.size === seen.add(item.Reihenfolge).size);
+    liedReihenfolgeSelected.forEach((item) => {
+      if (duplicates.find((f) => f.Reihenfolge == item.Reihenfolge)) {
+        item.duplicate = true;
+      }
+    });
+    // const
+
+    // console.log('Dupl: ', liedReihenfolgeSelected);
   };
 </script>
 
@@ -218,6 +238,7 @@
                   <TableBodyCell class="w-4">
                     <div class="flex flex-row">
                       <PlusOutline size="md" class="mr-2" on:click={addLied(lied)}></PlusOutline>
+
                       <TrashBinOutline size="md" class="mr-2" on:click={removeLied(lied)}></TrashBinOutline>
                     </div>
                   </TableBodyCell>
