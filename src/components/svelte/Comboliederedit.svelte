@@ -24,6 +24,10 @@
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
 
+  import { Modal } from 'flowbite-svelte';
+  import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
+  let popupModal = false;
+
   let selectedTermin;
   // let lastSelectedTermin;
 
@@ -152,6 +156,14 @@
     });
   };
 
+  const handleSaveDBPre = () => {
+    popupModal = true;
+  };
+
+  const handleSaveDB = () => {
+    console.log('Save: ', liedReihenfolgeSelected);
+  };
+
   const addLied = (lied) => {
     console.log('Add: ', lied);
     liedReihenfolgeSelected = liedReihenfolgeSelected.reduce((res, current) => {
@@ -220,13 +232,13 @@
             placeholder="Bitte Termin auswählen ..."
           />
 
-          <!-- <div class="flex flex-row">
-            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSave}>Bestätigen</GradientButton>
+          <div class="flex flex-row">
+            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSaveDBPre}>Bestätigen</GradientButton>
             <InfoCircleOutline size="xl"></InfoCircleOutline>
             <Tooltip placement="left"
               >Für die LiederDBAuswahl die Lieder und <br /> den Termin auswählen und bestätigen.</Tooltip
             >
-          </div> -->
+          </div>
         {/if}
       </div>
       <div>
@@ -315,3 +327,14 @@
     {/if}
   </Card>
 </div>
+
+<Modal bind:open={popupModal} size="xs" autoclose>
+  <div class="text-center">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+      Soll der geänderte Liederablauf für den Gottestdienst am {selectedTermin} gespeichert werden?
+    </h3>
+    <Button color="red" class="me-2" on:click={handleSaveDB}>Ja, ich bin mir sicher</Button>
+    <Button color="alternative">Nein, abbrechen</Button>
+  </div>
+</Modal>
