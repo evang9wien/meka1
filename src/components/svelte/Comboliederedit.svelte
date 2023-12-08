@@ -3,9 +3,9 @@
   import axios from 'axios';
   import { Label, Select } from 'flowbite-svelte';
   import { Button } from 'flowbite-svelte';
+  import { GradientButton } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
-
-  import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+  import { InfoCircleOutline, MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
@@ -26,6 +26,10 @@
 
   let liederreihenfolge;
 
+  let comboLieder;
+  const comboLiederDef = ['2', '3', '5', '6', '7', '8'];
+  let alleLieder;
+
   const handleLiederAuswahl = () => {
     if (liederauswahl[0]) {
       const lied1 = liederauswahl[0];
@@ -38,15 +42,30 @@
 
     const liedReihenfolgeToday = liederreihenfolge
       .filter((l) => l[termin.Abendmahl == '1' ? 'GD_mit_Abendmahl' : 'GD_ohne_Abendmahl'] == '1')
-      .map((l) => {
-        return { lied_im_GD_nummer: l.Reihenfolge, ...l };
-      });
+      .map((l) => ({ lied_im_GD_nummer: l.Reihenfolge, ComboLied: comboLiederDef.includes(l.Reihenfolge), ...l }));
     console.log('Lieder heute: ', liedReihenfolgeToday);
     liederauswahl = liedReihenfolgeToday.map((l) => {
       const lied = liederauswahl.find((la) => la.lied_im_GD_nummer == l.lied_im_GD_nummer);
       return lied ? lied : l;
     });
     console.log('Liederauswahl: ', liederauswahl);
+  };
+
+  const loadLieder = () => {
+    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+      alleLieder = JSON.parse(response.data);
+      alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t }));
+      comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
+      console.log(comboLieder);
+      // liederListe = liederListe.map((lied) => {
+      //   const days = Math.ceil((new Date() - new Date(lied.zuletzt_gesungen)) / (1000 * 3600 * 24 * 7));
+
+      //   const w = { zuletzt: days };
+      //   return { ...lied, ...w };
+      // });
+      // liederListeAll = liederListe;
+      // handleFilterKat();
+    });
   };
 
   onMount(() => {
@@ -67,6 +86,8 @@
       termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
       console.log(termine);
     });
+
+    loadLieder();
   });
 
   const handleSelectDate = (sel) => {
@@ -94,6 +115,15 @@
         });
     }, 300);
   };
+
+  const handleSave = () => {
+    window.setTimeout(() => {
+      liederauswahl = liederauswahl.map((l) => (l.selected ? { ...l, ...l.selected } : l));
+      // .forEach((l) => delete l.selected);
+
+      console.log('Save: ', liederauswahl);
+    });
+  };
 </script>
 
 <div class="flex justify-center mb-6">
@@ -101,30 +131,39 @@
     {#if userAuth}
       <div>
         {#if termine}
-          <Label>
-            <div class="flex space-x-4 mb-6">
+          <div class="flex space-x-4 mb-6">
+            {#if verantwortlich}
               <Avatar src="https://evang9.wien/comboapps/img/{getImage(verantwortlich)}" />
-              <div class="space-y-1 font-medium dark:text-white">
-                <div>Liederauswahl für den Gottesdienst bearbeiten</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
-              </div>
+            {/if}
+            <div class="space-y-1 font-medium dark:text-white">
+              <div>Liederauswahl für den Gottesdienst bearbeiten</div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
             </div>
-            <Select
-              items={termine}
-              bind:value={selectedTermin}
-              on:input={handleSelectDate}
-              placeholder="Bitte Termin auswählen ..."
-            />
-          </Label>
+          </div>
+          <Select
+            class="mb-4 mr-4"
+            items={termine}
+            bind:value={selectedTermin}
+            on:input={handleSelectDate}
+            placeholder="Bitte Termin auswählen ..."
+          />
+
+          <div class="flex flex-row">
+            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSave}>Bestätigen</GradientButton>
+            <InfoCircleOutline size="xl"></InfoCircleOutline>
+            <Tooltip placement="left"
+              >Für die Liederauswahl die Lieder und <br /> den Termin auswählen und bestätigen.</Tooltip
+            >
+          </div>
         {/if}
       </div>
-
       <div>
         {#if liederauswahl}
           <Table striped="true">
             <TableHead>
               <TableHeadCell>Lied</TableHeadCell>
               <TableHeadCell>Noten</TableHeadCell>
+              <TableHeadCell>Titel</TableHeadCell>
               <TableHeadCell>Hörprobe</TableHeadCell>
             </TableHead>
             <TableBody>
@@ -132,7 +171,7 @@
                 <TableBodyRow>
                   <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
                   <TableBodyCell class="w-4">
-                    {#if lied.lied_liste_nummer}
+                    {#if lied.Dateiname}
                       <div class="flex flex-row">
                         <FileMusicOutline
                           size="md"
@@ -147,14 +186,27 @@
                             openPdf(file);
                           }}
                         />
-                        <div class="mr-2">
-                          {lied.Titel}
-                        </div>
+                      </div>
+                    {/if}
+                  </TableBodyCell>
+                  <TableBodyCell class="w-4">
+                    {#if lied.lied_liste_nummer}
+                      <div class="mr-2">
+                        {lied.Titel}
+                      </div>
+                    {:else}
+                      <div class="w-80">
+                        <Select
+                          items={lied.ComboLied ? comboLieder : alleLieder}
+                          bind:value={lied.selected}
+                          on:input={handleSave}
+                          placeholder="Bitte Lied auswählen ..."
+                        />
                       </div>
                     {/if}
                   </TableBodyCell>
                   <TableBodyCell>
-                    {#if lied.lied_liste_nummer && lied.MP3 != '0'}
+                    {#if lied.MP3 && lied.MP3 != '0'}
                       <div class="flex flex-row">
                         <PlaySolid
                           size="md"
