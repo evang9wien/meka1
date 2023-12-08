@@ -5,7 +5,15 @@
   import { Button } from 'flowbite-svelte';
   import { GradientButton } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
-  import { InfoCircleOutline, MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+  import {
+    InfoCircleOutline,
+    MicrophoneOutline,
+    FileMusicOutline,
+    PlaySolid,
+    PauseSolid,
+    PlusOutline,
+    TrashBinOutline,
+  } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
@@ -18,21 +26,26 @@
 
   let selectedTermin;
   // let lastSelectedTermin;
-  let liederauswahl;
+
   let termine;
 
   let verantwortlich;
   let userAuth;
 
-  let liederreihenfolge;
+  // Entspricht der DB Tabelle lied_reihenfolge
+  let liederReihenfolgeDBTemplate;
+  // Entspricht der DB Tabelle lied_auswahl für das selektierte Datum
+  let liederDBAuswahl;
+  // Entspricht den den akteuell selektierten Liedern inklusive der geladenen Liedauswahl
+  let liedReihenfolgeSelected;
 
   let comboLieder;
   const comboLiederDef = ['2', '3', '5', '6', '7', '8'];
   let alleLieder;
 
-  const handleLiederAuswahl = () => {
-    if (liederauswahl[0]) {
-      const lied1 = liederauswahl[0];
+  const handleLiederDBAuswahl = () => {
+    if (liederDBAuswahl[0]) {
+      const lied1 = liederDBAuswahl[0];
       selectedTermin = lied1.Termin_Liedliste;
       // lastSelectedTermin = selectedTermin;
       verantwortlich = lied1.Verantwortlich;
@@ -40,54 +53,71 @@
     const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
     console.log('Termin:', termin);
 
-    const liedReihenfolgeToday = liederreihenfolge
+    (liedReihenfolgeSelected = liederReihenfolgeDBTemplate
+      // GD mit oder ohne AM
       .filter((l) => l[termin.Abendmahl == '1' ? 'GD_mit_Abendmahl' : 'GD_ohne_Abendmahl'] == '1')
-      .map((l) => ({ lied_im_GD_nummer: l.Reihenfolge, ComboLied: comboLiederDef.includes(l.Reihenfolge), ...l }));
-    console.log('Lieder heute: ', liedReihenfolgeToday);
-    liederauswahl = liedReihenfolgeToday.map((l) => {
-      const lied = liederauswahl.find((la) => la.lied_im_GD_nummer == l.lied_im_GD_nummer);
-      return lied ? lied : l;
-    });
-    console.log('Liederauswahl: ', liederauswahl);
-  };
 
-  const loadLieder = () => {
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
-      alleLieder = JSON.parse(response.data);
-      alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t }));
-      comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
-      console.log(comboLieder);
-      // liederListe = liederListe.map((lied) => {
-      //   const days = Math.ceil((new Date() - new Date(lied.zuletzt_gesungen)) / (1000 * 3600 * 24 * 7));
+      // Zusammenführen der vorgegebenen Liedelemente mit den Geladenen
+      .reduce(function (res, current) {
+        // Anzahl der selben LiederElemente in der DBAuswahl
+        const liederElemente = liederDBAuswahl.filter((l) => l.lied_im_GD_nummer == current.Reihenfolge);
 
-      //   const w = { zuletzt: days };
-      //   return { ...lied, ...w };
-      // });
-      // liederListeAll = liederListe;
-      // handleFilterKat();
-    });
+        console.log('Lieder pro Element: ', liederElemente);
+
+        // es gibt noch keine Auswahl
+        if (liederElemente.length == 0) {
+          return res.concat([{ ...current }]);
+        }
+
+        const result = liederElemente.map((l) => ({
+          ...current,
+          selectedLied: l,
+          selectedLiedID: l.lied_liste_nummer,
+        }));
+
+        return res.concat(result);
+      }, [])),
+      //
+
+      console.log('Lieder2Save: ', liedReihenfolgeSelected);
+    console.log('Lieder geladen: ', liederDBAuswahl);
+    //   .map((l) => ({ lied_im_GD_nummer: l.Reihenfolge, ComboLied: comboLiederDef.includes(l.Reihenfolge), ...l }));
+
+    //   console.log('Lieder heute: ', liedReihenfolgeSelected);
+    // liederDBAuswahl = liedReihenfolgeSelected.map((l) => {
+    //   const lied = liederDBAuswahl.find((la) => la.lied_im_GD_nummer == l.lied_im_GD_nummer);
+    //   return lied ? lied : l;
+    // });
+    // console.log('LiederDBAuswahl: ', liederDBAuswahl);
   };
 
   onMount(() => {
     console.log('onMount');
     userAuth = isUserAuth();
-    axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederreihenfolge', getAuthHeader()).then((response) => {
-      // liederreihenfolge mit und ohne AM
-      liederreihenfolge = JSON.parse(response.data);
-      console.log('Liederreihenfolge: ', liederreihenfolge);
-      axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
-        liederauswahl = JSON.parse(response.data);
-        handleLiederAuswahl();
-      });
+    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+      alleLieder = JSON.parse(response.data);
+      alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
+      comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
+      console.log(comboLieder);
+      axios
+        .get('https://evang9.wien/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader())
+        .then((response) => {
+          // liederReihenfolgeDBTemplate mit und ohne AM
+          liederReihenfolgeDBTemplate = JSON.parse(response.data);
+          console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
+          axios
+            .get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader())
+            .then((response) => {
+              liederDBAuswahl = JSON.parse(response.data);
+              handleLiederDBAuswahl();
+            });
+        });
     });
-
     axios.get('https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
       termine = JSON.parse(response.data);
       termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
       console.log(termine);
     });
-
-    loadLieder();
   });
 
   const handleSelectDate = (sel) => {
@@ -100,7 +130,7 @@
       // if (lastSelectedTermin == selectedTermin) return;
       // lastSelectedTermin = selectedTermin;
       // console.log(JSON.stringify(selectedTermin));
-      liederauswahl = undefined;
+      liederDBAuswahl = undefined;
       const token = localStorage.getItem('jwt');
       const authConfig = {
         headers: {
@@ -110,19 +140,32 @@
       axios
         .get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
         .then((response) => {
-          liederauswahl = JSON.parse(response.data);
-          handleLiederAuswahl(liederauswahl);
+          liederDBAuswahl = JSON.parse(response.data);
+          handleLiederDBAuswahl(liederDBAuswahl);
         });
     }, 300);
   };
 
-  const handleSave = () => {
+  const handleSave = (ev, ev1, ev2) => {
     window.setTimeout(() => {
-      liederauswahl = liederauswahl.map((l) => (l.selected ? { ...l, ...l.selected } : l));
+      liedReihenfolgeSelected = liedReihenfolgeSelected.map((l) => {
+        if (l.selectedLiedID && !l.selectedLied) {
+          l.selectedLied = alleLieder.find((la) => la.ID == l.selectedLiedID);
+        }
+        return l;
+      });
       // .forEach((l) => delete l.selected);
 
-      console.log('Save: ', liederauswahl);
+      console.log('Save: ', liedReihenfolgeSelected, ev, ev1, ev2);
     });
+  };
+
+  const addLied = (lied) => {
+    console.log('Add: ', lied);
+  };
+
+  const removeLied = (lied) => {
+    liedReihenfolgeSelected = liedReihenfolgeSelected.filter((l) => l != lied);
   };
 </script>
 
@@ -136,7 +179,7 @@
               <Avatar src="https://evang9.wien/comboapps/img/{getImage(verantwortlich)}" />
             {/if}
             <div class="space-y-1 font-medium dark:text-white">
-              <div>Liederauswahl für den Gottesdienst bearbeiten</div>
+              <div>LiederAuswahl für den Gottesdienst bearbeiten</div>
               <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
             </div>
           </div>
@@ -148,65 +191,48 @@
             placeholder="Bitte Termin auswählen ..."
           />
 
-          <div class="flex flex-row">
+          <!-- <div class="flex flex-row">
             <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSave}>Bestätigen</GradientButton>
             <InfoCircleOutline size="xl"></InfoCircleOutline>
             <Tooltip placement="left"
-              >Für die Liederauswahl die Lieder und <br /> den Termin auswählen und bestätigen.</Tooltip
+              >Für die LiederDBAuswahl die Lieder und <br /> den Termin auswählen und bestätigen.</Tooltip
             >
-          </div>
+          </div> -->
         {/if}
       </div>
       <div>
-        {#if liederauswahl}
+        {#if liedReihenfolgeSelected}
           <Table striped="true">
             <TableHead>
               <TableHeadCell>Lied</TableHeadCell>
-              <TableHeadCell>Noten</TableHeadCell>
+              <TableHeadCell></TableHeadCell>
               <TableHeadCell>Titel</TableHeadCell>
               <TableHeadCell>Hörprobe</TableHeadCell>
+              <TableHeadCell>Noten</TableHeadCell>
             </TableHead>
             <TableBody>
-              {#each liederauswahl as lied}
+              {#each liedReihenfolgeSelected as lied}
                 <TableBodyRow>
                   <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
+
                   <TableBodyCell class="w-4">
-                    {#if lied.Dateiname}
-                      <div class="flex flex-row">
-                        <FileMusicOutline
-                          size="md"
-                          class="mr-2"
-                          on:click={() => {
-                            const file =
-                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
-                              lied.Dateiname +
-                              '?lied=' +
-                              lied.Dateiname +
-                              '&type=pdf';
-                            openPdf(file);
-                          }}
-                        />
-                      </div>
-                    {/if}
+                    <div class="flex flex-row">
+                      <PlusOutline size="md" class="mr-2" on:click={addLied(lied)}></PlusOutline>
+                      <TrashBinOutline size="md" class="mr-2" on:click={removeLied(lied)}></TrashBinOutline>
+                    </div>
                   </TableBodyCell>
                   <TableBodyCell class="w-4">
-                    {#if lied.lied_liste_nummer}
-                      <div class="mr-2">
-                        {lied.Titel}
-                      </div>
-                    {:else}
-                      <div class="w-80">
-                        <Select
-                          items={lied.ComboLied ? comboLieder : alleLieder}
-                          bind:value={lied.selected}
-                          on:input={handleSave}
-                          placeholder="Bitte Lied auswählen ..."
-                        />
-                      </div>
-                    {/if}
+                    <div class="w-80">
+                      <Select
+                        items={lied.ComboLied ? comboLieder : alleLieder}
+                        bind:value={lied.selectedLiedID}
+                        on:input={handleSave}
+                        placeholder="Bitte Lied auswählen ..."
+                      />
+                    </div>
                   </TableBodyCell>
                   <TableBodyCell>
-                    {#if lied.MP3 && lied.MP3 != '0'}
+                    {#if lied.selectedLied && lied.selectedLied.MP3 && lied.selectedLied.MP3 != '0'}
                       <div class="flex flex-row">
                         <PlaySolid
                           size="md"
@@ -214,14 +240,33 @@
                           on:click={() => {
                             const file =
                               'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
-                              lied.Dateiname +
+                              lied.selectedLied.Dateiname +
                               '?lied=' +
-                              lied.Dateiname +
+                              lied.selectedLied.Dateiname +
                               '&type=mp3';
                             openMp3(file);
                           }}
                         ></PlaySolid>
                         <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
+                      </div>
+                    {/if}
+                  </TableBodyCell>
+                  <TableBodyCell class="w-4">
+                    {#if lied.selectedLied}
+                      <div class="flex flex-row">
+                        <FileMusicOutline
+                          size="md"
+                          class="mr-2"
+                          on:click={() => {
+                            const file =
+                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                              lied.selectedLied.Dateiname +
+                              '?lied=' +
+                              lied.selectedLied.Dateiname +
+                              '&type=pdf';
+                            openPdf(file);
+                          }}
+                        />
                       </div>
                     {/if}
                   </TableBodyCell>
