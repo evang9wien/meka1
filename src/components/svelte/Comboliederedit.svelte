@@ -154,7 +154,16 @@
 
   const addLied = (lied) => {
     console.log('Add: ', lied);
+    liedReihenfolgeSelected = liedReihenfolgeSelected.reduce((res, current) => {
+      if (lied.selectedLiedID == current.selectedLiedID) {
+        let toDel = { ...current };
+        delete toDel.selectedLied;
+        delete toDel.selectedLiedID;
+        return res.concat([{ ...current }, toDel]);
+      } else return res.concat([current]);
+    }, []);
     liederListeDuplicatesCheck();
+    console.log('Dupl: ', liedReihenfolgeSelected);
   };
 
   const removeLied = (lied) => {
