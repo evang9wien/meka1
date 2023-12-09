@@ -210,7 +210,16 @@
 
   const removeLied = (lied) => {
     window.setTimeout(() => {
-      if (lied.duplicate) liedReihenfolgeSelected = liedReihenfolgeSelected.filter((l) => l != lied);
+      if (lied.duplicate)
+        liedReihenfolgeSelected = liedReihenfolgeSelected.map((l) => {
+          // Damit die Entfernten Duplicate auch aus der DB gelöscht werden, muss das Element mit ID in der Liste bleiben
+          // Es wird ein sichtbarkeitflag gesetzt und das selectierte Lied gelöscht.
+          // in l1 ist das attribute selectedLied gelöscht
+          if (l == lied) {
+            const { selectedLied, selectedLiedID, ...l1 } = l;
+            return { ...l1, notvisible: l == lied };
+          } else return l;
+        });
       else {
         delete lied.selectedLied;
         delete lied.selectedLiedID;
@@ -221,14 +230,17 @@
       console.log('Dupl: ', liedReihenfolgeSelected);
     });
   };
-
+  // Prüfung ob es vom Liedtyp (Einzug, ...) mehr als eines gibt.
+  // Das ist relevant beim Löschen. Zumindest ein Element muss übrig bleiben
   const liederListeDuplicatesCheck = () => {
     liedReihenfolgeSelected.forEach((l) => {
       l.duplicate = false;
     });
 
     var seen = new Set();
-    const duplicates = liedReihenfolgeSelected.filter((item) => seen.size === seen.add(item.Reihenfolge).size);
+    const duplicates = liedReihenfolgeSelected.filter(
+      (item) => !item.notvisible && seen.size === seen.add(item.Reihenfolge).size
+    );
     liedReihenfolgeSelected.forEach((item) => {
       if (duplicates.find((f) => f.Reihenfolge == item.Reihenfolge)) {
         item.duplicate = true;
@@ -285,66 +297,68 @@
             </TableHead>
             <TableBody>
               {#each liedReihenfolgeSelected as lied}
-                <TableBodyRow>
-                  <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
+                {#if !lied.notvisible}
+                  <TableBodyRow>
+                    <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
 
-                  <TableBodyCell class="w-4">
-                    <div class="flex flex-row">
-                      <PlusOutline size="md" class="mr-2" on:click={addLied(lied)}></PlusOutline>
-
-                      <TrashBinOutline size="md" class="mr-2" on:click={removeLied(lied)}></TrashBinOutline>
-                    </div>
-                  </TableBodyCell>
-                  <TableBodyCell class="w-4">
-                    <div class="w-80">
-                      <Select
-                        items={lied.ComboLied ? comboLieder : alleLieder}
-                        bind:value={lied.selectedLiedID}
-                        on:input={handleSave}
-                        placeholder="Bitte Lied auswählen ..."
-                      />
-                    </div>
-                  </TableBodyCell>
-                  <TableBodyCell>
-                    {#if lied.selectedLied && lied.selectedLied.MP3 && lied.selectedLied.MP3 != '0'}
+                    <TableBodyCell class="w-4">
                       <div class="flex flex-row">
-                        <PlaySolid
-                          size="md"
-                          class="mr-2"
-                          on:click={() => {
-                            const file =
-                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
-                              lied.selectedLied.Dateiname +
-                              '?lied=' +
-                              lied.selectedLied.Dateiname +
-                              '&type=mp3';
-                            openMp3(file);
-                          }}
-                        ></PlaySolid>
-                        <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
+                        <PlusOutline size="md" class="mr-2" on:click={addLied(lied)}></PlusOutline>
+
+                        <TrashBinOutline size="md" class="mr-2" on:click={removeLied(lied)}></TrashBinOutline>
                       </div>
-                    {/if}
-                  </TableBodyCell>
-                  <TableBodyCell class="w-4">
-                    {#if lied.selectedLied}
-                      <div class="flex flex-row">
-                        <FileMusicOutline
-                          size="md"
-                          class="mr-2"
-                          on:click={() => {
-                            const file =
-                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
-                              lied.selectedLied.Dateiname +
-                              '?lied=' +
-                              lied.selectedLied.Dateiname +
-                              '&type=pdf';
-                            openPdf(file);
-                          }}
+                    </TableBodyCell>
+                    <TableBodyCell class="w-4">
+                      <div class="w-80">
+                        <Select
+                          items={lied.ComboLied ? comboLieder : alleLieder}
+                          bind:value={lied.selectedLiedID}
+                          on:input={handleSave}
+                          placeholder="Bitte Lied auswählen ..."
                         />
                       </div>
-                    {/if}
-                  </TableBodyCell>
-                </TableBodyRow>
+                    </TableBodyCell>
+                    <TableBodyCell>
+                      {#if lied.selectedLied && lied.selectedLied.MP3 && lied.selectedLied.MP3 != '0'}
+                        <div class="flex flex-row">
+                          <PlaySolid
+                            size="md"
+                            class="mr-2"
+                            on:click={() => {
+                              const file =
+                                'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                                lied.selectedLied.Dateiname +
+                                '?lied=' +
+                                lied.selectedLied.Dateiname +
+                                '&type=mp3';
+                              openMp3(file);
+                            }}
+                          ></PlaySolid>
+                          <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
+                        </div>
+                      {/if}
+                    </TableBodyCell>
+                    <TableBodyCell class="w-4">
+                      {#if lied.selectedLied}
+                        <div class="flex flex-row">
+                          <FileMusicOutline
+                            size="md"
+                            class="mr-2"
+                            on:click={() => {
+                              const file =
+                                'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                                lied.selectedLied.Dateiname +
+                                '?lied=' +
+                                lied.selectedLied.Dateiname +
+                                '&type=pdf';
+                              openPdf(file);
+                            }}
+                          />
+                        </div>
+                      {/if}
+                    </TableBodyCell>
+                  </TableBodyRow>
+                {/if}
               {/each}
             </TableBody>
           </Table>
