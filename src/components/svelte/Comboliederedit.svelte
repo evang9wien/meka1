@@ -27,6 +27,7 @@
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   let popupModal = false;
+  let popupSpinnerModal = false;
 
   let selectedTermin;
   // let lastSelectedTermin;
@@ -76,6 +77,7 @@
         const result = liederElemente.map((l) => ({
           ...current,
           selectedLied: l,
+          ID: l.ID,
           selectedLiedID: l.lied_liste_nummer,
         }));
 
@@ -116,9 +118,9 @@
     });
   });
 
-  const handleSelectDate = (sel) => {
+  const handleSelectDate = () => {
     // console.log(sel);
-
+    popupSpinnerModal = true;
     window.setTimeout(() => {
       console.log('Sel: ', selectedTermin);
       // console.log('lastSel: ', lastSelectedTermin);
@@ -138,6 +140,7 @@
         .then((response) => {
           liederDBAuswahl = JSON.parse(response.data);
           handleLiederDBAuswahl(liederDBAuswahl);
+          popupSpinnerModal = false;
         });
     }, 300);
   };
@@ -162,18 +165,45 @@
 
   const handleSaveDB = () => {
     console.log('Save: ', liedReihenfolgeSelected);
+
+    let liedReihenfolgeDB = liedReihenfolgeSelected
+      .filter((l) => l.selectedLied || l.ID)
+      .map((l) => ({
+        ID: l.ID,
+        lied_im_GD_nummer: l.Reihenfolge,
+        lied_liste_nummer: l.selectedLiedID,
+        termin_liedliste: selectedTermin,
+      }));
+
+    console.log('DB Save: ', liedReihenfolgeDB);
+    console.log('DB Save JSON: ', JSON.stringify(liedReihenfolgeDB));
+    popupSpinnerModal = true;
+    axios
+      .patch('https://www.evang9.wien/root/wp-json/combo/v2/comboliederedit', liedReihenfolgeDB, getAuthHeader())
+      .then(
+        (response) => {
+          console.log('Success:', response);
+          // wegen der Lied ID müssen die Lieder neu geladen werden.
+          handleSelectDate();
+        },
+        (error) => {
+          console.log('Error:', error);
+        }
+      );
   };
 
   const addLied = (lied) => {
     console.log('Add: ', lied);
     liedReihenfolgeSelected = liedReihenfolgeSelected.reduce((res, current) => {
-      if (lied.selectedLiedID == current.selectedLiedID) {
+      if (lied.selectedLiedID && lied.selectedLiedID == current.selectedLiedID) {
         let toDel = { ...current };
         delete toDel.selectedLied;
         delete toDel.selectedLiedID;
+        delete toDel.ID;
         return res.concat([{ ...current }, toDel]);
       } else return res.concat([current]);
     }, []);
+    console.log('Dupl0: ', liedReihenfolgeSelected);
     liederListeDuplicatesCheck();
     console.log('Dupl: ', liedReihenfolgeSelected);
   };
@@ -233,10 +263,12 @@
           />
 
           <div class="flex flex-row">
-            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSaveDBPre}>Bestätigen</GradientButton>
+            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSaveDBPre}
+              >Liederauswahl speichern</GradientButton
+            >
             <InfoCircleOutline size="xl"></InfoCircleOutline>
             <Tooltip placement="left"
-              >Für die LiederDBAuswahl die Lieder und <br /> den Termin auswählen und bestätigen.</Tooltip
+              >Für die Liederauswahl den Termin <br /> und die Lieder auswählen und speichern.</Tooltip
             >
           </div>
         {/if}
@@ -336,5 +368,15 @@
     </h3>
     <Button color="red" class="me-2" on:click={handleSaveDB}>Ja, ich bin mir sicher</Button>
     <Button color="alternative">Nein, abbrechen</Button>
+  </div>
+</Modal>
+
+<Modal bind:open={popupSpinnerModal} size="sm" autoclose>
+  <div class="text-center">
+    <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+      <Spinner color="purple" size={8} />&nbsp;Liederauswahl wird neu geladen.
+    </h3>
   </div>
 </Modal>
