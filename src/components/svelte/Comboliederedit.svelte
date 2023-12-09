@@ -91,6 +91,7 @@
 
   onMount(() => {
     console.log('onMount');
+    popupSpinnerModal = true;
     userAuth = isUserAuth();
     axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       alleLieder = JSON.parse(response.data);
@@ -108,6 +109,7 @@
             .then((response) => {
               liederDBAuswahl = JSON.parse(response.data);
               handleLiederDBAuswahl();
+              popupSpinnerModal = false;
             });
         });
     });
@@ -364,7 +366,7 @@
           </Table>
         {:else}
           <div>
-            <Spinner color="gray" />
+            <!-- <Spinner color="gray" /> -->
           </div>
         {/if}
       </div>
