@@ -1,15 +1,12 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Comboliederauswahl from '~/components/svelte/Comboliederauswahl.svelte';
-import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
   title: 'Liederauswahl',
 };
 ---
 
-<SvelteHeader></SvelteHeader>
-
 <Layout metadata={metadata}>
-  <Comboliederauswahl client:load/>
+  <Comboliederauswahl client:load />
 </Layout>

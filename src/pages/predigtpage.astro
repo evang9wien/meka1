@@ -1,7 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Predigten from '~/components/svelte/predigt/PredigtEdit.svelte';
-import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
+
 import Content from '~/components/widgets/Content.astro';
 import Image from '~/components/common/Image.astro';
 
@@ -10,7 +10,6 @@ const metadata = {
 };
 ---
 
-<SvelteHeader />
 <Layout metadata={metadata}>
   <Content id="nachhoeren" columns={3}>
     <Fragment slot="content">

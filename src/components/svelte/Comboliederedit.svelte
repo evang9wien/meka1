@@ -99,12 +99,12 @@
             <div class="sm:col-span-2">
               <Label class="pb-2">Noten</Label>
               <Fileupload bind:notenPdf class="mb-2" required />
-              <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!.</Helper>
+              <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!</Helper>
             </div>
             <div class="sm:col-span-2">
               <Label class="pb-2">Hörprobe</Label>
               <Fileupload bind:liedMp3 class="mb-2" />
-              <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!.</Helper>
+              <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!</Helper>
             </div>
             <div class="sm:col-span-2">
               <Label for="liedtext" class="mb-2">Liedtext</Label>

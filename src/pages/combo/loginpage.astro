@@ -1,13 +1,11 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Login from '~/components/svelte/Login.svelte';
-import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
   title: 'Login',
 };
 ---
-<SvelteHeader></SvelteHeader>
 
 <Layout metadata={metadata}>
   <Login client:only="svelte" />
