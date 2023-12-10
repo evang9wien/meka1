@@ -1,14 +1,11 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Comboliederedit from '~/components/svelte/Comboliederedit.svelte';
-import SvelteHeader from '~/components/svelte/SvelteHeader.astro';
 
 const metadata = {
   title: 'Liederedit',
 };
 ---
-
-<SvelteHeader />
 
 <Layout metadata={metadata}>
   <Comboliederedit client:load />

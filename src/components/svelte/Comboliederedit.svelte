@@ -2,10 +2,10 @@
   // Anlegen und bearbeitn eines Liedes
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { Label, Select } from 'flowbite-svelte';
-  import { Button } from 'flowbite-svelte';
-  import { GradientButton } from 'flowbite-svelte';
+  import { Section } from 'flowbite-svelte-blocks';
+  import { Label, Select, Textarea, Input, GradientButton, MultiSelect } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
+  import { Fileupload, Helper } from 'flowbite-svelte';
   import {
     InfoCircleOutline,
     MicrophoneOutline,
@@ -34,6 +34,11 @@
   let userAuth;
   let alleLieder;
 
+  let notenPdf;
+  let liedMp3;
+
+  let kategorien = [];
+
   onMount(() => {
     console.log('onMount');
     popupSpinnerModal = true;
@@ -46,6 +51,15 @@
   });
 
   const handleSelectLied = () => {};
+  const handleSubmit = () => {
+    alert('Form submited.');
+  };
+  let selected;
+  let countries = [
+    { value: 'tv', name: 'TV/Monitors' },
+    { value: 'pc', name: 'PC' },
+    { value: 'phone', name: 'Phones' },
+  ];
 </script>
 
 {#if userAuth && !popupSpinnerModal}
@@ -60,7 +74,46 @@
         />
       </div>
 
-      <div></div></Card
+      <Section name="crudcreateform">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Lied anlegen oder bearbeiten</h2>
+        <form on:submit={handleSubmit}>
+          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            <div class="sm:col-span-2">
+              <Label for="name" class="mb-2">Titel</Label>
+              <Input type="text" id="name" placeholder="Name des Liedes" required />
+            </div>
+            <div class="w-full">
+              <Label for="egnummer" class="mb-2">EG-Nummer</Label>
+              <Input type="text" id="egnummer" placeholder="Nummer im Gesangbuch" />
+            </div>
+            <div class="w-full">
+              <Label far="kategorie" class="mb-2">Kategorie</Label>
+              <MultiSelect
+                id="kategorie"
+                class="mt-2"
+                items={countries}
+                bind:value={selected}
+                placeholder="Kategorie"
+              />
+            </div>
+            <div class="sm:col-span-2">
+              <Label class="pb-2">Noten</Label>
+              <Fileupload bind:notenPdf class="mb-2" required />
+              <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!.</Helper>
+            </div>
+            <div class="sm:col-span-2">
+              <Label class="pb-2">Hörprobe</Label>
+              <Fileupload bind:liedMp3 class="mb-2" />
+              <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!.</Helper>
+            </div>
+            <div class="sm:col-span-2">
+              <Label for="liedtext" class="mb-2">Liedtext</Label>
+              <Textarea id="liedtext" placeholder="Liedtext" rows="6" name="liedtext" />
+            </div>
+            <GradientButton color="cyanToBlue" type="submit" class="w-32">Speichern</GradientButton>
+          </div>
+        </form>
+      </Section></Card
     >
   </div>
 {/if}
