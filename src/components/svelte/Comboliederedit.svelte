@@ -31,6 +31,7 @@
   let popupModal = false;
   let popupSpinnerModal = false;
   let selectedLied;
+  let loadedLied = {};
   let userAuth;
   let alleLieder;
 
@@ -50,7 +51,18 @@
     });
   });
 
-  const handleSelectLied = () => {};
+  const handleSelectLied = () => {
+    window.setTimeout(() => {
+      console.log('Sel: ', selectedLied);
+      axios
+        .get('https://www.evang9.wien/root/wp-json/combo/v2/comboliedread?lied_id=' + selectedLied, getAuthHeader())
+        .then((response) => {
+          // console.log('Lied Res: ', response);
+          loadedLied = JSON.parse(response.data)[0];
+          console.log('Lied: ', loadedLied);
+        });
+    });
+  };
   const handleSubmit = () => {
     alert('Form submited.');
   };
@@ -79,12 +91,12 @@
         <form on:submit={handleSubmit}>
           <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div class="sm:col-span-2">
-              <Label for="name" class="mb-2">Titel</Label>
-              <Input type="text" id="name" placeholder="Name des Liedes" required />
+              <Label for="name" class="mb-2">Titel*</Label>
+              <Input type="text" id="name" bind:value={loadedLied.Titel} placeholder="Name des Liedes" required />
             </div>
             <div class="w-full">
               <Label for="egnummer" class="mb-2">EG-Nummer</Label>
-              <Input type="text" id="egnummer" placeholder="Nummer im Gesangbuch" />
+              <Input type="text" id="egnummer" bind:value={loadedLied.EG} placeholder="Nummer im Gesangbuch" />
             </div>
             <div class="w-full">
               <Label far="kategorie" class="mb-2">Kategorie</Label>
@@ -97,7 +109,7 @@
               />
             </div>
             <div class="sm:col-span-2">
-              <Label class="pb-2">Noten</Label>
+              <Label class="pb-2">Noten*</Label>
               <Fileupload bind:notenPdf class="mb-2" required />
               <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!</Helper>
             </div>
@@ -108,7 +120,13 @@
             </div>
             <div class="sm:col-span-2">
               <Label for="liedtext" class="mb-2">Liedtext</Label>
-              <Textarea id="liedtext" placeholder="Liedtext" rows="6" name="liedtext" />
+              <Textarea
+                id="liedtext"
+                bind:value={loadedLied.Liedtext}
+                placeholder="Liedtext"
+                rows="6"
+                name="liedtext"
+              />
             </div>
             <GradientButton color="cyanToBlue" type="submit" class="w-32">Speichern</GradientButton>
           </div>
