@@ -64,7 +64,8 @@
     });
   };
   const handleSubmit = () => {
-    alert('Form submited.');
+    // alert('Form submited.');
+    console.log('Submit');
   };
   let selected;
   let countries = [
@@ -88,7 +89,7 @@
 
       <Section name="crudcreateform">
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Lied anlegen oder bearbeiten</h2>
-        <form on:submit={handleSubmit}>
+        <form on:submit|preventDefault={handleSubmit}>
           <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div class="sm:col-span-2">
               <Label for="name" class="mb-2">Titel*</Label>
@@ -131,8 +132,8 @@
             <GradientButton color="cyanToBlue" type="submit" class="w-32">Speichern</GradientButton>
           </div>
         </form>
-      </Section></Card
-    >
+      </Section>
+    </Card>
   </div>
 {/if}
 
