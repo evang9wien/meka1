@@ -22,6 +22,7 @@
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
+  import LoginWarn from './auth/LoginWarn.svelte';
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
 
@@ -30,9 +31,10 @@
 
   let popupModal = false;
   let popupSpinnerModal = false;
+  let popupUserAuthModal = false;
   let selectedLied;
   let loadedLied = {};
-  let userAuth;
+  let userAuth = false;
   let alleLieder;
 
   let notenPdf;
@@ -42,8 +44,12 @@
 
   onMount(() => {
     console.log('onMount');
-    popupSpinnerModal = true;
     userAuth = isUserAuth();
+    if (!userAuth) {
+      popupUserAuthModal = true;
+      return;
+    }
+    popupSpinnerModal = true;
     axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
@@ -157,3 +163,5 @@
     </h3>
   </div>
 </Modal>
+
+<LoginWarn {popupUserAuthModal} />

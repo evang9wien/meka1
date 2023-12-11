@@ -11,16 +11,20 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider } from 'flowbite-svelte';
+  import { Modal } from 'flowbite-svelte';
 
   import moment from 'moment';
   import { getAuthHeader, isUserAuth } from './auth.js';
+  import LoginWarn from './auth/LoginWarn.svelte';
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
 
+  let popupUserAuthModal = false;
+  let popupSpinnerModal = false;
   let termine;
   let members;
   let selectedmember;
   // let mySnackbar;
-  let userAuth = true;
+  let userAuth = false;
   const loadCombo = () => {
     resetSelection();
     axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combo?month=6').then((response) => {
@@ -31,11 +35,17 @@
 
   onMount(() => {
     userAuth = isUserAuth();
+    if (!userAuth) {
+      popupUserAuthModal = true;
+      return;
+    }
+    popupSpinnerModal = true;
     loadCombo();
     axios.get('https://www.evang9.wien/root/wp-json/combo/v2/combomembers', getAuthHeader()).then((response) => {
       members = JSON.parse(response.data);
       members = members.map((t) => ({ ...t, name: t.VName + ' ' + t.FName, value: t.ShortName }));
       console.log(members);
+      popupSpinnerModal = false;
     });
   });
 
@@ -119,10 +129,10 @@
   };
 </script>
 
-<div class="flex justify-center mb-6">
-  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
-    <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
-    {#if userAuth}
+{#if userAuth && !popupSpinnerModal}
+  <div class="flex justify-center mb-6">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
       <div class="flex flex-row">
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>
@@ -220,11 +230,16 @@
       {:else}
         <Spinner color="gray" />
       {/if}
-    {:else}
-      Bitte zuerst einloggen.
-    {/if}
-  </Card>
-</div>
-<!-- <Snackbar bind:this={mySnackbar}>
-  <Label>Auswahl wird gespeichert.</Label>
-</Snackbar> -->
+    </Card>
+  </div>
+{/if}
+<Modal bind:open={popupSpinnerModal} size="sm" autoclose>
+  <div class="text-center">
+    <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+      <Spinner color="purple" size={8} />&nbsp;Comboplan wird neu geladen.
+    </h3>
+  </div>
+</Modal>
+<LoginWarn {popupUserAuthModal} />
