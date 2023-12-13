@@ -69,9 +69,26 @@
         });
     });
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // alert('Form submited.');
-    console.log('Submit');
+    try {
+      console.log('Submit: ', notenPdf, liedMp3);
+
+      const formData = new FormData();
+      formData.append('liedtext', loadedLied.Liedtext);
+      formData.append('pdfFile', notenPdf);
+      formData.append('mp3File', liedMp3);
+
+      const response = await axios.post(
+        'https://www.evang9.wien/root/wp-json/combo/v2/comboliedwrite',
+        formData,
+        getAuthHeader()
+      );
+      console.log('Upload erfolgreich:', response.data);
+    } catch (error) {
+      console.error('Fehler beim Upload:', error);
+      // Hier kannst du Fehlerbehandlung implementieren
+    }
   };
   let selected;
   let countries = [
@@ -93,52 +110,40 @@
         />
       </div>
 
-      <Section name="crudcreateform">
-        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Lied anlegen oder bearbeiten</h2>
-        <form on:submit|preventDefault={handleSubmit}>
-          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div class="sm:col-span-2">
-              <Label for="name" class="mb-2">Titel*</Label>
-              <Input type="text" id="name" bind:value={loadedLied.Titel} placeholder="Name des Liedes" required />
-            </div>
-            <div class="w-full">
-              <Label for="egnummer" class="mb-2">EG-Nummer</Label>
-              <Input type="text" id="egnummer" bind:value={loadedLied.EG} placeholder="Nummer im Gesangbuch" />
-            </div>
-            <div class="w-full">
-              <Label far="kategorie" class="mb-2">Kategorie</Label>
-              <MultiSelect
-                id="kategorie"
-                class="mt-2"
-                items={countries}
-                bind:value={selected}
-                placeholder="Kategorie"
-              />
-            </div>
-            <div class="sm:col-span-2">
-              <Label class="pb-2">Noten*</Label>
-              <Fileupload bind:notenPdf class="mb-2" required />
-              <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!</Helper>
-            </div>
-            <div class="sm:col-span-2">
-              <Label class="pb-2">Hörprobe</Label>
-              <Fileupload bind:liedMp3 class="mb-2" />
-              <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!</Helper>
-            </div>
-            <div class="sm:col-span-2">
-              <Label for="liedtext" class="mb-2">Liedtext</Label>
-              <Textarea
-                id="liedtext"
-                bind:value={loadedLied.Liedtext}
-                placeholder="Liedtext"
-                rows="6"
-                name="liedtext"
-              />
-            </div>
-            <GradientButton color="cyanToBlue" type="submit" class="w-32">Speichern</GradientButton>
+      <!-- <Section name="crudcreateform"> -->
+      <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Lied anlegen oder bearbeiten</h2>
+      <form id="liedform" on:submit|preventDefault={handleSubmit}>
+        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+          <div class="sm:col-span-2">
+            <Label for="name" class="mb-2">Titel*</Label>
+            <Input type="text" id="name" bind:value={loadedLied.Titel} placeholder="Name des Liedes" required />
           </div>
-        </form>
-      </Section>
+          <div class="w-full">
+            <Label for="egnummer" class="mb-2">EG-Nummer</Label>
+            <Input type="text" id="egnummer" bind:value={loadedLied.EG} placeholder="Nummer im Gesangbuch" />
+          </div>
+          <div class="w-full">
+            <Label far="kategorie" class="mb-2">Kategorie</Label>
+            <MultiSelect id="kategorie" class="mt-2" items={countries} bind:value={selected} placeholder="Kategorie" />
+          </div>
+          <div class="sm:col-span-2">
+            <Label class="pb-2">Noten*</Label>
+            <Fileupload id="noten" name="noten" on:change={(e) => (notenPdf = e.target.files[0])} class="mb-2" />
+            <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!</Helper>
+          </div>
+          <div class="sm:col-span-2">
+            <Label class="pb-2">Hörprobe</Label>
+            <Fileupload id="mp3" name="mp3" on:change={(e) => (liedMp3 = e.target.files[0])} class="mb-2" />
+            <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!</Helper>
+          </div>
+          <div class="sm:col-span-2">
+            <Label for="liedtext" class="mb-2">Liedtext</Label>
+            <Textarea id="liedtext" bind:value={loadedLied.Liedtext} placeholder="Liedtext" rows="6" name="liedtext" />
+          </div>
+          <GradientButton color="cyanToBlue" type="submit" class="w-32">Speichern</GradientButton>
+        </div>
+      </form>
+      <!-- </Section> -->
     </Card>
   </div>
 {/if}
