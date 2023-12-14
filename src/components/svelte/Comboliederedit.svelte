@@ -5,7 +5,7 @@
   import { Section } from 'flowbite-svelte-blocks';
   import { Label, Select, Textarea, Input, GradientButton, MultiSelect } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
-  import { Fileupload, Helper } from 'flowbite-svelte';
+  import { Fileupload, Helper, Alert } from 'flowbite-svelte';
   import {
     InfoCircleOutline,
     MicrophoneOutline,
@@ -32,6 +32,7 @@
   let popupModal = false;
   let popupSpinnerModal = false;
   let popupUserAuthModal = false;
+  let popupSpinnerUploadModal = false;
   let selectedLied;
   let loadedLied = {};
   let userAuth = false;
@@ -41,6 +42,7 @@
   let liedMp3;
 
   let kategorien = [];
+  let kategorie;
 
   onMount(() => {
     console.log('onMount');
@@ -50,6 +52,12 @@
       return;
     }
     popupSpinnerModal = true;
+    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboliedkat', getAuthHeader()).then((response) => {
+      kategorien = JSON.parse(response.data);
+      kategorien = kategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
+      console.log(kategorien);
+    });
+
     axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
@@ -57,27 +65,49 @@
     });
   });
 
-  const handleSelectLied = () => {
-    window.setTimeout(() => {
+  const handleSelectLied = async () => {
+    window.setTimeout(async () => {
       console.log('Sel: ', selectedLied);
-      axios
-        .get('https://www.evang9.wien/root/wp-json/combo/v2/comboliedread?lied_id=' + selectedLied, getAuthHeader())
-        .then((response) => {
-          // console.log('Lied Res: ', response);
-          loadedLied = JSON.parse(response.data)[0];
-          console.log('Lied: ', loadedLied);
-        });
+      popupSpinnerModal = true;
+      try {
+        const response = await axios.get(
+          'https://www.evang9.wien/root/wp-json/combo/v2/comboliedread?lied_id=' + selectedLied,
+          getAuthHeader()
+        );
+
+        // console.log('Lied Res: ', response);
+        loadedLied = JSON.parse(response.data)[0];
+        console.log('Lied: ', loadedLied);
+      } catch (error) {
+        console.error('Fehler beim Upload:', error);
+        // Hier kannst du Fehlerbehandlung implementieren
+      }
+      popupSpinnerModal = false;
     });
   };
   const handleSubmit = async () => {
     // alert('Form submited.');
     try {
       console.log('Submit: ', notenPdf, liedMp3);
-
+      if (notenPdf && notenPdf.name && !notenPdf.name.endsWith('.pdf')) {
+        alert('Noten müssen pdf sein');
+        return;
+      }
+      if (liedMp3 && liedMp3.name && !liedMp3.name.endsWith('.mp3')) {
+        alert('Lied muss mp3 sein');
+        return;
+      }
+      popupSpinnerUploadModal = true;
       const formData = new FormData();
+      formData.append('titel', loadedLied.Titel);
+      formData.append('filename', loadedLied.Dateiname);
       formData.append('liedtext', loadedLied.Liedtext);
-      formData.append('pdfFile', notenPdf);
-      formData.append('mp3File', liedMp3);
+      formData.append('kategorie', loadedLied.Kategorie);
+      formData.append('eg', loadedLied.EG);
+      formData.append('id', loadedLied.ID);
+
+      formData.append('pdf_file', notenPdf);
+      formData.append('mp3_file', liedMp3);
 
       const response = await axios.post(
         'https://www.evang9.wien/root/wp-json/combo/v2/comboliedwrite',
@@ -89,13 +119,8 @@
       console.error('Fehler beim Upload:', error);
       // Hier kannst du Fehlerbehandlung implementieren
     }
+    popupSpinnerUploadModal = false;
   };
-  let selected;
-  let countries = [
-    { value: 'tv', name: 'TV/Monitors' },
-    { value: 'pc', name: 'PC' },
-    { value: 'phone', name: 'Phones' },
-  ];
 </script>
 
 {#if userAuth && !popupSpinnerModal}
@@ -124,7 +149,13 @@
           </div>
           <div class="w-full">
             <Label far="kategorie" class="mb-2">Kategorie</Label>
-            <MultiSelect id="kategorie" class="mt-2" items={countries} bind:value={selected} placeholder="Kategorie" />
+            <Select
+              id="kategorie"
+              class="mt-2"
+              items={kategorien}
+              bind:value={loadedLied.Kategorie}
+              placeholder="Kategorie"
+            />
           </div>
           <div class="sm:col-span-2">
             <Label class="pb-2">Noten*</Label>
@@ -165,6 +196,16 @@
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
       <Spinner color="purple" size={8} />&nbsp;Liederauswahl wird neu geladen.
+    </h3>
+  </div>
+</Modal>
+
+<Modal bind:open={popupSpinnerUploadModal} size="sm" autoclose>
+  <div class="text-center">
+    <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+      <Spinner color="purple" size={8} />&nbsp;Lied wird gespeichert.
     </h3>
   </div>
 </Modal>
