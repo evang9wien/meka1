@@ -98,6 +98,7 @@
     // alert('Form submited.');
     try {
       console.log('Submit: ', notenPdf, liedMp3);
+
       if (notenPdf && notenPdf.name && !notenPdf.name.endsWith('.pdf')) {
         alert('Noten müssen pdf sein');
         return;
@@ -113,10 +114,15 @@
       formData.append('liedtext', loadedLied.Liedtext);
       formData.append('kategorie', loadedLied.Kategorie);
       formData.append('eg', loadedLied.EG);
-      formData.append('id', loadedLied.ID);
+      formData.append('activ', loadedLied.Aktiv);
+      formData.append('lied_id', loadedLied.ID ? loadedLied.ID : 0);
 
       formData.append('pdf_file', notenPdf);
+      if (!loadedLied.PDF) loadedLied.PDF = notenPdf ? 1 : 0;
+      formData.append('pdf', loadedLied.PDF);
       formData.append('mp3_file', liedMp3);
+      if (!loadedLied.MP3) loadedLied.MP3 = liedMp3 ? 1 : 0;
+      formData.append('mp3', loadedLied.MP3);
 
       const response = await axios.post(
         'https://www.evang9.wien/root/wp-json/combo/v2/comboliedwrite',
