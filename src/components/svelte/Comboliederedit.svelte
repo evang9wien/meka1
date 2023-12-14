@@ -62,12 +62,21 @@
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
       popupSpinnerModal = false;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('lied_id')) {
+        selectedLied = urlParams.get('lied_id');
+        console.log('Liedid: ', selectedLied);
+        handleSelectLied();
+      }
     });
   });
 
   const handleSelectLied = async () => {
     window.setTimeout(async () => {
       console.log('Sel: ', selectedLied);
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('lied_id', selectedLied);
+      window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
       popupSpinnerModal = true;
       try {
         const response = await axios.get(

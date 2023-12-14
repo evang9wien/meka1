@@ -59,9 +59,8 @@
   function handleFilterNoten() {
     setTimeout(() => {
       liederListe = liederListeKat.filter(
-        (lied) =>
-          lied.Titel.toLowerCase().includes(filterNoten.toLowerCase()) ||
-          lied.Liedtext.toLowerCase().includes(filterNoten.toLowerCase())
+        (lied) => lied.Titel.toLowerCase().includes(filterNoten.toLowerCase()) //  ||
+        // lied.Liedtext.toLowerCase().includes(filterNoten.toLowerCase())
       );
       // handleFilterKat(liederListe);
     }, 500);
@@ -195,7 +194,7 @@
                       color="black"
                       pill={true}
                       class="!p-2"
-                      href="https://evang9.wien/root/liedtext-update?filter_ID={lied.ID}"
+                      href="/pages/combo/comboliedereditpage?lied_id={lied.ID}"
                     >
                       <EditOutline class="w-4 h-4" />
                     </GradientButton>
