@@ -8,11 +8,12 @@
   import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
-  import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
+  import { Avatar, Modal, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
+  import LoginWarn from './auth/LoginWarn.svelte';
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
 
@@ -23,9 +24,19 @@
 
   let verantwortlich;
   let userAuth;
-  onMount(() => {
+
+  let popupUserAuthModal = false;
+  let popupSpinnerModal = false;
+
+  onMount(async () => {
     console.log('onMount');
-    userAuth = isUserAuth();
+    popupSpinnerModal = true;
+    userAuth = await isUserAuth();
+    if (!userAuth) {
+      popupUserAuthModal = true;
+      return;
+    }
+
     axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
       liederauswahl = JSON.parse(response.data);
       if (liederauswahl[0]) {
@@ -33,6 +44,7 @@
         selectedTermin = lied1.Termin_Liedliste;
         lastSelectedTermin = selectedTermin;
         verantwortlich = lied1.Verantwortlich;
+        popupSpinnerModal = false;
       }
       // console.log(liederauswahl);
     });
@@ -74,9 +86,9 @@
   };
 </script>
 
-<div class="flex justify-center mb-6">
-  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
-    {#if userAuth}
+{#if userAuth && !popupSpinnerModal}
+  <div class="flex justify-center mb-6">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
       <div>
         {#if termine}
           <Label>
@@ -159,8 +171,16 @@
           </div>
         {/if}
       </div>
-    {:else}
-      Bitte zuerst einloggen.
-    {/if}
-  </Card>
-</div>
+    </Card>
+  </div>
+{/if}
+<Modal bind:open={popupSpinnerModal} size="sm" autoclose>
+  <div class="text-center">
+    <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+      <Spinner color="purple" size={8} />&nbsp;Liederauswahl wird geladen.
+    </h3>
+  </div>
+</Modal>
+<LoginWarn {popupUserAuthModal} />

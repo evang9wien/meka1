@@ -21,6 +21,7 @@
         const token = response.data.token;
         localStorage.setItem('jwt', token);
         loginSucess = true;
+        window.location.reload();
       });
   };
 </script>
