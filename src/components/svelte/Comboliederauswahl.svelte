@@ -17,6 +17,8 @@
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
 
+  import { getUrl } from './url/url.js';
+
   let selectedTermin;
   let lastSelectedTermin;
   let liederauswahl;
@@ -37,7 +39,7 @@
       return;
     }
 
-    axios.get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
       liederauswahl = JSON.parse(response.data);
       if (liederauswahl[0]) {
         const lied1 = liederauswahl[0];
@@ -48,7 +50,7 @@
       }
       // console.log(liederauswahl);
     });
-    axios.get('https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10').then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10').then((response) => {
       termine = JSON.parse(response.data);
       termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
       console.log(termine);
@@ -73,7 +75,7 @@
         },
       };
       axios
-        .get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
+        .get(getUrl + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
         .then((response) => {
           liederauswahl = JSON.parse(response.data);
 
@@ -93,7 +95,7 @@
         {#if termine}
           <Label>
             <div class="flex space-x-4 mb-6">
-              <Avatar src="https://evang9.wien/comboapps/img/{getImage(verantwortlich)}" />
+              <Avatar src="{getUrl()}/comboapps/img/{getImage(verantwortlich)}" />
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
