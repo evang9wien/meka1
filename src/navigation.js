@@ -162,7 +162,7 @@ export const footerData = {
         },
         {
           text: 'Liederauswahl bearbeiten (legacy)',
-          href: 'https://www.evang9.wien/root/lieder_auswahl/',
+          href: 'https://evang9.wien/root/lieder_auswahl/',
         },
         {
           text: 'Lieder anlegen und bearbeiten',
