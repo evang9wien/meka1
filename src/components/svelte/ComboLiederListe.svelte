@@ -13,19 +13,29 @@
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { openPdf } from './pdf.js';
   import { getUrl } from './url/url.js';
+  import LoginWarn from './auth/LoginWarn.svelte';
+  import WaitPopup from './popup/WaitPopup.svelte';
 
   let liederListe;
   let liederListeAll;
   let liederListeKat;
+
+  let popupSpinnerModal = false;
+  let popupUserAuthModal = false;
 
   let open = false;
   let liedtext;
   let liedtitelDlg;
   let response = 'Nothing yet.';
   let userAuth;
-  onMount(() => {
-    userAuth = isUserAuth();
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+  onMount(async () => {
+    popupSpinnerModal = true;
+    userAuth = await isUserAuth();
+    if (!userAuth) {
+      popupUserAuthModal = true;
+      return;
+    }
+    axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       liederListe = JSON.parse(response.data);
       liederListe = liederListe.map((lied) => {
         const days = Math.ceil((new Date() - new Date(lied.zuletzt_gesungen)) / (1000 * 3600 * 24 * 7));
@@ -35,6 +45,7 @@
       });
       liederListeAll = liederListe;
       handleFilterKat();
+      popupSpinnerModal = false;
     });
   });
   let sort = 'Titel';
@@ -96,13 +107,13 @@
   }
 </script>
 
-<div class="flex justify-center mb-6">
-  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
-    <h2 class="text-gray-900 dark:text-white font-bold mb-4">Lieder Liste</h2>
-    {#if userAuth}
+{#if userAuth && !popupSpinnerModal}
+  <div class="flex justify-center mb-6">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Lieder Liste</h2>
+
       <div>
-        {#if liederListe}
-          <!-- <Dialog bind:open aria-labelledby="default-focus-title" aria-describedby="default-focus-content">
+        <!-- <Dialog bind:open aria-labelledby="default-focus-title" aria-describedby="default-focus-content">
           <Title id="default-focus-title">{liedtitelDlg}</Title>
           <Content id="default-focus-content">
             {liedtext}
@@ -113,105 +124,102 @@
             </Button>
           </Actions>
         </Dialog> -->
-          <div class="">
-            <!-- <div class="flex space-x-4 mb-6">
+        <div class="">
+          <!-- <div class="flex space-x-4 mb-6">
               <Label for="website-admin" class="block mb-2">Suchbegriff</Label>
             </div> -->
-            <div class="flex space-x-4 mb-6">
-              <ButtonGroup class="w-full">
-                <InputAddon>
-                  <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                </InputAddon>
-                <Input
-                  class=""
-                  bind:value={filterNoten}
-                  on:input={handleFilterNoten}
-                  on:change={handleFilterNoten}
-                  placeholder="Suche im Titel oder im Liedtext"
-                />
-              </ButtonGroup>
+          <div class="flex space-x-4 mb-6">
+            <ButtonGroup class="w-full">
+              <InputAddon>
+                <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </InputAddon>
+              <Input
+                class=""
+                bind:value={filterNoten}
+                on:input={handleFilterNoten}
+                on:change={handleFilterNoten}
+                placeholder="Suche im Titel oder im Liedtext"
+              />
+            </ButtonGroup>
 
-              <Select items={kategorien} bind:value={filterKat} on:change={handleFilterKat} placeholder="Kategorie"
-              ></Select>
-            </div>
-            <!-- <Helper class="text-sm mt-2">Auswahl der Lied Kategorie.</Helper> -->
+            <Select items={kategorien} bind:value={filterKat} on:change={handleFilterKat} placeholder="Kategorie"
+            ></Select>
           </div>
-          <Table striped={true} sortable>
-            <TableHead>
-              <TableHeadCell columnId="Titel">Noten</TableHeadCell>
-              <TableHeadCell sortable={false}>Hörprobe</TableHeadCell>
-              <TableHeadCell columnId="zuletzt">zuletzt</TableHeadCell>
-              <TableHeadCell></TableHeadCell>
-            </TableHead>
-            <TableBody>
-              {#each liederListe as lied}
-                <TableBodyRow>
-                  <TableBodyCell>
+          <!-- <Helper class="text-sm mt-2">Auswahl der Lied Kategorie.</Helper> -->
+        </div>
+        <Table striped={true} sortable>
+          <TableHead>
+            <TableHeadCell columnId="Titel">Noten</TableHeadCell>
+            <TableHeadCell sortable={false}>Hörprobe</TableHeadCell>
+            <TableHeadCell columnId="zuletzt">zuletzt</TableHeadCell>
+            <TableHeadCell></TableHeadCell>
+          </TableHead>
+          <TableBody>
+            {#each liederListe as lied}
+              <TableBodyRow>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <FileMusicOutline
+                      size="md"
+                      class="mr-2"
+                      on:click={() => {
+                        const file =
+                          getUrl() +
+                          '/root/wp-json/combo/v2/combolied/' +
+                          lied.Dateiname +
+                          '?lied=' +
+                          lied.Dateiname +
+                          '&type=pdf';
+                        openPdf(file);
+                      }}
+                    />
+                    <div class="mr-2">
+                      {lied.Titel}
+                    </div>
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  {#if lied.MP3 != '0'}
                     <div class="flex flex-row">
-                      <FileMusicOutline
+                      <PlaySolid
                         size="md"
                         class="mr-2"
                         on:click={() => {
                           const file =
-                            'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                            getUrl() +
+                            '/root/wp-json/combo/v2/combolied/' +
                             lied.Dateiname +
                             '?lied=' +
                             lied.Dateiname +
-                            '&type=pdf';
-                          openPdf(file);
+                            '&type=mp3';
+                          openMp3(file);
                         }}
-                      />
-                      <div class="mr-2">
-                        {lied.Titel}
-                      </div>
+                      ></PlaySolid>
+                      <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
                     </div>
-                  </TableBodyCell>
-                  <TableBodyCell>
-                    {#if lied.MP3 != '0'}
-                      <div class="flex flex-row">
-                        <PlaySolid
-                          size="md"
-                          class="mr-2"
-                          on:click={() => {
-                            const file =
-                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
-                              lied.Dateiname +
-                              '?lied=' +
-                              lied.Dateiname +
-                              '&type=mp3';
-                            openMp3(file);
-                          }}
-                        ></PlaySolid>
-                        <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
-                      </div>
-                    {/if}
-                  </TableBodyCell>
-                  <TableBodyCell>
-                    {lied.zuletzt < 2000 ? lied.zuletzt + ' Wochen' : ''}
-                  </TableBodyCell>
-                  <TableBodyCell>
-                    <GradientButton
-                      shadow
-                      color="black"
-                      pill={true}
-                      class="!p-2"
-                      href="/pages/combo/comboliedereditpage?lied_id={lied.ID}"
-                    >
-                      <EditOutline class="w-4 h-4" />
-                    </GradientButton>
-                  </TableBodyCell>
-                </TableBodyRow>
-              {/each}
-            </TableBody>
-          </Table>
-        {:else}
-          <div>
-            <Spinner color="gray" />
-          </div>
-        {/if}
+                  {/if}
+                </TableBodyCell>
+                <TableBodyCell>
+                  {lied.zuletzt < 2000 ? lied.zuletzt + ' Wochen' : ''}
+                </TableBodyCell>
+                <TableBodyCell>
+                  <GradientButton
+                    shadow
+                    color="black"
+                    pill={true}
+                    class="!p-2"
+                    href="/pages/combo/comboliedereditpage?lied_id={lied.ID}"
+                  >
+                    <EditOutline class="w-4 h-4" />
+                  </GradientButton>
+                </TableBodyCell>
+              </TableBodyRow>
+            {/each}
+          </TableBody>
+        </Table>
       </div>
-    {:else}
-      Bitte zuerst einloggen.
-    {/if}
-  </Card>
-</div>
+    </Card>
+  </div>
+{/if}
+<WaitPopup {popupSpinnerModal} message="Liederliste wird geladen." />
+<LoginWarn {popupUserAuthModal} />

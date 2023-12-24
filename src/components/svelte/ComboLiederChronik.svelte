@@ -9,13 +9,15 @@
   import { Card } from 'flowbite-svelte';
   import { MicrophoneOutline, EditOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { Spinner } from 'flowbite-svelte';
+
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { getUrl } from './url/url.js';
+  import LoginWarn from './auth/LoginWarn.svelte';
+  import WaitPopup from './popup/WaitPopup.svelte';
 
   let liederListe;
   let liederListeAll;
@@ -27,11 +29,17 @@
   let response = 'Nothing yet.';
 
   let userAuth;
-
+  let popupSpinnerModal = false;
+  let popupUserAuthModal = false;
   const yearNow = new Date().getFullYear();
 
-  onMount(() => {
-    userAuth = isUserAuth();
+  onMount(async () => {
+    popupSpinnerModal = true;
+    userAuth = await isUserAuth();
+    if (!userAuth) {
+      popupUserAuthModal = true;
+      return;
+    }
     loadLieder({ value: yearNow });
   });
 
@@ -43,6 +51,7 @@
       liederListeAll = liederListe;
 
       handleSort();
+      popupSpinnerModal = false;
     });
   };
   let sort = 'Termin_Liedliste';
@@ -81,13 +90,13 @@
   }
 </script>
 
-<div class="flex justify-center mb-6">
-  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
-    <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Chronik</h2>
-    {#if userAuth}
+{#if userAuth && !popupSpinnerModal}
+  <div class="flex justify-center mb-6">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Chronik</h2>
+
       <div>
-        {#if liederListe}
-          <!-- <Dialog
+        <!-- <Dialog
             bind:open
             aria-labelledby="default-focus-title"
             aria-describedby="default-focus-content"
@@ -103,49 +112,80 @@
             </Actions>
         </Dialog>
     -->
-          <div class="mb-4">
-            <div class="">
-              <Select
-                items={years}
-                bind:value={selectedYear}
-                on:change={handleYearSelect}
-                placeholder="Auswahl des Jahres."
-              ></Select>
-            </div>
+        <div class="mb-4">
+          <div class="">
+            <Select
+              items={years}
+              bind:value={selectedYear}
+              on:change={handleYearSelect}
+              placeholder="Auswahl des Jahres."
+            ></Select>
           </div>
-          <!-- <IconButton class="material-icons" on:click={handleYearSelect}>search</IconButton> -->
+        </div>
+        <!-- <IconButton class="material-icons" on:click={handleYearSelect}>search</IconButton> -->
 
-          <!-- <FormField align="end">
+        <!-- <FormField align="end">
             <Checkbox bind:checked={combo} on:input={handleFilterCombo}/>  
             <span slot="label">Combolied</span>                          
         </FormField> -->
 
-          <Table sortable bind:sort bind:sortDirection>
-            <TableHead>
-              <TableHeadCell>Termin</TableHeadCell>
-              <TableHeadCell>
-                <Label>Noten</Label>
-              </TableHeadCell>
-              <TableHeadCell>
-                <Label>gespielt als</Label>
-              </TableHeadCell>
-              <TableHeadCell>
-                <Label>Piano</Label>
-              </TableHeadCell>
-            </TableHead>
-            <TableBody>
-              {#each liederListe as lied}
-                <TableBodyRow>
-                  <TableBodyCell>
-                    <div class="flex flex-col place-items-center">
-                      <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(lied.Verantwortlich)}" />
-                      {lied.Termin_Liedliste}
-                    </div>
-                  </TableBodyCell>
+        <Table sortable bind:sort bind:sortDirection>
+          <TableHead>
+            <TableHeadCell>Termin</TableHeadCell>
+            <TableHeadCell>
+              <Label>Noten</Label>
+            </TableHeadCell>
+            <TableHeadCell>
+              <Label>gespielt als</Label>
+            </TableHeadCell>
+            <TableHeadCell>
+              <Label>Piano</Label>
+            </TableHeadCell>
+          </TableHead>
+          <TableBody>
+            {#each liederListe as lied}
+              <TableBodyRow>
+                <TableBodyCell>
+                  <div class="flex flex-col place-items-center">
+                    <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(lied.Verantwortlich)}" />
+                    {lied.Termin_Liedliste}
+                  </div>
+                </TableBodyCell>
 
-                  <TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <FileMusicOutline
+                      size="md"
+                      class="mr-2"
+                      on:click={() => {
+                        const file =
+                          getUrl() +
+                          '/root/wp-json/combo/v2/combolied/' +
+                          lied.Dateiname +
+                          '?lied=' +
+                          lied.Dateiname +
+                          '&type=pdf';
+                        openPdf(file);
+                      }}
+                    />
+                    <div class="mr-2">
+                      {lied.Titel}
+                    </div>
+                  </div>
+
+                  <!--
+                    <Button
+                      style="color:black"
+                      on:click={() => ((open = true), (liedtext = lied.Liedtext), (liedtitelDlg = lied.Titel))}
+                    >
+                    
+                      <Label>{lied.Titel}</Label>
+                    </Button>
+                -->
+                  <br />
+                  {#if lied.MP3 != '0'}
                     <div class="flex flex-row">
-                      <FileMusicOutline
+                      <PlaySolid
                         size="md"
                         class="mr-2"
                         on:click={() => {
@@ -155,63 +195,27 @@
                             lied.Dateiname +
                             '?lied=' +
                             lied.Dateiname +
-                            '&type=pdf';
-                          openPdf(file);
+                            '&type=mp3';
+                          openMp3(file);
                         }}
-                      />
-                      <div class="mr-2">
-                        {lied.Titel}
-                      </div>
+                      ></PlaySolid>
+                      <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
                     </div>
-
-                    <!--
-                    <Button
-                      style="color:black"
-                      on:click={() => ((open = true), (liedtext = lied.Liedtext), (liedtitelDlg = lied.Titel))}
-                    >
-                    
-                      <Label>{lied.Titel}</Label>
-                    </Button>
-                -->
-                    <br />
-                    {#if lied.MP3 != '0'}
-                      <div class="flex flex-row">
-                        <PlaySolid
-                          size="md"
-                          class="mr-2"
-                          on:click={() => {
-                            const file =
-                              getUrl() +
-                              '/root/wp-json/combo/v2/combolied/' +
-                              lied.Dateiname +
-                              '?lied=' +
-                              lied.Dateiname +
-                              '&type=mp3';
-                            openMp3(file);
-                          }}
-                        ></PlaySolid>
-                        <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
-                      </div>
-                    {/if}
-                  </TableBodyCell>
-                  <TableBodyCell>
-                    {lied.Beschreibung}
-                  </TableBodyCell>
-                  <TableBodyCell>
-                    {lied.Tasten}
-                  </TableBodyCell>
-                </TableBodyRow>
-              {/each}
-            </TableBody>
-          </Table>
-        {:else}
-          <div>
-            <Spinner color="gray" />
-          </div>
-        {/if}
+                  {/if}
+                </TableBodyCell>
+                <TableBodyCell>
+                  {lied.Beschreibung}
+                </TableBodyCell>
+                <TableBodyCell>
+                  {lied.Tasten}
+                </TableBodyCell>
+              </TableBodyRow>
+            {/each}
+          </TableBody>
+        </Table>
       </div>
-    {:else}
-      Bitte zuerst einloggen.
-    {/if}
-  </Card>
-</div>
+    </Card>
+  </div>
+{/if}
+<WaitPopup {popupSpinnerModal} message="Liederchronik wird geladen." />
+<LoginWarn {popupUserAuthModal} />
