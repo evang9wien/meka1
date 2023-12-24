@@ -12,6 +12,7 @@
   import { openMp3, stopMp3 } from './mp3.js';
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { openPdf } from './pdf.js';
+  import { getUrl } from './url/url.js';
 
   let liederListe;
   let liederListeAll;

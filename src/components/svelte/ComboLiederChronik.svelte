@@ -15,6 +15,7 @@
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
   import { getAuthHeader, isUserAuth } from './auth.js';
+  import { getUrl } from './url/url.js';
 
   let liederListe;
   let liederListeAll;
@@ -36,15 +37,13 @@
 
   const loadLieder = (year) => {
     let y = year.value ? year.value : year;
-    axios
-      .get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederChronik?date=' + y, getAuthHeader())
-      .then((response) => {
-        liederListe = JSON.parse(response.data);
+    axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederChronik?date=' + y, getAuthHeader()).then((response) => {
+      liederListe = JSON.parse(response.data);
 
-        liederListeAll = liederListe;
+      liederListeAll = liederListe;
 
-        handleSort();
-      });
+      handleSort();
+    });
   };
   let sort = 'Termin_Liedliste';
   let sortDirection = 'decending';
@@ -139,7 +138,7 @@
                 <TableBodyRow>
                   <TableBodyCell>
                     <div class="flex flex-col place-items-center">
-                      <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImage(lied.Verantwortlich)}" />
+                      <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(lied.Verantwortlich)}" />
                       {lied.Termin_Liedliste}
                     </div>
                   </TableBodyCell>
@@ -151,7 +150,8 @@
                         class="mr-2"
                         on:click={() => {
                           const file =
-                            'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                            getUrl() +
+                            '/root/wp-json/combo/v2/combolied/' +
                             lied.Dateiname +
                             '?lied=' +
                             lied.Dateiname +
@@ -181,7 +181,8 @@
                           class="mr-2"
                           on:click={() => {
                             const file =
-                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                              getUrl() +
+                              '/root/wp-json/combo/v2/combolied/' +
                               lied.Dateiname +
                               '?lied=' +
                               lied.Dateiname +

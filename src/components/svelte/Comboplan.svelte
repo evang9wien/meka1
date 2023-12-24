@@ -11,10 +11,11 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
+  import { getUrl } from './url/url.js';
 
   let termine;
   onMount(() => {
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combo?month=3').then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v1/combo?month=3').then((response) => {
       termine = JSON.parse(response.data);
       // termine = response.data;
     });
@@ -51,7 +52,7 @@
             <TableBodyRow>
               <TableBodyCell>
                 <div class="flex flex-col place-items-center">
-                  <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImage(termin.Verantwortlich)}" />
+                  <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(termin.Verantwortlich)}" />
                   <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
                   {formatDate(moment(termin.Termin).toDate())}
                 </div>

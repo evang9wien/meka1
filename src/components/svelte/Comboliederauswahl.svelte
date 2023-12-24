@@ -130,7 +130,8 @@
                         class="mr-2"
                         on:click={() => {
                           const file =
-                            'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                            getUrl() +
+                            '/root/wp-json/combo/v2/combolied/' +
                             lied.Dateiname +
                             '?lied=' +
                             lied.Dateiname +
@@ -151,7 +152,8 @@
                           class="mr-2"
                           on:click={() => {
                             const file =
-                              'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                              getUrl() +
+                              '/root/wp-json/combo/v2/combolied/' +
                               lied.Dateiname +
                               '?lied=' +
                               lied.Dateiname +

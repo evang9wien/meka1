@@ -17,6 +17,7 @@
   import { getAuthHeader, isUserAuth } from './auth.js';
   import LoginWarn from './auth/LoginWarn.svelte';
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
+  import { getUrl } from './url/url.js';
 
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
@@ -27,7 +28,7 @@
   let userAuth = false;
   const loadCombo = () => {
     resetSelection();
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combo?month=6').then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v1/combo?month=6').then((response) => {
       // termine = response.data;
       termine = JSON.parse(response.data);
     });
@@ -41,7 +42,7 @@
     }
     popupSpinnerModal = true;
     loadCombo();
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/combomembers', getAuthHeader()).then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v2/combomembers', getAuthHeader()).then((response) => {
       members = JSON.parse(response.data);
       members = members.map((t) => ({ ...t, name: t.VName + ' ' + t.FName, value: t.ShortName }));
       console.log(members);
@@ -100,7 +101,7 @@
     let name = selectedmember;
     console.log(name, JSON.stringify(newEntries));
 
-    axios.patch('https://www.evang9.wien/root/wp-json/combo/v2/comboedit', newEntries, getAuthHeader()).then(
+    axios.patch(getUrl() + '/root/wp-json/combo/v2/comboedit', newEntries, getAuthHeader()).then(
       (response) => {
         console.log('Success:', response);
         loadCombo();
@@ -108,10 +109,7 @@
           .get(
             // "https://www.evang9.wien/root/wp-json/combo/v1/comboemail?name=AE&date=1.1.2020&instrument=Git&inout=EIN"
             encodeURI(
-              'https://www.evang9.wien/root/wp-json/combo/v2/comboemail?name=' +
-                name +
-                '&entries=' +
-                JSON.stringify(newEntries)
+              getUrl() + '/root/wp-json/combo/v2/comboemail?name=' + name + '&entries=' + JSON.stringify(newEntries)
             ),
             getAuthHeader()
           )
@@ -163,7 +161,7 @@
               <TableBodyRow>
                 <TableBodyCell>
                   <div class="flex flex-col place-items-center">
-                    <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImage(termin.Verantwortlich)}" />
+                    <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(termin.Verantwortlich)}" />
                     {formatDate(moment(termin.Termin).toDate())}
                   </div>
                 </TableBodyCell>

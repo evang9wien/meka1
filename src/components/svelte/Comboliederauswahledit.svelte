@@ -28,6 +28,7 @@
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginWarn from './auth/LoginWarn.svelte';
+  import { getUrl } from './url/url.js';
 
   let popupModal = false;
   let popupSpinnerModal = false;
@@ -101,27 +102,23 @@
       return;
     }
     popupSpinnerModal = true;
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
       comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
       // console.log(comboLieder);
-      axios
-        .get('https://evang9.wien/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader())
-        .then((response) => {
-          // liederReihenfolgeDBTemplate mit und ohne AM
-          liederReihenfolgeDBTemplate = JSON.parse(response.data);
-          console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
-          axios
-            .get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader())
-            .then((response) => {
-              liederDBAuswahl = JSON.parse(response.data);
-              handleLiederDBAuswahl();
-              popupSpinnerModal = false;
-            });
+      axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader()).then((response) => {
+        // liederReihenfolgeDBTemplate mit und ohne AM
+        liederReihenfolgeDBTemplate = JSON.parse(response.data);
+        console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
+        axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
+          liederDBAuswahl = JSON.parse(response.data);
+          handleLiederDBAuswahl();
+          popupSpinnerModal = false;
         });
+      });
     });
-    axios.get('https://evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
       termine = JSON.parse(response.data);
       termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
       // console.log(termine);
@@ -146,7 +143,7 @@
         },
       };
       axios
-        .get('https://evang9.wien/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
+        .get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
         .then((response) => {
           liederDBAuswahl = JSON.parse(response.data);
           handleLiederDBAuswahl(liederDBAuswahl);
@@ -188,18 +185,16 @@
     console.log('DB Save: ', liedReihenfolgeDB);
     console.log('DB Save JSON: ', JSON.stringify(liedReihenfolgeDB));
     popupSpinnerModal = true;
-    axios
-      .patch('https://www.evang9.wien/root/wp-json/combo/v2/comboliederedit', liedReihenfolgeDB, getAuthHeader())
-      .then(
-        (response) => {
-          console.log('Success:', response);
-          // wegen der Lied ID müssen die Lieder neu geladen werden.
-          handleSelectDate();
-        },
-        (error) => {
-          console.log('Error:', error);
-        }
-      );
+    axios.patch(getUrl() + '/root/wp-json/combo/v2/comboliederedit', liedReihenfolgeDB, getAuthHeader()).then(
+      (response) => {
+        console.log('Success:', response);
+        // wegen der Lied ID müssen die Lieder neu geladen werden.
+        handleSelectDate();
+      },
+      (error) => {
+        console.log('Error:', error);
+      }
+    );
   };
 
   const addLied = (lied) => {
@@ -269,7 +264,7 @@
         {#if termine}
           <div class="flex space-x-4 mb-6">
             {#if verantwortlich}
-              <Avatar src="https://evang9.wien/comboapps/img/{getImage(verantwortlich)}" />
+              <Avatar src="{getUrl()}/comboapps/img/{getImage(verantwortlich)}" />
             {/if}
             <div class="space-y-1 font-medium dark:text-white">
               <div>LiederAuswahl für den Gottesdienst bearbeiten</div>
@@ -336,7 +331,8 @@
                             class="mr-2"
                             on:click={() => {
                               const file =
-                                'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                                getUrl() +
+                                '/root/wp-json/combo/v2/combolied/' +
                                 lied.selectedLied.Dateiname +
                                 '?lied=' +
                                 lied.selectedLied.Dateiname +
@@ -356,7 +352,8 @@
                             class="mr-2"
                             on:click={() => {
                               const file =
-                                'https://evang9.wien/root/wp-json/combo/v2/combolied/' +
+                                getUrl() +
+                                '/root/wp-json/combo/v2/combolied/' +
                                 lied.selectedLied.Dateiname +
                                 '?lied=' +
                                 lied.selectedLied.Dateiname +

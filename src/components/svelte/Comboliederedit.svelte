@@ -28,6 +28,7 @@
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
+  import { getUrl } from './url/url.js';
 
   let popupModal = false;
   let popupSpinnerModal = false;
@@ -52,13 +53,13 @@
       return;
     }
     popupSpinnerModal = true;
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboliedkat', getAuthHeader()).then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v2/comboliedkat', getAuthHeader()).then((response) => {
       kategorien = JSON.parse(response.data);
       kategorien = kategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
       console.log(kategorien);
     });
 
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
       popupSpinnerModal = false;
@@ -80,7 +81,7 @@
       popupSpinnerModal = true;
       try {
         const response = await axios.get(
-          'https://www.evang9.wien/root/wp-json/combo/v2/comboliedread?lied_id=' + selectedLied,
+          getUrl() + '/root/wp-json/combo/v2/comboliedread?lied_id=' + selectedLied,
           getAuthHeader()
         );
 
@@ -124,11 +125,7 @@
       if (!loadedLied.MP3) loadedLied.MP3 = liedMp3 ? 1 : 0;
       formData.append('mp3', loadedLied.MP3);
 
-      const response = await axios.post(
-        'https://www.evang9.wien/root/wp-json/combo/v2/comboliedwrite',
-        formData,
-        getAuthHeader()
-      );
+      const response = await axios.post(getUrl() + '/root/wp-json/combo/v2/comboliedwrite', formData, getAuthHeader());
       console.log('Upload erfolgreich:', response.data);
     } catch (error) {
       console.error('Fehler beim Upload:', error);
