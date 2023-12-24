@@ -2,7 +2,7 @@
   import { Modal, Button } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   export let popupSpinnerModal = false;
-  export let message = 'Daten werden geladen.';
+  export let message = '';
 </script>
 
 <Modal bind:open={popupSpinnerModal} size="sm" autoclose>

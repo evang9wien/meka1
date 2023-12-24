@@ -29,7 +29,7 @@
   let response = 'Nothing yet.';
 
   let userAuth;
-  let popupSpinnerModal = false;
+  let popupSpinnerModal = true;
   let popupUserAuthModal = false;
   const yearNow = new Date().getFullYear();
 

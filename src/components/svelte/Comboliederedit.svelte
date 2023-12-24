@@ -23,6 +23,7 @@
 
   import { getAuthHeader, isUserAuth } from './auth.js';
   import LoginWarn from './auth/LoginWarn.svelte';
+  import WaitPopup from './popup/WaitPopup.svelte';
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
 
@@ -31,7 +32,7 @@
   import { getUrl } from './url/url.js';
 
   let popupModal = false;
-  let popupSpinnerModal = false;
+  let popupSpinnerModal = true;
   let popupUserAuthModal = false;
   let popupSpinnerUploadModal = false;
   let selectedLied;
@@ -191,27 +192,6 @@
   </div>
 {/if}
 
-<!-- <Modal bind:open={popupModal} size="xs" autoclose>
-  <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      Soll der geänderte Liederablauf für den Gottestdienst am {selectedTermin} gespeichert werden?
-    </h3>
-    <Button color="red" class="me-2" on:click={handleSaveDB}>Ja, ich bin mir sicher</Button>
-    <Button color="alternative">Nein, abbrechen</Button>
-  </div>
-</Modal> -->
-
-<Modal bind:open={popupSpinnerModal} size="sm" autoclose>
-  <div class="text-center">
-    <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <Spinner color="purple" size={8} />&nbsp;Liederauswahl wird neu geladen.
-    </h3>
-  </div>
-</Modal>
-
 <Modal bind:open={popupSpinnerUploadModal} size="sm" autoclose>
   <div class="text-center">
     <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
@@ -223,3 +203,4 @@
 </Modal>
 
 <LoginWarn {popupUserAuthModal} />
+<WaitPopup {popupSpinnerModal} message="Liederdaten werden neu geladen." />

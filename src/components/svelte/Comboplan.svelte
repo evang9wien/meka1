@@ -9,15 +9,17 @@
   import { Card } from 'flowbite-svelte';
   import { MicrophoneOutline, EditOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { Spinner } from 'flowbite-svelte';
+  import WaitPopup from './popup/WaitPopup.svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
   import { getUrl } from './url/url.js';
 
   let termine;
+  let popupSpinnerModal = true;
   onMount(() => {
+    popupSpinnerModal = true;
     axios.get(getUrl() + '/root/wp-json/combo/v1/combo?month=3').then((response) => {
       termine = JSON.parse(response.data);
-      // termine = response.data;
+      popupSpinnerModal = false;
     });
   });
 
@@ -33,10 +35,10 @@
   };
 </script>
 
-<div class="flex justify-center mb-6">
-  <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
-    <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
-    {#if termine}
+{#if !popupSpinnerModal}
+  <div class="flex justify-center mb-6">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
       <Table striped={true}>
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>
@@ -72,8 +74,7 @@
           {/each}
         </TableBody>
       </Table>
-    {:else}
-      <Spinner color="gray" />
-    {/if}
-  </Card>
-</div>
+    </Card>
+  </div>
+{/if}
+<WaitPopup {popupSpinnerModal} message="Comboplan wird geladen." />

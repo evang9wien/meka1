@@ -16,11 +16,12 @@
   import moment from 'moment';
   import { getAuthHeader, isUserAuth } from './auth.js';
   import LoginWarn from './auth/LoginWarn.svelte';
+  import WaitPopup from './popup/WaitPopup.svelte';
   import { getImage, getLongName } from './predigt/PredigtConstants.js';
   import { getUrl } from './url/url.js';
 
   let popupUserAuthModal = false;
-  let popupSpinnerModal = false;
+  let popupSpinnerModal = true;
   let termine;
   let members;
   let selectedmember;
@@ -144,100 +145,88 @@
         >
       </div>
 
-      {#if termine}
-        <Table striped={true}>
-          <TableHead>
-            <TableHeadCell>Termin</TableHeadCell>
-            <TableHeadCell>Tasten</TableHeadCell>
-            <TableHeadCell>Melodie</TableHeadCell>
-            <TableHeadCell>Drums</TableHeadCell>
-            <TableHeadCell>Bass</TableHeadCell>
-            <TableHeadCell>Git.</TableHeadCell>
-            <TableHeadCell>Bemerkung</TableHeadCell>
-          </TableHead>
+      <Table striped={true}>
+        <TableHead>
+          <TableHeadCell>Termin</TableHeadCell>
+          <TableHeadCell>Tasten</TableHeadCell>
+          <TableHeadCell>Melodie</TableHeadCell>
+          <TableHeadCell>Drums</TableHeadCell>
+          <TableHeadCell>Bass</TableHeadCell>
+          <TableHeadCell>Git.</TableHeadCell>
+          <TableHeadCell>Bemerkung</TableHeadCell>
+        </TableHead>
 
-          <TableBody>
-            {#each termine as termin}
-              <TableBodyRow>
-                <TableBodyCell>
-                  <div class="flex flex-col place-items-center">
-                    <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(termin.Verantwortlich)}" />
-                    {formatDate(moment(termin.Termin).toDate())}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  <div class="flex flex-row">
-                    <Checkbox
-                      disabled={!selectedmember}
-                      bind:group={combo.Tasten}
-                      value={termin.Termin + ',' + termin.Tasten}
-                    />
-                    {termin.Tasten}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  <div class="flex flex-row">
-                    <Checkbox
-                      disabled={!selectedmember}
-                      bind:group={combo.Melodie}
-                      value={termin.Termin + ',' + termin.Melodie}
-                    />
-                    {termin.Melodie}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  <div class="flex flex-row">
-                    <Checkbox
-                      disabled={!selectedmember}
-                      bind:group={combo.Drums}
-                      value={termin.Termin + ',' + termin.Drums}
-                    />
-                    {termin.Drums}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  <div class="flex flex-row">
-                    <Checkbox
-                      disabled={!selectedmember}
-                      bind:group={combo.Bass}
-                      value={termin.Termin + ',' + termin.Bass}
-                    />
-                    {termin.Bass}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  <div class="flex flex-row">
-                    <Checkbox
-                      disabled={!selectedmember}
-                      bind:group={combo.Gitarre}
-                      value={termin.Termin + ',' + termin.Gitarre}
-                    />
-                    {termin.Gitarre}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  <div class="flex flex-col">
-                    <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
-                    <div>{termin.Zusatzinfo}</div>
-                  </div>
-                </TableBodyCell>
-              </TableBodyRow>
-            {/each}
-          </TableBody>
-        </Table>
-      {:else}
-        <Spinner color="gray" />
-      {/if}
+        <TableBody>
+          {#each termine as termin}
+            <TableBodyRow>
+              <TableBodyCell>
+                <div class="flex flex-col place-items-center">
+                  <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(termin.Verantwortlich)}" />
+                  {formatDate(moment(termin.Termin).toDate())}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-row">
+                  <Checkbox
+                    disabled={!selectedmember}
+                    bind:group={combo.Tasten}
+                    value={termin.Termin + ',' + termin.Tasten}
+                  />
+                  {termin.Tasten}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-row">
+                  <Checkbox
+                    disabled={!selectedmember}
+                    bind:group={combo.Melodie}
+                    value={termin.Termin + ',' + termin.Melodie}
+                  />
+                  {termin.Melodie}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-row">
+                  <Checkbox
+                    disabled={!selectedmember}
+                    bind:group={combo.Drums}
+                    value={termin.Termin + ',' + termin.Drums}
+                  />
+                  {termin.Drums}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-row">
+                  <Checkbox
+                    disabled={!selectedmember}
+                    bind:group={combo.Bass}
+                    value={termin.Termin + ',' + termin.Bass}
+                  />
+                  {termin.Bass}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-row">
+                  <Checkbox
+                    disabled={!selectedmember}
+                    bind:group={combo.Gitarre}
+                    value={termin.Termin + ',' + termin.Gitarre}
+                  />
+                  {termin.Gitarre}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-col">
+                  <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
+                  <div>{termin.Zusatzinfo}</div>
+                </div>
+              </TableBodyCell>
+            </TableBodyRow>
+          {/each}
+        </TableBody>
+      </Table>
     </Card>
   </div>
 {/if}
-<Modal bind:open={popupSpinnerModal} size="sm" autoclose>
-  <div class="text-center">
-    <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <Spinner color="purple" size={8} />&nbsp;Comboplan wird neu geladen.
-    </h3>
-  </div>
-</Modal>
+<WaitPopup {popupSpinnerModal} message="Comboplan wird neu geladen." />
 <LoginWarn {popupUserAuthModal} />
