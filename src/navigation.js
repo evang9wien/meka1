@@ -54,27 +54,19 @@ export const headerData = {
       links: [
         {
           text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
-          href: getPermalink('/angebote#neuindergemeinde'),
+          href: getPermalink('/angebote/angebote#neuindergemeinde'),
         },
         {
           text: 'Angebote',
-          href: getPermalink('/angebote#angebot'),
-        },
-        {
-          text: 'Pfarrer to go',
-          href: getPermalink('/angebote#pfarrer2go'),
+          href: getPermalink('/angebote/angebote#angebote'),
         },
         {
           text: 'Grätzloase in der Seegasse',
-          href: getPermalink('/angebote#graetzloase'),
+          href: getPermalink('/angebote/angebote#graetzloase'),
         },
         {
-          text: 'MEKA Classic',
-          href: getPermalink('/mekaclassic'),
-        },
-        {
-          text: 'Zuversichtstraining goes Christmas',
-          href: getPermalink('/zuversichtgoeschristmas'),
+          text: 'Kirche Kunterbunt',
+          href: getPermalink('/angebote/angebote#kirchekunterbunt'),
         },
       ],
     },

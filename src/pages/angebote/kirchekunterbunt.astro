@@ -1,0 +1,82 @@
+---
+import Content from '~/components/widgets/Content.astro';
+import Gallery from '~/components/widgets/Gallery.astro';
+---
+
+<Content
+  id="kirchekunterbunt"
+  tagline="Kinter, Eltern, Großeltern, Freunde ... für alle"
+  title="Kirche Kunterbunt"
+  isReversed
+>
+  <Fragment slot="image">
+    <div class="relative h-0 pb-[56.25%]">
+      <figure class="wp-block-video">
+        <video controls="controls" preload="metadata">
+          <source src="https://www.evang9.wien/root/wp-content/uploads/2023/03/Eingangsbereich_KiKu.mov#t=3" />
+        </video>
+      </figure>
+    </div>
+  </Fragment>
+  <Fragment slot="content">
+    Kirche Kunterbunt findet regelmäßig hier bei uns in der Messiaskapelle statt. Ein kurzweiliges und spannendes
+    Treffen mit Aktiv-Stationen zu einer Bibelgeschichte oder einem Thema, einer interaktiven Feierzeit und
+    Tischgemeinschaft. Die Teilnahme ist gratis. Kirche Kunterbunt ist eine „fresh expressions of church“ – ein neue
+    Ausdrucksform von Kirche. Sie hat 5 bis 12-Jährige und ihre Bezugspersonen gemeinsam im Blick. Junge Familien, auch
+    Paten und Großeltern, können hier Gemeinde erleben, auch wenn sie bisher wenig Bezug zu Glauben und Kirche hatten.
+  </Fragment>
+  <Fragment slot="subtitle">
+    Wir starten mit Kirche Kunterbunt: eine neue Form, miteinander zu feiern und eine gute Zeit zu verbringen. Für
+    Familien und für alle, die offen sind für eine neue Form des Gottesdienstes und Lust an Gemeinschaft haben.
+  </Fragment>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Content>
+<Content
+  id="kirchekunterbunt"
+  items={[
+    {
+      title: 'gastfreundlich',
+      description: ` Wir leben eine Willkommens-Kultur und heißen Neue herzlich willkommen. Fröhliche Tischgemeinschaft ist eigentlich ein altes Kennzeichen der Christen und wird neu erlebt. Gott ist der Gastgeber, wir alle sind seine Gäste. `,
+    },
+    {
+      title: 'generationenübergreifend',
+      description:
+        'Erwachsene lernen von Kindern. Sie stellen oft die ehrlichen und tiefen Fragen. Kirche Kunterbunt ist kein Kinderprogramm mit Erwachsenen- Aufsicht. Bei den Stationen während der Aktiv- Zeit und bei der Feier- Zeit werden Jüngere und Ältere gleichzeitig angesprochen.',
+    },
+    {
+      title: 'kreativ',
+      description:
+        'Beteiligung wird bei Kirche Kunterbunt ganz großgeschrieben. Die Grundhaltung ist nicht ein „Wir für euch“, sondern ein „Wir mit euch“. Ein gemeinsamer Lern-Raum eröffnet sich zum Entdecken des Evangeliums mit allen Sinnen und auf ganz kreative Weise.',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2023/05/IMG_1651-2-1-768x1024.jpg',
+    alt: 'KS',
+  }}
+/>
+<Content
+  id="kirchekunterbunt"
+  isReversed
+  items={[
+    {
+      title: 'fröhlich feiernd',
+      description:
+        'Kirche Kunterbunt ist eine charmant chaotische „Auszeit“ im Alltag. Gemeinsam feiern wir die Gegenwart Gottes. Wir erleben Gemeinschaft, genießen miteinander das Essen und entdecken, wie kreativ wir sind.',
+    },
+    {
+      title: 'christuszentriert',
+      description:
+        'Kirche Kunterbunt ist ganz weit offen - und hat doch eine klare Mitte. Der Glaube an Christus kommt nicht belehrend daher, sondern stiftet Gemeinschaft und kann ohne Zwang ausprobiert und erlebt werden.',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2023/05/IMG_1643-2-1024x768.jpg',
+    alt: 'KS',
+  }}
+>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Content>
