@@ -3,15 +3,7 @@ import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
 import Content from '~/components/widgets/Content.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-
-import Features2 from '~/components/widgets/Features2.astro';
-import Features from '~/components/widgets/Features.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import Features3 from '~/components/widgets/Features3.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Brands from '~/components/widgets/Brands.astro';
-
+import PredigtPage from './predigtpage.astro';
 const metadata = {
   title: 'Termine',
 };
@@ -31,6 +23,10 @@ const metadata = {
         description: `Am 1. und 3. Sonntag feiern wir miteinander Abendmahl.`,
       },
       {
+        title: 'Musik',
+        description: `Unsere Band spielt jeden Sonntag monderne Musik.`,
+      },
+      {
         title: 'MEKA Bar',
         description:
           'Im Anschluss gibt es bei Kaffee, Tee und Kuchen die Möglichkeit, miteinander ins Gespräch zu kommen.',
@@ -43,6 +39,9 @@ const metadata = {
       >
         jeden Sonntag um 10 Uhr
       </h2> mit guter Musik, inspirierenden Predigten und in netter Gesellschaft.
+    </Fragment>
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
   <Content
@@ -69,10 +68,8 @@ const metadata = {
         </ul>
       </div>
     </Fragment>
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
   </Content>
+  <PredigtPage />
   <Hero id="termine" title="Termine" actions={[]}>
     <Fragment slot="subtitle">
       Hier ist verlässlichste Information über unsere laufenden Termine. Falls die Gemeindezeitung abweicht, stimmen

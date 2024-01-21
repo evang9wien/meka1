@@ -30,7 +30,16 @@ const metadata = {
         href: getPermalink('/angebote#angebot'),
         icon: 'tabler:calendar-plus',
       },
-      { text: 'Termine', href: getPermalink('/gottesdienste#termine') },
+      {
+        text: 'Gottesdienste  Termine',
+        href: getPermalink('/gottesdienste'),
+        icon: 'tabler:cross',
+      },
+      {
+        text: 'Kirche',
+        href: getPermalink('/kirche/kasualien'),
+        icon: 'tabler:building-church',
+      },
     ]}
     image={{ src: '~/assets/images/cropped-eingang-3.png', alt: 'Eingang Image' }}
     tagline="Messiaskapelle"
