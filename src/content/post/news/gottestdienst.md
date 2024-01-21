@@ -5,7 +5,7 @@ excerpt: Herzlich willkommen zu unseren Gottesdiensten. Wir feiern jeden Sonntag
   Gesellschaft. Am 1. und 3. Sonntag feiern wir miteinander Abendmahl. Im
   Anschluss gibt es bei Kaffee, Tee und Kuchen die Möglichkeit, miteinander ins
   Gespräch zu kommen.
-category: news
+category: angebote
 tags:
   - news
   - tools
