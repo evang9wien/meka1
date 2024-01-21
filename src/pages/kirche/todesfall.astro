@@ -9,66 +9,71 @@ const metadata = {
 };
 ---
 
-<Layout metadata={metadata}>
-  <Features3
-    title="Todesfall"
-    subtitle="Es tut uns leid, dass Sie einen nahestehenden Menschen verloren haben."
-    columns={3}
-    isBeforeContent={true}
-    items={[
-      {
-        title: 'Begräbnistermin',
-        description:
-          'Wenn Sie an einem bestimmten Begräbnistermin interessiert sind, bitten Sie bei der Aufnahme um sofortigen Kontakt mit unserem Pfarramt Tel.: 512-83-92.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Formalitäten ',
-        description:
-          'Grundsätzlich wenden Sie sich in Wien zunächst an ein Bestattungsunternehmen. Wenn diese Formalitäten erledigt sind, dann nehmen wir gerne mit Ihnen Kontakt auf und besprechen die weitere Vorgehensweise persönlich.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Lebenslauf',
-        description:
+<Features3
+  id="todesfall"
+  title="Todesfall"
+  subtitle="Es tut uns leid, dass Sie einen nahestehenden Menschen verloren haben."
+  columns={3}
+  isBeforeContent={true}
+  items={[
+    {
+      title: 'Begräbnistermin',
+      description:
+        'Wenn Sie an einem bestimmten Begräbnistermin interessiert sind, bitten Sie bei der Aufnahme um sofortigen Kontakt mit unserem Pfarramt Tel.: 512-83-92.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Formalitäten ',
+      description:
+        'Grundsätzlich wenden Sie sich in Wien zunächst an ein Bestattungsunternehmen. Wenn diese Formalitäten erledigt sind, dann nehmen wir gerne mit Ihnen Kontakt auf und besprechen die weitere Vorgehensweise persönlich.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Lebenslauf',
+      description:
         'Hilfreich ist es, wenn Sie einen Lebenslauf der/des Verstorbenen vorbereiten. Wir wissen, \
         daß rund um einen Todesfall viele Amtswege zu erledigen und manche Äußerlichkeiten beachtet\
          werden müssen. Als Kirche bemühen wir uns aber in erster Linie die menschliche Komponente \
          im Auge zu behalten und die christliche Auferstehungshoffnung in den Mittelpunkt unserer Bemühungen zu stellen.\
           ',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Seelsorge',
-        description:
-          'Für seelsorgerliche Gespräche steht unser_e Pfarrer_in gerne zur Verfügung.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Besuch',
-        description:
-          'Empfehlenswert (und damit Sie die Messiaskapelle kennenlernen können) ist ein Besuch unserer Gottesdienste – jeweils Sonntag um 10 Uhr.',
-        icon: 'tabler:template',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/flagged/photo-1580354088777-25d6128a414b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'Taufe',
-    }}
-  />
-  <Steps
-    title="Benötigte Unterlagen"
-    items={[
-      {
-        title: 'Lebenslauf der/des Verstorbenen',
-        description: '',
-        icon: 'tabler:package',
-      },
-      
-    ]}
-    image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-03-1024x1024.png',
-      alt: 'Steps image',
-    }}
-  />
-</Layout>
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Seelsorge',
+      description: 'Für seelsorgerliche Gespräche steht unser_e Pfarrer_in gerne zur Verfügung.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Besuch',
+      description:
+        'Empfehlenswert (und damit Sie die Messiaskapelle kennenlernen können) ist ein Besuch unserer Gottesdienste – jeweils Sonntag um 10 Uhr.',
+      icon: 'tabler:template',
+    },
+  ]}
+  image={{
+    src: 'https://images.unsplash.com/flagged/photo-1580354088777-25d6128a414b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    alt: 'Taufe',
+  }}
+>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Features3>
+<Steps
+  title="Benötigte Unterlagen"
+  items={[
+    {
+      title: 'Lebenslauf der/des Verstorbenen',
+      description: '',
+      icon: 'tabler:package',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-03-1024x1024.png',
+    alt: 'Steps image',
+  }}
+>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Steps>

@@ -9,64 +9,59 @@ const metadata = {
 };
 ---
 
-<Layout metadata={metadata}>
-  <Features3
-    title="Hochzeit"
-    subtitle="Sie möchten kirchlich getraut werden? Wir gratulieren!"
-    columns={3}
-    isBeforeContent={true}
-    items={[
-      {
-        title: 'Termine',
-        description:
-          'Termine und alle Details werden am besten persönlich besprochen. Bitte nehmen Sie mit uns Kontakt auf.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Trauungsgottesdienste ',
-        description:
-          'Trauungsgottesdienste können durch unseren Pfarrer in der Messiaskapelle aber \
+<Features3
+  id="hochzeit"
+  title="Hochzeit"
+  subtitle="Sie möchten kirchlich getraut werden? Wir gratulieren!"
+  columns={3}
+  isBeforeContent={true}
+  items={[
+    {
+      title: 'Termine',
+      description:
+        'Termine und alle Details werden am besten persönlich besprochen. Bitte nehmen Sie mit uns Kontakt auf.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Trauungsgottesdienste ',
+      description:
+        'Trauungsgottesdienste können durch unseren Pfarrer in der Messiaskapelle aber \
           auch in anderen evangelischen Kirchen vorgenommen werden (Beispiel für einen Trauungsablauf: Trauungsablauf)',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Empfehlenswert',
-        description:
-          'Empfehlenswert (und damit Sie die Messiaskapelle kennenlernen können) ist ein Besuch unserer Gottesdienste – jeweils Sonntag um 10 Uhr.',
-        icon: 'tabler:template',
-      },      
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1529634597503-139d3726fed5?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'Hochzeit',
-    }}
-  />
-  <Steps
-    title="Unterlagen"
-    items={[
-      {
-        title: 'Taufscheine der Brautleute',
-        description:
-          "",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Standesamtliche Heiratsurkunde',
-        description:
-          "",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Taufscheine der Trauzeugen',
-        description:
-          ' Die Trauzeugen müssen einem christlichen Bekenntnis angehören',
-        icon: 'tabler:paint',
-      },
-      
-    ]}
-    image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-01-1024x1024.png',
-      alt: 'Steps image',
-    }}
-  />
-</Layout>
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Empfehlenswert',
+      description:
+        'Empfehlenswert (und damit Sie die Messiaskapelle kennenlernen können) ist ein Besuch unserer Gottesdienste – jeweils Sonntag um 10 Uhr.',
+      icon: 'tabler:template',
+    },
+  ]}
+  image={{
+    src: 'https://images.unsplash.com/photo-1529634597503-139d3726fed5?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    alt: 'Hochzeit',
+  }}
+/>
+<Steps
+  title="Unterlagen"
+  items={[
+    {
+      title: 'Taufscheine der Brautleute',
+      description: '',
+      icon: 'tabler:package',
+    },
+    {
+      title: 'Standesamtliche Heiratsurkunde',
+      description: '',
+      icon: 'tabler:letter-case',
+    },
+    {
+      title: 'Taufscheine der Trauzeugen',
+      description: ' Die Trauzeugen müssen einem christlichen Bekenntnis angehören',
+      icon: 'tabler:paint',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-01-1024x1024.png',
+    alt: 'Steps image',
+  }}
+/>

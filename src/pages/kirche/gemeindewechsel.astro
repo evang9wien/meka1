@@ -10,51 +10,46 @@ const metadata = {
 };
 ---
 
-<Layout metadata={metadata}>
-  <Features3
-    title="Gemeindewechsel"
-    subtitle=""
-    columns={3}
-    isBeforeContent={true}
-    items={[
-      {
-        title: 'Umgezogen',
-        description: 'Sie sind umgezogen, möchten aber weiterhin der Messiaskapelle als  Kirchengemeinde angehören?',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Wechsel',
-        description: 'Sie  möchten der Messiaskapelle als  Kirchengemeinde angehören?',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Antrag',
-        description: 'Stellen Sie einen „Antrag auf Veränderung der Pfarrgemeindezugehörigkeit“!',
-        icon: 'tabler:template',
-      },
-    ]}
-    image={{
-      src: 'https://www.evang9.wien/root/wp-content/uploads/2019/02/cropped-eingang-3.png',
-      alt: 'Taufe',
-    }}
-  />
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Download',
-        href: 'https://evang9.wien/root/wp-content/uploads/2019/04/antrag.pdf',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-    ]}
-  >
-    <Fragment slot="title">
-    Antrag
-    </Fragment>
+<Features3
+  id="gemeindewechsel"
+  title="Gemeindewechsel"
+  subtitle=""
+  columns={3}
+  isBeforeContent={true}
+  items={[
+    {
+      title: 'Umgezogen',
+      description: 'Sie sind umgezogen, möchten aber weiterhin der Messiaskapelle als  Kirchengemeinde angehören?',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Wechsel',
+      description: 'Sie  möchten der Messiaskapelle als  Kirchengemeinde angehören?',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Antrag',
+      description: 'Stellen Sie einen „Antrag auf Veränderung der Pfarrgemeindezugehörigkeit“!',
+      icon: 'tabler:template',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/02/cropped-eingang-3.png',
+    alt: 'Taufe',
+  }}
+/>
+<CallToAction
+  actions={[
+    {
+      variant: 'primary',
+      text: 'Download',
+      href: 'https://evang9.wien/root/wp-content/uploads/2019/04/antrag.pdf',
+      target: '_blank',
+      icon: 'tabler:download',
+    },
+  ]}
+>
+  <Fragment slot="title">Antrag</Fragment>
 
-    <Fragment slot="subtitle">
-      „Antrag auf Veränderung der Pfarrgemeindezugehörigkeit“!
-    </Fragment>
-  </CallToAction>
-</Layout>
+  <Fragment slot="subtitle">„Antrag auf Veränderung der Pfarrgemeindezugehörigkeit“!</Fragment>
+</CallToAction>

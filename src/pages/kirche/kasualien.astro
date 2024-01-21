@@ -1,0 +1,23 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Taufe from './taufe.astro';
+import Konfirmation from './konfirmation.astro';
+import Hochzeit from './hochzeit.astro';
+import Eintritt from './eintritt.astro';
+import Gemeindewechsel from './gemeindewechsel.astro';
+import Todesfall from './todesfall.astro';
+
+const metadata = {
+  title: 'kasualien',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <Taufe />
+  <Konfirmation />
+  <Hochzeit />
+  <Eintritt />
+  <Gemeindewechsel />
+  <Todesfall />
+</Layout>
