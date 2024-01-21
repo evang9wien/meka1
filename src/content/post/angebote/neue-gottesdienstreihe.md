@@ -8,6 +8,7 @@ excerpt: Mit den Grundlagen unseres Glaubens beschäftigt sich unsere neue
 category: angebote
 tags:
   - news
+  - angebote
 image: https://www.evang9.wien/root/wp-content/uploads/2024/01/Toknow_200.jpg
 publishDate: 2024-01-21T17:35:34.286Z
 author: Andreas
