@@ -1,11 +1,11 @@
 ---
-title: 'Für Kinder: Weihnachten mit Zuversicht'
+title: "Für Kinder: Weihnachten mit Zuversicht"
 excerpt: Kinder ab 8 Jahren sind eingeladen, sich gemeinsam mit Skipper Caro auf
   die Suche nach dem „Weihnachtsschatz“ zu begeben.  Das Zuversichtstraining
   startet wieder am 17. November.
 category: kinder
 tags:
-  - news
+  - deleted
 image: https://www.evang9.wien/root/wp-content/uploads/2023/11/Zuversicht_200.png
 publishDate: 2023-11-19T22:25:13.068Z
 author: eidmann
