@@ -25,10 +25,6 @@ export const headerData = {
           text: 'Bilder aus der Messiaskapelle',
           href: getPermalink('/mekabilderpage'),
         },
-        {
-          text: 'Grätzloase in der Seegasse',
-          href: getPermalink('/angebote#graetzloase'),
-        },
       ],
     },
     {
