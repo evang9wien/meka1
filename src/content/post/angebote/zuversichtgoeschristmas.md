@@ -1,10 +1,14 @@
 ---
-publishDate: 2023-11-27T00:00:00Z
 title: Zuversichtstraining goes Christmas
-excerpt: 'Die „MS Zuversicht“ wird ab 17. November wieder in der Seegasse vor Anker gehen! Kinder ab 8 Jahren sind eingeladen, sich gemeinsam mit Skipper Caro auf die Suche nach dem „Weihnachtsschatz“ zu begeben.'
-image: https://www.evang9.wien/root/wp-content/uploads/2022/05/Seegassen-Matrosinnen.png
+excerpt: Die „MS Zuversicht“ wird ab 17. November wieder in der Seegasse vor
+  Anker gehen! Kinder ab 8 Jahren sind eingeladen, sich gemeinsam mit Skipper
+  Caro auf die Suche nach dem „Weihnachtsschatz“ zu begeben.
+category: angebote
 tags:
-  - angebot
+  - deleted
+image: https://www.evang9.wien/root/wp-content/uploads/2022/05/Seegassen-Matrosinnen.png
+publishDate: 2023-11-27T00:00:00.000Z
+author: Andreas
 ---
 
 Ahoi, ihr Landratten und Pirat\*innen!
