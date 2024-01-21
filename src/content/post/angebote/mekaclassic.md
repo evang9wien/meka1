@@ -1,13 +1,15 @@
 ---
-publishDate: 2023-07-17T00:00:00Z
-title: MEKA Classic startet in den Herbst
-excerpt: Unser Bibelkreis für Menschen mit Lebenserfahrung trifft sich in der Regel am 1. Donnerstag im Monat. Weiterführende Informationen finden Sie hier.
-image: https://www.evang9.wien/root/wp-content/uploads/2022/11/220211_bibel_classic.jpg
-category: Documentation
-tags:
-  - angebot
+excerpt: Unser Bibelkreis für Menschen mit Lebenserfahrung trifft sich in der
+  Regel am 1. Donnerstag im Monat. Weiterführende Informationen finden Sie hier.
+author: Andreas
 metadata:
   canonical: https://astrowind.vercel.app/astrowind-template-in-depth
+title: MEKA Classic startet in den Herbst
+category: Documentation
+tags:
+  - deleted
+image: https://www.evang9.wien/root/wp-content/uploads/2022/11/220211_bibel_classic.jpg
+publishDate: 2023-07-17T00:00:00.000Z
 ---
 
 Wenn es für Sie keine Frage war, Beatles oder Rolling Stones, wenn Sie selbst einmal in einem „Käfer“ saßen, oder jemanden kennen, der einen „Käfer“ hatte, wenn Sie wissen, wer zu einem Journalisten sagte „Lernen Sie Geschichte!“, wenn Sie wissen was „Peace, Love and Understanding“ bedeutete und „franz“ nicht nur ein Vorname war, dann ist diese Einladung für Sie genau richtig. Es ist kein „Kaffeekränzchen“, und für einen „Seniorenkreis“ sind wir viel zu jung!
