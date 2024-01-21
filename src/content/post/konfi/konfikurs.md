@@ -7,7 +7,7 @@ excerpt: Der Konfi-Kurs beginnt mit der 1. Einheit (Willkommensfest :-)) am
   für den Konfi-Kurs 2023/24 kannst du hier runterladen.
 category: konfi
 tags:
-  - konfi
+  - delete
 image: https://www.evang9.wien/root/wp-content/uploads/2019/03/Icons_kasualien-05-1024x1024.png
 publishDate: 2023-12-03T23:34:56.948Z
 author: andreas
