@@ -1,5 +1,6 @@
 ---
 import Content from '~/components/widgets/Content.astro';
+import Features3 from '~/components/widgets/Features3.astro';
 import Layout from '~/layouts/PageLayout.astro';
 import Taufe from './taufe.astro';
 import Konfirmation from './konfirmation.astro';
@@ -15,14 +16,22 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <Content id="kasualien" tagline="Taufe, Konfirmation, Hochzeit, Todesfall" title="Kasualien">
+  <Features3
+    id="kasualien"
+    tagline="Taufe, Konfirmation, Hochzeit, Todesfall"
+    title="Kasualien"
+    image={{
+      src: 'https://images.unsplash.com/photo-1472905981516-5ac09f35b7f4?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'Konfirmation',
+    }}
+  >
     <Fragment slot="subtitle">
-      Hier finden sie alle Informationen zu einer Taufe, Konfirmation, Hochzeit oder Todesfall.
+      Hier finden Sie alle Informationen zu einer Taufe, Konfirmation, Hochzeit oder Todesfall.
     </Fragment>
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
-  </Content>
+  </Features3>
   <Taufe />
   <Konfirmation />
   <Hochzeit />
