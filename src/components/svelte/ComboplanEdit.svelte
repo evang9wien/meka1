@@ -35,8 +35,8 @@
     });
   };
 
-  onMount(() => {
-    userAuth = isUserAuth();
+  onMount(async () => {
+    userAuth = await isUserAuth();
     if (!userAuth) {
       popupUserAuthModal = true;
       return;

@@ -46,9 +46,9 @@
   let kategorien = [];
   let kategorie;
 
-  onMount(() => {
+  onMount(async () => {
     console.log('onMount');
-    userAuth = isUserAuth();
+    userAuth = await isUserAuth();
     if (!userAuth) {
       popupUserAuthModal = true;
       return;
