@@ -26,5 +26,8 @@ export const commonText = {
     pagination: {
         nextText: "Älter",
         prevText: "Neuer"
+    },
+    toBlogLink: {
+        backToBlog: "Zurück zum Blog"
     }
 };
