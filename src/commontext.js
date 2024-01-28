@@ -15,7 +15,13 @@ export const commonText = {
     },
     tag: {
         headLine: "Tag: ",
-        title: "Tag"
+        title: "Tag",
+        postsForTag: "Posts für Tag"
+    },
+    singlePost: {
+        minute: "Minute",
+        minutes: "Minuten",
+        redingTime: "Lesezeit"
     },
     pagination: {
         nextText: "Älter",

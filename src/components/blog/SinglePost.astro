@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 
+import { commonText } from '~/commontext';
 import Image from '~/components/common/Image.astro';
 import PostTags from '~/components/blog/Tags.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
@@ -37,7 +38,7 @@ const { Content } = post;
               </>
             )
           }
-          {post.readingTime && <> · {post.readingTime} min read</>}
+          {post.readingTime && (<> · {post.readingTime} {' '} {post.readingTime > 1 ? commonText.singlePost.minutes : commonText.singlePost.minute} {' '} {commonText.singlePost.redingTime}</>)}
         </p>
       </div>
       <h1

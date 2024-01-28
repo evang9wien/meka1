@@ -18,7 +18,7 @@ const { page, tag } = Astro.props;
 const currentPage = page.currentPage ?? 1;
 
 const metadata = {
-  title: `${commonText.text.posts} by tag '${tag}'${currentPage > 1 ? ` — ${commonText.text.page} ${currentPage} ` : ''}`,
+  title: `${commonText.tag.postsForTag} '${tag}'${currentPage > 1 ? ` — ${commonText.text.page} ${currentPage} ` : ''}`,
   robots: {
     index: blogTagRobots?.index,
     follow: blogTagRobots?.follow,
