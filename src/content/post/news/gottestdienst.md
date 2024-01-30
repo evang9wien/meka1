@@ -7,7 +7,6 @@ excerpt: Herzlich willkommen zu unseren Gottesdiensten. Wir feiern jeden Sonntag
   Gespräch zu kommen.
 category: angebote
 tags:
-  - news
   - tools
   - resources
 image: https://www.evang9.wien/root/wp-content/uploads/2021/02/GoDi.png
