@@ -173,10 +173,7 @@ export const footerData = {
           text: 'Login',
           href: getPermalink('/combo/loginpage'),
         },
-        {
-          text: 'Mitarbeiterliste',
-          href: getPermalink('/'),
-        },
+
         {
           text: 'Kirchenservice',
           href: 'https://www.evang9.wien/root/kirchenservice/',
