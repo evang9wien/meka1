@@ -87,6 +87,7 @@
     { value: 'Kinder', name: 'Kinder' },
     { value: 'Weihnachten', name: 'Weihnachten' },
     { value: 'Comboprobe', name: 'Comboprobe' },
+    { value: 'Combotreffen', name: 'Combotreffen' },
   ];
 
   function handleFilterKat() {
