@@ -1,7 +1,63 @@
 ---
-import Steps from '~/components/widgets/Steps.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import { getPermalink } from '~/utils/permalinks';
 ---
 
+<Features3
+  id="neuindergemeinde"
+  tagline="Herzlich Willkommen"
+  title="NEU IN DER GEMEINDE?"
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2023/03/open-1024x576.png',
+    alt: 'Neu in der Gemeinde4',
+  }}
+  columns={3}
+  isBeforeContent={true}
+  items={[
+    {
+      title: 'Pfarrer to go',
+      icon: 'tabler:cross',
+      callToAction: {
+        text: 'Unseren Pfarrer bei einem Coffee to go kennen lernen. Bei einem guten Kaffee und einem netten Spaziergang ins Gespräch kommen. Hier sind sie richtig.',
+        href: getPermalink('/angebote/angebote#pfarrer2go'),
+      },
+    },
+
+    {
+      title: 'Kirche Kunterbunt',
+
+      icon: 'tabler:building-church',
+      callToAction: {
+        text: 'Kirche Kunterbunt ist eine neue Form, miteinander zu feiern und eine gute Zeit zu verbringen. Für Familien und für alle, die offen sind für eine neue Form des Gottesdienstes und Lust an Gemeinschaft haben. Weitere Informationen gibt es hier.',
+        href: getPermalink('/angebote/angebote#kirchekunterbunt'),
+      },
+    },
+    {
+      title: 'Grätzloase',
+      icon: 'tabler:flower',
+      callToAction: {
+        text: 'Am Alsergrund sind wir bekannt für unsere Grätzloase dem neuen Treffpunkt hier in der Rossau. \
+        Hier trinken Menschen in der Früh ihren Kaffee, sitzen zusammen um miteinander zu essen oder \
+        ruhen sich aus, während Kinder den Gehsteig mit Straßenkreiden verschönern. Als Gemeinde freuen wir \
+        uns sehr über den Besuch in eurer (!) Grätzloase.',
+        href: getPermalink('/angebote/angebote#graetzloase'),
+      },
+    },
+  ]}
+>
+  <Fragment slot="subtitle">
+    Wir freuen uns sehr, dich bei uns begrüßen zu dürfen. Wir sind eine moderne, dynamische und offene Gemeinde –
+    zumindestens arbeiten wir daran mit viel Leidenschaft. Die frohe Botschaft von der Liebe Gottes in die Welt zu
+    tragen und zu leben, verstehen wir als unseren Auftrag.<br /><br />
+     Für „Newcomer“ haben wir spezielle Angebote, um die Messiaskapelle besser und näher kennenzulernen. Neben unseren
+    Gottesdiensten gibt es etwa die Möglichkeit, unsere Gemeinde in der Kirche Kunterbunt kennenzulernen, mit unserem
+    Pfarrer bei einem Coffee to go zu reden oder unsere Grätzloase zu besuchen.
+  </Fragment>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Features3>
+<!--
 <Steps
   id="neuindergemeinde"
   title="NEU IN DER GEMEINDE? WILLKOMMEN!"
@@ -25,7 +81,7 @@ import Steps from '~/components/widgets/Steps.astro';
     },
   ]}
   image={{
-    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/f.jpg',
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2023/03/open-1024x576.png',
     alt: 'Steps image',
   }}
 >
@@ -33,3 +89,4 @@ import Steps from '~/components/widgets/Steps.astro';
     <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
   </Fragment>
 </Steps>
+-->

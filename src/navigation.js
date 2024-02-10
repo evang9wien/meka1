@@ -57,16 +57,20 @@ export const headerData = {
           href: getPermalink('/angebote/angebote#neuindergemeinde'),
         },
         {
-          text: 'Angebote',
-          href: getPermalink('/angebote/angebote#angebote'),
-        },
-        {
-          text: 'Grätzloase in der Seegasse',
-          href: getPermalink('/angebote/angebote#graetzloase'),
+          text: 'Pfarrer2Go',
+          href: getPermalink('/angebote/angebote#pfarrer2go'),
         },
         {
           text: 'Kirche Kunterbunt',
           href: getPermalink('/angebote/angebote#kirchekunterbunt'),
+        },
+        {
+          text: 'Meka Classic',
+          href: getPermalink('/angebote/angebote#mekaclassic'),
+        },
+        {
+          text: 'Grätzloase in der Seegasse',
+          href: getPermalink('/angebote/angebote#graetzloase'),
         },
       ],
     },

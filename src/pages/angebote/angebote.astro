@@ -1,9 +1,11 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Neuindergemeinde from './neuindergemeinde.astro';
-import BlogTagPosts from '~/components/widgets/BlogTagPosts.astro';
-import Graetzeloase from './graetzeloase.astro';
+import Pfarrer2Go from './pfarrer2go.astro';
 import Kirchekunterbunt from './kirchekunterbunt.astro';
+import MekaClassic from './mekaclassic.astro';
+import Graetzeloase from './graetzeloase.astro';
+
 const metadata = {
   title: 'Angebote',
   ignoreTitleTemplate: true,
@@ -11,14 +13,9 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <BlogTagPosts
-    id="angebote"
-    title="Angebote"
-    linkText="Alle Angebote der Messiaskapelle"
-    information={`Für weitere Informationen auf das Bild klicken.`}
-    tags={['angebot']}
-  />
   <Neuindergemeinde />
-  <Graetzeloase />
+  <Pfarrer2Go />
   <Kirchekunterbunt />
+  <MekaClassic />
+  <Graetzeloase />
 </Layout>
