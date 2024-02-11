@@ -158,7 +158,8 @@
   const handleSave = (ev, ev1, ev2) => {
     window.setTimeout(() => {
       liedReihenfolgeSelected = liedReihenfolgeSelected.map((l) => {
-        if (l.selectedLiedID && !l.selectedLied) {
+        // if (l.selectedLiedID && !l.selectedLied) {
+        if (l.selectedLiedID) {
           l.selectedLied = alleLieder.find((la) => la.ID == l.selectedLiedID);
         }
         return l;
@@ -166,6 +167,8 @@
       // .forEach((l) => delete l.selected);
 
       console.log('Save: ', liedReihenfolgeSelected, ev, ev1, ev2);
+      // workaround: force UI refresh
+      liedReihenfolgeSelected = liedReihenfolgeSelected;
     });
   };
 
@@ -321,7 +324,7 @@
                         <Select
                           items={lied.ComboLied ? comboLieder : alleLieder}
                           bind:value={lied.selectedLiedID}
-                          on:input={handleSave}
+                          on:change={handleSave}
                           placeholder="Bitte Lied auswählen ..."
                         />
                       </div>
