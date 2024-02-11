@@ -1,8 +1,9 @@
 ---
 title: "Inspired: Combo-Konzert am 15.3."
-excerpt: Herzliche Einladung zum Konzert unserer Band am Freitag, 15. März 2024.
-  Neben den musikalischen Beiträgen erwartet sie an diesem Abend unter anderem
-  auch eine amerikanische Versteigerung für einen guten Zweck.
+excerpt: Lieder unserer Zeit von der Botschaft aller Zeiten. Herzliche Einladung
+  zum Konzert unserer Band am Freitag, 15. März 2024 um 19 Uhr. Neben den
+  musikalischen Beiträgen erwartet sie an diesem Abend unter anderem auch eine
+  amerikanische Versteigerung für einen guten Zweck.
 category: angebote
 tags:
   - news
@@ -12,6 +13,6 @@ author: Andreas
 ---
 Lieder unserer Zeit von der Botschaft aller Zeiten.
 
-Herzliche Einladung zum Konzert unserer Band am Freitag, 15. März 2024.
+Herzliche Einladung zum Konzert unserer Band am Freitag, 15. März 2024 um 19:00 Uhr.
 
 Neben den musikalischen Beiträgen erwartet sie an diesem Abend unter anderem auch eine amerikanische Versteigerung für einen guten Zweck.
