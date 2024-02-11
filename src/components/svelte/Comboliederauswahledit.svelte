@@ -129,6 +129,8 @@
   const handleSelectDate = () => {
     // console.log(sel);
     popupSpinnerModal = true;
+    console.log('Sel 00: ', selectedTermin);
+    console.log('Termine: ', termine);
     window.setTimeout(() => {
       console.log('Sel: ', selectedTermin);
       // console.log('lastSel: ', lastSelectedTermin);
@@ -276,7 +278,7 @@
             class="mb-4 mr-4"
             items={termine}
             bind:value={selectedTermin}
-            on:input={handleSelectDate}
+            on:change={handleSelectDate}
             placeholder="Bitte Termin auswählen ..."
           />
 

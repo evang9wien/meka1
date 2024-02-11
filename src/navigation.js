@@ -153,10 +153,6 @@ export const footerData = {
           href: getPermalink('/combo/comboliederauswahleditpage'),
         },
         {
-          text: 'Liederauswahl bearbeiten (legacy)',
-          href: 'https://evang9.wien/root/lieder_auswahl/',
-        },
-        {
           text: 'Lieder anlegen und bearbeiten',
           href: getPermalink('/combo/comboliedereditpage'),
         },
