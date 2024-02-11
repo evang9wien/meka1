@@ -53,14 +53,15 @@
     });
     axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10').then((response) => {
       termine = JSON.parse(response.data);
-      termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
+      // termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
+      termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
       console.log(termine);
     });
   });
 
   const handleSelect = (sel) => {
     console.log(sel);
-
+    popupSpinnerModal = true;
     window.setTimeout(() => {
       console.log('Sel: ', selectedTermin);
       console.log('lastSel: ', lastSelectedTermin);
@@ -76,7 +77,7 @@
         },
       };
       axios
-        .get(getUrl + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
+        .get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
         .then((response) => {
           liederauswahl = JSON.parse(response.data);
 
@@ -84,6 +85,7 @@
             const lied1 = liederauswahl[0];
             verantwortlich = lied1.Verantwortlich;
           }
+          popupSpinnerModal = false;
         });
     }, 300);
   };
@@ -105,7 +107,7 @@
             <Select
               items={termine}
               bind:value={selectedTermin}
-              on:input={handleSelect}
+              on:change={handleSelect}
               placeholder="Bitte Termin auswählen ..."
             />
           </Label>
