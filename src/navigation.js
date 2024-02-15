@@ -198,6 +198,7 @@ export const footerData = {
     { text: 'Kontakt', href: getPermalink('/kontakt') },
     { text: 'Impressum', href: getPermalink('/impressum') },
     { text: 'DSGVO', href: getPermalink('/dsgvo') },
+    { text: 'Cookies', href: getPermalink('/cookies') },
   ],
   socialLinks: [
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: 'https://www.instagram.com/pfarrerin.mini/' },
