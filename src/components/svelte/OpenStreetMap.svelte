@@ -30,11 +30,8 @@
   });
 </script>
 
-<div id="map"></div>
+<div id="map" class="h-96 z-30"></div>
 
 <style>
   @import './leaflet.css';
-  #map {
-    height: 400px;
-  }
 </style>
