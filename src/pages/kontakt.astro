@@ -5,12 +5,25 @@ import Pfarramt from '~/components/parts/pfarramt.md';
 import Amtshandlungen from '~/components/parts/amtshandlungen.md';
 import Verkehrsmittel from '~/components/parts/verkehrsmittel.md';
 import Kurzparkzone from '~/components/parts/kurzparkzone.md';
+//import { getPermalink, getAsset } from '~/utils/permalinks';
+import { SITE, APP_BLOG } from '~/utils/config';
+
+import OpenStreetMap from '~/components/svelte/OpenStreetMap.svelte';
 
 import type { MetaData } from '~/types';
 
 const metadata: MetaData = {
   title: 'Kontakt',
 };
+
+const view = [48.2231769, 16.3641052];
+const zoom = 17;
+const minZoom = 12;
+const maxZoom = 19;
+const marker = [48.2231769, 16.3641052];
+const markerPopup = 'Evangelische Messiaskapelle';
+//const markerPath = 'https://unpkg.com/browse/leaflet@1.9.4/dist/images/';
+const markerPath = SITE.base + '/leaflet/images';
 ---
 
 <Layout metadata={metadata}>
@@ -32,6 +45,18 @@ const metadata: MetaData = {
       <Part title="Achtung Autofahrer_innen!">
         <Kurzparkzone />
       </Part>
+      <div class="relative h-0 pb-[80%] md:pb-[100%]">
+        <OpenStreetMap
+          client:only
+          view={view}
+          zoom={zoom}
+          minZoom={minZoom}
+          maxZoom={maxZoom}
+          marker={marker}
+          markerPopup={markerPopup}
+          markerPath={markerPath}
+        />
+      </div>
     </div>
   </section>
 </Layout>
