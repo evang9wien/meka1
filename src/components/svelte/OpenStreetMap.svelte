@@ -17,7 +17,11 @@
   L.Icon.Default.prototype.options.imagePath = String(markerPath + '/');
 
   onMount(async () => {
-    map = L.map('map').setView(view, zoom);
+    map = L.map('map', {
+      dragging: !L.Browser.mobile,
+      tap: !L.Browser.mobile,
+      scrollWheelZoom: false,
+    }).setView(view, zoom);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       minZoom: minZoom,
