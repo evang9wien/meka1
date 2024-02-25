@@ -1,0 +1,70 @@
+---
+import Content from '~/components/widgets/Content.astro';
+import Gallery from '~/components/widgets/Gallery.astro';
+---
+
+<Content
+  id="graetzloase"
+  tagline="Reden, Entspannen, Essen ... für alle"
+  title="Grätzloase in der Seegasse"
+  isReversed
+  items={[
+    {
+      title: 'Grätzloase',
+      description: `Weitere Informationen zum Projekt Grätzloase finden Sie auch hier: www.graetzloase.at`,
+    },
+    {
+      title: 'Bezirkszeitung',
+      description: 'Einen Bericht über die Eröffnung unserer Grätzloase finden Sie hier in der Bezirkszeitung.',
+    },
+    {
+      title: 'Öffnungszeiten',
+      description: 'Sie ist täglich geöffnet von 6 bis 22 Uhr. Die Benutzung erfolgt auf eigene Gefahr.',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2023/04/Hinweisschild-Gra%CC%88tzloase-724x1024.png',
+    alt: 'KS',
+  }}
+>
+  <Fragment slot="content">
+    „Ich finde die Idee der Grätzloase grundsätzlich sehr gut – ein konsumfreier Ort der dazu einlädt, sich auszuruhen,
+    miteinander ins Gespräch zu kommen, die Nachbar:innen kennenzulernen. Als Pfarrgemeinde vor Ort wollen wir zu einem
+    guten Miteinander im Grätzl beitragen. Dazu braucht es Räume, die öffentlich & einfach zugänglich sind. Auch das
+    Thema Hitze wird eine immer größere Herausforderung. Mit der Grätzloase machen wir aus einen Hot-Spot Betonparkplatz
+    mit Auto einen Cool Space durch Holz & Begrünung“, erklärt unser Pfarrer Stefan in einem Interview mit der
+    Instagram-Seite der Initiative Grätzloase.
+  </Fragment>
+  <Fragment slot="subtitle">
+    Herzlich willkommen in unserer „Seeoase“. Anfang April haben wir die von uns initiierte Grätzloase vor unserem
+    Kircheneingang in der Seegasse 16a (1090 Wien) errichtet, gefördert von der Lokal Agenda 21 und der Stadt Wien.
+    Unsere Seeoase ist für alle da: zum Kaffeetrinken, zum Ausruhen, zum Plaudern mit Nachbar:innen und vieles mehr. Sie
+    ist täglich geöffnet von 6 bis 22 Uhr. Die Benutzung erfolgt auf eigene Gefahr.
+  </Fragment>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Content>
+<Gallery
+  title=""
+  tagline=""
+  columns={4}
+  items={[
+    {
+      image: 'https://www.evang9.wien/root/wp-content/uploads/2019/04/Kircheneingang.png',
+      description: 'Herzlich willkommen!',
+    },
+    {
+      image: 'https://www.evang9.wien/root/wp-content/uploads/2023/05/gra%CC%88tzloase-1-1024x768.jpg',
+      description: 'Blumen',
+    },
+    {
+      image: 'https://www.evang9.wien/root/wp-content/uploads/2023/05/IMG_1562-1024x768.jpg',
+      description: 'Reden',
+    },
+    {
+      image: 'https://www.evang9.wien/root/wp-content/uploads/2023/04/Hinweisschild-Gra%CC%88tzloase-724x1024.png',
+      description: 'Plakat',
+    },
+  ]}
+/>

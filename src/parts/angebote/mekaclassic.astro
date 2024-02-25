@@ -1,0 +1,57 @@
+---
+import Content from '~/components/widgets/Content.astro';
+---
+
+<Content
+  id="mekaclassic"
+  tagline="Peace, Love and Understanding ..."
+  title="Meka Classic"
+  isReversed
+  classes={{ container: 'max-w-3xl' }}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2022/11/Foto2Homepage-1024x532.jpg',
+    alt: 'Meka Classic',
+  }}
+>
+  <Fragment slot="content">
+    Mit dieser charmanten Art wollen wir zu unserem Angebot in der MESSIASKAPELLE einladen. Gedacht in erster Linie für
+    Menschen, die schon auf eine bestimmte Lebenserfahrung zurückblicken können. Es ist ein Angebot, bei dem es
+    definitiv um die Bibel geht. Wie man mit der Bibel umgeht, wenn sich schon einiges an Menschen(er)kenntnis
+    angesammelt hat. Nix für junge Hupfer, aber ideal für Menschen mit Lebensklugheit; die auch an einer Diskussion
+    interessiert sind.
+  </Fragment>
+  <Fragment slot="subtitle">
+    Wenn es für Sie keine Frage war, Beatles oder Rolling Stones, wenn Sie selbst einmal in einem „Käfer“ saßen, oder
+    jemanden kennen, der einen „Käfer“ hatte, wenn Sie wissen, wer zu einem Journalisten sagte „Lernen Sie Geschichte!“,
+    wenn Sie wissen was „Peace, Love and Understanding“ bedeutete und „franz“ nicht nur ein Vorname war, dann ist diese
+    Einladung für Sie genau richtig. Es ist kein „Kaffeekränzchen“, und für einen „Seniorenkreis“ sind wir viel zu jung!
+  </Fragment>
+</Content>
+<Content
+  isAfterContent
+  classes={{ container: 'max-w-3xl' }}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2024/02/Mekaclassic.jpg',
+    alt: 'KS',
+  }}
+>
+  <Fragment slot="content">
+    <div class="text-left">
+      Es geht weiter, immer am ersten Donnerstag im Monat jeweils von 18 bis 20 Uhr. <br /><br />
+      <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Termine:</h2>
+      <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+        <li>Donnerstag, 7. März 2024</li>
+        <li>Donnerstag, 4. April 2024</li>
+        <li>Donnerstag, 2. Mai 2024</li>
+      </ul>
+      <br />
+       Wer sich ein Bild vom bisherigen Geschehen rund um Pfarrer in Ruhe Harald Geschl und Team machen will, kann sich
+      auf dem <a
+        class="text-muted underline dark:text-slate-400 font-medium"
+        href="https://www.youtube.com/@classicbibel7354"
+        target="_blank"
+        rel="noreferrer noopener">Classic Bibel Youtube-Kanal</a
+      > gut informieren.
+    </div>
+  </Fragment>
+</Content>

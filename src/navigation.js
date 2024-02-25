@@ -54,23 +54,23 @@ export const headerData = {
       links: [
         {
           text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
-          href: getPermalink('/angebote/angebote#neuindergemeinde'),
+          href: getPermalink('/angebote#neuindergemeinde'),
         },
         {
           text: 'Pfarrer2Go',
-          href: getPermalink('/angebote/angebote#pfarrer2go'),
+          href: getPermalink('/angebote#pfarrer2go'),
         },
         {
           text: 'Kirche Kunterbunt',
-          href: getPermalink('/angebote/angebote#kirchekunterbunt'),
+          href: getPermalink('/angebote#kirchekunterbunt'),
         },
         {
           text: 'Meka Classic',
-          href: getPermalink('/angebote/angebote#mekaclassic'),
+          href: getPermalink('/angebote#mekaclassic'),
         },
         {
           text: 'Grätzloase in der Seegasse',
-          href: getPermalink('/angebote/angebote#graetzloase'),
+          href: getPermalink('/angebote#graetzloase'),
         },
       ],
     },
@@ -81,27 +81,27 @@ export const headerData = {
       links: [
         {
           text: 'Taufe',
-          href: getPermalink('/kirche/kasualien#taufe'),
+          href: getPermalink('/kirche#taufe'),
         },
         {
           text: 'Konfirmation',
-          href: getPermalink('/kirche/kasualien#konfirmation'),
+          href: getPermalink('/kirche#konfirmation'),
         },
         {
           text: 'Hochzeit',
-          href: getPermalink('/kirche/kasualien#hochzeit'),
+          href: getPermalink('/kirche#hochzeit'),
         },
         {
           text: 'Eintritt',
-          href: getPermalink('/kirche/kasualien#eintritt'),
+          href: getPermalink('/kirche#eintritt'),
         },
         {
           text: 'Gemeindewechsel',
-          href: getPermalink('/kirche/kasualien#gemeindewechsel'),
+          href: getPermalink('/kirche#gemeindewechsel'),
         },
         {
           text: 'Todesfall',
-          href: getPermalink('/kirche/kasualien#todesfall'),
+          href: getPermalink('/kirche#todesfall'),
         },
       ],
     },

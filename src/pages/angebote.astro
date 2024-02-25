@@ -1,0 +1,21 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Neuindergemeinde from '~/parts/angebote/neuindergemeinde.astro';
+import Pfarrer2Go from '~/parts/angebote/pfarrer2go.astro';
+import Kirchekunterbunt from '~/parts/angebote/kirchekunterbunt.astro';
+import MekaClassic from '~/parts/angebote/mekaclassic.astro';
+import Graetzeloase from '~/parts/angebote/graetzeloase.astro';
+
+const metadata = {
+  title: 'Angebote',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <Neuindergemeinde />
+  <Pfarrer2Go />
+  <Kirchekunterbunt />
+  <MekaClassic />
+  <Graetzeloase />
+</Layout>

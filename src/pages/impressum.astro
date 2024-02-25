@@ -1,11 +1,12 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Part from '~/components/widgets/Part.astro';
-import Herausgeber from '~/components/parts/herausgeber.md';
-import Urheberrecht from '~/components/parts/urheberrecht.md';
-import Datenschutz from '~/components/parts/datenschutz.md';
-import Cookies from '~/components/parts/cookies.md';
-import Verlinkung from '~/components/parts/verlinkung.md';
+import PartH3 from '~/components/widgets/PartH3.astro';
+
+import Herausgeber from '~/parts/impressum/herausgeber.md';
+import Urheberrecht from '~/parts/impressum/urheberrecht.md';
+import Datenschutz from '~/parts/impressum/datenschutz.md';
+import Cookies from '~/parts/impressum/cookies.md';
+import Verlinkung from '~/parts/impressum/verlinkung.md';
 
 import type { MetaData } from '~/types';
 
@@ -20,22 +21,22 @@ const metadata: MetaData = {
     <div
       class="mx-auto prose prose-lg max-w-4xl dark:prose-invert dark:prose-headings:text-slate-300 prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8"
     >
-      <Part><em>letzte Änderung</em>: Februar 2024<br /></Part>
-      <Part title="Herausgeber">
+      <PartH3><em>letzte Änderung</em>: Februar 2024<br /></PartH3>
+      <PartH3 title="Herausgeber">
         <Herausgeber />
-      </Part>
-      <Part title="Urheberrecht">
+      </PartH3>
+      <PartH3 title="Urheberrecht">
         <Urheberrecht />
-      </Part>
-      <Part title="Datenschutz">
+      </PartH3>
+      <PartH3 title="Datenschutz">
         <Datenschutz />
-      </Part>
-      <Part title="Cookies">
+      </PartH3>
+      <PartH3 title="Cookies">
         <Cookies />
-      </Part>
-      <Part title="Verlinkung">
+      </PartH3>
+      <PartH3 title="Verlinkung">
         <Verlinkung />
-      </Part>
+      </PartH3>
     </div>
   </section>
 </Layout>
