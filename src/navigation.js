@@ -130,12 +130,8 @@ export const headerData = {
 export const footerData = {
   links: [
     {
-      title: 'Combo',
+      title: 'Musik',
       links: [
-        {
-          text: 'Login',
-          href: getPermalink('/combo/loginpage'),
-        },
         {
           text: 'Comboplan',
           href: getPermalink('/combo/comboplanpage'),
@@ -145,7 +141,7 @@ export const footerData = {
           href: getPermalink('/combo/comboplaneditpage'),
         },
         {
-          text: 'Liederauswahl für Sonntag',
+          text: 'Lieder für den nächsten Gottestdienst',
           href: getPermalink('/combo/comboliederauswahlpage'),
         },
         {
