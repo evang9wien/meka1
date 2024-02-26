@@ -9,7 +9,6 @@ image: https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1470&
 publishDate: 2024-02-26T21:32:43.810Z
 author: Andreas
 ---
-Willkommen auf der neuen Homepage der evangelischen MESSIASKAPELLE am Alsergrund!
 
 Wir freuen uns, Sie hier begrüßen zu dürfen und Ihnen einen Einblick in das vielfältige Leben unserer Gemeinde zu geben. Diese neue Webseite dient als digitale Plattform, um Ihnen aktuelle Informationen über Gottesdienste, Veranstaltungen, Gruppen und Aktivitäten unserer Kirchengemeinde zur Verfügung zu stellen.
 
