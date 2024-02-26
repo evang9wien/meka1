@@ -16,4 +16,6 @@ Als Teil einer lebendigen und offenen Gemeinschaft möchten wir Sie herzlich daz
 
 Unser Ziel ist es, ein Ort der Begegnung, des Glaubens und der Gemeinschaft zu sein, an dem jeder willkommen ist, unabhängig von Alter, Herkunft oder Lebenssituation. Wir laden Sie ein, sich auf unserer neuen Homepage umzusehen und sich inspirieren zu lassen.
 
+Die neue Webseite bietet nicht nur eine modernere Ästhetik, sondern auch verbesserte Funktionalitäten, die es einfacher machen, Informationen zu finden, Veranstaltungen zu entdecken und mit der Gemeinde in Kontakt zu treten.
+
 Wir freuen uns auf Sie!
