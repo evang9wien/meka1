@@ -10,7 +10,7 @@ publishDate: 2024-02-26T21:32:43.810Z
 author: Andreas
 ---
 
-Wir freuen uns, Euch hier begrüßen zu dürfen und Euch einen Einblick in das vielfältige Leben unserer Gemeinde zu geben. Diese neue Webseite dient als digitale Plattform, um Euch aktuelle Informationen über Gottesdienste, Veranstaltungen, Gruppen und Aktivitäten unserer Kirchengemeinde zur Verfügung zu stellen.
+Wir freuen uns, Euch hier begrüßen zu dürfen und Euch einen Einblick in das vielfältige Leben unserer Gemeinde zu geben. Diese neue Webseite dient als digitale Plattform, um Euch aktuelle Informationen über Gottesdienste, Veranstaltungen, Gruppen und Aktivitäten unserer Pfarrgemeinde zur Verfügung zu stellen.
 
 Als Teil einer lebendigen und offenen Gemeinschaft möchten wir Euch herzlich dazu einladen, uns näher kennenzulernen, sei es persönlich bei unseren Gottesdiensten und Veranstaltungen oder auch online durch unsere Webseite und unsere Social-Media-Präsenz.
 
