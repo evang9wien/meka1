@@ -11,7 +11,8 @@ publishDate: 2023-11-26T21:32:39.382Z
 author: stfj
 ---
 
-... Staatsoberhaupt nicht nur durch radikale wirtschaftspolitische Ansichten, die – diplomatisch gesprochen – auf unterschiedliche Resonanz stoßen.
+Er hat es tatsächlich geschafft: der Rechtspopulist und selbsternannte Anarchokapitalist Javier Milei gewinnt die Präsidentenwahl in Argentinien.
+Bekannt geworden ist das neue Staatsoberhaupt nicht nur durch radikale wirtschaftspolitische Ansichten, die – diplomatisch gesprochen – auf unterschiedliche Resonanz stoßen.
 Bekannt wurde der Ökonom durch seine Wahlkampfauftritte mit einer Kettensäge. Bei einem seiner Auftritte sprang er auf einer Bühne herum und brüllte den Text eines Rocksongs: „Ich bin der König in einer verlorenen Welt!“.
 Die Sehnsucht nach einem König in einer verlorenen Welt ist groß – in Südamerika wie in Europa. Mit allen Gefahren, die in so einem Verlangen liegen. Dazu muss man gar nicht die politischen Ansichten und Analysen des Argentiniers teilen. Aber dass die Welt im Argen liegt (wenn auch noch nicht verloren), dieser Aussage können in diesen Tagen viele Menschen etwas abgewinnen.
 Als Christinnen und Christen setzen wir unsere Hoffnung auf den König, der Segen (keine Kettensäge!) und Gerechtigkeit bringt. Dieser König ist niemand anderes als unser Gott: „er ist der König der Ehre“.

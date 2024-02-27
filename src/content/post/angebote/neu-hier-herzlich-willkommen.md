@@ -1,7 +1,7 @@
 ---
 title: Neu hier? Herzlich willkommen!
 excerpt: In der Messiaskapelle freuen wir uns immer über neue Besucher und neue Besucherinnen.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" href="/pages/angebote/angebote#neuindergemeinde">
+  <a class="text-muted underline dark:text-slate-400 font-medium" href="/pages/angebote#neuindergemeinde">
   Für alle Newcomer und Interessierte haben wir spezielle Angebote.</a><br/> Herzlich
   willkommen! 🙂
 category: angebote
@@ -12,4 +12,4 @@ publishDate: 2024-01-21T17:29:33.972Z
 author: Andreas
 ---
 
-In der Messiaskapelle freuen wir uns immer über neue Besucher\*innen. Für alle Newcomer und Interessierte haben wir spezielle [Angebote](/pages/angebote/angebote#neuindergemeinde). Herzlich willkommen! 🙂
+In der Messiaskapelle freuen wir uns immer über neue Besucher\*innen. Für alle Newcomer und Interessierte haben wir spezielle [Angebote](/pages/angebote#neuindergemeinde). Herzlich willkommen! 🙂

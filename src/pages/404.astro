@@ -1,5 +1,5 @@
 ---
-import Layout from '~/layouts/Layout.astro';
+import Layout from '~/layouts/PageLayout.astro';
 import { getHomePermalink } from '~/utils/permalinks';
 
 const title = `Error 404`;
@@ -13,11 +13,9 @@ const title = `Error 404`;
           <span class="sr-only">Error</span>
           <span class="text-primary">404</span>
         </h2>
-        <p class="text-3xl font-semibold md:text-3xl">Sorry, we couldn't find this page.</p>
-        <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          But dont worry, you can find plenty of other things on our homepage.
-        </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
+        <p class="text-3xl font-semibold md:text-3xl">Entschuldigung,<br />diese Seite ist nicht vorhanden.</p>
+        <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">Aber Sie können gerne alles andere erkunden.</p>
+        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Zurück zur Homepage</a>
       </div>
     </div>
   </section>
