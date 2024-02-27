@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Calendar from '~/components/svelte/Calendar/Calendar.svelte';
+
+const metadata = {
+  title: 'Termine',
+};
+---
+
+<Layout metadata={metadata}>
+  <Calendar client:load />
+</Layout>
