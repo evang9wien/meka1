@@ -139,11 +139,6 @@
         {/if}
         {#if predigten}
           <Table aria-label="Liederliste">
-            <TableHead>
-              <TableHeadCell />
-              <TableHeadCell>Termin<br />Name</TableHeadCell>
-              <TableHeadCell>Predigt</TableHeadCell>
-            </TableHead>
             <TableBody>
               {#each predigten as predigt}
                 {#if getName(predigt.split('_')[0]) != ''}
@@ -156,8 +151,7 @@
                     <TableBodyCell>
                       {predigt.split('_')[0]} <br />
                       {getName(predigt.split('_')[0])}
-                    </TableBodyCell>
-                    <TableBodyCell>
+
                       <audio
                         id="player{predigt}"
                         class="bg-white"
