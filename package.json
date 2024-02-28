@@ -26,6 +26,7 @@
     "flowbite-svelte": "^0.44.19",
     "flowbite-svelte-blocks": "^0.5.1",
     "flowbite-svelte-icons": "^0.4.5",
+    "leaflet": "^1.9.4",
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",
     "moment": "^2.29.4",
