@@ -3,8 +3,10 @@
   import axios from 'axios';
   import moment from 'moment/min/moment-with-locales';
 
-  import { Timeline, TimelineItem, Button } from 'flowbite-svelte';
+  import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';
+  import { CalendarWeekSolid } from 'flowbite-svelte-icons';
   import { ArrowRightOutline } from 'flowbite-svelte-icons';
+  import { getImageCal } from '../predigt/PredigtConstants.js';
 
   let items = [];
 
@@ -29,7 +31,7 @@
 
         items = items.map((i) => {
           moment.locale('de');
-          return { ...i, startDate: moment(new Date(i.start.dateTime)).format('dddd, Do MMMM  YYYY, h:mm ') };
+          return { ...i, startDate: moment(new Date(i.start.dateTime)).format('dddd, Do MMMM  YYYY, H:mm ') };
         });
         console.log(items);
       });
@@ -37,10 +39,28 @@
 </script>
 
 <div class="flex justify-center mb-6">
-  <Timeline>
+  <Timeline order="vertical">
     {#each items as item}
       <TimelineItem title={item.summary} date={item.startDate}>
-        <p class="text-base font-normal text-gray-500 dark:text-gray-400">{item.description ? item.description : ''}</p>
+        <svelte:fragment slot="icon">
+          <span
+            class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-blue-50 dark:ring-[#030620] dark:bg-primary-900"
+          >
+            {#if getImageCal(item.description ? item.description.split(' ')[0] : '')}
+              <Avatar
+                class="w-6 h-6"
+                size="md"
+                src="https://evang9.wien/comboapps/img/{getImageCal(item.description.split(' ')[0])}"
+              />
+            {:else}
+              <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+            {/if}
+          </span>
+        </svelte:fragment>
+
+        <div class="flex space-x-4 text-base font-normal text-gray-500 dark:text-gray-400">
+          {item.description ? item.description : ''}
+        </div>
       </TimelineItem>
     {/each}
   </Timeline>

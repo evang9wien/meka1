@@ -39,12 +39,12 @@ export const headerData = {
           href: getPermalink('/gottesdienste#oase'),
         },
         {
-          text: 'Zum Nachhören',
-          href: getPermalink('/gottesdienste#nachhoeren'),
+          text: 'Termine',
+          href: getPermalink('/gottesdienste#termine'),
         },
         {
-          text: 'Termine',
-          href: getPermalink('/termine'),
+          text: 'Zum Nachhören',
+          href: getPermalink('/gottesdienste#nachhoeren'),
         },
       ],
     },

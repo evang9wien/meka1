@@ -2,6 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
+import Calendar from '~/components/svelte/calendar/Calendar.svelte';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 
 import Features2 from '~/components/widgets/Features2.astro';
@@ -26,25 +27,7 @@ const metadata = {
     </Fragment>
 
     <Fragment slot="image">
-      <div class="relative h-0 pb-[80%] md:pb-[100%]">
-        <iframe
-          width="560"
-          height="630"
-          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23bcd0ed&ctz=Europe%2FVienna&src=MDk1bGtmOXVqZ2FhNHUxcW1pNGUydmYwMGtAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23336699&mode=AGENDA&showTitle=0&showCalendars=0&showTz=0"
-          class="absolute top-0 left-0 w-full h-full"></iframe>
-        <!-- 
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/dsTXcSeAZq8"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
-          allowfullscreen
-          class="absolute top-0 left-0 w-full h-full"
-        >
-        </iframe>
-      -->
-      </div>
+      <Calendar client:load />
     </Fragment>
   </Hero>
 </Layout>
