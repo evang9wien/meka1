@@ -1,16 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-
-import Hero from '~/components/widgets/Hero.astro';
-import Calendar from '~/components/svelte/calendar/Calendar.svelte';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-
-import Features2 from '~/components/widgets/Features2.astro';
-import Features from '~/components/widgets/Features.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import Features3 from '~/components/widgets/Features3.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Brands from '~/components/widgets/Brands.astro';
+import Termin from '~/parts/gottesdienste/termine.astro';
 
 const metadata = {
   title: 'Termine',
@@ -18,16 +8,5 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero Widget ******************* -->
-
-  <Hero title="Termine" actions={[]}>
-    <Fragment slot="subtitle">
-      Hier ist verlässlichste Information über unsere laufenden Termine. Falls die Gemeindezeitung abweicht, stimmen
-      diese Informationen.
-    </Fragment>
-
-    <Fragment slot="image">
-      <Calendar client:load />
-    </Fragment>
-  </Hero>
+  <Termin />
 </Layout>

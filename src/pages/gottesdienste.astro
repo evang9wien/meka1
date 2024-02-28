@@ -1,10 +1,9 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Hero from '~/components/widgets/Hero.astro';
 import Content from '~/components/widgets/Content.astro';
 import PredigtPage from '~/parts/gottesdienste/predigtpage.astro';
-import Calendar from '~/components/svelte/calendar/Calendar.svelte';
+import Termine from '~/parts/gottesdienste/termine.astro';
 
 const metadata = {
   title: 'Termine',
@@ -68,27 +67,6 @@ const metadata = {
       </div>
     </Fragment>
   </Content>
-
-  <Content
-    id="termine"
-    title="Termine"
-    image={{
-      src: 'https://images.unsplash.com/photo-1560420025-9453f02b4751?q=80&w=1402&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'Kalendar',
-    }}
-    actions={[]}
-  >
-    <Fragment slot="subtitle">
-      Hier ist verlässlichste Information über unsere laufenden Termine. Falls die Gemeindezeitung abweicht, stimmen
-      diese Informationen.
-    </Fragment>
-
-    <Fragment slot="content">
-      <Calendar client:load />
-    </Fragment>
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+  <Termine />
   <PredigtPage />
 </Layout>
