@@ -50,7 +50,7 @@
               <Avatar
                 class="w-6 h-6"
                 size="md"
-                src="https://evang9.wien/comboapps/img/{getImageCal(item.description.split(' ')[0])}"
+                src="https://www.evang9.wien/comboapps/img/{getImageCal(item.description.split(' ')[0])}"
               />
             {:else}
               <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
