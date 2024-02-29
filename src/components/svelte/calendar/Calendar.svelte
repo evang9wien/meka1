@@ -39,7 +39,7 @@
 </script>
 
 <div class="flex justify-center mb-6">
-  <Timeline order="vertical">
+  <Timeline>
     {#each items as item}
       <TimelineItem title={item.summary} date={item.startDate}>
         <svelte:fragment slot="icon">
