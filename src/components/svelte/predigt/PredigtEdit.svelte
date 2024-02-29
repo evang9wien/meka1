@@ -17,6 +17,7 @@
   import { getAuthHeader, isUserAuth } from '../auth.js';
 
   import { getImage, getLongName } from './PredigtConstants.js';
+  import moment from 'moment/min/moment-with-locales';
 
   let files;
   let termine;
@@ -96,6 +97,11 @@
 
     return getImage(name[0].Verantwortlich);
   }
+
+  function getDate(date) {
+    moment.locale('de');
+    return moment(new Date(date)).format('dddd, Do MMMM  YYYY, H:mm ');
+  }
 </script>
 
 <div class="flex justify-center mb-6">
@@ -149,12 +155,15 @@
                       </div>
                     </TableBodyCell>
                     <TableBodyCell>
-                      {predigt.split('_')[0]} <br />
-                      {getName(predigt.split('_')[0])}
-
+                      <div class="flex space-x-4 text-base font-normal text-gray-400 dark:text-gray-300">
+                        {getDate(predigt.split('_')[0])}
+                      </div>
+                      <div class="flex space-x-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+                        {getName(predigt.split('_')[0])}
+                      </div>
                       <audio
                         id="player{predigt}"
-                        class="bg-white"
+                        class="bg-white dark:bg-gray-800"
                         src="https://www.evang9.wien/predigten/{predigt}"
                         controls="controls"
                         preload="none"
