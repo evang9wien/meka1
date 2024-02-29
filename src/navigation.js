@@ -44,7 +44,7 @@ export const headerData = {
         },
         {
           text: 'Zum Nachhören',
-          href: getPermalink('/gottesdienste#nachhoeren'),
+          href: getPermalink('/nachhoeren'),
         },
       ],
     },
