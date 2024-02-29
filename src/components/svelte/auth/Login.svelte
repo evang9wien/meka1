@@ -13,7 +13,7 @@
   const login = () => {
     console.log('Login');
     axios
-      .post('https://evang9.wien/root/wp-json/jwt-auth/v1/token', {
+      .post('https://www.evang9.wien/root/wp-json/jwt-auth/v1/token', {
         username: name,
         password: password,
       })

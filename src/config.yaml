@@ -1,6 +1,6 @@
 site:
   name: Evangelische Messiaskapelle
-  site: 'https://evang9.wien'
+  site: 'https://www.evang9.wien'
   base: '/pages'
   trailingSlash: false
 

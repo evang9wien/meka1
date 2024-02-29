@@ -145,7 +145,7 @@
                   <TableBodyRow>
                     <TableBodyCell>
                       <div class="w-12">
-                        <Avatar size="md" src="https://evang9.wien/comboapps/img/{getImg(predigt.split('_')[0])}" />
+                        <Avatar size="md" src="https://www.evang9.wien/comboapps/img/{getImg(predigt.split('_')[0])}" />
                       </div>
                     </TableBodyCell>
                     <TableBodyCell>
@@ -155,7 +155,7 @@
                       <audio
                         id="player{predigt}"
                         class="bg-white"
-                        src="https://evang9.wien/predigten/{predigt}"
+                        src="https://www.evang9.wien/predigten/{predigt}"
                         controls="controls"
                         preload="none"
                       />
