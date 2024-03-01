@@ -1,0 +1,161 @@
+---
+import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
+---
+
+<Features
+  id="lektoren"
+  tagline="Lesepredigten"
+  title="Unsere Lektoren und Lektorinnen"
+  subtitle="Wir versuchen Abwechslung und unterschiedliche Themenschwerpunkte in die Gottesdienste zu bringen. \
+    Jeder bringt seine persönlichen Erfahrungen mit Gott mit und beschäftigt sich privat und beruflich mit \
+    unterschiedlichen Dingen. So ist jede Predigt auf besondere Art geprägt."
+  classes={{ container: 'max-w-3xl' }}
+/>
+
+<!-- Content Widget **************** -->
+<!-- Content Widget **************** -->
+
+<Content
+  isAfterContent
+  classes={{ container: 'max-w-3xl' }}
+  items={[
+    {
+      title: 'Beruf',
+      description: `Meine Arbeit dreht sich um Nachhaltigkeit, Lebensmittel, Konsum, E-Mobilität und vieles mehr`,
+    },
+    {
+      title: 'In der Messiaskapelle seit',
+      description: '1993',
+    },
+    {
+      title: 'Lektorin seit',
+      description: '2003',
+    },
+    {
+      title: 'Schwerpunkte',
+      description: 'Yes you can – mit Gottes Hilfe!',
+    },
+    {
+      title: 'Ein wichtiges Zitat',
+      description:
+        'Jesus Christus spricht: „Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht mehr in der Finsternis umherirren, sondern wird das Licht des Lebens haben.” (Joh 8,12)',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/10/TDH_web.png',
+    alt: 'Tanja',
+  }}
+>
+  <Fragment slot="content"><span class="font-semibold">Lektorin Tanja Dietrich-Hübner</span></Fragment>
+
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Content>
+
+<!-- Content Widget **************** -->
+
+<Content
+  isReversed
+  isAfterContent
+  classes={{ container: 'max-w-3xl' }}
+  items={[
+    {
+      title: 'Beruf',
+      description: `Pfarrer im Ruhestand`,
+    },
+    {
+      title: 'In der Messiaskapelle seit',
+      description: '1992',
+    },
+
+    {
+      title: 'Schwerpunkte',
+      description: 'zeitgemäße Rede über das Wort Gottes',
+    },
+    {
+      title: 'Ein wichtiges Zitat',
+      description: 'Gottes Geist führt immer in die Weite, nie in die Enge',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/08/Harald-Geschl.png',
+    alt: 'Harald',
+  }}
+>
+  <Fragment slot="content"><span class="font-semibold">Harald Geschl, Pfarrer i.R.</span></Fragment>
+</Content>
+
+<Content
+  isAfterContent
+  classes={{ container: 'max-w-3xl' }}
+  items={[
+    {
+      title: 'Beruf',
+      description: `Unternehmer`,
+    },
+    {
+      title: 'In der Messiaskapelle seit',
+      description: '2014',
+    },
+    {
+      title: 'Lektor seit',
+      description: '2009',
+    },
+    {
+      title: 'Schwerpunkte',
+      description: 'Christliches Leben im Hier und Jetzt',
+    },
+    {
+      title: 'Ein wichtiges Zitat',
+      description: 'Du stellst meine Füße auf weiten Raum (Psalm 31;9)',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/08/Mark-Ruiz-Hellin.png',
+    alt: 'Mark',
+  }}
+>
+  <Fragment slot="content"><span class="font-semibold">Lektor Mark Ruiz Hellín</span></Fragment>
+
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Content>
+
+<!-- Content Widget **************** -->
+
+<Content
+  isReversed
+  isAfterContent
+  classes={{ container: 'max-w-3xl' }}
+  items={[
+    {
+      title: 'Beruf',
+      description: `Arzt`,
+    },
+    {
+      title: 'In der Messiaskapelle seit',
+      description: '2004',
+    },
+    {
+      title: 'Lektor seit',
+      description: '2011',
+    },
+    {
+      title: 'Schwerpunkte',
+      description: 'Glaube, Liebe, Hoffnung, Seelsorge',
+    },
+    {
+      title: 'Ein wichtiges Zitat',
+      description: '366mal "Fürchtet euch nicht!"',
+    },
+  ]}
+  image={{
+    src: 'https://www.evang9.wien/root/wp-content/uploads/2019/08/Wolfgang-Waldschu%CC%88tz.png',
+    alt: 'Wolfgang',
+  }}
+>
+  <Fragment slot="content"><span class="font-semibold">Lektor Wolfgang Waldschütz</span></Fragment>
+</Content>

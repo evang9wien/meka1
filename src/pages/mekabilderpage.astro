@@ -1,13 +1,12 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import MekaBilder from './mekabilder.astro';
+import MekaBilder from '../parts/startseite/mekabilder.astro';
 const metadata = {
   title: 'Gallery',
   ignoreTitleTemplate: true,
 };
-
 ---
-<Layout metadata={metadata}>
-    <MekaBilder></MekaBilder>
 
+<Layout metadata={metadata}>
+  <MekaBilder />
 </Layout>
