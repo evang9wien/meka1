@@ -1,9 +1,10 @@
 ---
 title: "Musik: Gabe & Geschenk"
-excerpt: „Du holde Kunst, in wieviel grauen Stunden<br/>Wo mich des Lebens
-  wilder Kreis umstrickt<br/>Hast du mein Herz zu warmer Lieb entzunden<br/>Hast
-  mich in eine beßre Welt entrückt“<br/><br/>So dichtete einst Franz Schubert in
-  seiner berühmten Ode „An die Musik“.
+excerpt: Musik ist in der Lage, unsere Laune aufzuhellen. Sie schenkt uns Trost
+  in schweren Stunden. Manchmal kann es schön sein, einem traurigen Moment mit
+  Musik eine gewisse Tiefe zu geben und ein Lied, das wir zuletzt vor vielen
+  Jahren gehört haben, kann uns hier und heute in die Stimmung von damals
+  versetzen.
 category: impuls
 tags:
   - impuls
