@@ -61,6 +61,12 @@
         <Input bind:value={password} id="default-input-p" type="password" placeholder="Password" />
       </div>
       <GradientButton class="mb-6" color="cyanToBlue" on:click={login}>Login</GradientButton>
+      <div>
+        <a
+          class="text-muted underline dark:text-slate-400 font-medium"
+          href="https://www.evang9.wien/root/wp-login.php?action=lostpassword">Passwort vergessen?</a
+        >
+      </div>
     {:else}
       <Alert color="green">
         <InfoCircleSolid slot="icon" class="w-4 h-4" />
