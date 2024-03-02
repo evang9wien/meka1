@@ -141,11 +141,11 @@ export const footerData = {
           href: getPermalink('/combo/comboplaneditpage'),
         },
         {
-          text: 'Lieder für den nächsten Gottestdienst',
+          text: 'Lieder für den Gottestdienst',
           href: getPermalink('/combo/comboliederauswahlpage'),
         },
         {
-          text: 'Liederauswahl bearbeiten',
+          text: 'Lieder für den Gottestdienst bearbeiten',
           href: getPermalink('/combo/comboliederauswahleditpage'),
         },
         {
