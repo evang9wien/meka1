@@ -261,6 +261,31 @@
 
     // console.log('Dupl: ', liedReihenfolgeSelected);
   };
+
+  const sendEmail = () => {
+    let body = 'Liebe Combo!%0D%0A%0D%0A';
+    liedReihenfolgeSelected.forEach((item) => {
+      if (!item.notvisible) {
+        console.log(item);
+        body = body + item.Beschreibung + ': ' + item.selectedLied.Titel + '%0D%0A';
+      }
+    });
+
+    body =
+      body +
+      '%0D%0ADie Lieder mit Hörproben und Noten zum Üben und Ausdrucken%0D%0Afindest Du übersichtlich zusammengefasst hier:%0D%0A%0D%0Ahttp://evang9.wien//pages/combo/comboliederauswahlpage/';
+
+    console.log('Email:', selectedTermin);
+    const subject = 'Gottestdienst am ' + selectedTermin;
+
+    const href = 'mailto:combo@evang9.wien?subject=' + subject + '&body=' + body;
+
+    // return href;
+    let anchor = document.createElement('a');
+    anchor.href = href;
+    anchor.target = '_blank';
+    anchor.click();
+  };
 </script>
 
 {#if userAuth && !popupSpinnerModal}
@@ -289,9 +314,16 @@
             <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSaveDBPre}
               >Liederauswahl speichern</GradientButton
             >
-            <InfoCircleOutline size="xl"></InfoCircleOutline>
-            <Tooltip placement="left"
-              >Für die Liederauswahl den Termin <br /> und die Lieder auswählen und speichern.</Tooltip
+            <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
+            <Tooltip>Für die Liederauswahl den Termin <br /> und die Lieder auswählen und speichern.</Tooltip>
+            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={sendEmail}
+              >Liederauswahl verschicken</GradientButton
+            >
+            <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
+            <Tooltip
+              >Es sollte sich das Email Programm öffnen mit der Liederauswahl. Vor dem Versenden kann die Email ganz
+              normal bearbeitet werden. Hinweis: Falls sich im Chrome das Email Program nicht öffen, die Setting hier
+              prüfen: chrome://settings/handlers (diesen String in die Adresszeile des Chomre einfügen.)</Tooltip
             >
           </div>
         {/if}
