@@ -5,8 +5,10 @@ import Login from '~/components/svelte/auth/Login.svelte';
 const metadata = {
   title: 'Login',
 };
+
+const loginReload = false;
 ---
 
 <Layout metadata={metadata}>
-  <Login client:only="svelte" />
+  <Login client:only="svelte" {loginReload} />
 </Layout>
