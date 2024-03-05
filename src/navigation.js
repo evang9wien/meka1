@@ -184,6 +184,10 @@ export const footerData = {
           href: 'https://evang9-wien.netlify.app/decapcms/index.html',
         },
         {
+          text: 'Wordpress',
+          href: 'https://www.evang9.wien/root/wp-login.php',
+        },
+        {
           text: 'Github',
           href: 'https://github.com/evang9wien/meka1',
         },
