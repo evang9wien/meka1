@@ -62,7 +62,7 @@
     }
     const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
     console.log('Termin:', termin);
-
+    if (!termin) return;
     liedReihenfolgeSelected = liederReihenfolgeDBTemplate
       // GD mit oder ohne AM
       .filter((l) => l[termin.Abendmahl == '1' ? 'GD_mit_Abendmahl' : 'GD_ohne_Abendmahl'] == '1')
@@ -299,7 +299,9 @@
             {/if}
             <div class="space-y-1 font-medium dark:text-white">
               <div>LiederAuswahl für den Gottesdienst bearbeiten</div>
-              <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+              {#if verantwortlich}
+                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+              {/if}
             </div>
           </div>
           <Select

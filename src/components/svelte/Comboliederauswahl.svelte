@@ -47,8 +47,8 @@
         selectedTermin = lied1.Termin_Liedliste;
         lastSelectedTermin = selectedTermin;
         verantwortlich = lied1.Verantwortlich;
-        popupSpinnerModal = false;
       }
+      popupSpinnerModal = false;
       // console.log(liederauswahl);
     });
     axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10').then((response) => {
@@ -98,10 +98,14 @@
         {#if termine}
           <Label>
             <div class="flex space-x-4 mb-6">
-              <Avatar src="{getUrl()}/comboapps/img/{getImage(verantwortlich)}" />
+              {#if verantwortlich}
+                <Avatar src="{getUrl()}/comboapps/img/{getImage(verantwortlich)}" />
+              {/if}
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+                {#if verantwortlich}
+                  <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+                {/if}
               </div>
             </div>
             <Select
