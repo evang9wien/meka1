@@ -107,7 +107,8 @@
       alleLieder = JSON.parse(response.data);
       alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
       comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
-      // console.log(comboLieder);
+      // console.log('Combolieder: ', comboLieder);
+      // console.log('Alle Lieder: ', alleLieder);
       axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader()).then((response) => {
         // liederReihenfolgeDBTemplate mit und ohne AM
         liederReihenfolgeDBTemplate = JSON.parse(response.data);
@@ -286,6 +287,10 @@
     anchor.target = '_blank';
     anchor.click();
   };
+
+  const isComboLied = (lied) => {
+    return comboLiederDef.includes(lied.Reihenfolge);
+  };
 </script>
 
 {#if userAuth && !popupSpinnerModal}
@@ -356,7 +361,7 @@
                     <TableBodyCell class="w-4">
                       <div class="w-80">
                         <Select
-                          items={lied.ComboLied ? comboLieder : alleLieder}
+                          items={isComboLied(lied) ? comboLieder : alleLieder}
                           bind:value={lied.selectedLiedID}
                           on:change={handleSave}
                           placeholder="Bitte Lied auswählen ..."
