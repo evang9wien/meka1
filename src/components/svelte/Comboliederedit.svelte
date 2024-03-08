@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Section } from 'flowbite-svelte-blocks';
-  import { Label, Select, Textarea, Input, GradientButton, MultiSelect } from 'flowbite-svelte';
+  import { Label, Select, Textarea, Input, GradientButton, Checkbox, MultiSelect } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import { Fileupload, Helper, Alert } from 'flowbite-svelte';
   import {
@@ -39,6 +39,7 @@
   let loadedLied = {};
   let userAuth = false;
   let alleLieder;
+  let liedGesungen;
 
   let notenPdf;
   let liedMp3;
@@ -88,6 +89,7 @@
 
         // console.log('Lied Res: ', response);
         loadedLied = JSON.parse(response.data)[0];
+        liedGesungen = loadedLied.Aktiv == '1';
         console.log('Lied: ', loadedLied);
       } catch (error) {
         console.error('Fehler beim Upload:', error);
@@ -112,18 +114,22 @@
       popupSpinnerUploadModal = true;
       const formData = new FormData();
       formData.append('titel', loadedLied.Titel);
+      if (!loadedLied.Dateiname) {
+        loadedLied.Dateiname = loadedLied.Titel.replace(/[^A-Z0-9]/gi, '_');
+      }
       formData.append('filename', loadedLied.Dateiname);
       formData.append('liedtext', loadedLied.Liedtext);
       formData.append('kategorie', loadedLied.Kategorie);
       formData.append('eg', loadedLied.EG);
-      formData.append('activ', loadedLied.Aktiv);
+      formData.append('aktiv', liedGesungen ? '1' : '0');
       formData.append('lied_id', loadedLied.ID ? loadedLied.ID : 0);
 
       formData.append('pdf_file', notenPdf);
-      if (!loadedLied.PDF) loadedLied.PDF = notenPdf ? 1 : 0;
+      console.log('PDF: ', loadedLied.PDF);
+      if (loadedLied.PDF == 0) loadedLied.PDF = notenPdf ? 1 : 0;
       formData.append('pdf', loadedLied.PDF);
       formData.append('mp3_file', liedMp3);
-      if (!loadedLied.MP3) loadedLied.MP3 = liedMp3 ? 1 : 0;
+      if (loadedLied.MP3 == 0) loadedLied.MP3 = liedMp3 ? 1 : 0;
       formData.append('mp3', loadedLied.MP3);
 
       const response = await axios.post(getUrl() + '/root/wp-json/combo/v2/comboliedwrite', formData, getAuthHeader());
@@ -155,6 +161,9 @@
           <div class="sm:col-span-2">
             <Label for="name" class="mb-2">Titel*</Label>
             <Input type="text" id="name" bind:value={loadedLied.Titel} placeholder="Name des Liedes" required />
+          </div>
+          <div class="w-full">
+            <Checkbox bind:checked={liedGesungen}>Lied im Gottesdienst gesungen</Checkbox>
           </div>
           <div class="w-full">
             <Label for="egnummer" class="mb-2">EG-Nummer</Label>
