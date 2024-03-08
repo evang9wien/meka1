@@ -100,6 +100,7 @@
   };
   const handleSubmit = async () => {
     // alert('Form submited.');
+    let reload = false;
     try {
       console.log('Submit: ', notenPdf, liedMp3);
 
@@ -114,8 +115,10 @@
       popupSpinnerUploadModal = true;
       const formData = new FormData();
       formData.append('titel', loadedLied.Titel);
+
       if (!loadedLied.Dateiname) {
         loadedLied.Dateiname = loadedLied.Titel.replace(/[^A-Z0-9]/gi, '_');
+        reload = true;
       }
       formData.append('filename', loadedLied.Dateiname);
       formData.append('liedtext', loadedLied.Liedtext);
@@ -139,6 +142,9 @@
       // Hier kannst du Fehlerbehandlung implementieren
     }
     popupSpinnerUploadModal = false;
+    if (reload) {
+      window.location.reload();
+    }
   };
 </script>
 
