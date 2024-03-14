@@ -50,7 +50,7 @@
   let liedReihenfolgeSelected;
 
   let comboLieder;
-  const comboLiederDef = ['2', '3', '5', '6', '7', '8'];
+  const comboLiederDef = [2, 3, 5, 6, 7, 8];
   let alleLieder;
 
   const handleLiederDBAuswahl = () => {
@@ -289,6 +289,9 @@
   };
 
   const isComboLied = (lied) => {
+    // console.log('Combolied: ', lied);
+    // console.log('IsCombilied: ', comboLiederDef.includes(lied.Reihenfolge));
+    // console.log('Def: ', comboLiederDef);
     return comboLiederDef.includes(lied.Reihenfolge);
   };
 </script>
