@@ -6,7 +6,7 @@ excerpt: Lieder unserer Zeit von der Botschaft aller Zeiten. <br/> Herzliche Ein
   amerikanische Versteigerung für einen guten Zweck.
 category: angebote
 tags:
-  - news
+  - old
 image: https://www.evang9.wien/root/wp-content/uploads/2024/02/meka-konzert-maerz2024-plakat-scaled.jpg
 publishDate: 2024-02-11T23:13:28.900Z
 author: Andreas
