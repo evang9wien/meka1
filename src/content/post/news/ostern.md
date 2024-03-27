@@ -1,5 +1,5 @@
 ---
-title: Termine an Ostern
+title: Termine zu Ostern
 excerpt: <b>Gründonnerstag</b>, 28. März, 18:00
   Tischabendmahl in der Grätzloase (nur bei Schönwetter)<br/><br/>
   <b>Karfreitagsgottesdienst</b>, 29. März, 10:00<br/><br/>
