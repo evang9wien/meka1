@@ -22,6 +22,18 @@ export function getImage(name) {
   return imgMap.get(name);
 }
 
+const avatarImgMap = new Map();
+
+avatarImgMap.set('GH', 'Harald-Geschl-Avatar.png');
+avatarImgMap.set('SFJ', 'stefan-Avatar.png');
+avatarImgMap.set('WW', 'Wolfgang-Avatar.png');
+avatarImgMap.set('TDH', 'Tanja-Avatar.png');
+avatarImgMap.set('MRH', 'Mark-Ruiz-Hellin-Avatar.png');
+
+export function getImageAvatar(name) {
+  return avatarImgMap.get(name);
+}
+
 const imgMapCal = new Map();
 
 imgMapCal.set('Harald', 'Harald-Geschl.png');

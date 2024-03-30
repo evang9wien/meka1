@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import moment from 'moment';
-  import { getImage, getLongName } from './predigt/PredigtConstants.js';
+  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
 
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
@@ -54,7 +54,7 @@
             <TableBodyRow>
               <TableBodyCell>
                 <div class="flex flex-col place-items-center">
-                  <Avatar size="md" src="{getUrl()}/comboapps/img/{getImage(termin.Verantwortlich)}" />
+                  <Avatar size="md" src="{getUrl()}/comboapps/img/{getImageAvatar(termin.Verantwortlich)}" />
                   <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
                   {formatDate(moment(termin.Termin).toDate())}
                 </div>

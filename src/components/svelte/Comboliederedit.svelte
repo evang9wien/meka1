@@ -19,7 +19,7 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { getImage, getLongName } from './predigt/PredigtConstants.js';
+  import { getLongName } from './predigt/PredigtConstants.js';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
   import LoginWarn from './auth/LoginWarn.svelte';

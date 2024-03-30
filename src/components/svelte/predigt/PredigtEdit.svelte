@@ -16,7 +16,7 @@
 
   import { getAuthHeader, isUserAuth } from '../auth.js';
 
-  import { getImage, getLongName } from './PredigtConstants.js';
+  import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
   import moment from 'moment/min/moment-with-locales';
 
   let files;
@@ -90,12 +90,12 @@
     return langName ? langName : name[0].Verantwortlich;
   }
 
-  function getImg(termin) {
+  function getImgAvatar(termin) {
     const name = termine.filter((f) => f.Termin == termin && f.Veranstaltung == 'GD');
 
     if (!name[0]) return '';
 
-    return getImage(name[0].Verantwortlich);
+    return getImageAvatar(name[0].Verantwortlich);
   }
 
   function getDate(date) {
@@ -151,7 +151,10 @@
                   <TableBodyRow>
                     <TableBodyCell>
                       <div class="w-12">
-                        <Avatar size="md" src="https://www.evang9.wien/comboapps/img/{getImg(predigt.split('_')[0])}" />
+                        <Avatar
+                          size="md"
+                          src="https://www.evang9.wien/comboapps/img/{getImgAvatar(predigt.split('_')[0])}"
+                        />
                       </div>
                     </TableBodyCell>
                     <TableBodyCell>

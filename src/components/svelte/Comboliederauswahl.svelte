@@ -10,7 +10,7 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Modal, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { getImage, getLongName } from './predigt/PredigtConstants.js';
+  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
   import LoginWarn from './auth/LoginWarn.svelte';
@@ -99,7 +99,7 @@
           <Label>
             <div class="flex space-x-4 mb-6">
               {#if verantwortlich}
-                <Avatar src="{getUrl()}/comboapps/img/{getImage(verantwortlich)}" />
+                <Avatar src="{getUrl()}/comboapps/img/{getImageAvatar(verantwortlich)}" />
               {/if}
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>

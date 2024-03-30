@@ -19,7 +19,7 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { getImage, getLongName } from './predigt/PredigtConstants.js';
+  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { openMp3, stopMp3 } from './mp3.js';
@@ -303,7 +303,7 @@
         {#if termine}
           <div class="flex space-x-4 mb-6">
             {#if verantwortlich}
-              <Avatar src="{getUrl()}/comboapps/img/{getImage(verantwortlich)}" />
+              <Avatar src="{getUrl()}/comboapps/img/{getImageAvatar(verantwortlich)}" />
             {/if}
             <div class="space-y-1 font-medium dark:text-white">
               <div>LiederAuswahl für den Gottesdienst bearbeiten</div>
