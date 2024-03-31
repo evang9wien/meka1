@@ -21,7 +21,7 @@ export const commonText = {
   singlePost: {
     minute: 'Minute',
     minutes: 'Minuten',
-    redingTime: 'Lesezeit',
+    readingTime: 'Lesezeit',
   },
   pagination: {
     nextText: 'Älter',
