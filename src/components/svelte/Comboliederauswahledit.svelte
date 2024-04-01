@@ -433,7 +433,7 @@
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
       Soll der geänderte Liederablauf für den Gottestdienst am {selectedTermin} gespeichert werden?
     </h3>
-    <Button color="red" class="me-2" on:click={handleSaveDB}>Ja, ich bin mir sicher</Button>
+    <Button color="green" class="me-2" on:click={handleSaveDB}>Ja, ich bin mir sicher</Button>
     <Button color="alternative">Nein, abbrechen</Button>
   </div>
 </Modal>

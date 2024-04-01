@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Section } from 'flowbite-svelte-blocks';
-  import { Label, Select, Textarea, Input, GradientButton, Checkbox, MultiSelect } from 'flowbite-svelte';
+  import { Label, Select, Textarea, Input, Button, GradientButton, Checkbox, MultiSelect } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import { Fileupload, Helper, Alert } from 'flowbite-svelte';
   import {
@@ -32,6 +32,8 @@
   import { getUrl } from './url/url.js';
 
   let popupModal = false;
+  let popupErrorModal = false;
+  let responseData;
   let popupSpinnerModal = true;
   let popupUserAuthModal = false;
   let popupSpinnerUploadModal = false;
@@ -93,7 +95,6 @@
         console.log('Lied: ', loadedLied);
       } catch (error) {
         console.error('Fehler beim Upload:', error);
-        // Hier kannst du Fehlerbehandlung implementieren
       }
       popupSpinnerModal = false;
     });
@@ -121,9 +122,10 @@
         reload = true;
       }
       formData.append('filename', loadedLied.Dateiname);
-      formData.append('liedtext', loadedLied.Liedtext);
+      // console.log(loadedLied.Liedtext.replace(/['"]/gi, ''));
+      formData.append('liedtext', loadedLied.Liedtext ? loadedLied.Liedtext.replace(/['"]/gi, '') : '');
       formData.append('kategorie', loadedLied.Kategorie);
-      formData.append('eg', loadedLied.EG);
+      formData.append('eg', loadedLied.EG == undefined ? 0 : loadedLied.EG);
       formData.append('aktiv', liedGesungen ? '1' : '0');
       formData.append('lied_id', loadedLied.ID ? loadedLied.ID : 0);
 
@@ -137,9 +139,16 @@
 
       const response = await axios.post(getUrl() + '/root/wp-json/combo/v2/comboliedwrite', formData, getAuthHeader());
       console.log('Upload erfolgreich:', response.data);
+      if (response.data.startsWith('Error')) {
+        reload = false;
+        responseData = response.data;
+        popupErrorModal = true;
+      }
     } catch (error) {
       console.error('Fehler beim Upload:', error);
-      // Hier kannst du Fehlerbehandlung implementieren
+      responseData = error;
+      reload = false;
+      popupErrorModal = true;
     }
     popupSpinnerUploadModal = false;
     if (reload) {
@@ -214,6 +223,14 @@
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
       <Spinner color="purple" size={8} />&nbsp;Lied wird gespeichert.
     </h3>
+  </div>
+</Modal>
+
+<Modal bind:open={popupErrorModal} size="xs" autoclose>
+  <div class="text-center">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Fehler beim Speichern: {responseData}</h3>
+    <Button color="alternative">Abbrechen</Button>
   </div>
 </Modal>
 
