@@ -129,10 +129,10 @@
 
       formData.append('pdf_file', notenPdf);
       console.log('PDF: ', loadedLied.PDF);
-      if (loadedLied.PDF == 0) loadedLied.PDF = notenPdf ? 1 : 0;
+      if (loadedLied.PDF == 0 || loadedLied.PDF == undefined) loadedLied.PDF = notenPdf ? 1 : 0;
       formData.append('pdf', loadedLied.PDF);
       formData.append('mp3_file', liedMp3);
-      if (loadedLied.MP3 == 0) loadedLied.MP3 = liedMp3 ? 1 : 0;
+      if (loadedLied.MP3 == 0 || loadedLied.MP3 == undefined) loadedLied.MP3 = liedMp3 ? 1 : 0;
       formData.append('mp3', loadedLied.MP3);
 
       const response = await axios.post(getUrl() + '/root/wp-json/combo/v2/comboliedwrite', formData, getAuthHeader());
