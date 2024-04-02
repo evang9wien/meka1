@@ -51,7 +51,7 @@
       popupSpinnerModal = false;
       // console.log(liederauswahl);
     });
-    axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=10').then((response) => {
+    axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=30').then((response) => {
       termine = JSON.parse(response.data);
       // termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
       termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
