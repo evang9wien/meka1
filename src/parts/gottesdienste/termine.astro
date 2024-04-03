@@ -1,6 +1,7 @@
 ---
 import Content from '~/components/widgets/Content.astro';
 import Calendar from '~/components/svelte/calendar/Calendar.svelte';
+import { Icon } from 'astro-icon/components';
 ---
 
 <Content
@@ -19,10 +20,10 @@ import Calendar from '~/components/svelte/calendar/Calendar.svelte';
 
   <Fragment slot="content">
     <Calendar client:load />
-     Der Terminkalendar ist auch <a
+     Der Terminkalender ist auch <a
       class="text-muted underline dark:text-slate-400"
       href="https://calendar.google.com/calendar/embed?src=095lkf9ujgaa4u1qmi4e2vf00k%40group.calendar.google.com&ctz=Europe%2FVienna"
-      target="_blank">auf dieser externen Seite</a
+      target="_blank">auf dieser externen Seite <Icon name="tabler:external-link" class="inline" /></a
     > erreichbar.
   </Fragment>
   <Fragment slot="bg">

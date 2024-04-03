@@ -45,3 +45,15 @@ imgMapCal.set('Mark', 'Mark-Ruiz-Hellin.png');
 export function getImageCal(name) {
   return imgMapCal.get(name);
 }
+
+const avatarImgMapCal = new Map();
+
+avatarImgMapCal.set('Harald', 'Harald-Geschl-Avatar.png');
+avatarImgMapCal.set('Stefan', 'stefan-Avatar.png');
+avatarImgMapCal.set('Wolfgang', 'Wolfgang-Avatar.png');
+avatarImgMapCal.set('Tanja', 'Tanja-Avatar.png');
+avatarImgMapCal.set('Mark', 'Mark-Ruiz-Hellin-Avatar.png');
+
+export function getImageCalAvatar(name) {
+  return avatarImgMapCal.get(name);
+}
