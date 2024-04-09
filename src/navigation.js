@@ -65,12 +65,16 @@ export const headerData = {
           href: getPermalink('/angebote#kirchekunterbunt'),
         },
         {
-          text: 'Meka Classic',
-          href: getPermalink('/angebote#mekaclassic'),
+          text: 'Spenden',
+          href: getPermalink('/angebote#spenden'),
         },
         {
           text: 'Grätzloase in der Seegasse',
           href: getPermalink('/angebote#graetzloase'),
+        },
+        {
+          text: 'Meka Classic',
+          href: getPermalink('/angebote#mekaclassic'),
         },
       ],
     },
