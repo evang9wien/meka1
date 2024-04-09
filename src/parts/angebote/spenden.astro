@@ -1,36 +1,54 @@
 ---
 import Content from '~/components/widgets/Content.astro';
+import Features3 from '~/components/widgets/Features3.astro';
 ---
 
-<Content
+<Features3
   id="spenden"
   tagline="Spenden"
   title="Make a Change"
-  isReversed
+  columns={4}
   image={{
     src: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     alt: 'Spenden',
   }}
+  items={[
+    {
+      title: 'Gemeinde',
+      description:
+        'Du fühlst dich wohl in unserer Gemeinde. Du schätzt die Angebote der Messiaskapelle. \
+        Du möchtest unserer Gemeinschaft etwas zurückgeben.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Unterschied',
+      description:
+        'Jede Spende ist willkommen, sei es einmalig oder regelmäßig als Dauerauftrag, sei es allgemein oder für einen \
+    bestimmten Zweck. Auch deine Spende macht einen Unterschied, für unsere diakonische Arbeit, für die Kinder-, Jugend- \
+    und Erwachsenenarbeit, für die Instanthaltung unserer Räumlichkeiten, für die Musik.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Finanzen',
+      description:
+        'Falls du dich \
+    interessierst, wofür das Geld der Messiaskapelle ausgegeben wird: In der öffentlichen Sitzung der \
+    Gemeindevertreterinnen und Gemeindevertreter wird einmal im Jahr die Kostenabrechnung präsentiert.',
+      icon: 'tabler:template',
+    },
+    {
+      title: 'Spendenkonto',
+      description:
+        'IBAN AT46 3200 0000 0747 7664<br /> \
+     BIC RLNWATWW<br /> \
+     Raiffeisen Landesbank NÖ/Wien<br />',
+      icon: 'tabler:template',
+    },
+  ]}
 >
-  <Fragment slot="content">
-    Du fühlst dich wohl in unserer Gemeinde. Du schätzt die Angebote der Messiaskapelle. Du möchtest unserer
-    Gemeinschaft etwas zurückgeben. <br /><br />
-    <div class="font-semibold">
-      Spendenkonto:<br />
-    </div>
-     IBAN AT46 3200 0000 0747 7664<br />
-     BIC RLNWATWW<br />
-     Raiffeisen Landesbank NÖ/Wien<br />
-    <br />
-     Jede Spende ist willkommen, sei es einmalig oder regelmäßig als Dauerauftrag, sei es allgemein oder für einen
-    bestimmten Zweck. Auch deine Spende macht einen Unterschied, für unsere diakonische Arbeit, für die Kinder-, Jugend-
-    und Erwachsenenarbeit, für die Instanthaltung unserer Räumlichkeiten, für die Musik ... <br /> Falls du dich
-    interessierst, wofür das Geld der Messiaskapelle ausgegeben wird: In der öffentlichen Sitzung der
-    Gemeindevertreterinnen und Gemeindevertreter wird einmal im Jahr die Kostenabrechnung präsentiert.
-  </Fragment>
   <Fragment slot="subtitle">
     Jeder bei euch soll selber entscheiden, was er spenden möchte. Spendet nichts, wenn ihr nicht wirklich wollt oder
     nur, weil ihr manipuliert wurdet. Gott steht auf Leute, die einfach so spenden, weil sie es gerne tun. <br />(2.Kor
     9,7 volxbibel)
   </Fragment>
-</Content>
+</Features3>
