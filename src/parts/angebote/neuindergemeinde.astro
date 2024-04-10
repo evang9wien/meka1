@@ -8,10 +8,10 @@ import { getPermalink } from '~/utils/permalinks';
   tagline="Herzlich Willkommen"
   title="NEU IN DER GEMEINDE?"
   image={{
-    src: 'https://www.evang9.wien/root/wp-content/uploads/2023/03/open-1024x576.png',
+    src: 'https://images.unsplash.com/photo-1580191947416-62d35a55e71d?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     alt: 'Neu in der Gemeinde4',
   }}
-  columns={3}
+  columns={4}
   isBeforeContent={true}
   items={[
     {
@@ -43,8 +43,18 @@ import { getPermalink } from '~/utils/permalinks';
         uns sehr über den Besuch in eurer (!) \
         <a class="text-muted underline dark:text-slate-400 font-medium" href="#graetzloase">Grätzloase.</a>',
     },
+    {
+      title: 'Mitarbeiten',
+
+      icon: 'tabler:pig-money',
+      description:
+        'Du hast unsere Gemeinde schon kennen gelernt? Du fühlst dich wohl in der Messiaskapelle und \
+         möchtest etwas geben? Falls du bei uns mitarbeiten möchtests,  \
+      <a class="text-muted underline dark:text-slate-400 font-medium" href="/pages/mitarbeiten">bist du hier richtig</a>.\
+      Gerne gibt es auch die Möglichkeit, \
+      <a class="text-muted underline dark:text-slate-400 font-medium" href="#spenden">uns finanziell zu unterstützen</a>.',
+    },
   ]}
-  classes={{ container: 'max-w-3xl' }}
 >
   <Fragment slot="subtitle">
     Wir freuen uns sehr, dich bei uns begrüßen zu dürfen. Wir sind eine moderne, dynamische und offene Gemeinde –
