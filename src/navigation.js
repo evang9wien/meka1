@@ -25,6 +25,10 @@ export const headerData = {
           text: 'Bilder aus der Messiaskapelle',
           href: getPermalink('/mekabilderpage'),
         },
+        {
+          text: 'Spenden',
+          href: getPermalink('#spenden'),
+        },
       ],
     },
     {
@@ -63,10 +67,6 @@ export const headerData = {
         {
           text: 'Kirche Kunterbunt',
           href: getPermalink('/angebote#kirchekunterbunt'),
-        },
-        {
-          text: 'Spenden',
-          href: getPermalink('/angebote#spenden'),
         },
         {
           text: 'Grätzloase in der Seegasse',
