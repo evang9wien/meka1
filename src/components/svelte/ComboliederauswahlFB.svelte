@@ -2,11 +2,11 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Label, Select } from 'flowbite-svelte';
-  import { Button } from 'flowbite-svelte';
+  import { Button, Modal } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import { A } from 'flowbite-svelte';
 
-  import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+  import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid, ListMusicOutline } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Popover } from 'flowbite-svelte';
@@ -52,6 +52,9 @@
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
   let popupFireBaseLogin = false;
+  let liedTextModal = false;
+  let liedText;
+  let liedTextTitel;
 
   let fireBase = true;
 
@@ -102,14 +105,14 @@
         const o = { ...l, ...docSnap.data() };
         liederAus.push(o);
         liederauswahl = liederAus;
-        // console.log('Lieder: ', liederauswahl);
+        console.log('Lieder: ', liederauswahl);
       } else {
         // docSnap.data() will be undefined in this case
         console.log('No such document!');
       }
     });
 
-    console.log('Liederauswahl: ', liederauswahl);
+    // console.log('Liederauswahl: ', liederauswahl);
     popupSpinnerModal = false;
   };
 
@@ -269,17 +272,20 @@
             </TableHead>
             <TableBody>
               {#each liederauswahl as lied}
-                <Popover
-                  class="w-72 text-sm font-light text-gray-500 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
-                  placement="bottom-start"
-                  title="Liedtext: {lied.Titel}"
-                  triggeredBy="#B{lied.ID}"
-                >
-                  <div class="p-3 space-y-2">{lied.Liedtext}</div>
-                </Popover>
                 <TableBodyRow>
                   <TableBodyCell>
-                    <div id="B{lied.ID}">{lied.Beschreibung}</div>
+                    <div class="flex flex-row">
+                      <A
+                        on:click={() => {
+                          liedTextModal = true;
+                          liedText = lied.Liedtext;
+                          liedTextTitel = lied.Titel;
+                        }}
+                      >
+                        <div class="mr-2">{lied.Beschreibung}</div>
+                        <ListMusicOutline size="md" class="mr-2" />
+                      </A>
+                    </div>
                   </TableBodyCell>
                   <TableBodyCell class="w-4">
                     <div class="flex flex-row">
@@ -322,3 +328,4 @@
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
 <!--<LoginWarn {popupUserAuthModal} />-->
 <LoginFirebase {popupFireBaseLogin} {auth} />
+<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
