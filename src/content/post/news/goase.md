@@ -4,7 +4,7 @@ excerpt: Unsere @graetzloase ist 1 Jahr alt. Heute vor einem Jahr haben wir unse
 category: news
 tags:
   - news
-image: https://www.evang9.wien/root/wp-content/uploads/2023/05/gra%CC%88tzloase-1-1024x768.jpg
+image: https://i.imgur.com/CdZf6rd.jpg
 publishDate: 2024-04-5T21:32:43.810Z
 author: Andreas
 ---
