@@ -78,21 +78,26 @@
     // console.log('Termin: ', termin);
     const liederAus = [];
 
-    for (const l of termin.LiedAuswahl) {
+    // for (const l of termin.LiedAuswahl) {
+    if (!termin.LiedAuswahl) {
+      console.log('Keine Liedauswahl vorhanden!');
+      return;
+    }
+    termin.LiedAuswahl.forEach(async (l) => {
       const liedRef = doc(dbFireStore, 'lieder', l.lied_liste_nummer);
       const docSnap = await getDoc(liedRef);
       if (docSnap.exists()) {
         // console.log('Document data:', docSnap.data());
         const o = { ...l, ...docSnap.data() };
         liederAus.push(o);
-
+        liederauswahl = liederAus;
         // console.log('Lieder: ', liederauswahl);
       } else {
         // docSnap.data() will be undefined in this case
         console.log('No such document!');
       }
-    }
-    liederauswahl = liederAus;
+    });
+
     console.log('Liederauswahl: ', liederauswahl);
     popupSpinnerModal = false;
   };
