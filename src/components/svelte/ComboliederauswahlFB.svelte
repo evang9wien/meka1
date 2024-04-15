@@ -35,6 +35,7 @@
     limitToLast,
     limitToFirst,
     startAt,
+    endAt,
   } from 'firebase/database';
 
   import moment from 'moment';
@@ -87,11 +88,12 @@
 
     console.log('onMount');
     popupSpinnerModal = true;
-    userAuth = await isUserAuth();
-    if (!userAuth) {
-      popupUserAuthModal = true;
-      return;
-    }
+    userAuth = true;
+    // userAuth = await isUserAuth();
+    // if (!userAuth) {
+    //   popupUserAuthModal = true;
+    //   return;
+    // }
 
     /// load firebase liederauswahl
     console.log('Read Termine');
@@ -101,25 +103,27 @@
     const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
     // console.log('Now: ', now.format('YYYY-MM-DD'));
 
-    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
+    const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
     // console.log('Temine: ', dbRef);
 
-    onValue(dbRef, async (snapshot) => {
+    onValue(dbRefNow, async (snapshot) => {
       const termin = Object.values(snapshot.val())[0];
       verantwortlich = termin.Verantwortlich;
       selectedTermin = termin.Termin;
       lastSelectedTermin = selectedTermin;
       // updateStarCount(postElement, data);
       console.log('Termin: ', termin);
-      // const liederAus = [];
-      liederauswahl = [];
+      const liederAus = [];
+
       termin.LiedAuswahl.forEach(async (l) => {
         const liedRef = doc(dbFireStore, 'lieder', l.lied_liste_nummer);
         const docSnap = await getDoc(liedRef);
         if (docSnap.exists()) {
           // console.log('Document data:', docSnap.data());
           const o = { ...l, ...docSnap.data() };
-          liederauswahl.push(o);
+          liederAus.push(o);
+          liederauswahl = liederAus;
+          // console.log('Lieder: ', liederauswahl);
         } else {
           // docSnap.data() will be undefined in this case
           console.log('No such document!');
@@ -127,29 +131,46 @@
       });
       popupSpinnerModal = false;
       // liederauswahl = liederAus;
-      console.log('Lieder: ', liederauswahl);
-      console.log('liederL: ', liederauswahl.length);
-      liederauswahl.forEach((e) => console.log('E: ', e));
+      // console.log('Lieder: ', liederauswahl);
+      // console.log('liederL: ', liederauswahl.length);
+      // liederauswahl.forEach((e) => console.log('E: ', e));
       // console.log('Lieder: ', liederAus);
     });
 
-    axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
-      liederauswahl = JSON.parse(response.data);
-      if (liederauswahl[0]) {
-        const lied1 = liederauswahl[0];
-        selectedTermin = lied1.Termin_Liedliste;
-        lastSelectedTermin = selectedTermin;
-        // verantwortlich = lied1.Verantwortlich;
+    const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
+    const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
+    // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+    // console.log('Temine: ', dbRef);
+
+    onValue(dbRef, async (snapshot) => {
+      if (snapshot) {
+        termine = Object.values(snapshot.val()).map((t) => ({
+          ...t,
+          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+          value: t.Termin,
+        }));
+        console.log('Termine: ', termine);
       }
-      popupSpinnerModal = false;
-      console.log('Lieder alt: ', liederauswahl);
     });
-    axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=30').then((response) => {
-      termine = JSON.parse(response.data);
-      // termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
-      termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
-      console.log(termine);
-    });
+    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
+    //   liederauswahl = JSON.parse(response.data);
+    //   if (liederauswahl[0]) {
+    //     const lied1 = liederauswahl[0];
+    //     selectedTermin = lied1.Termin_Liedliste;
+    //     lastSelectedTermin = selectedTermin;
+    //     // verantwortlich = lied1.Verantwortlich;
+    //   }
+    //   popupSpinnerModal = false;
+    //   console.log('Lieder alt: ', liederauswahl);
+    // });
+    // axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=30').then((response) => {
+    //   termine = JSON.parse(response.data);
+    //   // termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
+    //   termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
+    //   console.log(termine);
+    // });
   });
 
   const handleSelect = (sel) => {
@@ -222,7 +243,7 @@
             <TableBody>
               {#each liederauswahl as lied}
                 <TableBodyRow>
-                  <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
+                  <TableBodyCell>{lied.Titel}</TableBodyCell>
                   <TableBodyCell class="w-4">
                     <div class="flex flex-row">
                       {#if fireBase}
@@ -301,5 +322,5 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
-<LoginWarn {popupUserAuthModal} />
+<!--<LoginWarn {popupUserAuthModal} />-->
 <LoginFirebase {popupFireBaseLogin} {auth} />
