@@ -9,7 +9,7 @@
   import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
-  import { Avatar, Modal, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
+  import { Avatar, Popover } from 'flowbite-svelte';
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
 
@@ -67,6 +67,36 @@
 
   let storage;
   let auth;
+  let dbFireStore;
+
+  const loadLieder = async (termin) => {
+    // console.log('Selected Termin: ', termin);
+    verantwortlich = termin.Verantwortlich;
+    selectedTermin = termin.Termin;
+    lastSelectedTermin = selectedTermin;
+    // updateStarCount(postElement, data);
+    // console.log('Termin: ', termin);
+    const liederAus = [];
+
+    for (const l of termin.LiedAuswahl) {
+      const liedRef = doc(dbFireStore, 'lieder', l.lied_liste_nummer);
+      const docSnap = await getDoc(liedRef);
+      if (docSnap.exists()) {
+        // console.log('Document data:', docSnap.data());
+        const o = { ...l, ...docSnap.data() };
+        liederAus.push(o);
+
+        // console.log('Lieder: ', liederauswahl);
+      } else {
+        // docSnap.data() will be undefined in this case
+        console.log('No such document!');
+      }
+    }
+    liederauswahl = liederAus;
+    console.log('Liederauswahl: ', liederauswahl);
+    popupSpinnerModal = false;
+  };
+
   onMount(async () => {
     console.log('FireBase');
     const app = initializeApp(firebaseConfig);
@@ -97,7 +127,7 @@
 
     /// load firebase liederauswahl
     console.log('Read Termine');
-    const dbFireStore = getFirestore(app);
+    dbFireStore = getFirestore(app);
 
     const dbRealtime = getDatabase(app);
     const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
@@ -108,28 +138,7 @@
 
     onValue(dbRefNow, async (snapshot) => {
       const termin = Object.values(snapshot.val())[0];
-      verantwortlich = termin.Verantwortlich;
-      selectedTermin = termin.Termin;
-      lastSelectedTermin = selectedTermin;
-      // updateStarCount(postElement, data);
-      console.log('Termin: ', termin);
-      const liederAus = [];
-
-      termin.LiedAuswahl.forEach(async (l) => {
-        const liedRef = doc(dbFireStore, 'lieder', l.lied_liste_nummer);
-        const docSnap = await getDoc(liedRef);
-        if (docSnap.exists()) {
-          // console.log('Document data:', docSnap.data());
-          const o = { ...l, ...docSnap.data() };
-          liederAus.push(o);
-          liederauswahl = liederAus;
-          // console.log('Lieder: ', liederauswahl);
-        } else {
-          // docSnap.data() will be undefined in this case
-          console.log('No such document!');
-        }
-      });
-      popupSpinnerModal = false;
+      loadLieder(termin);
       // liederauswahl = liederAus;
       // console.log('Lieder: ', liederauswahl);
       // console.log('liederL: ', liederauswahl.length);
@@ -177,30 +186,32 @@
     console.log(sel);
     popupSpinnerModal = true;
     window.setTimeout(() => {
-      console.log('Sel: ', selectedTermin);
-      console.log('lastSel: ', lastSelectedTermin);
+      // console.log('Sel: ', selectedTermin);
+      // console.log('lastSel: ', lastSelectedTermin);
 
       if (lastSelectedTermin == selectedTermin) return;
       lastSelectedTermin = selectedTermin;
-      console.log(JSON.stringify(selectedTermin));
+      // console.log('SlTermin: ', JSON.stringify(selectedTermin));
       liederauswahl = undefined;
-      const token = localStorage.getItem('jwt');
-      const authConfig = {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      };
-      axios
-        .get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
-        .then((response) => {
-          liederauswahl = JSON.parse(response.data);
+      const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
+      loadLieder(termin);
+      // const token = localStorage.getItem('jwt');
+      // const authConfig = {
+      //   headers: {
+      //     Authorization: 'Bearer ' + token,
+      //   },
+      // };
+      // axios
+      //   .get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
+      //   .then((response) => {
+      //     liederauswahl = JSON.parse(response.data);
 
-          if (liederauswahl[0]) {
-            const lied1 = liederauswahl[0];
-            verantwortlich = lied1.Verantwortlich;
-          }
-          popupSpinnerModal = false;
-        });
+      //     if (liederauswahl[0]) {
+      //       const lied1 = liederauswahl[0];
+      //       verantwortlich = lied1.Verantwortlich;
+      //     }
+      //     popupSpinnerModal = false;
+      //   });
     }, 300);
   };
 </script>
@@ -242,69 +253,40 @@
             </TableHead>
             <TableBody>
               {#each liederauswahl as lied}
+                <Popover
+                  class="w-72 text-sm font-light text-gray-500 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                  placement="bottom-start"
+                  title="Liedtext: {lied.Titel}"
+                  triggeredBy="#B{lied.ID}"
+                >
+                  <div class="p-3 space-y-2">{lied.Liedtext}</div>
+                </Popover>
                 <TableBodyRow>
-                  <TableBodyCell>{lied.Titel}</TableBodyCell>
+                  <TableBodyCell>
+                    <div id="B{lied.ID}">{lied.Titel}</div>
+                  </TableBodyCell>
                   <TableBodyCell class="w-4">
                     <div class="flex flex-row">
-                      {#if fireBase}
-                        {#await getDownloadURL(stref(storage, 'lieder/noten/' + lied.Dateiname + '.pdf'))}
-                          <p>loading</p>
-                        {:then url}
-                          <A href={url} target="_blank">
-                            <FileMusicOutline size="md" class="mr-2" />
-                            <div class="mr-2">
-                              {lied.Titel}
-                            </div>
-                          </A>
-                        {/await}
-                      {:else}
-                        <FileMusicOutline
-                          size="md"
-                          class="mr-2"
-                          on:click={() => {
-                            const file =
-                              getUrl() +
-                              '/root/wp-json/combo/v2/combolied/' +
-                              lied.Dateiname +
-                              '?lied=' +
-                              lied.Dateiname +
-                              '&type=pdf';
-                            openPdf(file);
-                          }}
-                        />
-
-                        <div class="mr-2">
-                          {lied.Titel}
-                        </div>
-                      {/if}
+                      {#await getDownloadURL(stref(storage, 'lieder/noten/' + lied.Dateiname + '.pdf'))}
+                        <p>loading</p>
+                      {:then url}
+                        <A href={url} target="_blank">
+                          <FileMusicOutline size="md" class="mr-2" />
+                          <div class="mr-2">
+                            {lied.Titel}
+                          </div>
+                        </A>
+                      {/await}
                     </div>
                   </TableBodyCell>
                   <TableBodyCell>
                     {#if lied.MP3 != '0'}
                       <div class="flex flex-row">
-                        {#if fireBase}
-                          {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
-                            <p>loading</p>
-                          {:then url}
-                            <audio controls src={url}></audio>
-                          {/await}
-                        {:else}
-                          <PlaySolid
-                            size="md"
-                            class="mr-2"
-                            on:click={() => {
-                              const file =
-                                getUrl() +
-                                '/root/wp-json/combo/v2/combolied/' +
-                                lied.Dateiname +
-                                '?lied=' +
-                                lied.Dateiname +
-                                '&type=mp3';
-                              openMp3(file);
-                            }}
-                          ></PlaySolid>
-                          <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
-                        {/if}
+                        {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
+                          <p>loading</p>
+                        {:then url}
+                          <audio controls src={url}></audio>
+                        {/await}
                       </div>
                     {/if}
                   </TableBodyCell>
