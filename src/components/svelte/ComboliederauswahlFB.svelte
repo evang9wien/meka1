@@ -23,6 +23,8 @@
   import { getUrl } from './url/url.js';
   import { comboReihenfolge } from './combo/combo.js';
 
+  import { firebaseConfig } from './firebase/firebase.js';
+
   import { initializeApp } from 'firebase/app';
   import { getStorage, ref as stref, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
@@ -55,19 +57,6 @@
   let liedTextModal = false;
   let liedText;
   let liedTextTitel;
-
-  let fireBase = true;
-
-  const firebaseConfig = {
-    apiKey: 'AIzaSyCCScuVEd_E1vQRPMkCuALcccPbly0JhPc',
-    authDomain: 'evang9-combo-4cb8e.firebaseapp.com',
-    databaseURL: 'https://evang9-combo-4cb8e-default-rtdb.europe-west1.firebasedatabase.app',
-    projectId: 'evang9-combo-4cb8e',
-    storageBucket: 'evang9-combo-4cb8e.appspot.com',
-    messagingSenderId: '110813316877',
-    appId: '1:110813316877:web:2e6a8789144bb3e5189244',
-    measurementId: 'G-RC23VERNJ8',
-  };
 
   let storage;
   let auth;
@@ -121,16 +110,8 @@
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        console.log('User:  ', user);
-        // ...
-      } else {
-        // User is signed out
+      if (!user) {
         popupFireBaseLogin = true;
-        // ...
       }
     });
     storage = getStorage(app);

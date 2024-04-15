@@ -165,7 +165,11 @@ export const footerData = {
           href: getPermalink('/combo/comboliederchronikpage'),
         },
         {
-          text: 'Experimental: Lieder für den Gottesdienst',
+          text: 'Beta: Comboplan',
+          href: getPermalink('/combo/comboplanFBpage'),
+        },
+        {
+          text: 'Beta: Lieder für den Gottesdienst',
           href: getPermalink('/combo/comboliederauswahlFBpage'),
         },
       ],
