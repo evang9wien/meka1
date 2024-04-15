@@ -21,6 +21,7 @@
   import { openPdf } from './pdf.js';
 
   import { getUrl } from './url/url.js';
+  import { comboReihenfolge } from './combo/combo.js';
 
   import { initializeApp } from 'firebase/app';
   import { getStorage, ref as stref, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
@@ -70,7 +71,17 @@
   let dbFireStore;
 
   const loadLieder = async (termin) => {
-    // console.log('Selected Termin: ', termin);
+    console.log('Selected Termin: ', termin);
+    if (termin.LiedAuswahl) {
+      termin.LiedAuswahl = termin.LiedAuswahl.sort(
+        (a, b) => parseInt(a.lied_im_GD_nummer) - parseInt(b.lied_im_GD_nummer)
+      );
+
+      termin.LiedAuswahl = termin.LiedAuswahl.map((l) => ({
+        ...l,
+        Beschreibung: comboReihenfolge.filter((f) => f.Reihenfolge == l.lied_im_GD_nummer)[0].Beschreibung,
+      }));
+    }
     verantwortlich = termin.Verantwortlich;
     selectedTermin = termin.Termin;
     lastSelectedTermin = selectedTermin;
@@ -268,7 +279,7 @@
                 </Popover>
                 <TableBodyRow>
                   <TableBodyCell>
-                    <div id="B{lied.ID}">{lied.Titel}</div>
+                    <div id="B{lied.ID}">{lied.Beschreibung}</div>
                   </TableBodyCell>
                   <TableBodyCell class="w-4">
                     <div class="flex flex-row">
