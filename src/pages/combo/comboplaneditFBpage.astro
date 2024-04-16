@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import ComboplanEdit from '~/components/svelte/ComboplanEditFB.svelte';
+
+const metadata = {
+  title: 'Liederauswahl',
+};
+---
+
+<Layout metadata={metadata}>
+  <ComboplanEdit client:load />
+</Layout>

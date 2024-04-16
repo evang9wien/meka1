@@ -169,6 +169,10 @@ export const footerData = {
           href: getPermalink('/combo/comboplanFBpage'),
         },
         {
+          text: 'Beta: Comboplan eintragen',
+          href: getPermalink('/combo/comboplaneditFBpage'),
+        },
+        {
           text: 'Beta: Lieder für den Gottesdienst',
           href: getPermalink('/combo/comboliederauswahlFBpage'),
         },
