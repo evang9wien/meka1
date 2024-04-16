@@ -14,14 +14,21 @@
   let password = '';
 
   let loginSucess = false;
-
   let loginError = false;
 
   const login = () => {
     console.log('Login');
-    signInWithEmailAndPassword(auth, name, password);
-    loginSucess = true;
-    loginError = false;
+    signInWithEmailAndPassword(auth, name, password)
+      .then((userCredential) => {
+        // Signed in
+        loginSucess = true;
+        loginError = false;
+        // ...
+      })
+      .catch((error) => {
+        loginSucess = false;
+        loginError = true;
+      });
   };
 </script>
 
@@ -46,12 +53,12 @@
         <Input bind:value={password} id="default-input-p" type="password" placeholder="Password" />
       </div>
       <GradientButton class="mb-6" color="cyanToBlue" on:click={login}>Login</GradientButton>
-      <div>
+      <!-- <div>
         <a
           class="text-muted underline dark:text-slate-400 font-medium"
           href="https://www.evang9.wien/root/wp-login.php?action=lostpassword">Passwort vergessen?</a
         >
-      </div>
+      </div> -->
     {:else}
       <Alert color="green">
         <InfoCircleSolid slot="icon" class="w-4 h-4" />

@@ -84,6 +84,7 @@
     // for (const l of termin.LiedAuswahl) {
     if (!termin.LiedAuswahl) {
       console.log('Keine Liedauswahl vorhanden!');
+      popupSpinnerModal = false;
       return;
     }
     termin.LiedAuswahl.forEach(async (l) => {
@@ -298,9 +299,7 @@
             </TableBody>
           </Table>
         {:else}
-          <div>
-            <Spinner color="gray" />
-          </div>
+          <div>Noch keine Liedauswahl vorhanden.</div>
         {/if}
       </div>
     </Card>

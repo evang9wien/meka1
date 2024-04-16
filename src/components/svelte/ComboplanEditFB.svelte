@@ -20,6 +20,7 @@
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import { getUrl } from './url/url.js';
 
+  import LoginFirebase from './auth/LoginFirebase.svelte';
   import { firebaseConfig } from './firebase/firebase.js';
   import { initializeApp } from 'firebase/app';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
@@ -47,6 +48,8 @@
   let userAuth = false;
   let dbRealtime;
   let auth;
+  let popupFireBaseLogin = false;
+
   const loadCombo = () => {
     popupSpinnerModal = true;
     console.log('FireBase');
@@ -83,11 +86,7 @@
       }
     });
     dbRealtime = getDatabase(app);
-    // userAuth = await isUserAuth();
-    // if (!userAuth) {
-    //   popupUserAuthModal = true;
-    //   return;
-    // }
+
     popupSpinnerModal = true;
     loadCombo();
 
@@ -101,19 +100,8 @@
         name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
         value: t.ShortName,
       }));
-      // console.log('Document data:', docSnap.data());
-      // const o = { ...l, ...docSnap.data() };
-      // liederAus.push(o);
-      // liederauswahl = liederAus;
       console.log('Mitarbeiter: ', members);
     }
-
-    // axios.get(getUrl() + '/root/wp-json/combo/v2/combomembers', getAuthHeader()).then((response) => {
-    //   members = JSON.parse(response.data);
-    //   members = members.map((t) => ({ ...t, name: t.VName + ' ' + t.FName, value: t.ShortName }));
-    //   console.log('Mitarbeiter old: ', members);
-    //   popupSpinnerModal = false;
-    // });
   });
 
   let formatDate = (date) => {
@@ -279,4 +267,5 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Comboplan wird neu geladen." />
-<LoginWarn {popupUserAuthModal} />
+<!-- <LoginWarn {popupUserAuthModal} /> -->
+<LoginFirebase {popupFireBaseLogin} {auth} />

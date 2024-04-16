@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import LogoutFB from '~/components/svelte/auth/Logout.svelte';
+
+const metadata = {
+  title: 'Logout',
+};
+---
+
+<Layout metadata={metadata}>
+  <LogoutFB client:load />
+</Layout>

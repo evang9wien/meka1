@@ -176,6 +176,10 @@ export const footerData = {
           text: 'Beta: Lieder für den Gottesdienst',
           href: getPermalink('/combo/comboliederauswahlFBpage'),
         },
+        {
+          text: 'Beta: Logout',
+          href: getPermalink('/combo/logoutFBpage'),
+        },
       ],
     },
     {
