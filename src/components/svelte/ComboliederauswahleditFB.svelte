@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Label, Select } from 'flowbite-svelte';
-  import { Button } from 'flowbite-svelte';
+  import { A, Button } from 'flowbite-svelte';
   import { GradientButton } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import {
@@ -31,6 +31,7 @@
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getUrl } from './url/url.js';
 
+  import { comboReihenfolge } from './combo/combo.js';
   import { firebaseConfig } from './firebase/firebase.js';
 
   import { initializeApp } from 'firebase/app';
@@ -73,13 +74,25 @@
   const comboLiederDef = [2, 3, 5, 6, 7, 8];
   let alleLieder;
 
-  const handleLiederDBAuswahl = () => {
-    if (liederDBAuswahl[0]) {
-      const lied1 = liederDBAuswahl[0];
-      selectedTermin = lied1.Termin_Liedliste;
-      // lastSelectedTermin = selectedTermin;
-      verantwortlich = lied1.Verantwortlich;
+  let storage;
+  let auth;
+  let dbFireStore;
+
+  const handleLiederDBAuswahl = async () => {
+    // lieder nachladen
+    const liederDBAuswahlLoad = [];
+    for (let lied of liederDBAuswahl) {
+      const liedRef = doc(dbFireStore, 'lieder', lied.lied_liste_nummer);
+      const docSnap = await getDoc(liedRef);
+      if (docSnap.exists()) {
+        liederDBAuswahlLoad.push({ ...lied, ...docSnap.data() });
+      } else {
+        console.log('No such document!');
+      }
     }
+    liederDBAuswahl = liederDBAuswahlLoad;
+    console.log('LiederDBList Load: ', liederDBAuswahl);
+
     const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
     console.log('Termin:', termin);
     if (!termin) return;
@@ -115,36 +128,113 @@
   };
 
   onMount(async () => {
+    console.log('FireBase');
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        popupFireBaseLogin = true;
+      }
+    });
+    storage = getStorage(app);
+
     console.log('onMount');
 
-    userAuth = await isUserAuth();
-    if (!userAuth) {
-      popupUserAuthModal = true;
-      return;
-    }
+    userAuth = true;
+    // userAuth = await isUserAuth();
+    // if (!userAuth) {
+    //   popupUserAuthModal = true;
+    //   return;
+    // }
     popupSpinnerModal = true;
-    axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
-      alleLieder = JSON.parse(response.data);
-      alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
-      comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
-      // console.log('Combolieder: ', comboLieder);
-      // console.log('Alle Lieder: ', alleLieder);
-      axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader()).then((response) => {
-        // liederReihenfolgeDBTemplate mit und ohne AM
-        liederReihenfolgeDBTemplate = JSON.parse(response.data);
-        console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
-        axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
-          liederDBAuswahl = JSON.parse(response.data);
-          handleLiederDBAuswahl();
-          popupSpinnerModal = false;
-        });
-      });
+    dbFireStore = getFirestore(app);
+    // const docRef = ;
+    const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+    comboLieder = [];
+    for (const [key, value] of Object.entries(liederGes.data())) {
+      comboLieder.push({ name: value, value: key, ID: key });
+    }
+    comboLieder = comboLieder.sort((a, b) => a.name.localeCompare(b.name));
+    // console.log(comboLieder);
+
+    const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
+    const nichtcomboLieder = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data())) {
+      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    }
+
+    alleLieder = comboLieder.concat(nichtcomboLieder);
+    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
+    // console.log(alleLieder);
+
+    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+    //   alleLieder = JSON.parse(response.data);
+    //   alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
+    //   comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
+    //   console.log('Combolieder: ', comboLieder);
+    // console.log('Alle Lieder: ', alleLieder);
+    //axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader()).then((response) => {
+    // liederReihenfolgeDBTemplate mit und ohne AM
+    //liederReihenfolgeDBTemplate = JSON.parse(response.data);
+    liederReihenfolgeDBTemplate = comboReihenfolge;
+    console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
+    const dbRealtime = getDatabase(app);
+    const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
+    // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+    const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
+    // console.log('Temine: ', dbRef);
+
+    onValue(dbRefNow, async (snapshot) => {
+      const termin = Object.values(snapshot.val())[0];
+      console.log('Termin: ', termin);
+      liederDBAuswahl = termin.LiedAuswahl;
+      selectedTermin = termin.Termin;
+      verantwortlich = termin.Verantwortlich;
+      console.log('LiederDBAuswahl: ', liederDBAuswahl);
+      handleLiederDBAuswahl();
+      // loadLieder(termin);
+      // liederauswahl = liederAus;
+      // console.log('Lieder: ', liederauswahl);
+      // console.log('liederL: ', liederauswahl.length);
+      // liederauswahl.forEach((e) => console.log('E: ', e));
+      // console.log('Lieder: ', liederAus);
     });
-    axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
-      termine = JSON.parse(response.data);
-      termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
-      // console.log(termine);
+
+    const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
+    const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
+    // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+    // console.log('Temine: ', dbRef);
+
+    onValue(dbRef, async (snapshot) => {
+      if (snapshot) {
+        termine = Object.values(snapshot.val()).map((t) => ({
+          ...t,
+          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+          value: t.Termin,
+        }));
+        console.log('Termine: ', termine);
+      }
     });
+
+    popupSpinnerModal = false;
+
+    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
+    //   liederDBAuswahl = JSON.parse(response.data);
+    //   console.log('LiederDBAuswahl TTT: ', liederDBAuswahl);
+    //   handleLiederDBAuswahl();
+    //   popupSpinnerModal = false;
+    // });
+
+    // //});
+    // // });
+    // axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
+    //   termine = JSON.parse(response.data);
+    //   termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
+    //   // console.log(termine);
+    // });
   });
 
   const handleSelectDate = () => {
@@ -365,8 +455,8 @@
               <TableHeadCell>Lied</TableHeadCell>
               <TableHeadCell></TableHeadCell>
               <TableHeadCell>Titel</TableHeadCell>
-              <TableHeadCell>Hörprobe</TableHeadCell>
               <TableHeadCell>Noten</TableHeadCell>
+              <TableHeadCell>Hörprobe</TableHeadCell>
             </TableHead>
             <TableBody>
               {#each liedReihenfolgeSelected as lied}
@@ -391,44 +481,34 @@
                         />
                       </div>
                     </TableBodyCell>
-                    <TableBodyCell>
-                      {#if lied.selectedLied && lied.selectedLied.MP3 && lied.selectedLied.MP3 != '0'}
+                    <TableBodyCell class="w-4">
+                      {#if lied.selectedLied && lied.selectedLied.PDF && lied.selectedLied.PDF != '0'}
                         <div class="flex flex-row">
-                          <PlaySolid
-                            size="md"
-                            class="mr-2"
-                            on:click={() => {
-                              const file =
-                                getUrl() +
-                                '/root/wp-json/combo/v2/combolied/' +
-                                lied.selectedLied.Dateiname +
-                                '?lied=' +
-                                lied.selectedLied.Dateiname +
-                                '&type=mp3';
-                              openMp3(file);
-                            }}
-                          ></PlaySolid>
-                          <PauseSolid size="md" class="mr-2" on:click={stopMp3}></PauseSolid>
+                          {#await getDownloadURL(stref(storage, 'lieder/noten/' + lied.selectedLied.Dateiname + '.pdf'))}
+                            <p>loading</p>
+                          {:then url}
+                            <A href={url} target="_blank">
+                              <FileMusicOutline size="md" class="mr-2" />
+                              <!-- <div class="mr-2">
+                              {lied.Titel}
+                            </div> -->
+                            </A>
+                          {/await}
                         </div>
                       {/if}
                     </TableBodyCell>
-                    <TableBodyCell class="w-4">
-                      {#if lied.selectedLied}
+                    <TableBodyCell>
+                      {#if lied.selectedLied && lied.selectedLied.MP3 && lied.selectedLied.MP3 != '0'}
                         <div class="flex flex-row">
-                          <FileMusicOutline
-                            size="md"
-                            class="mr-2"
-                            on:click={() => {
-                              const file =
-                                getUrl() +
-                                '/root/wp-json/combo/v2/combolied/' +
-                                lied.selectedLied.Dateiname +
-                                '?lied=' +
-                                lied.selectedLied.Dateiname +
-                                '&type=pdf';
-                              openPdf(file);
-                            }}
-                          />
+                          {#if lied.MP3 != '0'}
+                            <div class="flex flex-row">
+                              {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.selectedLied.Dateiname + '.mp3'))}
+                                <p>loading</p>
+                              {:then url}
+                                <audio controls src={url}></audio>
+                              {/await}
+                            </div>
+                          {/if}
                         </div>
                       {/if}
                     </TableBodyCell>
