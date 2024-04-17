@@ -4,7 +4,7 @@ excerpt: Unsere @graetzloase ist 1 Jahr alt. Heute vor einem Jahr haben wir unse
 category: news
 tags:
   - news
-image: https://i.imgur.com/CdZf6rd.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1713381305/Homepage/gra%CC%88tzloase-1-1024x768_kddatc.jpg
 publishDate: 2024-04-5T21:32:43.810Z
 author: Andreas
 ---
