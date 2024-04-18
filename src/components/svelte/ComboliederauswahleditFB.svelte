@@ -1,7 +1,6 @@
 <script>
   // Anlegen und bearbeiten der Liederauswahl für den nächsten Sonntag
   import { onMount } from 'svelte';
-  import axios from 'axios';
   import { Label, Select } from 'flowbite-svelte';
   import { A, Button } from 'flowbite-svelte';
   import { GradientButton } from 'flowbite-svelte';
@@ -21,10 +20,6 @@
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
 
-  import { getAuthHeader, isUserAuth } from './auth.js';
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
-
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginWarn from './auth/LoginWarn.svelte';
@@ -40,6 +35,7 @@
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
+    set,
     ref as dbref,
     onValue,
     query,
@@ -77,6 +73,7 @@
   let storage;
   let auth;
   let dbFireStore;
+  let dbRealtime;
 
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
@@ -141,11 +138,7 @@
     console.log('onMount');
 
     userAuth = true;
-    // userAuth = await isUserAuth();
-    // if (!userAuth) {
-    //   popupUserAuthModal = true;
-    //   return;
-    // }
+
     popupSpinnerModal = true;
     dbFireStore = getFirestore(app);
     // const docRef = ;
@@ -167,18 +160,9 @@
     alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
     // console.log(alleLieder);
 
-    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
-    //   alleLieder = JSON.parse(response.data);
-    //   alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
-    //   comboLieder = alleLieder.filter((l) => l.Aktiv == '1');
-    //   console.log('Combolieder: ', comboLieder);
-    // console.log('Alle Lieder: ', alleLieder);
-    //axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederReihenfolge', getAuthHeader()).then((response) => {
-    // liederReihenfolgeDBTemplate mit und ohne AM
-    //liederReihenfolgeDBTemplate = JSON.parse(response.data);
     liederReihenfolgeDBTemplate = comboReihenfolge;
     console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
-    const dbRealtime = getDatabase(app);
+    dbRealtime = getDatabase(app);
     const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
     // console.log('Now: ', now.format('YYYY-MM-DD'));
 
@@ -193,12 +177,6 @@
       verantwortlich = termin.Verantwortlich;
       console.log('LiederDBAuswahl: ', liederDBAuswahl);
       handleLiederDBAuswahl();
-      // loadLieder(termin);
-      // liederauswahl = liederAus;
-      // console.log('Lieder: ', liederauswahl);
-      // console.log('liederL: ', liederauswahl.length);
-      // liederauswahl.forEach((e) => console.log('E: ', e));
-      // console.log('Lieder: ', liederAus);
     });
 
     const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
@@ -220,61 +198,61 @@
     });
 
     popupSpinnerModal = false;
-
-    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
-    //   liederDBAuswahl = JSON.parse(response.data);
-    //   console.log('LiederDBAuswahl TTT: ', liederDBAuswahl);
-    //   handleLiederDBAuswahl();
-    //   popupSpinnerModal = false;
-    // });
-
-    // //});
-    // // });
-    // axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=200').then((response) => {
-    //   termine = JSON.parse(response.data);
-    //   termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
-    //   // console.log(termine);
-    // });
   });
 
   const handleSelectDate = () => {
     // console.log(sel);
     popupSpinnerModal = true;
+    liederDBAuswahl = [];
     console.log('Sel 00: ', selectedTermin);
     console.log('Termine: ', termine);
     window.setTimeout(() => {
       console.log('Sel: ', selectedTermin);
-      // console.log('lastSel: ', lastSelectedTermin);
 
-      // if (lastSelectedTermin == selectedTermin) return;
-      // lastSelectedTermin = selectedTermin;
-      // console.log(JSON.stringify(selectedTermin));
-      liederDBAuswahl = undefined;
-      const token = localStorage.getItem('jwt');
-      const authConfig = {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      };
-      axios
-        .get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
-        .then((response) => {
-          liederDBAuswahl = JSON.parse(response.data);
-          handleLiederDBAuswahl(liederDBAuswahl);
-          popupSpinnerModal = false;
-        });
-    }, 300);
+      const dbRefNow = query(
+        dbref(dbRealtime, 'combo/termine'),
+        orderByKey(),
+        startAt(selectedTermin),
+        limitToFirst(1)
+      );
+      // console.log('Temine: ', dbRef);
+
+      onValue(dbRefNow, async (snapshot) => {
+        const termin = Object.values(snapshot.val())[0];
+        console.log('Termin: ', termin);
+        liederDBAuswahl = termin.LiedAuswahl;
+        if (!liederDBAuswahl) liederDBAuswahl = [];
+
+        selectedTermin = termin.Termin;
+        verantwortlich = termin.Verantwortlich;
+        console.log('LiederDBAuswahl: ', liederDBAuswahl);
+        handleLiederDBAuswahl();
+        popupSpinnerModal = false;
+      });
+    });
   };
 
   const handleSave = (ev, ev1, ev2) => {
-    window.setTimeout(() => {
-      liedReihenfolgeSelected = liedReihenfolgeSelected.map((l) => {
+    window.setTimeout(async () => {
+      console.log('Lieder Selected:', liedReihenfolgeSelected);
+      for (const l of liedReihenfolgeSelected) {
+        // liedReihenfolgeSelected = liedReihenfolgeSelected.map(async (l) => {
         // if (l.selectedLiedID && !l.selectedLied) {
-        if (l.selectedLiedID) {
-          l.selectedLied = alleLieder.find((la) => la.ID == l.selectedLiedID);
+        if (l.selectedLiedID && l.selectedLiedID != '' && (!l.selectedLied || l.selectedLiedID != l.selectedLied.ID)) {
+          console.log('Load Lied ', l);
+          // lied muss neu geladen werden
+          const liedRef = doc(dbFireStore, 'lieder', l.selectedLiedID);
+          const docSnap = await getDoc(liedRef);
+          if (docSnap.exists()) {
+            l.selectedLied = { ...l, ...docSnap.data() };
+          } else {
+            console.log('No such document!');
+          }
+
+          // l.selectedLied = alleLieder.find((la) => la.ID == l.selectedLiedID);
         }
-        return l;
-      });
+        // return l;
+      }
       // .forEach((l) => delete l.selected);
 
       console.log('Save: ', liedReihenfolgeSelected, ev, ev1, ev2);
@@ -291,27 +269,17 @@
     console.log('Save: ', liedReihenfolgeSelected);
 
     let liedReihenfolgeDB = liedReihenfolgeSelected
-      .filter((l) => l.selectedLied || l.ID)
+      .filter((l) => l.selectedLied)
       .map((l) => ({
-        ID: l.ID,
         lied_im_GD_nummer: l.Reihenfolge,
         lied_liste_nummer: l.selectedLiedID,
-        termin_liedliste: selectedTermin,
       }));
 
     console.log('DB Save: ', liedReihenfolgeDB);
     console.log('DB Save JSON: ', JSON.stringify(liedReihenfolgeDB));
-    popupSpinnerModal = true;
-    axios.patch(getUrl() + '/root/wp-json/combo/v2/comboliederedit', liedReihenfolgeDB, getAuthHeader()).then(
-      (response) => {
-        console.log('Success:', response);
-        // wegen der Lied ID müssen die Lieder neu geladen werden.
-        handleSelectDate();
-      },
-      (error) => {
-        console.log('Error:', error);
-      }
-    );
+    // popupSpinnerModal = true;
+
+    set(dbref(dbRealtime, 'combo/termine/' + selectedTermin + '/LiedAuswahl'), liedReihenfolgeDB);
   };
 
   const addLied = (lied) => {
@@ -489,9 +457,6 @@
                           {:then url}
                             <A href={url} target="_blank">
                               <FileMusicOutline size="md" class="mr-2" />
-                              <!-- <div class="mr-2">
-                              {lied.Titel}
-                            </div> -->
                             </A>
                           {/await}
                         </div>
