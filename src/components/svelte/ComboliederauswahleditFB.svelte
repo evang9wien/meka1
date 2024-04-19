@@ -23,6 +23,7 @@
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginWarn from './auth/LoginWarn.svelte';
+  import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getUrl } from './url/url.js';
 
@@ -51,6 +52,7 @@
   let popupModal = false;
   let popupSpinnerModal = false;
   let popupUserAuthModal = false;
+  let popupFireBaseLogin = false;
   let selectedTermin;
   // let lastSelectedTermin;
 
@@ -504,4 +506,4 @@
 </Modal>
 
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
-<LoginWarn {popupUserAuthModal} />
+<LoginFirebase {popupFireBaseLogin} {auth} />

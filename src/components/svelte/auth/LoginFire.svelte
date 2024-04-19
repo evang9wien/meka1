@@ -9,6 +9,7 @@
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
   export let auth;
+  export let loginReload = true;
 
   let name = '';
   let password = '';
@@ -23,6 +24,9 @@
         // Signed in
         loginSucess = true;
         loginError = false;
+        if (loginReload) {
+          window.location.reload();
+        }
         // ...
       })
       .catch((error) => {
@@ -34,7 +38,7 @@
 
 <div class="flex justify-center">
   <Card class="mb-6">
-    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Firebase Login für Mitarbeiter</h5>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Login für Mitarbeiter</h5>
     <!-- <Title>Login</Title> -->
     {#if !loginSucess}
       {#if loginError}
