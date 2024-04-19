@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Comboliederedit from '~/components/svelte/ComboliedereditFB.svelte';
+
+const metadata = {
+  title: 'Liederedit',
+};
+---
+
+<Layout metadata={metadata}>
+  <Comboliederedit client:load />
+</Layout>

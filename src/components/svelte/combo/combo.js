@@ -11,4 +11,16 @@ const comboReihenfolge = [
   { Reihenfolge: '10', Beschreibung: 'Instrumental beim AM', GD_mit_Abendmahl: '1', GD_ohne_Abendmahl: '0' },
 ];
 
-export { comboReihenfolge };
+const comboKategorien = [
+  { ID: '46', Typ: 'freiTöne' },
+  { ID: '29', Typ: 'Kinder' },
+  { ID: '28', Typ: 'Gesamtes_Archiv' },
+  { ID: '48', Typ: 'EG-Lieder' },
+  { ID: '26', Typ: 'Combolieder' },
+  { ID: '36', Typ: 'Comboprobe' },
+  { ID: '45', Typ: 'Instrumental' },
+  { ID: '44', Typ: 'Weihnachten' },
+  { ID: '49', Typ: 'Combotreffen' },
+];
+
+export { comboReihenfolge, comboKategorien };
