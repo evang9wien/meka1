@@ -7,7 +7,6 @@
   import { Alert } from 'flowbite-svelte';
   import { InfoCircleSolid } from 'flowbite-svelte-icons';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
-  import { I } from 'dist/astro/Card.28e69644';
 
   export let auth;
   export let loginReload = true;
