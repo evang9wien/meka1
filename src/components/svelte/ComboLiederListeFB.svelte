@@ -181,14 +181,19 @@
       filterNoten = '';
     }, 200);
   }
-  async function liedLaden(lied, index) {
+  async function liedLaden(lied) {
     console.log('Lied init: ', lied);
     const liedRef = doc(dbFireStore, 'lieder', lied.ID);
     const docSnap = await getDoc(liedRef);
     if (docSnap.exists()) {
       // console.log('Document data:', docSnap.data());
       const loadedLied = { ...docSnap.data() };
-      liederListe[index] = { ...lied, ...loadedLied };
+      const index1 = liederListe.findIndex((l) => l.ID == lied.ID);
+      liederListe[index1] = { ...lied, ...loadedLied };
+
+      const index2 = liederListeKat.findIndex((l) => l.ID == lied.ID);
+      liederListeKat[index2] = { ...lied, ...loadedLied };
+
       // liedGesungen = loadedLied.Aktiv == '1';
       console.log('Lied: ', loadedLied);
       // liederAus.push(o);
