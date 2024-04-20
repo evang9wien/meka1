@@ -326,4 +326,4 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederchronik wird geladen." />
-<LoginWarn {popupUserAuthModal} />
+<LoginFirebase {popupFireBaseLogin} {auth} />
