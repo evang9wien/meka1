@@ -5,7 +5,14 @@
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
   import { Card, A } from 'flowbite-svelte';
-  import { MicrophoneOutline, EditOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+  import {
+    MicrophoneOutline,
+    EditOutline,
+    FileMusicOutline,
+    PlaySolid,
+    PauseSolid,
+    ListMusicOutline,
+  } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
@@ -49,12 +56,12 @@
   let liedGesungen;
 
   let popupSpinnerModal = false;
-  let popupUserAuthModal = false;
+  // let popupUserAuthModal = false;
 
-  let open = false;
-  let liedtext;
-  let liedtitelDlg;
-  let response = 'Nothing yet.';
+  // let open = false;
+  // let liedtext;
+  // let liedtitelDlg;
+  // let response = 'Nothing yet.';
   let userAuth;
 
   let storage;
@@ -62,6 +69,10 @@
   let dbFireStore;
   let dbRealtime;
   let popupFireBaseLogin = false;
+
+  let liedTextModal = false;
+  let liedText;
+  let liedTextTitel;
 
   onMount(async () => {
     const app = initializeApp(firebaseConfig);
@@ -170,6 +181,24 @@
       filterNoten = '';
     }, 200);
   }
+  async function liedLaden(lied, index) {
+    console.log('Lied init: ', lied);
+    const liedRef = doc(dbFireStore, 'lieder', lied.ID);
+    const docSnap = await getDoc(liedRef);
+    if (docSnap.exists()) {
+      // console.log('Document data:', docSnap.data());
+      const loadedLied = { ...docSnap.data() };
+      liederListe[index] = { ...lied, ...loadedLied };
+      // liedGesungen = loadedLied.Aktiv == '1';
+      console.log('Lied: ', loadedLied);
+      // liederAus.push(o);
+      // liederauswahl = liederAus;
+      // console.log('Lieder: ', liederauswahl);
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log('Lied nicht gefunden!');
+    }
+  }
 </script>
 
 {#if userAuth && !popupSpinnerModal}
@@ -220,7 +249,7 @@
             <TableHeadCell></TableHeadCell>
           </TableHead>
           <TableBody>
-            {#each liederListe as lied}
+            {#each liederListe as lied, index}
               <TableBodyRow>
                 <TableBodyCell>
                   <div class="flex flex-row">
@@ -234,11 +263,22 @@
                             {lied.Titel}
                           </div>
                         </A>
+                        <A
+                          on:click={() => {
+                            liedTextModal = true;
+                            liedText = lied.Liedtext;
+                            liedTextTitel = lied.Titel;
+                          }}
+                        >
+                          <ListMusicOutline size="md" class="mr-2" />
+                        </A>
                       {/await}
+                    {:else}
+                      <GradientButton shadow color="black" pill={true} class="!p-2" on:click={liedLaden(lied, index)}>
+                        <MicrophoneOutline class="w-4 h-4" />
+                        {lied.name}
+                      </GradientButton>
                     {/if}
-                    <div class="mr-2">
-                      {lied.name}
-                    </div>
                   </div>
                 </TableBodyCell>
                 <TableBodyCell>
@@ -276,3 +316,4 @@
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederliste wird geladen." />
 <LoginFirebase {popupFireBaseLogin} {auth} />
+<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
