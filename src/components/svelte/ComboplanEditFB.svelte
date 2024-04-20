@@ -40,7 +40,7 @@
   } from 'firebase/database';
 
   let popupUserAuthModal = false;
-  let popupSpinnerModal = true;
+  let popupSpinnerModal = false;
   let termine;
   let members;
   let selectedmember;
@@ -78,30 +78,32 @@
   onMount(async () => {
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         popupFireBaseLogin = true;
+        return;
       } else {
         userAuth = true;
       }
+
+      dbRealtime = getDatabase(app);
+
+      popupSpinnerModal = true;
+      loadCombo();
+
+      const dbFireStore = getFirestore(app);
+      const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
+      const docSnap = await getDoc(maRef);
+      if (docSnap.exists()) {
+        members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
+        members = members.map((t) => ({
+          ...t,
+          name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
+          value: t.ShortName,
+        }));
+        console.log('Mitarbeiter: ', members);
+      }
     });
-    dbRealtime = getDatabase(app);
-
-    popupSpinnerModal = true;
-    loadCombo();
-
-    const dbFireStore = getFirestore(app);
-    const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
-    const docSnap = await getDoc(maRef);
-    if (docSnap.exists()) {
-      members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-      members = members.map((t) => ({
-        ...t,
-        name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-        value: t.ShortName,
-      }));
-      console.log('Mitarbeiter: ', members);
-    }
   });
 
   let formatDate = (date) => {

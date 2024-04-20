@@ -55,7 +55,7 @@
   let popupModal = false;
   let popupErrorModal = false;
   let responseData;
-  let popupSpinnerModal = true;
+  let popupSpinnerModal = false;
   let popupUserAuthModal = false;
   let popupSpinnerUploadModal = false;
   let selectedLied;
@@ -80,57 +80,60 @@
     console.log('onMount');
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
+        console.log('No Login');
         popupFireBaseLogin = true;
         return;
       }
+
+      console.log('User Auth');
+      userAuth = true;
+      storage = getStorage(app);
+      dbFireStore = getFirestore(app);
+
+      // userAuth = await isUserAuth();
+      // if (!userAuth) {
+      //   popupUserAuthModal = true;
+      //   return;
+      // }
+      popupSpinnerModal = true;
+      // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliedkat', getAuthHeader()).then((response) => {
+      //   kategorien = JSON.parse(response.data);
+      // kategorien = kategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
+      kategorien = comboKategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
+      console.log(kategorien);
+      // });
+
+      // axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
+      //   alleLieder = JSON.parse(response.data);
+      //   alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
+      // const docRef = ;
+      const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+      const comboLieder = [];
+      for (const [key, value] of Object.entries(liederGes.data())) {
+        comboLieder.push({ name: value, value: key, ID: key });
+      }
+      const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
+      const nichtcomboLieder = [];
+      for (const [key, value] of Object.entries(liederNichtGes.data())) {
+        nichtcomboLieder.push({ name: value, value: key, ID: key });
+      }
+
+      alleLieder = comboLieder.concat(nichtcomboLieder);
+      alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
+
+      console.log('Alle Lieder: ', alleLieder);
+
+      popupSpinnerModal = false;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('lied_id')) {
+        selectedLied = urlParams.get('lied_id');
+        console.log('Liedid: ', selectedLied);
+        handleSelectLied();
+      }
+      // });
     });
-    userAuth = true;
-    storage = getStorage(app);
-    dbFireStore = getFirestore(app);
-
-    // userAuth = await isUserAuth();
-    // if (!userAuth) {
-    //   popupUserAuthModal = true;
-    //   return;
-    // }
-    popupSpinnerModal = true;
-    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliedkat', getAuthHeader()).then((response) => {
-    //   kategorien = JSON.parse(response.data);
-    // kategorien = kategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
-    kategorien = comboKategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
-    console.log(kategorien);
-    // });
-
-    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
-    //   alleLieder = JSON.parse(response.data);
-    //   alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
-    // const docRef = ;
-    const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-    const comboLieder = [];
-    for (const [key, value] of Object.entries(liederGes.data())) {
-      comboLieder.push({ name: value, value: key, ID: key });
-    }
-    const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-    const nichtcomboLieder = [];
-    for (const [key, value] of Object.entries(liederNichtGes.data())) {
-      nichtcomboLieder.push({ name: value, value: key, ID: key });
-    }
-
-    alleLieder = comboLieder.concat(nichtcomboLieder);
-    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
-
-    console.log('Alle Lieder: ', alleLieder);
-
-    popupSpinnerModal = false;
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('lied_id')) {
-      selectedLied = urlParams.get('lied_id');
-      console.log('Liedid: ', selectedLied);
-      handleSelectLied();
-    }
-    // });
   });
 
   const handleSelectLied = async () => {

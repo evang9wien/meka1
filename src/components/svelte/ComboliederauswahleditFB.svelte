@@ -130,76 +130,78 @@
     console.log('FireBase');
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         popupFireBaseLogin = true;
+        return;
       }
-    });
-    storage = getStorage(app);
 
-    console.log('onMount');
+      storage = getStorage(app);
 
-    userAuth = true;
+      console.log('onMount');
 
-    popupSpinnerModal = true;
-    dbFireStore = getFirestore(app);
-    // const docRef = ;
-    const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-    comboLieder = [];
-    for (const [key, value] of Object.entries(liederGes.data())) {
-      comboLieder.push({ name: value, value: key, ID: key });
-    }
-    comboLieder = comboLieder.sort((a, b) => a.name.localeCompare(b.name));
-    // console.log(comboLieder);
+      userAuth = true;
 
-    const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-    const nichtcomboLieder = [];
-    for (const [key, value] of Object.entries(liederNichtGes.data())) {
-      nichtcomboLieder.push({ name: value, value: key, ID: key });
-    }
-
-    alleLieder = comboLieder.concat(nichtcomboLieder);
-    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
-    // console.log(alleLieder);
-
-    liederReihenfolgeDBTemplate = comboReihenfolge;
-    console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
-    dbRealtime = getDatabase(app);
-    const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-    const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
-    // console.log('Temine: ', dbRef);
-
-    onValue(dbRefNow, async (snapshot) => {
-      const termin = Object.values(snapshot.val())[0];
-      console.log('Termin: ', termin);
-      liederDBAuswahl = termin.LiedAuswahl;
-      selectedTermin = termin.Termin;
-      verantwortlich = termin.Verantwortlich;
-      console.log('LiederDBAuswahl: ', liederDBAuswahl);
-      handleLiederDBAuswahl();
-    });
-
-    const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
-    const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
-    // console.log('Temine: ', dbRef);
-
-    onValue(dbRef, async (snapshot) => {
-      if (snapshot) {
-        termine = Object.values(snapshot.val()).map((t) => ({
-          ...t,
-          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
-          value: t.Termin,
-        }));
-        console.log('Termine: ', termine);
+      popupSpinnerModal = true;
+      dbFireStore = getFirestore(app);
+      // const docRef = ;
+      const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+      comboLieder = [];
+      for (const [key, value] of Object.entries(liederGes.data())) {
+        comboLieder.push({ name: value, value: key, ID: key });
       }
-    });
+      comboLieder = comboLieder.sort((a, b) => a.name.localeCompare(b.name));
+      // console.log(comboLieder);
 
-    popupSpinnerModal = false;
+      const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
+      const nichtcomboLieder = [];
+      for (const [key, value] of Object.entries(liederNichtGes.data())) {
+        nichtcomboLieder.push({ name: value, value: key, ID: key });
+      }
+
+      alleLieder = comboLieder.concat(nichtcomboLieder);
+      alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
+      // console.log(alleLieder);
+
+      liederReihenfolgeDBTemplate = comboReihenfolge;
+      console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
+      dbRealtime = getDatabase(app);
+      const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
+      // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+      const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
+      // console.log('Temine: ', dbRef);
+
+      onValue(dbRefNow, async (snapshot) => {
+        const termin = Object.values(snapshot.val())[0];
+        console.log('Termin: ', termin);
+        liederDBAuswahl = termin.LiedAuswahl;
+        selectedTermin = termin.Termin;
+        verantwortlich = termin.Verantwortlich;
+        console.log('LiederDBAuswahl: ', liederDBAuswahl);
+        handleLiederDBAuswahl();
+      });
+
+      const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
+      const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
+      // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+      const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+      // console.log('Temine: ', dbRef);
+
+      onValue(dbRef, async (snapshot) => {
+        if (snapshot) {
+          termine = Object.values(snapshot.val()).map((t) => ({
+            ...t,
+            name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+            value: t.Termin,
+          }));
+          console.log('Termine: ', termine);
+        }
+      });
+
+      popupSpinnerModal = false;
+    });
   });
 
   const handleSelectDate = () => {

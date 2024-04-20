@@ -1,12 +1,13 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { GradientButton } from 'flowbite-svelte';
+  import { Button, GradientButton } from 'flowbite-svelte';
   import { Label, Input } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import { Alert } from 'flowbite-svelte';
   import { InfoCircleSolid } from 'flowbite-svelte-icons';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
+  import { I } from 'dist/astro/Card.28e69644';
 
   export let auth;
   export let loginReload = true;
@@ -16,6 +17,24 @@
 
   let loginSucess = false;
   let loginError = false;
+
+  let passwordResetMsg = '';
+  const resetPassword = () => {
+    if (!name) {
+      passwordResetMsg = 'Bitte eine Email Adresse angeben.';
+      return;
+    }
+    sendPasswordResetEmail(auth, name)
+      .then(() => {
+        passwordResetMsg = `Es wurde erfolgreich eine Email an ${name} verschickt.`;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        passwordResetMsg = `Beim Versenden der Email ist ein Fehler aufgetreten: ${errorMessage} (${errorCode})`;
+        // ..
+      });
+  };
 
   const login = () => {
     console.log('Login');
@@ -49,7 +68,7 @@
         </Alert>
       {/if}
       <div class="mb-6">
-        <Label for="default-input-n" class="block mb-2">Name</Label>
+        <Label for="default-input-n" class="block mb-2">E-Mail</Label>
         <Input bind:value={name} id="default-input-n" placeholder="Name" />
       </div>
       <div class="mb-6">
@@ -57,12 +76,14 @@
         <Input bind:value={password} id="default-input-p" type="password" placeholder="Password" />
       </div>
       <GradientButton class="mb-6" color="cyanToBlue" on:click={login}>Login</GradientButton>
-      <!-- <div>
-        <a
-          class="text-muted underline dark:text-slate-400 font-medium"
-          href="https://www.evang9.wien/root/wp-login.php?action=lostpassword">Passwort vergessen?</a
+      <div>
+        <Button class="text-muted underline dark:text-slate-400 font-medium" on:click={resetPassword}
+          >Passwort vergessen?</Button
         >
-      </div> -->
+      </div>
+      <div>
+        {passwordResetMsg}
+      </div>
     {:else}
       <Alert color="green">
         <InfoCircleSolid slot="icon" class="w-4 h-4" />

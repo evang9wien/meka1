@@ -110,59 +110,61 @@
     console.log('FireBase');
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         popupFireBaseLogin = true;
+        return;
       }
-    });
-    storage = getStorage(app);
 
-    console.log('onMount');
-    popupSpinnerModal = true;
-    userAuth = true;
-    // userAuth = await isUserAuth();
-    // if (!userAuth) {
-    //   popupUserAuthModal = true;
-    //   return;
-    // }
+      storage = getStorage(app);
 
-    /// load firebase liederauswahl
-    console.log('Read Termine');
-    dbFireStore = getFirestore(app);
+      console.log('onMount');
+      popupSpinnerModal = true;
+      userAuth = true;
+      // userAuth = await isUserAuth();
+      // if (!userAuth) {
+      //   popupUserAuthModal = true;
+      //   return;
+      // }
 
-    const dbRealtime = getDatabase(app);
-    const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
+      /// load firebase liederauswahl
+      console.log('Read Termine');
+      dbFireStore = getFirestore(app);
 
-    const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
-    // console.log('Temine: ', dbRef);
+      const dbRealtime = getDatabase(app);
+      const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
+      // console.log('Now: ', now.format('YYYY-MM-DD'));
 
-    onValue(dbRefNow, async (snapshot) => {
-      const termin = Object.values(snapshot.val())[0];
-      loadLieder(termin);
-      // liederauswahl = liederAus;
-      // console.log('Lieder: ', liederauswahl);
-      // console.log('liederL: ', liederauswahl.length);
-      // liederauswahl.forEach((e) => console.log('E: ', e));
-      // console.log('Lieder: ', liederAus);
-    });
+      const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
+      // console.log('Temine: ', dbRef);
 
-    const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
-    const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
+      onValue(dbRefNow, async (snapshot) => {
+        const termin = Object.values(snapshot.val())[0];
+        loadLieder(termin);
+        // liederauswahl = liederAus;
+        // console.log('Lieder: ', liederauswahl);
+        // console.log('liederL: ', liederauswahl.length);
+        // liederauswahl.forEach((e) => console.log('E: ', e));
+        // console.log('Lieder: ', liederAus);
+      });
 
-    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
-    // console.log('Temine: ', dbRef);
+      const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
+      const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
+      // console.log('Now: ', now.format('YYYY-MM-DD'));
 
-    onValue(dbRef, async (snapshot) => {
-      if (snapshot) {
-        termine = Object.values(snapshot.val()).map((t) => ({
-          ...t,
-          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
-          value: t.Termin,
-        }));
-        console.log('Termine: ', termine);
-      }
+      const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+      // console.log('Temine: ', dbRef);
+
+      onValue(dbRef, async (snapshot) => {
+        if (snapshot) {
+          termine = Object.values(snapshot.val()).map((t) => ({
+            ...t,
+            name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+            value: t.Termin,
+          }));
+          console.log('Termine: ', termine);
+        }
+      });
     });
     // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
     //   liederauswahl = JSON.parse(response.data);
