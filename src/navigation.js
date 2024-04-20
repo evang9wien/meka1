@@ -184,6 +184,15 @@ export const footerData = {
           text: 'Beta: Lieder anlegen und bearbeiten',
           href: getPermalink('/combo/comboliedereditFBpage'),
         },
+
+        {
+          text: 'Beta: Liederliste gesamt',
+          href: getPermalink('/combo/comboliederlisteFBpage'),
+        },
+        {
+          text: 'Beta: Liederchronik',
+          href: getPermalink('/combo/comboliederchronikFBpage'),
+        },
         {
           text: 'Beta: Logout',
           href: getPermalink('/combo/logoutFBpage'),

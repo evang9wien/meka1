@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import ComboLiederChronik from '~/components/svelte/ComboLiederChronikFB.svelte';
+
+const metadata = {
+  title: 'Liederauswahl',
+};
+---
+
+<Layout metadata={metadata}>
+  <ComboLiederChronik client:load />
+</Layout>
