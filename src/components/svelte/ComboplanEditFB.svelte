@@ -165,6 +165,8 @@
 
     // reset selected member
     selectedmember = '';
+
+    // send email
   };
 </script>
 

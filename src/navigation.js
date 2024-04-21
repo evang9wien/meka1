@@ -138,63 +138,35 @@ export const footerData = {
       links: [
         {
           text: 'Comboplan',
-          href: getPermalink('/combo/comboplanpage'),
-        },
-        {
-          text: 'Comboplan eintragen',
-          href: getPermalink('/combo/comboplaneditpage'),
-        },
-        {
-          text: 'Lieder für den Gottesdienst',
-          href: getPermalink('/combo/comboliederauswahlpage'),
-        },
-        {
-          text: 'Lieder für den Gottesdienst bearbeiten',
-          href: getPermalink('/combo/comboliederauswahleditpage'),
-        },
-        {
-          text: 'Lieder anlegen und bearbeiten',
-          href: getPermalink('/combo/comboliedereditpage'),
-        },
-        {
-          text: 'Liederliste gesamt',
-          href: getPermalink('/combo/comboliederlistepage'),
-        },
-        {
-          text: 'Liederchronik',
-          href: getPermalink('/combo/comboliederchronikpage'),
-        },
-        {
-          text: 'Beta: Comboplan',
           href: getPermalink('/combo/comboplanFBpage'),
         },
         {
-          text: 'Beta: Comboplan eintragen',
+          text: 'Comboplan eintragen',
           href: getPermalink('/combo/comboplaneditFBpage'),
         },
         {
-          text: 'Beta: Lieder für den Gottesdienst',
+          text: 'Lieder für den Gottesdienst',
           href: getPermalink('/combo/comboliederauswahlFBpage'),
         },
         {
-          text: 'Beta: Lieder für den Gottesdienst bearbeiten',
+          text: 'Lieder für den Gottesdienst bearbeiten',
           href: getPermalink('/combo/comboliederauswahleditFBpage'),
         },
         {
-          text: 'Beta: Lieder anlegen und bearbeiten',
+          text: 'Lieder anlegen und bearbeiten',
           href: getPermalink('/combo/comboliedereditFBpage'),
         },
 
         {
-          text: 'Beta: Liederliste gesamt',
+          text: 'Liederliste gesamt',
           href: getPermalink('/combo/comboliederlisteFBpage'),
         },
         {
-          text: 'Beta: Liederchronik',
+          text: 'Liederchronik',
           href: getPermalink('/combo/comboliederchronikFBpage'),
         },
         {
-          text: 'Beta: Logout',
+          text: 'Logout',
           href: getPermalink('/combo/logoutFBpage'),
         },
       ],
