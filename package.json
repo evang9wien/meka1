@@ -18,6 +18,7 @@
     "@astrojs/svelte": "^4.0.4",
     "@astrolib/analytics": "^0.4.2",
     "@astrolib/seo": "^1.0.0-beta.4",
+    "@emailjs/browser": "^4.3.3",
     "@fontsource-variable/inter": "^5.0.8",
     "astro": "^3.6.4",
     "astro-icon": "^1.0.0-next.2",

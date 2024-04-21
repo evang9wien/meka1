@@ -39,6 +39,8 @@
     endAt,
   } from 'firebase/database';
 
+  import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
+
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
   let termine;
@@ -141,6 +143,27 @@
       .trim();
   };
 
+  const sendEmail = async (message, subject) => {
+    try {
+      await emailjs.send(
+        'service_rzebsaf',
+        'template_d17yqvi',
+        { subject: subject, message: message },
+        {
+          publicKey: 'jZ6lvMXTvg1PtIufC',
+        }
+      );
+      console.log('SUCCESS!');
+    } catch (err) {
+      if (err instanceof EmailJSResponseStatus) {
+        console.log('EMAILJS FAILED...', err);
+        return;
+      }
+
+      console.log('ERROR', err);
+    }
+  };
+
   let handleSave = (event) => {
     // mySnackbar.open();
     let newEntries = [];
@@ -155,18 +178,31 @@
       });
     });
     let name = selectedmember;
-    console.log(name, JSON.stringify(newEntries));
+
+    const longName = members.filter((m) => m.value == name)[0].name;
+
+    let message = '';
 
     newEntries.forEach((entry) => {
       // const obj = {};
       // obj[entry.key] = entry.value;
       set(dbref(dbRealtime, 'combo/termine/' + entry.Termin + '/' + entry.key), entry.value);
+      const einaus = entry.value.includes(name) ? 'EIN' : 'AUS';
+      message += `${longName} hat sich am ${entry.Termin} in der Spalte ${entry.key} ${einaus}getragen !`;
+      message += '\n';
     });
 
     // reset selected member
     selectedmember = '';
 
     // send email
+    console.log('EMail: ', name, newEntries);
+
+    const subject = `${longName} hat die Comboliste aktualisiert!`;
+
+    console.log(message);
+    console.log(subject);
+    sendEmail(message, subject);
   };
 </script>
 
