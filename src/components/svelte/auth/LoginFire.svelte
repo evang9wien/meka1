@@ -63,12 +63,12 @@
         <Alert color="red">
           <InfoCircleSolid slot="icon" class="w-4 h-4" />
           <div class="font-medium">Login Fehler!</div>
-          Benutzername oder Passwort ist fehlerhaft.
+          E-Mail oder Passwort ist fehlerhaft.
         </Alert>
       {/if}
       <div class="mb-6">
         <Label for="default-input-n" class="block mb-2">E-Mail</Label>
-        <Input bind:value={name} id="default-input-n" placeholder="Name" />
+        <Input bind:value={name} id="default-input-n" placeholder="E-Mail" />
       </div>
       <div class="mb-6">
         <Label for="default-input-p" class="block mb-2">Password</Label>
