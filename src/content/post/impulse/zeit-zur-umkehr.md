@@ -1,9 +1,10 @@
 ---
 title: Zeit zur Umkehr
-excerpt: Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksal
+excerpt: 'Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksal
   der Juden und ungezählter anderer Verfolgter unempfindlich zeigten. […] Die
   Kirchen haben gegen sichtbares Unrecht nicht protestiert, sie haben
-  geschwiegen und weggeschaut.
+  geschwiegen und weggeschaut.<br/>
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/01/Gemeindezeitung202401.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls
@@ -11,6 +12,7 @@ image: https://www.evang9.wien/root/wp-content/uploads/2023/12/israeli-flag.jpg
 publishDate: 2023-12-14T17:49:19.237Z
 author: stfj
 ---
+
 „Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksal der Juden und ungezählter anderer Verfolgter unempfindlich zeigten. \[…] Die Kirchen haben gegen sichtbares Unrecht nicht protestiert, sie haben geschwiegen und weggeschaut, sie sind ‚dem Rad nicht in die Speichen gefallen‘ (Bonhoeffer).“
 
 Dieses Zitat ist einer Erklärung der Generalsynode (Kirchenparlament) aus dem Jahr 1998 entnommen, die den Titel „Zeit zur Umkehr – Die Evangelischen Kirchen in Österreich und die Juden“ trägt. Wenn die christlichen Kirchen in Österreich in wenigen Tagen, am 17. Jänner 2024 den Tag des Judentums begehen, denken wir an diese Erklärung unserer Kirche, die im vergangenen November 25 Jahre alt wurde.
@@ -24,7 +26,5 @@ Wenngleich die Erklärung „Zeit zur Umkehr“ vor 25 Jahren einen Meilenstein 
 Wie sehr es das Engagement gegen Judenfeindlichkeit und Antisemitismus braucht, zeigt sich seit der Eskalation des Nahostkonflikts in diesem Herbst auch in Österreich. Die dramatische Zunahme an antisemitischen Vorfällen und die Angst von Jüdinnen und Juden vor Übergriffen lässt uns nicht unberührt.
 
 Ich bin dankbar, dass unsere Kirche einmal mehr zum glaubwürdigen und unermüdlichen Einsatz gegen Antisemitismus aufruft und sich solidarisch mit allen Jüdinnen und Juden sowie mit ihrem Gemeinden erklärt.
-
-
 
 Ihr Pfarrer Stefan Fleischner-Janits

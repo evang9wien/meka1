@@ -1,9 +1,10 @@
 ---
 title: Gemeinsam Wachsen
-excerpt: "Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus
+excerpt: '"Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus
   wirklich gelebt? Als Pfarrer einer kleinen Großstadtgemeinde mache ich oft
   diese Erfahrung: Menschen haben großes Interesse an spirituellen Fragen,
-  wissen aber nicht genau, wo sie darauf Antworten finden sollen."
+  wissen aber nicht genau, wo sie darauf Antworten finden sollen.<br/>
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/02/Gemeindezeitung202402.pdf">PDF</a>'
 category: impulse
 tags:
   - impuls
@@ -11,7 +12,8 @@ image: https://www.evang9.wien/root/wp-content/uploads/2024/02/snowdrop-280950_s
 publishDate: 2024-02-07T20:29:47.616Z
 author: stfj
 ---
-Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus wirklich gelebt? 
+
+Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus wirklich gelebt?
 
 Als Pfarrer einer kleinen Großstadtgemeinde mache ich oft diese Erfahrung: Menschen haben großes Interesse an spirituellen Fragen, wissen aber nicht genau, wo sie darauf Antworten finden sollen. Manche gehen in die Buchhandlung, andere buchen teure Seminare oder googlen sich einmal durchs ganze Internet auf der Suche nach den richtigen Antworten auf die großen Fragen des Lebens.
 

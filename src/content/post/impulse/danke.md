@@ -1,6 +1,7 @@
 ---
 title: Danke!
-excerpt: 'Wenn der Esstisch nach dem Frühstück der Kinder wie ein Schlachtfeld aussieht. Wenn ein Arbeitstag nicht enden mag. Wenn im Supermarkt mal wieder die Melanzani ausverkauft sind, obwohl man ein ...'
+excerpt: 'Wenn der Esstisch nach dem Frühstück der Kinder wie ein Schlachtfeld aussieht. Wenn ein Arbeitstag nicht enden mag. Wenn im Supermarkt mal wieder die Melanzani ausverkauft sind, obwohl man ein ...<br/>
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/09/Gemeindezeitung202309.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls

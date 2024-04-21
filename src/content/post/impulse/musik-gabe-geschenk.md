@@ -1,10 +1,11 @@
 ---
-title: "Musik: Gabe & Geschenk"
-excerpt: Musik ist in der Lage, unsere Laune aufzuhellen. Sie schenkt uns Trost
+title: 'Musik: Gabe & Geschenk'
+excerpt: 'Musik ist in der Lage, unsere Laune aufzuhellen. Sie schenkt uns Trost
   in schweren Stunden. Manchmal kann es schön sein, einem traurigen Moment mit
   Musik eine gewisse Tiefe zu geben und ein Lied, das wir zuletzt vor vielen
   Jahren gehört haben, kann uns hier und heute in die Stimmung von damals
-  versetzen.
+  versetzen.<br/>
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/03/Gemeindezeitung202403.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls
@@ -12,16 +13,17 @@ image: https://www.evang9.wien/root/wp-content/uploads/2024/03/meka-konzert24_in
 publishDate: 2024-03-02T11:56:18.065Z
 author: stfj
 ---
-*„Du holde Kunst, in wieviel grauen Stunden<br/>
+
+_„Du holde Kunst, in wieviel grauen Stunden<br/>
 Wo mich des Lebens wilder Kreis umstrickt<br/>
 Hast du mein Herz zu warmer Lieb entzunden<br/>
-Hast mich in eine beßre Welt entrückt“*<br/><br/>
+Hast mich in eine beßre Welt entrückt“_<br/><br/>
 So dichtete einst Franz Schubert in seiner berühmten
 Ode „An die Musik“.<br/><br/>
-*„Oft hat ein Seufzer, deiner Harf' entflossen<br/>
+_„Oft hat ein Seufzer, deiner Harf' entflossen<br/>
 Ein süßer, heiliger Akkord von dir<br/>
 Den Himmel beßrer Zeiten mir erschlossen<br/>
-Du holde Kunst, ich danke dir dafür!“*<br/><br/>
+Du holde Kunst, ich danke dir dafür!“_<br/><br/>
 Die Erfahrung, die hier besungen wird, haben schon
 viele gemacht: Musik ist in der Lage, unsere Laune
 aufzuhellen. Sie schenkt uns Trost in schweren Stunden.
