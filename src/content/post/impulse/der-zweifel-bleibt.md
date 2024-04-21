@@ -1,17 +1,19 @@
 ---
 title: Der Zweifel bleibt
-excerpt: "Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/> Ja, Sie
+excerpt: 'Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/> Ja, Sie
   haben richtig gelesen: der Zweifel gehört nicht nur zum Glauben dazu, er hilft
   und bereichert ihn sogar. Denn der Zweifel ist weder gut noch schlecht.
   Vielmehr ist er eine stetige Einladung, sich immer wieder neu mit seinem
-  Glauben zu beschäftigen."
+  Glauben zu beschäftigen.<br/>
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/04/Gemeindezeitung202404.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls
 image: https://www.evang9.wien/root/wp-content/uploads/2024/04/egg-2655031_200.jpg
 publishDate: 2024-04-21T16:31:00.000Z
-author: STFJ
+author: stfj
 ---
+
 Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/>
 Ja, Sie haben richtig gelesen: der Zweifel gehört nicht nur zum Glauben dazu, er hilft und bereichert ihn sogar. Denn der Zweifel ist weder gut noch schlecht. Vielmehr ist er eine stetige Einladung, sich immer wieder neu mit seinem Glauben zu beschäftigen.
 
@@ -21,7 +23,7 @@ Die Herausforderung dabei ist, nicht den Glauben als solches abzulegen, sondern 
 
 Auch die beiden Emmaus-Jünger, deren Geschichte im Lukas-Evangelium steht (Lukas 24,13-35), hatten nach dem Tod Jesu große Zweifel. Sein Tod brachte sie beinahe zum Verzweifeln. Auf ihrem Nachhauseweg begegnet ihnen ein Unbekannter. Sie erzählen ihm vom Tod des geliebten Jesus. Der Mann begleitet sie, spendet ihnen Trost, erklärt ihnen Dinge aus der Heiligen Schrift auf neue Art und Weise. Erst beim gemeinsamen Abendessen gibt er sich zu erkennen: es war Jesus selbst, der auferstandene Herr.
 
-Jesus hat sie beim Zweifeln begleitet, so konnten sie ihren alten, zu klein gewordenen 
+Jesus hat sie beim Zweifeln begleitet, so konnten sie ihren alten, zu klein gewordenen
 Glauben ablegen. Der neue Glaube trägt jetzt Wundmale. Verzweiflung und Hoffnungslosigkeit haben Spuren hinterlassen. Am Ende hat er ihnen einen neuen, kräftigeren Glauben geschenkt.
 
 Mögen auch wir diese Erfahrung in unserem Glaubensleben machen.

@@ -1,6 +1,7 @@
 ---
 title: 'Trauer: Kein Problem'
-excerpt: '„Jetzt trägst du noch immer schwarz?“, wurde eine Bekannte einst bei einer Familienfeier gefragt. Damals lag der Verlust ihres Ehemanns schon mehr als ein halbes Jahr zurück. Seit dem Tod ...'
+excerpt: '„Jetzt trägst du noch immer schwarz?“, wurde eine Bekannte einst bei einer Familienfeier gefragt. Damals lag der Verlust ihres Ehemanns schon mehr als ein halbes Jahr zurück. Seit dem Tod ...<br/>
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/10/Gemeindezeitung202310.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls

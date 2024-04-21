@@ -1,6 +1,7 @@
 ---
 title: Bestimmen Sie mit
-excerpt: '"First autumn day makes me a little sad", singt die österreichische Gingerpop-Band “Daisy O’Hara” in ihrem gleichnamigen ...'
+excerpt: '"First autumn day makes me a little sad", singt die österreichische Gingerpop-Band “Daisy O’Hara” in ihrem gleichnamigen ...<br/>
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/09/Gemeindezeitung202308.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls

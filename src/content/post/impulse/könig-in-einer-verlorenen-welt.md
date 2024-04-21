@@ -2,7 +2,8 @@
 title: König in einer verlorenen Welt
 excerpt: 'Er hat es tatsächlich geschafft: der Rechtspopulist und selbsternannte
   Anarchokapitalist Javier Milei gewinnt die Präsidentenwahl in Argentinien.
-  Bekannt geworden ist das neue ...'
+  Bekannt geworden ist das neue ...<br/>
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/11/Gemeindezeitung202311.pdf">PDF</a>'
 category: impuls
 tags:
   - impuls
