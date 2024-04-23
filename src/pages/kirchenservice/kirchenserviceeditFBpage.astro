@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import KirchenserviceEdit from '~/components/svelte/KirchenserviceEditFB.svelte';
+
+const metadata = {
+  title: 'Liederauswahl',
+};
+---
+
+<Layout metadata={metadata}>
+  <KirchenserviceEdit client:load />
+</Layout>

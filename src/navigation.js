@@ -183,6 +183,10 @@ export const footerData = {
           text: 'Kirchenservice',
           href: 'https://www.evang9.wien/root/kirchenservice/',
         },
+        {
+          text: 'Beta: Kirchenservice',
+          href: getPermalink('/kirchenservice/kirchenserviceeditFBpage'),
+        },
       ],
     },
     {
