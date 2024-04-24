@@ -287,13 +287,11 @@
                   </TableBodyCell>
                   <TableBodyCell>
                     {#if lied.MP3 != '0'}
-                      <div class="flex flex-row">
-                        {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
-                          <p>loading</p>
-                        {:then url}
-                          <audio controls src={url}></audio>
-                        {/await}
-                      </div>
+                      {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
+                        <p>loading</p>
+                      {:then url}
+                        <audio class="audio-border" src={url} controls="controls" />
+                      {/await}
                     {/if}
                   </TableBodyCell>
                 </TableBodyRow>
@@ -311,3 +309,14 @@
 <!--<LoginWarn {popupUserAuthModal} />-->
 <LoginFirebase {popupFireBaseLogin} {auth} />
 <Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
+
+<style>
+  :global(html audio::-webkit-media-controls-panel) {
+    background-color: #ffffff;
+  }
+
+  :global(html.dark audio::-webkit-media-controls-panel) {
+    background-color: rgb(94, 98, 104);
+    border-radius: 2px;
+  }
+</style>

@@ -19,6 +19,20 @@
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
   import moment from 'moment/min/moment-with-locales';
 
+  import { firebaseConfig } from './../firebase/firebase.js';
+  import { initializeApp } from 'firebase/app';
+  import {
+    getDatabase,
+    ref as dbref,
+    onValue,
+    query,
+    orderByKey,
+    limitToLast,
+    limitToFirst,
+    startAt,
+    endAt,
+  } from 'firebase/database';
+
   let files;
   let termine;
   let selectedTermin;
@@ -27,10 +41,31 @@
   let predigtEdit = false;
 
   onMount(() => {
-    axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=0').then((response) => {
-      termine = JSON.parse(response.data);
-      termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
+    console.log('FireBase');
+    const app = initializeApp(firebaseConfig);
+    const dbRealtime = getDatabase(app);
+    const fromDate = moment().subtract(50, 'days').format('YYYY-MM-DD');
+    const toDate = moment().format('YYYY-MM-DD');
+
+    // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+    onValue(dbRef, async (snapshot) => {
+      if (snapshot) {
+        termine = Object.values(snapshot.val()).map((t) => ({
+          ...t,
+          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+          value: t.Termin,
+        }));
+        console.log('Termine: ', termine);
+        // popupSpinnerModal = false;
+      }
     });
+
+    // axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=0').then((response) => {
+    //   termine = JSON.parse(response.data);
+    //   termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
+    // });
 
     axios.get('https://www.evang9.wien/root/wp-json/combo/v2/ispredigtedit', getAuthHeader()).then((response) => {
       predigtEdit = true;
@@ -166,10 +201,9 @@
                       </div>
                       <audio
                         id="player{predigt}"
-                        class="bg-white dark:bg-gray-800"
+                        class="audio-border"
                         src="https://www.evang9.wien/predigten/{predigt}"
                         controls="controls"
-                        preload="none"
                       />
                     </TableBodyCell>
                   </TableBodyRow>
@@ -192,10 +226,12 @@
 </div>
 
 <style>
-  audio::-webkit-media-controls-panel {
+  :global(html audio::-webkit-media-controls-panel) {
     background-color: #ffffff;
   }
-  /*audio {
-    padding-top: 5px;
-  } */
+
+  :global(html.dark audio::-webkit-media-controls-panel) {
+    background-color: rgb(94, 98, 104);
+    border-radius: 2px;
+  }
 </style>
