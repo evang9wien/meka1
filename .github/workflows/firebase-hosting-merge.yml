@@ -25,3 +25,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}
           channelId: live
           projectId: evang9-combo-4cb8e
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks  
