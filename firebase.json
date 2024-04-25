@@ -8,7 +8,7 @@
     "redirects": [
       {
         "source": "/pages/**",
-        "destination": ".",
+        "destination": "/",
         "type": 301
       }
     ]
