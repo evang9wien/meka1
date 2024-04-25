@@ -7,7 +7,7 @@
     },
     "redirects": [
       {
-        "source": "/pages",
+        "source": "/pages/**",
         "destination": ".",
         "type": 301
       }
