@@ -165,10 +165,6 @@ export const footerData = {
           text: 'Liederchronik',
           href: getPermalink('/combo/comboliederchronikFBpage'),
         },
-        {
-          text: 'Logout',
-          href: getPermalink('/combo/logoutFBpage'),
-        },
       ],
     },
     {
@@ -183,6 +179,14 @@ export const footerData = {
     {
       title: 'Admin',
       links: [
+        {
+          text: 'Login',
+          href: getPermalink('/combo/loginpage'),
+        },
+        {
+          text: 'Logout',
+          href: getPermalink('/combo/logoutFBpage'),
+        },
         {
           text: 'DecapCMS',
           href: 'https://evang9-wien.netlify.app/decapcms/index.html',

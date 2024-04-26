@@ -1,14 +1,13 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Login from '~/components/svelte/auth/Login.svelte';
+import LoginFB from '~/components/svelte/auth/LoginFire.svelte';
 
 const metadata = {
   title: 'Login',
 };
-
 const loginReload = false;
 ---
 
 <Layout metadata={metadata}>
-  <Login client:only="svelte" {loginReload} />
+  <LoginFB client:load {loginReload} />
 </Layout>

@@ -6,9 +6,12 @@
   import { Card } from 'flowbite-svelte';
   import { Alert } from 'flowbite-svelte';
   import { InfoCircleSolid } from 'flowbite-svelte-icons';
+  import { firebaseConfig } from './../firebase/firebase.js';
+
+  import { initializeApp } from 'firebase/app';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 
-  export let auth;
+  export let auth = null;
   export let loginReload = true;
 
   let name = '';
@@ -37,6 +40,10 @@
 
   const login = () => {
     console.log('Login');
+    if (auth == null) {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+    }
     signInWithEmailAndPassword(auth, name, password)
       .then((userCredential) => {
         // Signed in
