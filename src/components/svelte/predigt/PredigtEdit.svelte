@@ -35,7 +35,6 @@
     startAt,
     endAt,
   } from 'firebase/database';
-  import { T } from 'dist/astro/index.9d030681.js';
 
   let files;
   let termine;
