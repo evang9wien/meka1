@@ -52,6 +52,9 @@
   let auth;
   let popupFireBaseLogin = false;
 
+  let comboAdminRole = false;
+  let comboAdminModus = false;
+
   const loadCombo = () => {
     popupSpinnerModal = true;
     console.log('FireBase');
@@ -103,7 +106,17 @@
           name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
           value: t.ShortName,
         }));
+        // rolle prüfen
         console.log('Mitarbeiter: ', members);
+        console.log('User: ', user.providerData[0].email);
+        let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
+        if (loginUser.length > 0) {
+          console.log('LoginUser: ', loginUser[0]);
+          if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
+            console.log('Role: ', loginUser[0].role);
+            comboAdminRole = true;
+          }
+        }
       }
     });
   });
@@ -130,11 +143,22 @@
   };
 
   const checkEntries = (newEntry, oldEntry) => {
+    console.log('newEntry: ', newEntry);
+    console.log('oldEntry: ', oldEntry);
     if (!oldEntry) {
       return newEntry;
     }
     if (!oldEntry.includes(newEntry)) {
       return oldEntry + ' ' + newEntry;
+    }
+    // Combo Admin Modus: Select newEntry
+    if (comboAdminModus) {
+      // selection löschen
+      if (oldEntry.includes('*' + newEntry + '*')) {
+        return oldEntry.replace('*' + newEntry + '*', newEntry).trim();
+      }
+      // selection setzen
+      return oldEntry.replace(newEntry, '*' + newEntry + '*').trim();
     }
     // remove newEntry
     return oldEntry
@@ -165,6 +189,7 @@
   };
 
   let handleSave = (event) => {
+    console.log('ComboAdminModus: ', comboAdminModus);
     // mySnackbar.open();
     let newEntries = [];
     Object.entries(combo).forEach(([key, values]) => {
@@ -202,7 +227,9 @@
 
     console.log(message);
     console.log(subject);
-    sendEmail(message, subject);
+    if (!comboAdminModus) {
+      sendEmail(message, subject);
+    }
   };
 </script>
 
@@ -222,6 +249,15 @@
           Termin nochmal auswählen <br />und bestätigen.</Tooltip
         >
       </div>
+      {#if comboAdminRole}
+        <div class="flex flex-row">
+          Comboplan Admin-Modus:&nbsp;
+          <Checkbox bind:checked={comboAdminModus} />
+          <InfoCircleOutline size="xl"></InfoCircleOutline><Tooltip placement="left"
+            >Im Combo Admin-Modus wird bei Auswahl eines schon <br /> vorhandenen Namen ein Auswahl Stern gesetzt.</Tooltip
+          >
+        </div>
+      {/if}
 
       <Table striped={true}>
         <TableHead>
