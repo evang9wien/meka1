@@ -22,7 +22,7 @@
   import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { firebaseConfig } from './../firebase/firebase.js';
   import { initializeApp } from 'firebase/app';
-
+  import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import {
     getDatabase,
@@ -83,7 +83,24 @@
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log('user: ', user);
-        if (user.email.includes('eidmanna') || user.email.includes('f.osimk')) predigtEdit = true;
+        const dbFireStore = getFirestore(app);
+        const maRef = doc(dbFireStore, 'mitarbeiter', 'predigt');
+        const docSnap = await getDoc(maRef);
+        if (docSnap.exists()) {
+          let members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
+          // rolle prüfen
+          console.log('Mitarbeiter: ', members);
+          console.log('User: ', user.providerData[0].email);
+          let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
+          if (loginUser.length > 0) {
+            console.log('LoginUser: ', loginUser[0]);
+            if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'predigt').length > 0) {
+              console.log('Role: ', loginUser[0].role);
+              // comboAdminRole = true;
+              predigtEdit = true;
+            }
+          }
+        }
       }
     });
 
