@@ -235,10 +235,12 @@
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>
           <TableHeadCell>Koordination</TableHeadCell>
+          <!--
           <TableHeadCell>Begr.</TableHeadCell>
           <TableHeadCell>Abendm.</TableHeadCell>
           <TableHeadCell>Bar</TableHeadCell>
           <TableHeadCell>Kuchen</TableHeadCell>
+          -->
           <TableHeadCell>Bemerkung</TableHeadCell>
         </TableHead>
 
@@ -261,6 +263,7 @@
                   {termin.KS_Koordination}
                 </div>
               </TableBodyCell>
+              <!--
               <TableBodyCell>
                 <div class="flex flex-row">
                   <Checkbox
@@ -301,6 +304,7 @@
                   {termin.KS_Kuchen}
                 </div>
               </TableBodyCell>
+            -->
               <TableBodyCell>
                 <div class="flex flex-col">
                   <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
