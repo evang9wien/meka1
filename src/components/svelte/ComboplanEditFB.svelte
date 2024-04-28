@@ -253,8 +253,8 @@
         <div class="flex flex-row">
           Comboplan Admin-Modus:&nbsp;
           <Checkbox bind:checked={comboAdminModus} />
-          <InfoCircleOutline size="xl"></InfoCircleOutline><Tooltip placement="left"
-            >Im Combo Admin-Modus wird bei Auswahl eines schon <br /> vorhandenen Namen ein Auswahl Stern gesetzt.</Tooltip
+          <InfoCircleOutline size="xl"></InfoCircleOutline><Tooltip
+            >Im Combo Admin-Modus wird bei <br />Auswahl eines schon vorhandenen Namen <br />ein Auswahl-Stern gesetzt.</Tooltip
           >
         </div>
       {/if}
