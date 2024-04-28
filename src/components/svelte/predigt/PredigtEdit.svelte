@@ -55,7 +55,7 @@
 
     const dbRealtime = getDatabase(app);
     const fromDate = moment().subtract(50, 'days').format('YYYY-MM-DD');
-    const toDate = moment().format('YYYY-MM-DD');
+    const toDate = moment().add(2, 'days').format('YYYY-MM-DD');
 
     // console.log('Now: ', now.format('YYYY-MM-DD'));
 
