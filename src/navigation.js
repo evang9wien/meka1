@@ -199,6 +199,10 @@ export const footerData = {
           text: 'Firebase',
           href: 'https://console.firebase.google.com/',
         },
+        {
+          text: 'Cloudinary',
+          href: 'https://cloudinary.com/',
+        },
       ],
     },
   ],
