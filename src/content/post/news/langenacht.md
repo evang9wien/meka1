@@ -4,7 +4,7 @@ excerpt: Am 7.Juni um 19:00 laden im Rahmen der 'Langen Nacht der Kirchen' das V
 category: news
 tags:
   - news
-image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714573140/Homepage/News/Copy_of_Das_Leben_feiern_yeortz.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714575948/Homepage/News/Copy_of_Das_Leben_feiern_rp72wt.jpg
 publishDate: 2024-04-30T21:32:43.810Z
 author: Andreas
 ---
