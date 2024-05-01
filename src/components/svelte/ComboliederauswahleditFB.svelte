@@ -64,7 +64,7 @@
   // Entspricht der DB Tabelle lied_reihenfolge
   let liederReihenfolgeDBTemplate;
   // Entspricht der DB Tabelle lied_auswahl für das selektierte Datum
-  let liederDBAuswahl;
+  let liederDBAuswahl = [];
   // Entspricht den den akteuell selektierten Liedern inklusive der geladenen Liedauswahl
   let liedReihenfolgeSelected;
 
@@ -76,6 +76,8 @@
   let auth;
   let dbFireStore;
   let dbRealtime;
+
+  let dbRealtimeOnce = false;
 
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
@@ -166,21 +168,6 @@
       liederReihenfolgeDBTemplate = comboReihenfolge;
       console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
       dbRealtime = getDatabase(app);
-      const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
-      // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-      const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
-      // console.log('Temine: ', dbRef);
-
-      onValue(dbRefNow, async (snapshot) => {
-        const termin = Object.values(snapshot.val())[0];
-        console.log('Termin: ', termin);
-        liederDBAuswahl = termin.LiedAuswahl;
-        selectedTermin = termin.Termin;
-        verantwortlich = termin.Verantwortlich;
-        console.log('LiederDBAuswahl: ', liederDBAuswahl);
-        handleLiederDBAuswahl();
-      });
 
       const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
       const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
@@ -191,16 +178,37 @@
 
       onValue(dbRef, async (snapshot) => {
         if (snapshot) {
+          if (dbRealtimeOnce) return;
           termine = Object.values(snapshot.val()).map((t) => ({
             ...t,
             name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
             value: t.Termin,
           }));
           console.log('Termine: ', termine);
+
+          const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
+          // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+          const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
+          // console.log('Temine: ', dbRef);
+
+          onValue(dbRefNow, async (snapshot) => {
+            if (snapshot) {
+              if (dbRealtimeOnce) return;
+              const termin = Object.values(snapshot.val())[0];
+              console.log('Termin: ', termin);
+              if (termin.LiedAuswahl) liederDBAuswahl = termin.LiedAuswahl;
+              selectedTermin = termin.Termin;
+              verantwortlich = termin.Verantwortlich;
+              console.log('LiederDBAuswahl: ', liederDBAuswahl);
+              handleLiederDBAuswahl();
+              dbRealtimeOnce = true;
+            }
+          });
+
+          popupSpinnerModal = false;
         }
       });
-
-      popupSpinnerModal = false;
     });
   });
 
