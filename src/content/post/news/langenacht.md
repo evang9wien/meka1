@@ -21,15 +21,14 @@ einer Sinn-vollen Lebensführung zu tun hat, erfahren Sie bei uns im Vortrag von
 
 **Wo:** Messiaskapelle (1090 Wien, Seegasse 16 | U4 Rossauer Lände)
 
-<!--
-
 **Mag.a. Kathrin Hopfgartner**
 
-<img style="float: left; margin: 16px; padding: 16px;" src="https://www.franklzentrum.org/images/referenten/tbz/76.jpg">
+<!--
+<img style="float: left; margin: 16px; padding: 16px;" src="https://www.franklzentrum.org/images/referenten/tbz/76.jpg"> -->
+
 Sinn-Zentrierte Beraterin nach VIKTOR FRANKL ZENTRUM WIEN; Mitarbeiterin im VIKTOR FRANKL ZENTRUM WIEN. Ressortleitung: Englischsprachige Lectures & Museumsführungen; Museumsdienst; Repetitorien des Lehrgangs Logopädagogik nach VIKTOR FRANKL ZENTRUM WIEN; Dipl. Lebens- und Sozialberaterin sowie dipl. Wellness- und Pilatestrainerin. Quellberuf: Juristin.
 
 Mag.a. Kathrin Hopfgartner © Hans Krist
--->
 
 **Web:** www.evang9.wien
 www.franklzentrum.org
