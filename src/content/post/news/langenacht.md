@@ -1,6 +1,6 @@
 ---
 title: Das Leben feiern!
-excerpt: Am 7.Juni um 19:00 laden im Rahmen der 'Langen Nacht der Kirchen' das Viktor Frankl Zentrum Wien & die Evangelische Messiaskapelle Wien-Alsergrund ein. <a class="text-muted underline dark:text-slate-400 font-medium" href="/pages/news/langenacht">Weitere Informationen gibt es hier</a>.
+excerpt: Am 7.Juni um 19:00 laden im Rahmen der 'Langen Nacht der Kirchen' das Viktor Frankl Zentrum Wien & die Evangelische Messiaskapelle Wien-Alsergrund ein. <a class="text-muted underline font-medium" href="/pages/news/langenacht">Mehr anzeigen</a>.
 category: news
 tags:
   - news
