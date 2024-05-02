@@ -125,6 +125,7 @@
     liederListeDuplicatesCheck();
     console.log('Lieder2Save: ', liedReihenfolgeSelected);
     console.log('Lieder geladen: ', liederDBAuswahl);
+    sendEmailHrefRefresh();
   };
 
   onMount(async () => {
@@ -352,14 +353,16 @@
     // console.log('Dupl: ', liedReihenfolgeSelected);
   };
 
-  const sendEmail = () => {
+  let sendEmailHref;
+  const sendEmailHrefRefresh = () => {
     let body = 'Liebe Combo!%0D%0A%0D%0A';
-    liedReihenfolgeSelected.forEach((item) => {
-      if (!item.notvisible) {
-        console.log(item);
-        body = body + item.Beschreibung + ': ' + item.selectedLied.Titel + '%0D%0A';
-      }
-    });
+    if (liedReihenfolgeSelected)
+      liedReihenfolgeSelected.forEach((item) => {
+        if (!item.notvisible) {
+          console.log(item);
+          body = body + item.Beschreibung + ': ' + item.selectedLied.Titel + '%0D%0A';
+        }
+      });
 
     body =
       body +
@@ -368,13 +371,13 @@
     console.log('Email:', selectedTermin);
     const subject = 'Gottesdienst am ' + selectedTermin;
 
-    const href = 'mailto:combo@evang9.wien?subject=' + subject + '&body=' + body;
+    sendEmailHref = 'mailto:combo@evang9.wien?subject=' + subject + '&body=' + body;
 
     // return href;
-    let anchor = document.createElement('a');
-    anchor.href = href;
-    anchor.target = '_blank';
-    anchor.click();
+    // let anchor = document.createElement('a');
+    // anchor.href = href;
+    // anchor.target = '_blank';
+    // anchor.click();
   };
 
   const isComboLied = (lied) => {
@@ -415,9 +418,7 @@
             >
             <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
             <Tooltip>Für die Liederauswahl den Termin <br /> und die Lieder auswählen und speichern.</Tooltip>
-            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={sendEmail}
-              >Liederauswahl verschicken</GradientButton
-            >
+            <A class="mb-4 mr-4" color="cyanToBlue" href={sendEmailHref}>Liederauswahl verschicken</A>
             <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
             <Tooltip
               >Es sollte sich das Email Programm öffnen mit der Liederauswahl. Vor dem Versenden kann die Email ganz

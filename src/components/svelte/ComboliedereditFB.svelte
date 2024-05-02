@@ -238,39 +238,6 @@
       }
 
       return;
-
-      const formData = new FormData();
-      formData.append('titel', loadedLied.Titel);
-
-      if (!loadedLied.Dateiname) {
-        loadedLied.Dateiname = loadedLied.Titel.replace(/[^A-Z0-9]/gi, '_');
-        reload = true;
-      }
-      formData.append('filename', loadedLied.Dateiname);
-      // console.log(loadedLied.Liedtext.replace(/['"]/gi, ''));
-      formData.append('liedtext', loadedLied.Liedtext ? loadedLied.Liedtext.replace(/['"]/gi, '') : '');
-      formData.append('kategorie', loadedLied.Kategorie);
-      formData.append('eg', loadedLied.EG == undefined ? 0 : loadedLied.EG);
-      formData.append('aktiv', liedGesungen ? '1' : '0');
-      formData.append('lied_id', loadedLied.ID ? loadedLied.ID : 0);
-
-      formData.append('pdf_file', notenPdf);
-      console.log('PDF: ', loadedLied.PDF);
-      if (loadedLied.PDF == 0 || loadedLied.PDF == undefined) loadedLied.PDF = notenPdf ? 1 : 0;
-      formData.append('pdf', loadedLied.PDF);
-      formData.append('mp3_file', liedMp3);
-      if (loadedLied.MP3 == 0 || loadedLied.MP3 == undefined) loadedLied.MP3 = liedMp3 ? 1 : 0;
-      formData.append('mp3', loadedLied.MP3);
-
-      console.log(formData);
-      // const response = await axios.post(getUrl() + '/root/wp-json/combo/v2/comboliedwrite', formData, getAuthHeader());
-      const response = {};
-      console.log('Upload erfolgreich:', response.data);
-      if (response.data.startsWith('Error')) {
-        reload = false;
-        responseData = response.data;
-        popupErrorModal = true;
-      }
     } catch (error) {
       console.error('Fehler beim Upload:', error);
       responseData = error;
