@@ -15,7 +15,7 @@
 
   import moment from 'moment';
   import { getAuthHeader, isUserAuth } from './auth.js';
-  import LoginWarn from './auth/LoginWarn.svelte';
+
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import { getUrl } from './url/url.js';

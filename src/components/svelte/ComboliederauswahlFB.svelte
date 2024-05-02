@@ -14,7 +14,6 @@
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
-  import LoginWarn from './auth/LoginWarn.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import { openMp3, stopMp3 } from './mp3.js';

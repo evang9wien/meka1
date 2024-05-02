@@ -22,7 +22,6 @@
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-  import LoginWarn from './auth/LoginWarn.svelte';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getUrl } from './url/url.js';

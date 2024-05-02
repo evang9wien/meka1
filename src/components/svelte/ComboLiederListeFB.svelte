@@ -20,7 +20,6 @@
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { openPdf } from './pdf.js';
   import { getUrl } from './url/url.js';
-  import LoginWarn from './auth/LoginWarn.svelte';
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';

@@ -16,7 +16,6 @@
   import { getAuthHeader, isUserAuth } from './auth.js';
   import { comboReihenfolge } from './combo/combo.js';
   import { getUrl } from './url/url.js';
-  import LoginWarn from './auth/LoginWarn.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { firebaseConfig } from './firebase/firebase.js';
   import LoginFirebase from './auth/LoginFirebase.svelte';
