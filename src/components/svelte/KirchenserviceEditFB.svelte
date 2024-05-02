@@ -39,7 +39,6 @@
   } from 'firebase/database';
 
   import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
-  i;
 
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
