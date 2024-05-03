@@ -12,6 +12,7 @@
   import { Avatar, Popover } from 'flowbite-svelte';
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
+  import PredigtAvatar from './predigt/PredigtAvatar.svelte';
 
   import { getAuthHeader, isUserAuth } from './auth.js';
   import WaitPopup from './popup/WaitPopup.svelte';
@@ -226,7 +227,7 @@
           <Label>
             <div class="flex space-x-4 mb-6">
               {#if verantwortlich}
-                <Avatar src="{getUrl()}/comboapps/img/{getImageAvatar(verantwortlich)}" />
+                <PredigtAvatar prediger={verantwortlich} />
               {/if}
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>

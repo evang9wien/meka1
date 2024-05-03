@@ -17,6 +17,7 @@
   import { getAuthHeader, isUserAuth } from './auth.js';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
+  import PredigtAvatar from './predigt/PredigtAvatar.svelte';
   import { getUrl } from './url/url.js';
 
   import LoginSimple from './auth/LoginSimpleModal.svelte';
@@ -247,7 +248,7 @@
             <TableBodyRow>
               <TableBodyCell>
                 <div class="flex flex-col place-items-center">
-                  <Avatar size="md" src="{getUrl()}/comboapps/img/{getImageAvatar(termin.Verantwortlich)}" />
+                  <PredigtAvatar prediger={termin.Verantwortlich} />
                   {formatDate(moment(termin.Termin).toDate())}
                 </div>
               </TableBodyCell>

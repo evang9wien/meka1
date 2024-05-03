@@ -3,6 +3,7 @@
   import moment from 'moment';
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
+  import PredigtAvatar from './predigt/PredigtAvatar.svelte';
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
@@ -252,7 +253,7 @@
               <TableBodyRow>
                 <TableBodyCell>
                   <div class="flex flex-col place-items-center">
-                    <Avatar size="md" src="{getUrl()}/comboapps/img/{getImageAvatar(lied.Verantwortlich)}" />
+                    <PredigtAvatar prediger={lied.Verantwortlich} />
                     {lied.Termin}
                   </div>
                 </TableBodyCell>

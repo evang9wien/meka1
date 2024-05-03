@@ -19,6 +19,7 @@
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
+  import PredigtAvatar from './predigt/PredigtAvatar.svelte';
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
@@ -395,7 +396,7 @@
         {#if termine}
           <div class="flex space-x-4 mb-6">
             {#if verantwortlich}
-              <Avatar src="{getUrl()}/comboapps/img/{getImageAvatar(verantwortlich)}" />
+              <PredigtAvatar prediger={verantwortlich} />
             {/if}
             <div class="space-y-1 font-medium dark:text-white">
               <div>LiederAuswahl für den Gottesdienst bearbeiten</div>
