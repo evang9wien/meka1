@@ -8,7 +8,7 @@ excerpt: '"Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesu
 category: impulse
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2024/02/snowdrop-280950_scaled.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/snowdrop-280950_scaled_qr78fz.jpg
 publishDate: 2024-02-07T20:29:47.616Z
 author: stfj
 ---

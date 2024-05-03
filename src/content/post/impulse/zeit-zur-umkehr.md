@@ -8,7 +8,7 @@ excerpt: 'Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksa
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2023/12/israeli-flag.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/israeli-flag_w2gzij.jpg
 publishDate: 2023-12-14T17:49:19.237Z
 author: stfj
 ---

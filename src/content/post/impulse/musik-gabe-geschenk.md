@@ -9,7 +9,7 @@ excerpt: 'Musik ist in der Lage, unsere Laune aufzuhellen. Sie schenkt uns Trost
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2024/03/meka-konzert24_inspired.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/meka-konzert24_inspired_stydgn.jpg
 publishDate: 2024-03-02T11:56:18.065Z
 author: stfj
 ---

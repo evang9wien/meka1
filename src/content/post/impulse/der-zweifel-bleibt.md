@@ -9,7 +9,7 @@ excerpt: 'Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/> Ja, Sie
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2024/04/egg-2655031_200.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714764982/Homepage/News/egg-2655031_200_mhgsl0.jpg
 publishDate: 2024-04-21T16:31:00.000Z
 author: stfj
 ---
