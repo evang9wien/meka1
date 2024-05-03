@@ -5,7 +5,7 @@ excerpt: 'Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/> Ja, Sie
   und bereichert ihn sogar. Denn der Zweifel ist weder gut noch schlecht.
   Vielmehr ist er eine stetige Einladung, sich immer wieder neu mit seinem
   Glauben zu beschäftigen.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/04/Gemeindezeitung202404.pdf">PDF</a>'
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202404.pdf?alt=media&token=9c7743d5-c4d8-4473-9a3c-38b3d1cbfb91">PDF</a>'
 category: impuls
 tags:
   - impuls

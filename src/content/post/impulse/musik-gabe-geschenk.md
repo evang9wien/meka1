@@ -5,7 +5,7 @@ excerpt: 'Musik ist in der Lage, unsere Laune aufzuhellen. Sie schenkt uns Trost
   Musik eine gewisse Tiefe zu geben und ein Lied, das wir zuletzt vor vielen
   Jahren gehört haben, kann uns hier und heute in die Stimmung von damals
   versetzen.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/03/Gemeindezeitung202403.pdf">PDF</a>'
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202403.pdf?alt=media&token=996c9888-3008-492a-a402-deb2492a4df6">PDF</a>'
 category: impuls
 tags:
   - impuls

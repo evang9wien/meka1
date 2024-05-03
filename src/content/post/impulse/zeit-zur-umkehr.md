@@ -4,7 +4,7 @@ excerpt: 'Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksa
   der Juden und ungezählter anderer Verfolgter unempfindlich zeigten. […] Die
   Kirchen haben gegen sichtbares Unrecht nicht protestiert, sie haben
   geschwiegen und weggeschaut.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2024/01/Gemeindezeitung202401.pdf">PDF</a>'
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202401.pdf?alt=media&token=fda30d3a-cbdb-480c-bf32-bd92264e7171">PDF</a>'
 category: impuls
 tags:
   - impuls
