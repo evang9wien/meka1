@@ -15,6 +15,7 @@
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
   import { Modal } from 'flowbite-svelte';
 
+  import PredigtAvatar from './PredigtAvatar.svelte';
   import { getAuthHeader, isUserAuth } from '../auth.js';
 
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
@@ -245,10 +246,8 @@
                 <TableBodyRow>
                   <TableBodyCell>
                     <div class="w-12">
-                      <Avatar
-                        size="md"
-                        src="https://www.evang9.wien/comboapps/img/{getImageAvatar(termin.Verantwortlich)}"
-                      />
+                      <!-- <Avatar size="md" src="~/assets/images/avatar/{getImageAvatar(termin.Verantwortlich)}" /> -->
+                      <PredigtAvatar prediger={termin.Verantwortlich} />
                     </div>
                   </TableBodyCell>
                   <TableBodyCell>

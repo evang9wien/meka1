@@ -366,7 +366,7 @@
 
     body =
       body +
-      '%0D%0ADie Lieder mit Hörproben und Noten zum Üben und Ausdrucken%0D%0Afindest Du übersichtlich zusammengefasst hier:%0D%0A%0D%0Ahttps://evang9.wien/pages/combo/comboliederauswahlpage/';
+      '%0D%0ADie Lieder mit Hörproben und Noten zum Üben und Ausdrucken%0D%0Afindest Du übersichtlich zusammengefasst hier:%0D%0A%0D%0Ahttps://www.evang9.wien/pages/combo/comboliederauswahlFBpage';
 
     console.log('Email:', selectedTermin);
     const subject = 'Gottesdienst am ' + selectedTermin;
