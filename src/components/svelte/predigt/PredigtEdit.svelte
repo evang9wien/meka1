@@ -104,26 +104,7 @@
         }
       }
     });
-
-    // axios.get('https://www.evang9.wien/root/wp-json/combo/v1/combotermine?from_date=-50&to_date=0').then((response) => {
-    //   termine = JSON.parse(response.data);
-    //   termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
-    // });
-
-    // axios.get('https://www.evang9.wien/root/wp-json/combo/v2/ispredigtedit', getAuthHeader()).then((response) => {
-    //   predigtEdit = true;
-    // });
-
-    // loadPredigten();
   });
-
-  // function loadPredigten() {
-  //   axios.get('https://www.evang9.wien/root/wp-json/combo/v1/getpredigten').then((response) => {
-  //     predigten = Object.values(JSON.parse(response.data)).sort((a, b) => (a < b ? 1 : -1));
-
-  //     console.log(predigten);
-  //   });
-  // }
 
   function submitForm() {
     console.log('submit form');
@@ -146,30 +127,6 @@
       // trigger UI reload
       termine = termine;
     });
-
-    // predigten = undefined;
-    // const dataArray = new FormData();
-    // dataArray.append('termin', selectedTermin);
-    // dataArray.append('uploadFile', files[0]);
-
-    // const token = localStorage.getItem('jwt');
-
-    // fetch('https://www.evang9.wien/root/wp-json/combo/v2/savepredigt', {
-    //   method: 'POST',
-    //   body: dataArray,
-    //   headers: {
-    //     Authorization: 'Bearer ' + token,
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     selectedTermin = '';
-    //     files = undefined;
-    //     loadPredigten();
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
 
   function getName(termin) {
@@ -259,13 +216,6 @@
                     </div>
 
                     <audio controls src={url}></audio>
-
-                    <!-- <audio
-                    id="player"
-                    class="audio-border"
-                    src="https://www.evang9.wien/predigten/{predigt}"
-                    controls="controls"
-                  /> -->
                   </TableBodyCell>
                 </TableBodyRow>
               {/await}

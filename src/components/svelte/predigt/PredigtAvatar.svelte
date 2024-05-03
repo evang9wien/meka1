@@ -8,15 +8,16 @@
   import { Avatar } from 'flowbite-svelte';
 
   export let prediger;
+  export let clazz;
 
   const getAvatar = () => {
     console.log(prediger);
-    if (prediger == 'SFJ') return stefan.src;
-    if (prediger == 'MRH') return mark.src;
-    if (prediger == 'TDH') return tanja.src;
-    if (prediger == 'WW') return wolfgang.src;
-    if (prediger == 'GH') return harald.src;
+    if (prediger == 'SFJ' || prediger == 'Stefan') return stefan.src;
+    if (prediger == 'MRH' || prediger == 'Mark') return mark.src;
+    if (prediger == 'TDH' || prediger == 'Tanja') return tanja.src;
+    if (prediger == 'WW' || prediger == 'Wolfgang') return wolfgang.src;
+    if (prediger == 'GH' || prediger == 'Harald') return harald.src;
   };
 </script>
 
-<Avatar size="md" src={getAvatar()} />
+<Avatar size="md" class={clazz} src={getAvatar()} />
