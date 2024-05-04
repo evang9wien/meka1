@@ -7,6 +7,11 @@
         "source": "/pages",
         "destination": "/",
         "type": 301
+      },
+      {
+        "source": "/root",
+        "destination": "/",
+        "type": 301
       }
     ],
     "frameworksBackend": {
