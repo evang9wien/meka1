@@ -2,6 +2,13 @@
   "hosting": {
     "source": ".",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      {
+        "source": "/pages",
+        "destination": "/",
+        "type": 301
+      }
+    ],
     "frameworksBackend": {
       "region": "europe-west1"
     }
