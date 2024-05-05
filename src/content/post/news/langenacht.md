@@ -1,6 +1,6 @@
 ---
 title: Das Leben feiern!
-excerpt: Am 7.Juni um 19:00 laden im Rahmen der 'Langen Nacht der Kirchen' das Viktor Frankl Zentrum Wien & die Evangelische Messiaskapelle Wien-Alsergrund ein. <a class="text-muted underline font-medium" href="/pages/news/langenacht">Mehr anzeigen</a>.
+excerpt: Am 7.Juni um 19:00 laden das Viktor Frankl Zentrum Wien & die Evangelische Messiaskapelle im Rahmen der 'Langen Nacht der Kirchen' zu einem Vortragsabend ein. <a class="text-muted underline font-medium" href="/pages/news/langenacht">Mehr anzeigen</a>.
 category: news
 tags:
   - news
@@ -23,14 +23,11 @@ einer Sinn-vollen Lebensführung zu tun hat, erfahren Sie bei uns im Vortrag von
 
 **Mag.a. Kathrin Hopfgartner**
 
-<!--
-<img style="float: left; margin: 16px; padding: 16px;" src="https://www.franklzentrum.org/images/referenten/tbz/76.jpg"> -->
-
+<img style="float: left; margin: 16px; padding: 16px;" src="https://www.franklzentrum.org/images/referenten/tbz/76.jpg">
 Sinn-Zentrierte Beraterin nach VIKTOR FRANKL ZENTRUM WIEN; Mitarbeiterin im VIKTOR FRANKL ZENTRUM WIEN. Ressortleitung: Englischsprachige Lectures & Museumsführungen; Museumsdienst; Repetitorien des Lehrgangs Logopädagogik nach VIKTOR FRANKL ZENTRUM WIEN; Dipl. Lebens- und Sozialberaterin sowie dipl. Wellness- und Pilatestrainerin. Quellberuf: Juristin.
 
 Mag.a. Kathrin Hopfgartner © Hans Krist
 
-**Web:** www.evang9.wien
-www.franklzentrum.org
+**Web:** www.franklzentrum.org
 
 "Für gewöhnlich sieht der Mensch nur das Stoppelfeld der Vergänglichkeit; Was er übersieht, sind die vollen Scheunen der Vergangenheit. Im Vergangensein ist nämlich nichts unwiederbringlich verloren, vielmehr alles unverlierbar geborgen" Viktor E. Frankl
