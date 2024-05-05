@@ -290,7 +290,7 @@
                       {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
                         <p>loading</p>
                       {:then url}
-                        <audio class="audio-border" src={url} controls="controls" />
+                        <audio class="audio-border" src={url} controls="controls" preload="none"/>
                       {/await}
                     {/if}
                   </TableBodyCell>
