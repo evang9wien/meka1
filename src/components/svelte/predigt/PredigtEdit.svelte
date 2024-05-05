@@ -215,7 +215,7 @@
                       {getName(termin)}
                     </div>
 
-                    <audio controls src={url}></audio>
+                    <audio controls src={url} preload="none"></audio>
                   </TableBodyCell>
                 </TableBodyRow>
               {/await}
