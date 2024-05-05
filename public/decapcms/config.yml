@@ -4,9 +4,9 @@ backend:
 
 media_folder: 'src/assets/images'
 public_folder: '/astro'
-site_url: https://evang9.wien/pages
-display_url: https://evang9.wien/pages
-logo_url: https://evang9.wien/root/wp-content/uploads/2019/02/cropped-Logo-für-Menü.png
+site_url: https://evang9.wien/
+display_url: https://evang9.wien/
+logo_url: https://evang9.wien/astro/Kreuz-bunt.b5b8901f_ZCimQD.svg
 
 collections:
   - name: 'post'
