@@ -16,6 +16,8 @@
   import moment from 'moment';
   import { getAuthHeader, isUserAuth } from './auth.js';
 
+  import TerminAdmin from './calendar/TerminAdmin.svelte';
+
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
@@ -55,6 +57,8 @@
 
   let comboAdminRole = false;
   let comboAdminModus = false;
+
+  let terminAdminRole = false;
 
   const loadCombo = () => {
     popupSpinnerModal = true;
@@ -116,6 +120,10 @@
           if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
             console.log('Role: ', loginUser[0].role);
             comboAdminRole = true;
+          }
+          if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'terminadmin').length > 0) {
+            console.log('Role: ', loginUser[0].role);
+            terminAdminRole = true;
           }
         }
       }
@@ -258,6 +266,10 @@
             >Im Combo Admin-Modus wird bei <br />Auswahl eines schon vorhandenen Namen <br />ein Auswahl-Stern gesetzt.</Tooltip
           >
         </div>
+      {/if}
+
+      {#if terminAdminRole}
+        <TerminAdmin />
       {/if}
 
       <Table striped={true}>
