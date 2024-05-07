@@ -4,13 +4,17 @@
   import mark from '../../../assets/images/avatar/Mark-Ruiz-Hellin-Avatar.png';
   import tanja from '../../../assets/images/avatar/Tanja-Avatar.png';
   import wolfgang from '../../../assets/images/avatar/Wolfgang-Avatar.png';
+  import mekaclassic from '../../../assets/images/avatar/Mekaclassic.webp';
 
   import { Avatar } from 'flowbite-svelte';
+  import { TicketOutline } from 'flowbite-svelte-icons';
 
   export let prediger;
   export let clazz;
+  export let title;
 
   const getAvatar = () => {
+    if (title && title.toLowerCase().includes('meka classic')) return mekaclassic.src;
     console.log(prediger);
     if (prediger == 'SFJ' || prediger == 'Stefan') return stefan.src;
     if (prediger == 'MRH' || prediger == 'Mark') return mark.src;
