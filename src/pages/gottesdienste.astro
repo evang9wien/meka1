@@ -2,8 +2,9 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Content from '~/components/widgets/Content.astro';
-import PredigtPage from '~/parts/gottesdienste/predigtpage.astro';
+import Hero from '~/components/widgets/Hero.astro';
 import Termine from '~/parts/gottesdienste/termine.astro';
+import { getPermalink } from '~/utils/permalinks';
 
 const metadata = {
   title: 'Termine',
@@ -73,5 +74,27 @@ const metadata = {
     </Fragment>
   </Content>
   <Termine />
-  <PredigtPage />
+
+  <Hero
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Predigten zum Nachhören',
+        href: getPermalink('/nachhoeren'),
+        icon: 'tabler:headphones',
+      },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1558584673-c834fb1cc3ca?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'Hören',
+    }}
+    tagline="Predigten"
+  >
+    <Fragment slot="title">Zum Nachhören</Fragment>
+
+    <Fragment slot="subtitle">
+      Als besonderes Service können Sie die Predigt gerne zuhause nachhören. Sie finden sie innerhalb der Folgewoche
+      <a class="text-muted underline font-medium" href={getPermalink('/nachhoeren')}>hier</a>.
+    </Fragment>
+  </Hero>
 </Layout>
