@@ -4,10 +4,12 @@
   import moment from 'moment/min/moment-with-locales';
 
   import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';
-  import { CalendarWeekSolid } from 'flowbite-svelte-icons';
+  import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
   import { ArrowRightOutline } from 'flowbite-svelte-icons';
   import { getImageCalAvatar } from '../predigt/PredigtConstants.js';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
+
+  export let filter;
 
   let items = [];
 
@@ -34,6 +36,9 @@
           moment.locale('de');
           return { ...i, startDate: moment(new Date(i.start.dateTime)).format('dddd, Do MMMM  YYYY, H:mm ') };
         });
+        if (filter) {
+          items = items.filter((f) => f.summary.toLowerCase().includes(filter));
+        }
         console.log(items);
       });
   });
