@@ -1,6 +1,6 @@
 ---
 title: Diakonie-Aktion
-excerpt: Für unsere diesjährige Diakonie-Frühlingsaktion suchen wir u.a. Kleidungsstücke für die Sozialeinrichtung s’Häferl der Stadtdiakonie Wien. <a class="text-muted underline  font-medium" href="/pages/news/haeferl">Mehr anzeigen</a>.
+excerpt: Für unsere diesjährige Diakonie-Frühlingsaktion suchen wir u.a. Kleidungsstücke für die Sozialeinrichtung s’Häferl der Stadtdiakonie Wien. <a class="text-muted underline  font-medium" href="/news/haeferl">Mehr anzeigen</a>.
 category: news
 tags:
   - news

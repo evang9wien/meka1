@@ -1,6 +1,6 @@
 ---
 title: graetzloase
-excerpt: Unsere @graetzloase ist 1 Jahr alt. Heute vor einem Jahr haben wir unsere Seeoase aufgebaut und seitdem dem Grätzl einen neuen Treffpunkt im Viertel geschenkt. <a class="text-muted underline  font-medium" href="/pages/angebote#graetzloase">Mehr anzeigen</a>.
+excerpt: Unsere @graetzloase ist 1 Jahr alt. Heute vor einem Jahr haben wir unsere Seeoase aufgebaut und seitdem dem Grätzl einen neuen Treffpunkt im Viertel geschenkt. <a class="text-muted underline  font-medium" href="/angebote#graetzloase">Mehr anzeigen</a>.
 category: news
 tags:
   - news
