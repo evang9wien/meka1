@@ -3,7 +3,7 @@ title: Neue Gottesdienstreihe
 excerpt: Mit den Grundlagen unseres Glaubens beschäftigt sich unsere neue
   Gottesdienstreihe „To Know Is To Grow“ mit Gespräch im Anschluss.  Für
   Newcomer genauso wie für Fortgeschrittene. Die ideale Möglichkeit, unsere
-  Messiaskapelle und den christlichen Glauben kennenzulernen.  <a class="text-muted underline dark:text-slate-400 font-medium" href="/pages/angebote#neue-gottesdienstreihe">
+  Messiaskapelle und den christlichen Glauben kennenzulernen.  <a class="text-muted underline dark:text-slate-400 font-medium" href="/angebote#neue-gottesdienstreihe">
   Termine finden Sie hier.</a>
 
 category: angebote

@@ -12,4 +12,4 @@ publishDate: 2024-01-21T17:29:33.972Z
 author: Andreas
 ---
 
-In der Messiaskapelle freuen wir uns immer über neue Besucher\*innen. Für alle Newcomer und Interessierte haben wir spezielle [Angebote](/pages/angebote#neuindergemeinde). Herzlich willkommen! 🙂
+In der Messiaskapelle freuen wir uns immer über neue Besucher\*innen. Für alle Newcomer und Interessierte haben wir spezielle [Angebote](/angebote#neuindergemeinde). Herzlich willkommen! 🙂
