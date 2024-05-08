@@ -5,6 +5,7 @@
   import tanja from '../../../assets/images/avatar/Tanja-Avatar.png';
   import wolfgang from '../../../assets/images/avatar/Wolfgang-Avatar.png';
   import mekaclassic from '../../../assets/images/avatar/Mekaclassic.webp';
+  import musik from '../../../assets/images/avatar/musik.png';
 
   import { Avatar } from 'flowbite-svelte';
   import { TicketOutline } from 'flowbite-svelte-icons';
@@ -21,6 +22,7 @@
     if (prediger == 'TDH' || prediger == 'Tanja') return tanja.src;
     if (prediger == 'WW' || prediger == 'Wolfgang') return wolfgang.src;
     if (prediger == 'GH' || prediger == 'Harald') return harald.src;
+    if (prediger == 'COM') return musik.src;
   };
 </script>
 
