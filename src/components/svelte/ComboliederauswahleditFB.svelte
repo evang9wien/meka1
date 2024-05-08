@@ -185,6 +185,7 @@
             name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
             value: t.Termin,
           }));
+          termine = termine.filter((t) => t.Veranstaltung == 'GD');
           console.log('Termine: ', termine);
 
           const now = moment().subtract(2, 'days').format('YYYY-MM-DD');

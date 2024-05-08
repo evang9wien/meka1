@@ -162,6 +162,7 @@
             name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
             value: t.Termin,
           }));
+          termine = termine.filter((t) => t.Veranstaltung == 'GD');
           console.log('Termine: ', termine);
         }
       });
@@ -290,7 +291,7 @@
                       {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
                         <p>loading</p>
                       {:then url}
-                        <audio class="audio-border" src={url} controls="controls" preload="none"/>
+                        <audio class="audio-border" src={url} controls="controls" preload="none" />
                       {/await}
                     {/if}
                   </TableBodyCell>
