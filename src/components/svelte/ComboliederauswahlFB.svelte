@@ -41,7 +41,7 @@
     endAt,
   } from 'firebase/database';
 
-  import moment from 'moment';
+  import dayjs from 'dayjs';
 
   let selectedTermin;
   let lastSelectedTermin;
@@ -132,8 +132,8 @@
       dbFireStore = getFirestore(app);
 
       const dbRealtime = getDatabase(app);
-      const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
-      // console.log('Now: ', now.format('YYYY-MM-DD'));
+      const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
+      console.log('Now: ', now);
 
       const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
       // console.log('Temine: ', dbRef);
@@ -148,8 +148,8 @@
         // console.log('Lieder: ', liederAus);
       });
 
-      const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
-      const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
+      const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
+      const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
       // console.log('Now: ', now.format('YYYY-MM-DD'));
 
       const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));

@@ -47,7 +47,7 @@
     endAt,
   } from 'firebase/database';
 
-  import moment from 'moment';
+  import dayjs from 'dayjs';
 
   let popupModal = false;
   let popupSpinnerModal = false;
@@ -170,8 +170,8 @@
       console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
       dbRealtime = getDatabase(app);
 
-      const fromDate = moment().subtract(4, 'weeks').format('YYYY-MM-DD');
-      const toDate = moment().add(4, 'weeks').format('YYYY-MM-DD');
+      const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
+      const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
       // console.log('Now: ', now.format('YYYY-MM-DD'));
 
       const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
@@ -188,7 +188,7 @@
           termine = termine.filter((t) => t.Veranstaltung == 'GD');
           console.log('Termine: ', termine);
 
-          const now = moment().subtract(2, 'days').format('YYYY-MM-DD');
+          const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
           // console.log('Now: ', now.format('YYYY-MM-DD'));
 
           const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
@@ -360,7 +360,7 @@
     let body = 'Liebe Combo!%0D%0A%0D%0A';
     if (liedReihenfolgeSelected)
       liedReihenfolgeSelected.forEach((item) => {
-        if (!item.notvisible) {
+        if (!item.notvisible && item.selectedLied) {
           console.log(item);
           body = body + item.Beschreibung + ': ' + item.selectedLied.Titel + '%0D%0A';
         }

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
@@ -112,7 +112,7 @@
 
   const loadLieder = (year) => {
     let y = year.value ? year.value : year;
-    const fromDate = moment().set('year', y).set('month', 0).set('date', 1).format('YYYY-MM-DD');
+    const fromDate = dayjs().set('year', y).set('month', 0).set('date', 1).format('YYYY-MM-DD');
 
     console.log('Date: ', fromDate);
 
