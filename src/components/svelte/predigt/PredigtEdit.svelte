@@ -19,7 +19,8 @@
   import { getAuthHeader, isUserAuth } from '../auth.js';
 
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
-  import moment from 'moment/min/moment-with-locales';
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { firebaseConfig } from './../firebase/firebase.js';
   import { initializeApp } from 'firebase/app';
@@ -55,8 +56,8 @@
     storage = getStorage(app);
 
     const dbRealtime = getDatabase(app);
-    const fromDate = moment().subtract(50, 'days').format('YYYY-MM-DD');
-    const toDate = moment().add(2, 'days').format('YYYY-MM-DD');
+    const fromDate = dayjs().subtract(50, 'days').format('YYYY-MM-DD');
+    const toDate = dayjs().add(2, 'days').format('YYYY-MM-DD');
 
     // console.log('Now: ', now.format('YYYY-MM-DD'));
 
@@ -144,8 +145,8 @@
   // }
 
   function getDate(date) {
-    moment.locale('de');
-    return moment(new Date(date)).format('dddd, Do MMMM  YYYY, H:mm ');
+    dayjs.locale('de');
+    return dayjs(new Date(date)).format('dddd, D. MMMM  YYYY, H:mm ');
   }
 </script>
 
