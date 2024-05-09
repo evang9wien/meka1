@@ -106,11 +106,13 @@
       const docSnap = await getDoc(maRef);
       if (docSnap.exists()) {
         members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-        members = members.map((t) => ({
-          ...t,
-          name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-          value: t.ShortName,
-        }));
+        members = members
+          .map((t) => ({
+            ...t,
+            name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
+            value: t.ShortName,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name));
         // rolle prüfen
         console.log('Mitarbeiter: ', members);
         console.log('User: ', user.providerData[0].email);
