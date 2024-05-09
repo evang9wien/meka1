@@ -1,6 +1,9 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
+  import * as dayjs from 'dayjs';
+  import 'dayjs/locale/de';
+
   import moment from 'moment/min/moment-with-locales';
 
   import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';

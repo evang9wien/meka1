@@ -23,6 +23,7 @@
     "astro": "^3.6.4",
     "astro-icon": "^1.0.0-next.2",
     "axios": "^1.6.0",
+    "dayjs": "^1.11.11",
     "firebase": "^10.11.0",
     "flowbite": "^2.1.1",
     "flowbite-svelte": "^0.44.19",
