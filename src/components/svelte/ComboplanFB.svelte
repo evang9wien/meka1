@@ -1,7 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/de';
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
 
@@ -34,7 +35,7 @@
     console.log('FireBase');
     const app = initializeApp(firebaseConfig);
     const dbRealtime = getDatabase(app);
-    const fromDate = moment().format('YYYY-MM-DD');
+    const fromDate = dayjs().format('YYYY-MM-DD');
 
     // console.log('Now: ', now.format('YYYY-MM-DD'));
 
@@ -55,14 +56,8 @@
   });
 
   let formatDate = (date) => {
-    const options = {
-      weekday: 'short',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    };
-    return new Date(date).toLocaleDateString('de-DE', options).replace(/,/g, '');
+    dayjs.locale('de');
+    return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
   };
 </script>
 
@@ -87,7 +82,7 @@
                 <div class="flex flex-col place-items-center">
                   <PredigtAvatar prediger={termin.Verantwortlich} />
                   <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
-                  {formatDate(moment(termin.Termin).toDate())}
+                  {formatDate(dayjs(termin.Termin).toDate())}
                 </div>
               </TableBodyCell>
               <TableBodyCell>

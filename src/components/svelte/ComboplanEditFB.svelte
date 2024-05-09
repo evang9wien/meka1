@@ -13,7 +13,8 @@
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import { Modal } from 'flowbite-svelte';
 
-  import moment from 'moment';
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/de';
   import { getAuthHeader, isUserAuth } from './auth.js';
 
   import TerminAdmin from './calendar/TerminAdmin.svelte';
@@ -64,7 +65,7 @@
     popupSpinnerModal = true;
     console.log('FireBase');
 
-    const fromDate = moment().format('YYYY-MM-DD');
+    const fromDate = dayjs().format('YYYY-MM-DD');
 
     // console.log('Now: ', now.format('YYYY-MM-DD'));
 
@@ -133,14 +134,8 @@
   });
 
   let formatDate = (date) => {
-    const options = {
-      weekday: 'short',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    };
-    return new Date(date).toLocaleDateString('de-DE', options).replace(/,/g, '');
+    dayjs.locale('de');
+    return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
   };
 
   let combo = {};
@@ -291,7 +286,7 @@
               <TableBodyCell>
                 <div class="flex flex-col place-items-center">
                   <PredigtAvatar prediger={termin.Verantwortlich} />
-                  {formatDate(moment(termin.Termin).toDate())}
+                  {formatDate(dayjs(termin.Termin).toDate())}
                 </div>
               </TableBodyCell>
               <TableBodyCell>
