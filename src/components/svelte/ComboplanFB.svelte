@@ -71,9 +71,9 @@
           <TableHeadCell>Bemerkung</TableHeadCell>
           <TableHeadCell>Tasten</TableHeadCell>
           <TableHeadCell>Melodie</TableHeadCell>
+          <TableHeadCell>Git.</TableHeadCell>
           <TableHeadCell>Drums</TableHeadCell>
           <TableHeadCell>Bass</TableHeadCell>
-          <TableHeadCell>Git.</TableHeadCell>
         </TableHead>
         <TableBody>
           {#each termine as termin}
@@ -93,9 +93,9 @@
               </TableBodyCell>
               <TableBodyCell>{termin.Tasten}</TableBodyCell>
               <TableBodyCell>{termin.Melodie}</TableBodyCell>
+              <TableBodyCell>{termin.Gitarre}</TableBodyCell>
               <TableBodyCell>{termin.Drums}</TableBodyCell>
               <TableBodyCell>{termin.Bass}</TableBodyCell>
-              <TableBodyCell>{termin.Gitarre}</TableBodyCell>
             </TableBodyRow>
           {/each}
         </TableBody>

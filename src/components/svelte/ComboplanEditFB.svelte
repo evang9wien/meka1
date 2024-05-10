@@ -274,9 +274,9 @@
           <TableHeadCell>Termin</TableHeadCell>
           <TableHeadCell>Tasten</TableHeadCell>
           <TableHeadCell>Melodie</TableHeadCell>
+          <TableHeadCell>Git.</TableHeadCell>
           <TableHeadCell>Drums</TableHeadCell>
           <TableHeadCell>Bass</TableHeadCell>
-          <TableHeadCell>Git.</TableHeadCell>
           <TableHeadCell>Bemerkung</TableHeadCell>
         </TableHead>
 
@@ -313,6 +313,16 @@
                 <div class="flex flex-row">
                   <Checkbox
                     disabled={!selectedmember}
+                    bind:group={combo.Gitarre}
+                    value={termin.Termin + ',' + termin.Gitarre}
+                  />
+                  {termin.Gitarre}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex flex-row">
+                  <Checkbox
+                    disabled={!selectedmember}
                     bind:group={combo.Drums}
                     value={termin.Termin + ',' + termin.Drums}
                   />
@@ -329,16 +339,7 @@
                   {termin.Bass}
                 </div>
               </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-row">
-                  <Checkbox
-                    disabled={!selectedmember}
-                    bind:group={combo.Gitarre}
-                    value={termin.Termin + ',' + termin.Gitarre}
-                  />
-                  {termin.Gitarre}
-                </div>
-              </TableBodyCell>
+
               <TableBodyCell>
                 <div class="flex flex-col">
                   <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
