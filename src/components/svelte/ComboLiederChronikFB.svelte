@@ -35,6 +35,7 @@
     limitToFirst,
     startAt,
     endAt,
+    endBefore,
   } from 'firebase/database';
 
   let liederListe = [];
@@ -113,10 +114,15 @@
   const loadLieder = (year) => {
     let y = year.value ? year.value : year;
     const fromDate = dayjs().set('year', y).set('month', 0).set('date', 1).format('YYYY-MM-DD');
+    const toDate = dayjs()
+      .set('year', y + 1)
+      .set('month', 0)
+      .set('date', 1)
+      .format('YYYY-MM-DD');
 
     console.log('Date: ', fromDate);
 
-    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
+    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endBefore(toDate));
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
         let termine = Object.values(snapshot.val()).map((t) => ({
