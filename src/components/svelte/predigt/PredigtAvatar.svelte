@@ -11,8 +11,8 @@
   import { TicketOutline } from 'flowbite-svelte-icons';
 
   export let prediger;
-  export let clazz;
-  export let title;
+  export let clazz = '';
+  export let title = '';
 
   const getAvatar = () => {
     if (title && title.toLowerCase().includes('meka classic')) return mekaclassic.src;
