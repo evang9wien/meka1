@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
 
-  import { Label, Select } from 'flowbite-svelte';
+  import { Label, Select, Toggle } from 'flowbite-svelte';
   import { Button } from 'flowbite-svelte';
   import { Tooltip, GradientButton } from 'flowbite-svelte';
   import { Checkbox } from 'flowbite-svelte';
@@ -60,6 +60,8 @@
   let comboAdminModus = false;
 
   let terminAdminRole = false;
+
+  let showComboProben = false;
 
   const loadCombo = () => {
     popupSpinnerModal = true;
@@ -268,7 +270,7 @@
       {#if terminAdminRole}
         <TerminAdmin />
       {/if}
-
+      <Toggle bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       <Table striped={true}>
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>
@@ -282,71 +284,73 @@
 
         <TableBody>
           {#each termine as termin}
-            <TableBodyRow>
-              <TableBodyCell>
-                <div class="flex flex-col place-items-center">
-                  <PredigtAvatar prediger={termin.Verantwortlich} />
-                  {formatDate(dayjs(termin.Termin).toDate())}
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-row">
-                  <Checkbox
-                    disabled={!selectedmember}
-                    bind:group={combo.Tasten}
-                    value={termin.Termin + ',' + termin.Tasten}
-                  />
-                  {termin.Tasten}
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-row">
-                  <Checkbox
-                    disabled={!selectedmember}
-                    bind:group={combo.Melodie}
-                    value={termin.Termin + ',' + termin.Melodie}
-                  />
-                  {termin.Melodie}
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-row">
-                  <Checkbox
-                    disabled={!selectedmember}
-                    bind:group={combo.Gitarre}
-                    value={termin.Termin + ',' + termin.Gitarre}
-                  />
-                  {termin.Gitarre}
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-row">
-                  <Checkbox
-                    disabled={!selectedmember}
-                    bind:group={combo.Drums}
-                    value={termin.Termin + ',' + termin.Drums}
-                  />
-                  {termin.Drums}
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-row">
-                  <Checkbox
-                    disabled={!selectedmember}
-                    bind:group={combo.Bass}
-                    value={termin.Termin + ',' + termin.Bass}
-                  />
-                  {termin.Bass}
-                </div>
-              </TableBodyCell>
+            {#if showComboProben || !(termin.Verantwortlich == 'COM')}
+              <TableBodyRow>
+                <TableBodyCell>
+                  <div class="flex flex-col place-items-center">
+                    <PredigtAvatar prediger={termin.Verantwortlich} />
+                    {formatDate(dayjs(termin.Termin).toDate())}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <Checkbox
+                      disabled={!selectedmember}
+                      bind:group={combo.Tasten}
+                      value={termin.Termin + ',' + termin.Tasten}
+                    />
+                    {termin.Tasten}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <Checkbox
+                      disabled={!selectedmember}
+                      bind:group={combo.Melodie}
+                      value={termin.Termin + ',' + termin.Melodie}
+                    />
+                    {termin.Melodie}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <Checkbox
+                      disabled={!selectedmember}
+                      bind:group={combo.Gitarre}
+                      value={termin.Termin + ',' + termin.Gitarre}
+                    />
+                    {termin.Gitarre}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <Checkbox
+                      disabled={!selectedmember}
+                      bind:group={combo.Drums}
+                      value={termin.Termin + ',' + termin.Drums}
+                    />
+                    {termin.Drums}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <Checkbox
+                      disabled={!selectedmember}
+                      bind:group={combo.Bass}
+                      value={termin.Termin + ',' + termin.Bass}
+                    />
+                    {termin.Bass}
+                  </div>
+                </TableBodyCell>
 
-              <TableBodyCell>
-                <div class="flex flex-col">
-                  <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
-                  <div>{termin.Zusatzinfo}</div>
-                </div>
-              </TableBodyCell>
-            </TableBodyRow>
+                <TableBodyCell>
+                  <div class="flex flex-col">
+                    <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
+                    <div>{termin.Zusatzinfo}</div>
+                  </div>
+                </TableBodyCell>
+              </TableBodyRow>
+            {/if}
           {/each}
         </TableBody>
       </Table>

@@ -8,7 +8,7 @@
 
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
-  import { Card } from 'flowbite-svelte';
+  import { Card, Toggle } from 'flowbite-svelte';
   import { MicrophoneOutline, EditOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
@@ -30,6 +30,7 @@
 
   let termine;
   let popupSpinnerModal = true;
+  let showComboProben = false;
   onMount(() => {
     popupSpinnerModal = true;
     console.log('FireBase');
@@ -57,7 +58,7 @@
 
   let formatDate = (date) => {
     dayjs.locale('de');
-    return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
+    return dayjs(new Date(date)).format('dd. D.M. H:mm ');
   };
 </script>
 
@@ -65,38 +66,41 @@
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
+      <Toggle bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       <Table striped={true}>
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>
-          <TableHeadCell>Bemerkung</TableHeadCell>
           <TableHeadCell>Tasten</TableHeadCell>
           <TableHeadCell>Melodie</TableHeadCell>
           <TableHeadCell>Git.</TableHeadCell>
           <TableHeadCell>Drums</TableHeadCell>
           <TableHeadCell>Bass</TableHeadCell>
+          <TableHeadCell>Bemerkung</TableHeadCell>
         </TableHead>
         <TableBody>
           {#each termine as termin}
-            <TableBodyRow>
-              <TableBodyCell>
-                <div class="flex flex-col place-items-center">
-                  <PredigtAvatar prediger={termin.Verantwortlich} />
-                  <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
-                  {formatDate(dayjs(termin.Termin).toDate())}
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>
-                <div class="flex flex-col">
-                  <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
-                  <div>{termin.Zusatzinfo}</div>
-                </div>
-              </TableBodyCell>
-              <TableBodyCell>{termin.Tasten}</TableBodyCell>
-              <TableBodyCell>{termin.Melodie}</TableBodyCell>
-              <TableBodyCell>{termin.Gitarre}</TableBodyCell>
-              <TableBodyCell>{termin.Drums}</TableBodyCell>
-              <TableBodyCell>{termin.Bass}</TableBodyCell>
-            </TableBodyRow>
+            {#if showComboProben || !(termin.Verantwortlich == 'COM')}
+              <TableBodyRow>
+                <TableBodyCell>
+                  <div class="flex flex-col place-items-center">
+                    <PredigtAvatar prediger={termin.Verantwortlich} />
+                    <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
+                    {formatDate(dayjs(termin.Termin).toDate())}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>{termin.Tasten}</TableBodyCell>
+                <TableBodyCell>{termin.Melodie}</TableBodyCell>
+                <TableBodyCell>{termin.Gitarre}</TableBodyCell>
+                <TableBodyCell>{termin.Drums}</TableBodyCell>
+                <TableBodyCell>{termin.Bass}</TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-col">
+                    <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
+                    <div>{termin.Zusatzinfo}</div>
+                  </div>
+                </TableBodyCell>
+              </TableBodyRow>
+            {/if}
           {/each}
         </TableBody>
       </Table>
