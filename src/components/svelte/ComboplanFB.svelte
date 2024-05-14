@@ -58,7 +58,7 @@
 
   let formatDate = (date) => {
     dayjs.locale('de');
-    return dayjs(new Date(date)).format('dd. D.M. H:mm ');
+    return dayjs(date).format('dd. D.M. H:mm ');
   };
 </script>
 
@@ -85,7 +85,7 @@
                   <div class="flex flex-col place-items-center">
                     <PredigtAvatar prediger={termin.Verantwortlich} />
                     <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
-                    {formatDate(dayjs(termin.Termin).toDate())}
+                    {formatDate(termin.Termin)}
                   </div>
                 </TableBodyCell>
                 <TableBodyCell>{termin.Tasten}</TableBodyCell>

@@ -137,7 +137,7 @@
 
   let formatDate = (date) => {
     dayjs.locale('de');
-    return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
+    return dayjs(date).format('dd. D.M. H:mm ');
   };
 
   let combo = {};
@@ -286,7 +286,7 @@
                 <TableBodyCell>
                   <div class="flex flex-col place-items-center">
                     <PredigtAvatar prediger={termin.Verantwortlich} />
-                    {formatDate(dayjs(termin.Termin).toDate())}
+                    {formatDate(termin.Termin)}
                   </div>
                 </TableBodyCell>
                 <TableBodyCell>
