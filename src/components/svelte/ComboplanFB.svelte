@@ -66,7 +66,7 @@
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
-      <Toggle bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
+      <Toggle color="teal" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       <Table striped={true}>
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>

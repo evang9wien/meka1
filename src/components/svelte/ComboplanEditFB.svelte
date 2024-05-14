@@ -267,10 +267,7 @@
         </div>
       {/if}
 
-      {#if terminAdminRole}
-        <TerminAdmin />
-      {/if}
-      <Toggle bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
+      <Toggle color="teal" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       <Table striped={true}>
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>
@@ -354,6 +351,9 @@
           {/each}
         </TableBody>
       </Table>
+      {#if terminAdminRole}
+        <TerminAdmin />
+      {/if}
     </Card>
   </div>
 {/if}
