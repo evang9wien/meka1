@@ -81,6 +81,8 @@
 
   let showComboProben = false;
 
+  let alleTermine;
+
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
     const liederDBAuswahlLoad = [];
@@ -182,29 +184,39 @@
       onValue(dbRef, async (snapshot) => {
         if (snapshot) {
           if (dbRealtimeOnce) return;
-          termine = Object.values(snapshot.val()).map((t) => ({
+          alleTermine = Object.values(snapshot.val()).map((t) => ({
             ...t,
             name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
             value: t.Termin,
           }));
-          termine = termine.filter((t) => t.Veranstaltung == 'GD');
-          console.log('Termine: ', termine);
-
-          const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
-
-          const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
-          console.log('Termin: ', termin);
-          if (termin.LiedAuswahl) liederDBAuswahl = termin.LiedAuswahl;
-          selectedTermin = termin.Termin;
-          verantwortlich = termin.Verantwortlich;
-          console.log('LiederDBAuswahl: ', liederDBAuswahl);
-          handleLiederDBAuswahl();
+          handleTermine();
 
           popupSpinnerModal = false;
         }
       });
     });
   });
+
+  const handleTermine = () => {
+    window.setTimeout(() => {
+      popupSpinnerModal = true;
+      liederDBAuswahl = [];
+      termine = alleTermine.filter((t) => t.Veranstaltung == (showComboProben ? 'CP' : 'GD'));
+      console.log('Termine: ', termine);
+
+      const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
+
+      const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
+      console.log('Termin: ', termin);
+      if (termin.LiedAuswahl) liederDBAuswahl = termin.LiedAuswahl;
+      selectedTermin = termin.Termin;
+      verantwortlich = termin.Verantwortlich;
+      console.log('Verantwortlich: ', verantwortlich);
+      console.log('LiederDBAuswahl: ', liederDBAuswahl);
+      handleLiederDBAuswahl();
+      popupSpinnerModal = false;
+    });
+  };
 
   const handleSelectDate = () => {
     // console.log(sel);
@@ -389,10 +401,12 @@
         {#if termine}
           <div class="flex space-x-4 mb-6">
             {#if verantwortlich}
-              <PredigtAvatar prediger={verantwortlich} />
+              {#key verantwortlich}
+                <PredigtAvatar prediger={verantwortlich} />
+              {/key}
             {/if}
             <div class="space-y-1 font-medium dark:text-white">
-              <div>LiederAuswahl für den Gottesdienst bearbeiten</div>
+              <div>Liederauswahl bearbeiten</div>
               {#if verantwortlich}
                 <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
               {/if}
@@ -421,7 +435,7 @@
             >
           </div>
         {/if}
-        <Toggle color="teal" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
+        <Toggle color="teal" bind:checked={showComboProben} on:click={handleTermine}>Comboproben anzeigen</Toggle>
       </div>
       <div>
         {#if liedReihenfolgeSelected}

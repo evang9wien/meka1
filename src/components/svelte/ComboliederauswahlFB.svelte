@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { Label, Select } from 'flowbite-svelte';
+  import { Label, Select, Toggle } from 'flowbite-svelte';
   import { Button, Modal } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import { A } from 'flowbite-svelte';
@@ -62,6 +62,10 @@
   let auth;
   let dbFireStore;
 
+  let showComboProben = false;
+
+  let alleTermine;
+
   const loadLieder = async (termin) => {
     console.log('Selected Termin: ', termin);
     if (termin.LiedAuswahl) {
@@ -95,7 +99,7 @@
         const o = { ...l, ...docSnap.data() };
         liederAus.push(o);
         liederauswahl = liederAus;
-        console.log('Lieder: ', liederauswahl);
+        // console.log('Lieder: ', liederauswahl);
       } else {
         // docSnap.data() will be undefined in this case
         console.log('No such document!');
@@ -142,31 +146,32 @@
 
       onValue(dbRef, async (snapshot) => {
         if (snapshot) {
-          termine = Object.values(snapshot.val()).map((t) => ({
+          alleTermine = Object.values(snapshot.val()).map((t) => ({
             ...t,
             name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
             value: t.Termin,
           }));
-          console.log('Alle Termine: ', termine);
-          termine = termine.filter((t) => t.Veranstaltung == 'GD');
-          console.log('Termine: ', termine);
-
-          const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
-          console.log('Now: ', now);
-
-          // const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
-          // console.log('Temine: ', dbRef);
-
-          // onValue(dbRefNow, async (snapshot) => {
-          const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
-          console.log('Termin: ', termin);
-          // const termin = Object.values(snapshot.val())[0];
-          loadLieder(termin);
-          // });
+          console.log('Alle Termine: ', alleTermine);
+          handleTermine();
         }
       });
     });
   });
+
+  const handleTermine = () => {
+    window.setTimeout(() => {
+      termine = alleTermine.filter((t) => t.Veranstaltung == (showComboProben ? 'CP' : 'GD'));
+      console.log('Termine: ', termine);
+
+      const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
+      console.log('Now: ', now);
+
+      const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
+      console.log('Termin: ', termin);
+
+      loadLieder(termin);
+    });
+  };
 
   const handleSelect = (sel) => {
     console.log(sel);
@@ -181,23 +186,6 @@
       liederauswahl = undefined;
       const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
       loadLieder(termin);
-      // const token = localStorage.getItem('jwt');
-      // const authConfig = {
-      //   headers: {
-      //     Authorization: 'Bearer ' + token,
-      //   },
-      // };
-      // axios
-      //   .get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl?date=' + selectedTermin, authConfig)
-      //   .then((response) => {
-      //     liederauswahl = JSON.parse(response.data);
-
-      //     if (liederauswahl[0]) {
-      //       const lied1 = liederauswahl[0];
-      //       verantwortlich = lied1.Verantwortlich;
-      //     }
-      //     popupSpinnerModal = false;
-      //   });
     }, 300);
   };
 </script>
@@ -205,12 +193,14 @@
 {#if userAuth && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
-      <div>
+      <div class="space-x-4 mb-4">
         {#if termine}
           <Label>
             <div class="flex space-x-4 mb-6">
               {#if verantwortlich}
-                <PredigtAvatar prediger={verantwortlich} />
+                {#key verantwortlich}
+                  <PredigtAvatar prediger={verantwortlich} />
+                {/key}
               {/if}
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>
@@ -228,7 +218,9 @@
           </Label>
         {/if}
       </div>
-
+      <div class="space-x-4 mb-6">
+        <Toggle color="teal" bind:checked={showComboProben} on:click={handleTermine}>Comboproben anzeigen</Toggle>
+      </div>
       <div>
         {#if liederauswahl}
           <Table striped="true">

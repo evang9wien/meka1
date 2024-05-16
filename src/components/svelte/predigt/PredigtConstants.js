@@ -5,9 +5,10 @@ namenMap.set('SFJ', 'Pfarrer Stefan Fleischner-Janits');
 namenMap.set('WW', 'Lektor Wolfgang Waldschütz');
 namenMap.set('TDH', 'Lektorin Tanja Dietrich-Hübner');
 namenMap.set('MRH', 'Lektor Mark Ruiz-Hellin');
+namenMap.set('COM', 'Comboprobe');
 
 export function getLongName(name) {
-  return namenMap.get(name);
+  return namenMap.get(name) ? namenMap.get(name) : '';
 }
 
 const imgMap = new Map();
