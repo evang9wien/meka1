@@ -132,21 +132,6 @@
       dbFireStore = getFirestore(app);
 
       const dbRealtime = getDatabase(app);
-      const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
-      console.log('Now: ', now);
-
-      const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
-      // console.log('Temine: ', dbRef);
-
-      onValue(dbRefNow, async (snapshot) => {
-        const termin = Object.values(snapshot.val())[0];
-        loadLieder(termin);
-        // liederauswahl = liederAus;
-        // console.log('Lieder: ', liederauswahl);
-        // console.log('liederL: ', liederauswahl.length);
-        // liederauswahl.forEach((e) => console.log('E: ', e));
-        // console.log('Lieder: ', liederAus);
-      });
 
       const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
       const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
@@ -162,28 +147,25 @@
             name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
             value: t.Termin,
           }));
+          console.log('Alle Termine: ', termine);
           termine = termine.filter((t) => t.Veranstaltung == 'GD');
           console.log('Termine: ', termine);
+
+          const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
+          console.log('Now: ', now);
+
+          // const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
+          // console.log('Temine: ', dbRef);
+
+          // onValue(dbRefNow, async (snapshot) => {
+          const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
+          console.log('Termin: ', termin);
+          // const termin = Object.values(snapshot.val())[0];
+          loadLieder(termin);
+          // });
         }
       });
     });
-    // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliederauswahl', getAuthHeader()).then((response) => {
-    //   liederauswahl = JSON.parse(response.data);
-    //   if (liederauswahl[0]) {
-    //     const lied1 = liederauswahl[0];
-    //     selectedTermin = lied1.Termin_Liedliste;
-    //     lastSelectedTermin = selectedTermin;
-    //     // verantwortlich = lied1.Verantwortlich;
-    //   }
-    //   popupSpinnerModal = false;
-    //   console.log('Lieder alt: ', liederauswahl);
-    // });
-    // axios.get(getUrl() + '/root/wp-json/combo/v1/combotermine?from_date=-30&to_date=30').then((response) => {
-    //   termine = JSON.parse(response.data);
-    //   // termine = termine.map((t) => ({ ...t, name: t.Termin, value: t.Termin }));
-    //   termine = termine.map((t) => ({ ...t, name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''), value: t.Termin }));
-    //   console.log(termine);
-    // });
   });
 
   const handleSelect = (sel) => {

@@ -2,7 +2,7 @@
   // Anlegen und bearbeiten der Liederauswahl für den nächsten Sonntag
   import { onMount } from 'svelte';
   import { Label, Select } from 'flowbite-svelte';
-  import { A, Button } from 'flowbite-svelte';
+  import { A, Button, Toggle } from 'flowbite-svelte';
   import { GradientButton } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
   import {
@@ -78,6 +78,8 @@
   let dbRealtime;
 
   let dbRealtimeOnce = false;
+
+  let showComboProben = false;
 
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
@@ -189,24 +191,14 @@
           console.log('Termine: ', termine);
 
           const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
-          // console.log('Now: ', now.format('YYYY-MM-DD'));
 
-          const dbRefNow = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(now), limitToFirst(1));
-          // console.log('Temine: ', dbRef);
-
-          onValue(dbRefNow, async (snapshot) => {
-            if (snapshot) {
-              if (dbRealtimeOnce) return;
-              const termin = Object.values(snapshot.val())[0];
-              console.log('Termin: ', termin);
-              if (termin.LiedAuswahl) liederDBAuswahl = termin.LiedAuswahl;
-              selectedTermin = termin.Termin;
-              verantwortlich = termin.Verantwortlich;
-              console.log('LiederDBAuswahl: ', liederDBAuswahl);
-              handleLiederDBAuswahl();
-              dbRealtimeOnce = true;
-            }
-          });
+          const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
+          console.log('Termin: ', termin);
+          if (termin.LiedAuswahl) liederDBAuswahl = termin.LiedAuswahl;
+          selectedTermin = termin.Termin;
+          verantwortlich = termin.Verantwortlich;
+          console.log('LiederDBAuswahl: ', liederDBAuswahl);
+          handleLiederDBAuswahl();
 
           popupSpinnerModal = false;
         }
@@ -429,6 +421,7 @@
             >
           </div>
         {/if}
+        <Toggle color="teal" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       </div>
       <div>
         {#if liedReihenfolgeSelected}
