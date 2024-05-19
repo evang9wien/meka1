@@ -1,16 +1,12 @@
 ---
 title: Das Leben feiern!
-excerpt: 'Was haben ein altes Gurkenglas und unser Zuversichtstraining für
-  Kinder miteinander zu tun?  Vor einigen Monaten bastelten die Kinder unserer
-  Gemeinde sogenannte „Danke-Gläser“. Sie haben alte Gurkengläser liebevoll
-  gestaltet und bunt verziert. Und sie mit nach Hause genommen, verbunden mit
-  einer kleinen Aufgabe: immer, wenn etwas Schönes oder Tolles passiert, sollen
-  sie es auf einem Zettel notieren und dann in das Gurkenglas legen. Am Ende des
-  Jahres oder nach ein paar Monaten werden dann diese Zettel herausgeholt und
-  gelesen. Um sich dankbar an diese besonderen Momente wieder zu
-  erinnern.<br/>   <a class="text-muted underline dark:text-slate-400
+excerpt: Was haben ein altes Gurkenglas und unser Zuversichtstraining für Kinder
+  miteinander zu tun?  Vor einigen Monaten bastelten die Kinder unserer Gemeinde
+  sogenannte „Danke-Gläser“. Sie haben alte Gurkengläser liebevoll gestaltet und
+  bunt verziert. Und sie mit nach Hause genommen, verbunden mit einer kleinen
+  Aufgabe ...<br/>   <a class="text-muted underline dark:text-slate-400
   font-medium" target="_blank" target="_blank"
-  href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202406.pdf?alt=media&token=c5c1876e-2001-4e06-9b99-3a2f330d10f2">PDF</a>'
+  href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202406.pdf?alt=media&token=c5c1876e-2001-4e06-9b99-3a2f330d10f2">PDF</a>
 category: impuls
 tags:
   - impuls
