@@ -3,11 +3,11 @@ title: König in einer verlorenen Welt
 excerpt: 'Er hat es tatsächlich geschafft: der Rechtspopulist und selbsternannte
   Anarchokapitalist Javier Milei gewinnt die Präsidentenwahl in Argentinien.
   Bekannt geworden ist das neue ...<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/11/Gemeindezeitung202311.pdf">PDF</a>'
+  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202311.pdf?alt=media&token=bc72c980-945e-4ca5-82e2-e1832ef635b9">PDF</a>'
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2023/11/chainsaw-Bearbeitet-e1701082145764.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1716415518/Homepage/News/chainsaw-Bearbeitet_u96oqb.jpg
 publishDate: 2023-11-26T21:32:39.382Z
 author: stfj
 ---
