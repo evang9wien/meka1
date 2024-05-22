@@ -63,7 +63,7 @@ apps:
 analytics:
   vendors:
     googleAnalytics:
-      id: 'G-DQEDT60Q5K'
+      id: null # 'G-DQEDT60Q5K'
 
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
