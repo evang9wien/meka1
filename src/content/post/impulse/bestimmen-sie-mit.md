@@ -1,11 +1,11 @@
 ---
 title: Bestimmen Sie mit
 excerpt: '"First autumn day makes me a little sad", singt die österreichische Gingerpop-Band “Daisy O’Hara” in ihrem gleichnamigen ...<br/>
-<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/09/Gemeindezeitung202308.pdf">PDF</a>'
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202308.pdf?alt=media&token=995ad18a-477c-48b4-8c1b-5b70fdf4d37a">PDF</a>'
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2023/11/230109_gv-wahl_160123_36a_epd_uschmannm.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1716416797/Homepage/News/230109_gv-wahl_160123_36a_epd_uschmannm_onsozu.jpg
 publishDate: 2023-8-26T21:32:39.382Z
 author: stfj
 ---

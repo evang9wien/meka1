@@ -1,11 +1,11 @@
 ---
 title: 'Trauer: Kein Problem'
 excerpt: '„Jetzt trägst du noch immer schwarz?“, wurde eine Bekannte einst bei einer Familienfeier gefragt. Damals lag der Verlust ihres Ehemanns schon mehr als ein halbes Jahr zurück. Seit dem Tod ...<br/>
-<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://www.evang9.wien/root/wp-content/uploads/2023/10/Gemeindezeitung202310.pdf">PDF</a>'
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202310.pdf?alt=media&token=f6af1772-5d8a-4229-8bea-8453c40eddf3">PDF</a>'
 category: impuls
 tags:
   - impuls
-image: https://www.evang9.wien/root/wp-content/uploads/2023/11/couple-2563424.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1716416640/Homepage/News/couple-2563424_dqujcb.jpg
 publishDate: 2023-10-26T21:32:39.382Z
 author: stfj
 ---
