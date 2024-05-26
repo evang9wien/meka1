@@ -8,7 +8,6 @@ import Calendar from '~/components/svelte/calendar/Calendar.svelte';
   tagline="Peace, Love and Understanding ..."
   title="Meka Classic"
   isReversed
-  classes={{ container: 'max-w-3xl' }}
   image={{
     src: 'https://res.cloudinary.com/dqjdjviob/image/upload/v1714831192/Homepage/Angebote/Foto2Homepage-1024x532_v8pp89.jpg',
     alt: 'Meka Classic',
@@ -20,6 +19,14 @@ import Calendar from '~/components/svelte/calendar/Calendar.svelte';
     definitiv um die Bibel geht. Wie man mit der Bibel umgeht, wenn sich schon einiges an Menschen(er)kenntnis
     angesammelt hat. Nix für junge Hupfer, aber ideal für Menschen mit Lebensklugheit; die auch an einer Diskussion
     interessiert sind.
+    <br />
+     Wer sich ein Bild vom bisherigen Geschehen rund um Pfarrer in Ruhe Harald Geschl und Team machen will, kann sich
+    auf dem <a
+      class="text-muted underline dark:text-slate-400 font-medium"
+      href="https://www.youtube.com/@classicbibel7354"
+      target="_blank"
+      rel="noreferrer noopener">Classic Bibel Youtube-Kanal</a
+    > gut informieren.
   </Fragment>
   <Fragment slot="subtitle">
     Wenn es für Sie keine Frage war, Beatles oder Rolling Stones, wenn Sie selbst einmal in einem „Käfer“ saßen, oder
@@ -27,10 +34,12 @@ import Calendar from '~/components/svelte/calendar/Calendar.svelte';
     wenn Sie wissen was „Peace, Love and Understanding“ bedeutete und „franz“ nicht nur ein Vorname war, dann ist diese
     Einladung für Sie genau richtig. Es ist kein „Kaffeekränzchen“, und für einen „Seniorenkreis“ sind wir viel zu jung!
   </Fragment>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
 </Content>
 <Content
   isAfterContent
-  classes={{ container: 'max-w-3xl' }}
   image={{
     src: 'https://res.cloudinary.com/dqjdjviob/image/upload/v1714831210/Homepage/Angebote/Mekaclassic_lfe4yz.jpg',
     alt: 'KS',
@@ -46,14 +55,6 @@ import Calendar from '~/components/svelte/calendar/Calendar.svelte';
         <li>Donnerstag, 4. April 2024</li>
         <li>Donnerstag, 2. Mai 2024</li> -->
       </ul>
-      <br />
-       Wer sich ein Bild vom bisherigen Geschehen rund um Pfarrer in Ruhe Harald Geschl und Team machen will, kann sich
-      auf dem <a
-        class="text-muted underline dark:text-slate-400 font-medium"
-        href="https://www.youtube.com/@classicbibel7354"
-        target="_blank"
-        rel="noreferrer noopener">Classic Bibel Youtube-Kanal</a
-      > gut informieren.
     </div>
   </Fragment>
 </Content>

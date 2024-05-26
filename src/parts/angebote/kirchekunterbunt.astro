@@ -1,5 +1,6 @@
 ---
 import Content from '~/components/widgets/Content.astro';
+import Calendar from '~/components/svelte/calendar/Calendar.svelte';
 ---
 
 <Content
@@ -25,11 +26,7 @@ import Content from '~/components/widgets/Content.astro';
     Tischgemeinschaft. Die Teilnahme ist gratis. Kirche Kunterbunt ist eine „fresh expressions of church“ – ein neue
     Ausdrucksform von Kirche. Sie hat 5 bis 12-Jährige und ihre Bezugspersonen gemeinsam im Blick. Junge Familien, auch
     Paten und Großeltern, können hier Gemeinde erleben, auch wenn sie bisher wenig Bezug zu Glauben und Kirche hatten.<br
-    /><br />
-    <b>Nächster Termin:</b>
-    <br />
-    <!-- Kirche Kunterbunt <br />
-    <b>Samstag, 27. April 2024, 15:30</b> -->
+    />
   </Fragment>
   <Fragment slot="subtitle">
     Wir starten mit Kirche Kunterbunt: eine neue Form, miteinander zu feiern und eine gute Zeit zu verbringen. Für
@@ -40,6 +37,7 @@ import Content from '~/components/widgets/Content.astro';
   </Fragment>
 </Content>
 <Content
+  isAfterContent
   items={[
     {
       title: 'gastfreundlich',
@@ -63,6 +61,7 @@ import Content from '~/components/widgets/Content.astro';
 />
 <Content
   id="kirchekunterbunt"
+  isAfterContent
   isReversed
   items={[
     {
@@ -83,5 +82,22 @@ import Content from '~/components/widgets/Content.astro';
 >
   <Fragment slot="bg">
     <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</Content>
+<Content
+  isAfterContent
+  image={{
+    src: 'https://images.unsplash.com/photo-1550534791-2677533605ab?q=80&w=3360&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    alt: 'Termin',
+  }}
+>
+  <Fragment slot="content">
+    <div class="text-left">
+      Kirche Kunterbunt findet meist an einem Samstag statt in den Räumlichkeiten der Messiaskapelle. <br /><br />
+      <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Termine:</h2>
+      <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+        <Calendar client:load filter="kirche kunterbunt" />
+      </ul>
+    </div>
   </Fragment>
 </Content>
