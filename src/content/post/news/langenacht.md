@@ -3,7 +3,7 @@ title: Das Leben feiern!
 excerpt: Am 7.Juni um 19:00 laden das Viktor Frankl Zentrum Wien & die Evangelische Messiaskapelle im Rahmen der 'Langen Nacht der Kirchen' zu einem Vortragsabend ein. <a class="text-muted underline font-medium" href="/news/langenacht">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714575948/Homepage/News/Copy_of_Das_Leben_feiern_rp72wt.jpg
 publishDate: 2024-04-30T21:32:43.810Z
 author: Andreas
