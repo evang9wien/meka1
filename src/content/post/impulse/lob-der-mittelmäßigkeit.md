@@ -3,7 +3,9 @@ title: Lob der Mittelmäßigkeit
 excerpt: Wie geht es Ihnen, wenn Sie das Wort „mittelmäßig“ lesen? Für viele ist
   es eher negativ konnotiert. Mittelmäßig, das ist eben doch letztendlich zu
   wenig. Da geht mehr, das geht besser! In Zeiten der Selbstoptimierung ist
-  mittelmäßig eben nicht genug.
+  mittelmäßig eben nicht genug.<br/> <a class="text-muted underline
+  dark:text-slate-400 font-medium" target="_blank"
+  href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202407.pdf?alt=media&token=f65a1124-2e05-44bd-b8a2-f59056d9ce36">PDF</a>
 category: impuls
 tags:
   - impuls
