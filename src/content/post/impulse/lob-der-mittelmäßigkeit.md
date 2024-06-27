@@ -9,7 +9,7 @@ excerpt: Wie geht es Ihnen, wenn Sie das Wort „mittelmäßig“ lesen? Für vi
 category: impuls
 tags:
   - impuls
-image: https://res.cloudinary.com/dqjdjviob/image/upload/v1719517126/Homepage/News/legs-4666061-200-112_vbbeq1.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1719518682/Homepage/News/legs-4666061-900-506_woqaqd.jpg
 publishDate: 2024-06-27T21:46:00.000Z
 author: stfj
 ---
