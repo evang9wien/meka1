@@ -24,6 +24,11 @@
         "type": 301
       },
       {
+        "regex": "/root/termine/?",
+        "destination": "/termine",
+        "type": 301
+      },
+      {
         "regex": "/root/meka-classic/?",
         "destination": "/angebote#mekaclassic",
         "type": 301
