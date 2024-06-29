@@ -9,6 +9,31 @@
         "type": 301
       },
       {
+        "regex": "/root/neu-fuer-familie-co-kirche-kunterbunt/?",
+        "destination": "/angebote#kirchekunterbunt",
+        "type": 301
+      },
+      {
+        "regex": "/root/schoen-dass-sie-mich-gefunden-haben/?",
+        "destination": "/#pfarrer",
+        "type": 301
+      },
+      {
+        "regex": "/root/kontakt/?",
+        "destination": "/kontakt",
+        "type": 301
+      },
+      {
+        "regex": "/root/meka-classic/?",
+        "destination": "/angebote#mekaclassic",
+        "type": 301
+      },
+      {
+        "regex": "/root/gottesdienste/zum-nachhoeren/?",
+        "destination": "/nachhoeren",
+        "type": 301
+      },
+      {
         "source": "/root",
         "destination": "/",
         "type": 301
