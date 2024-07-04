@@ -1,7 +1,7 @@
 ---
 title: Neue Webseite
 excerpt: Willkommen auf der neuen Homepage der evangelischen MESSIASKAPELLE am
-  Alsergrund!   Wir freuen uns, Euch hier begrüßen zu dürfen.
+  Alsergrund!   Wir freuen uns, Euch hier begrüßen zu dürfen. <a class="text-muted underline  font-medium" href="/news/neue-homepage">Mehr anzeigen</a>.
 category: news
 tags:
   - news
