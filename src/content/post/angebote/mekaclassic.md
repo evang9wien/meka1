@@ -1,14 +1,14 @@
 ---
 excerpt: Unser Bibelkreis für Menschen mit Lebenserfahrung trifft sich in der
-  Regel am 1. Donnerstag im Monat. Weiterführende Informationen finden Sie hier.
+  Regel am 1. Donnerstag im Monat. Weiterführende Informationen finden Sie <a class="text-muted underline  font-medium" href="/angebote#mekaclassic">hier</a>.
 author: Andreas
 metadata:
   canonical: https://astrowind.vercel.app/astrowind-template-in-depth
 title: MEKA Classic startet in den Herbst
 category: Documentation
 tags:
-  - deleted
-image: https://www.evang9.wien/root/wp-content/uploads/2022/11/220211_bibel_classic.jpg
+  - news
+image: https://res.cloudinary.com/dqjdjviob/image/upload/w_768,h_768,c_lfill,f_auto/v1714831210/Homepage/Angebote/Mekaclassic_lfe4yz
 publishDate: 2023-07-17T00:00:00.000Z
 ---
 
@@ -17,17 +17,8 @@ Wenn es für Sie keine Frage war, Beatles oder Rolling Stones, wenn Sie selbst e
 Mit dieser charmanten Art wollen wir zu unserem Angebot in der MESSIASKAPELLE einladen. Gedacht in erster Linie für Menschen, die schon auf eine bestimmte Lebenserfahrung zurückblicken können.
 Es ist ein Angebot, bei dem es definitiv um die Bibel geht. Wie man mit der Bibel umgeht, wenn sich schon einiges an Menschen(er)kenntnis angesammelt hat. Nix für junge Hupfer, aber ideal für Menschen mit Lebensklugheit; die auch an einer Diskussion interessiert sind.
 
-Im Herbst geht es weiter, dann immer am ersten Donnerstag im Monat. Termine:
+Im Herbst geht es weiter, dann immer am ersten Donnerstag im Monat von 18 bis 20 Uhr.
 
-- Donnerstag, 5. Oktober 2023
-- Donnerstag, 2. November 2023
-- Donnerstag, 4. Jänner 2024
-- Donnerstag, 1. Februar 2024
-- Donnerstag, 7. März 2024
-- Donnerstag, 4. April 2024
-- und Donnerstag, 2. Mai 2024
-  jeweils von 18 bis 20 Uhr.
+Die Termine gibt es <a class="text-muted underline  font-medium" href="/angebote#mekaclassic">hier</a>.
 
 Wer sich ein Bild vom bisherigen Geschehen rund um Pfarrer in Ruhe Harald Geschl und Team machen will, kann sich auf dem Youtube-Kanal gut informieren.
-
-![Alt text](https://www.evang9.wien/root/wp-content/uploads/2022/11/Foto2Homepage-1024x532.jpg)
