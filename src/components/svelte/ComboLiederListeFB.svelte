@@ -158,7 +158,7 @@
     }, 500);
   }
 
-  let filterKat = 'Alle Lieder';
+  let filterKat = 'Combolieder';
   let kategorien = [
     { value: 'Alle Lieder', name: 'Alle Lieder' },
     { value: 'Combolieder', name: 'Gesungene Lieder' },
