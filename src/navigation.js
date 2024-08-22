@@ -203,6 +203,14 @@ export const footerData = {
           text: 'Cloudinary',
           href: 'https://cloudinary.com/',
         },
+        {
+          text: 'EmailJS',
+          href: 'https://emailjs.com/',
+        },
+        {
+          text: 'Helloly',
+          href: 'https://www.helloly.com/',
+        },
       ],
     },
   ],
