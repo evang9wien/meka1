@@ -34,7 +34,7 @@ Bild von Politikerinnen und Politikern. Als Christ\*innen
 sollten wir uns davor hüten, alle Politiker*innen in
 denselben Topf zu werfen. In allen Parteien finden sich
 engagierte Menschen, die für das Gemeinwohl arbeiten.
-Dabei ist es oft ein undankbarer Job.<br>
+Dabei ist es oft ein undankbarer Job.
 Manch einer setzt Gesundheit und
 Familie aufs Spiel. Gerade auch
 Politikerinnen bekommen deutlich
