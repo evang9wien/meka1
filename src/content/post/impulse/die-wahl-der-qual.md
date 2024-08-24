@@ -2,7 +2,9 @@
 title: Die Wahl der Qual
 excerpt: Betet auch für die Könige und alle übrigen Machthaber. Denn wir wollen
   ein ruhiges und stilles Leben führen in ungehinderter Ausübung unseres
-  Glaubens und in Würde.
+  Glaubens und in Würde.<br/> <a class="text-muted underline dark:text-slate-400
+  font-medium" target="_blank" target="_blank"
+  href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202408.pdf?alt=media&token=06bc72b6-db24-4bf0-a01f-04b6ab8ca7a1">PDF</a>
 category: impulse
 tags:
   - impuls
