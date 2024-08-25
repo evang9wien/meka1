@@ -5,6 +5,7 @@ import Content from '~/components/widgets/Content.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Termine from '~/parts/gottesdienste/termine.astro';
 import { getPermalink } from '~/utils/permalinks';
+import Calendar from '~/components/svelte/calendar/Calendar.svelte';
 
 const metadata = {
   title: 'Termine',
@@ -65,11 +66,9 @@ const metadata = {
         Einmal im Monat im Winterhalbjahr laden wir zum OASE Gottestdienst ein. Gott begegnen in meditativer Atmosphäre,
         in Bibellesung und kurzem Impuls sowie mit Ruhe und Zeit für das persönliche Gebet. <br />
         <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Jeweils Sonntags um 19 Uhr am:</h2>
-        <!--
         <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-          <li>3. März 2024</li>
+          <Calendar client:load filter="oase" />
         </ul>
-        -->
       </div>
     </Fragment>
   </Content>
