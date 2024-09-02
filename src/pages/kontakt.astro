@@ -22,7 +22,8 @@ const minZoom = 12;
 const maxZoom = 19;
 const marker = [48.2231769, 16.3641052];
 const markerPopup = 'Evangelische Messiaskapelle';
-const markerPath = SITE.base + '/leaflet/images';
+const imagePath = typeof SITE.base !== 'string' ? '/' : SITE.base.toString();
+const markerPath = imagePath + (imagePath.endsWith('/') ? '' : '/') + 'leaflet/images/';
 ---
 
 <Layout metadata={metadata}>

@@ -14,7 +14,7 @@
   var mark;
   var attr;
 
-  L.Icon.Default.prototype.options.imagePath = String(markerPath + '/');
+  L.Icon.Default.prototype.options.imagePath = String(markerPath);
 
   onMount(async () => {
     map = L.map('map', {
