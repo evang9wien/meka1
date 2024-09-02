@@ -4,7 +4,7 @@ excerpt: Konfi in der Region Wien Mitte heißt im nächsten Schuljahr 2024/25 - 
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1720127037/Homepage/Konfi/202b0bcb-f709-469c-97db-529844f288c2.png
-publishDate: 2024-07-4T21:32:43.810Z
+publishDate: 2024-09-4T21:32:43.810Z
 author: Andreas
 ---
 

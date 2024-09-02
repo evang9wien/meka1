@@ -9,7 +9,7 @@ category: Documentation
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/w_768,h_768,c_lfill,f_auto/v1714831210/Homepage/Angebote/Mekaclassic_lfe4yz
-publishDate: 2023-07-17T00:00:00.000Z
+publishDate: 2024-07-17T00:00:00.000Z
 ---
 
 Wenn es für Sie keine Frage war, Beatles oder Rolling Stones, wenn Sie selbst einmal in einem „Käfer“ saßen, oder jemanden kennen, der einen „Käfer“ hatte, wenn Sie wissen, wer zu einem Journalisten sagte „Lernen Sie Geschichte!“, wenn Sie wissen was „Peace, Love and Understanding“ bedeutete und „franz“ nicht nur ein Vorname war, dann ist diese Einladung für Sie genau richtig. Es ist kein „Kaffeekränzchen“, und für einen „Seniorenkreis“ sind wir viel zu jung!
