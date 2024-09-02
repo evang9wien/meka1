@@ -3,14 +3,14 @@ title: Gemeinsam Wachsen
 excerpt: '"Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus
   wirklich gelebt? Als Pfarrer einer kleinen Großstadtgemeinde mache ich oft
   diese Erfahrung: Menschen haben großes Interesse an spirituellen Fragen,
-  wissen aber nicht genau, wo sie darauf Antworten finden sollen.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202402.pdf?alt=media&token=a04c96a0-2f2d-4f9b-9231-739a6803dad8">PDF</a>'
+  wissen aber nicht genau, wo sie darauf Antworten finden sollen.'
 category: impulse
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/snowdrop-280950_scaled_qr78fz.jpg
 publishDate: 2024-02-07T20:29:47.616Z
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202402.pdf?alt=media&token=a04c96a0-2f2d-4f9b-9231-739a6803dad8
 ---
 
 Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus wirklich gelebt?

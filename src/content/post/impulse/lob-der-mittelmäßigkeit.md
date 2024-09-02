@@ -3,16 +3,16 @@ title: Lob der Mittelmäßigkeit
 excerpt: Wie geht es Ihnen, wenn Sie das Wort „mittelmäßig“ lesen? Für viele ist
   es eher negativ konnotiert. Mittelmäßig, das ist eben doch letztendlich zu
   wenig. Da geht mehr, das geht besser! In Zeiten der Selbstoptimierung ist
-  mittelmäßig eben nicht genug.<br/> <a class="text-muted underline
-  dark:text-slate-400 font-medium" target="_blank"
-  href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202407.pdf?alt=media&token=f65a1124-2e05-44bd-b8a2-f59056d9ce36">PDF</a>
+  mittelmäßig eben nicht genug.
 category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1719518682/Homepage/News/legs-4666061-900-506_woqaqd.jpg
 publishDate: 2024-06-27T21:46:00.000Z
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202407.pdf?alt=media&token=f65a1124-2e05-44bd-b8a2-f59056d9ce36
 ---
+
 Für Schülerinnen und Schüler gibt es wohl kaum einen
 wichtigeren Tag im Schuljahr: der Zeugnistag zu Beginn
 des Sommers! Für die einen ein Tag zum Feiern. Einerseits,
@@ -47,7 +47,7 @@ vielen mittelmäßigen Menschen: die
 600.000 Israeliten, die aus Ägypten
 befreit wurden und 40 Jahre in der
 Wüste lebten. Die 5000, die beim Speisewunder dabei
-waren. Die ersten Christ*innen, die von Paulus einen
+waren. Die ersten Christ\*innen, die von Paulus einen
 Brief bekamen.<br/>
 Wir sind von mittelmäßigen Menschen umgeben. Und
 das erfüllt mich mit Demut. Dabei lerne ich, dass ich mit

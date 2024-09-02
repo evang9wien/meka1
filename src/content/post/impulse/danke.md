@@ -1,13 +1,13 @@
 ---
 title: Danke!
-excerpt: 'Wenn der Esstisch nach dem Frühstück der Kinder wie ein Schlachtfeld aussieht. Wenn ein Arbeitstag nicht enden mag. Wenn im Supermarkt mal wieder die Melanzani ausverkauft sind, obwohl man ein ...<br/>
-<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202309.pdf?alt=media&token=bc6502ba-5273-4411-addf-0a853bd4aeb2">PDF</a>'
+excerpt: 'Wenn der Esstisch nach dem Frühstück der Kinder wie ein Schlachtfeld aussieht. Wenn ein Arbeitstag nicht enden mag. Wenn im Supermarkt mal wieder die Melanzani ausverkauft sind, obwohl man ein ...'
 category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1716416727/Homepage/News/market-4354598_njuwg4.jpg
 publishDate: 2023-9-26T21:32:39.382Z
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202309.pdf?alt=media&token=bc6502ba-5273-4411-addf-0a853bd4aeb2
 ---
 
 Wenn der Esstisch nach dem Frühstück der Kinder wie ein Schlachtfeld aussieht. Wenn ein Arbeitstag nicht enden mag. Wenn im Supermarkt mal wieder die Melanzani ausverkauft sind, obwohl man ein Baba Ganoush zubereiten wollte.

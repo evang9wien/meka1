@@ -50,6 +50,7 @@ collections:
       - { label: 'Image', name: 'image', widget: 'string' }
       - { label: 'Publish Date', name: 'publishDate', widget: 'datetime', required: false }
       - { label: 'Author', name: 'author', widget: 'string' }
+      - { label: 'PDF', name: 'pdf', widget: 'string' }
       - { label: 'Content', name: 'body', widget: 'markdown' }
   - name: 'news'
     label: 'News'

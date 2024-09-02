@@ -42,6 +42,9 @@ export interface Post {
 
   /**  */
   readingTime?: number;
+
+  /**  */
+  pdf?: string;
 }
 
 export interface MetaData {

@@ -3,15 +3,14 @@ title: 'Musik: Gabe & Geschenk'
 excerpt: 'Musik ist in der Lage, unsere Laune aufzuhellen. Sie schenkt uns Trost
   in schweren Stunden. Manchmal kann es schön sein, einem traurigen Moment mit
   Musik eine gewisse Tiefe zu geben und ein Lied, das wir zuletzt vor vielen
-  Jahren gehört haben, kann uns hier und heute in die Stimmung von damals
-  versetzen.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202403.pdf?alt=media&token=996c9888-3008-492a-a402-deb2492a4df6">PDF</a>'
+  Jahren gehört haben, kann uns hier und heute in die Stimmung von damals versetzen.'
 category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/meka-konzert24_inspired_stydgn.jpg
 publishDate: 2024-03-02T11:56:18.065Z
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202403.pdf?alt=media&token=996c9888-3008-492a-a402-deb2492a4df6
 ---
 
 _„Du holde Kunst, in wieviel grauen Stunden<br/>

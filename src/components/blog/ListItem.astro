@@ -76,6 +76,17 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     </header>
 
     {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-lg" set:html={post.excerpt} />}
+
+    <div class="inline">
+      {
+        post.pdf && (
+          <a href={post.pdf} class="text-muted dark:text-slate-400 text-lg underline font-medium" target="_blank">
+            PDF
+          </a>
+        )
+      }
+    </div>
+
     <footer class="mt-5">
       <PostTags tags={post.tags} />
     </footer>

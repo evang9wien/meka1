@@ -3,14 +3,14 @@ title: Zeit zur Umkehr
 excerpt: 'Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksal
   der Juden und ungezählter anderer Verfolgter unempfindlich zeigten. […] Die
   Kirchen haben gegen sichtbares Unrecht nicht protestiert, sie haben
-  geschwiegen und weggeschaut.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202401.pdf?alt=media&token=fda30d3a-cbdb-480c-bf32-bd92264e7171">PDF</a>'
+  geschwiegen und weggeschaut.'
 category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/israeli-flag_w2gzij.jpg
 publishDate: 2023-12-14T17:49:19.237Z
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202401.pdf?alt=media&token=fda30d3a-cbdb-480c-bf32-bd92264e7171
 ---
 
 „Mit Scham stellen wir fest, daß sich unsere Kirchen für das Schicksal der Juden und ungezählter anderer Verfolgter unempfindlich zeigten. \[…] Die Kirchen haben gegen sichtbares Unrecht nicht protestiert, sie haben geschwiegen und weggeschaut, sie sind ‚dem Rad nicht in die Speichen gefallen‘ (Bonhoeffer).“

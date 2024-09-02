@@ -4,14 +4,14 @@ excerpt: 'Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/> Ja, Sie
   haben richtig gelesen: der Zweifel gehört nicht nur zum Glauben dazu, er hilft
   und bereichert ihn sogar. Denn der Zweifel ist weder gut noch schlecht.
   Vielmehr ist er eine stetige Einladung, sich immer wieder neu mit seinem
-  Glauben zu beschäftigen.<br/>
-  <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202404.pdf?alt=media&token=9c7743d5-c4d8-4473-9a3c-38b3d1cbfb91">PDF</a>'
+  Glauben zu beschäftigen.'
 category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714764982/Homepage/News/egg-2655031_200_mhgsl0.jpg
 publishDate: 2024-04-21T16:31:00.000Z
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202404.pdf?alt=media&token=9c7743d5-c4d8-4473-9a3c-38b3d1cbfb91
 ---
 
 Ostern geht, der Zweifel bleibt. Und das ist gut so!<br/>

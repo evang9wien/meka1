@@ -2,15 +2,15 @@
 title: Die Wahl der Qual
 excerpt: Betet auch für die Könige und alle übrigen Machthaber. Denn wir wollen
   ein ruhiges und stilles Leben führen in ungehinderter Ausübung unseres
-  Glaubens und in Würde.<br/> <a class="text-muted underline dark:text-slate-400
-  font-medium" target="_blank" target="_blank"
-  href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202408.pdf?alt=media&token=06bc72b6-db24-4bf0-a01f-04b6ab8ca7a1">PDF</a>
+  Glaubens und in Würde.
 category: impulse
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1724516937/wahl_900x600_bx1tgr.jpg
 author: stfj
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202408.pdf?alt=media&token=06bc72b6-db24-4bf0-a01f-04b6ab8ca7a1
 ---
+
 Ende September wählt Österreich nach fünf Jahren
 wieder seinen Nationalrat. Am 29.9. geht es um nichts
 weniger als die politische Zukunft unseres Landes.<br><br>
@@ -31,7 +31,7 @@ innen gesprochen? Wie glaubhaft ist der Einsatz
 gegen Diskriminierung und für Gleichberechtigung?<br><br>
 Wahl der Qual? Viele Menschen haben ein schlechtes
 Bild von Politikerinnen und Politikern. Als Christ\*innen
-sollten wir uns davor hüten, alle Politiker*innen in
+sollten wir uns davor hüten, alle Politiker\*innen in
 denselben Topf zu werfen. In allen Parteien finden sich
 engagierte Menschen, die für das Gemeinwohl arbeiten.
 Dabei ist es oft ein undankbarer Job.
