@@ -49,3 +49,5 @@ C O M I N G S O O N : D E I N G E N I A L E S K O N F I J A H R 2 0 2 4 / 2 0 2 
 <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2FKonfiflyer%20Final.pdf?alt=media&token=969bc415-988e-4769-b8b7-dc119e2b3d1a">Flyer</a>
 
 <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2FGemeinsame%20Konfieinladung.pdf?alt=media&token=1e7c1b22-ff18-4e9b-88d0-18361689cf2d">Einladung</a>
+
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2F240917_pra%CC%88sentation_konfikurs.pdf?alt=media&token=e11a08b1-649c-4db1-b022-e30bb3894d3d">Präsentation</a>
