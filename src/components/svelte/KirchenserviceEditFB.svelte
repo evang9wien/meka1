@@ -107,11 +107,25 @@
     const docSnap = await getDoc(maRef);
     if (docSnap.exists()) {
       members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-      members = members.map((t) => ({
-        ...t,
-        name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-        value: t.ShortName,
-      }));
+      members = members
+        .map((t) => ({
+          ...t,
+          name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
+          value: t.ShortName,
+        }))
+        .sort((a, b) => {
+          const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+          const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
+        });
       console.log('Mitarbeiter: ', members);
     }
     // });
