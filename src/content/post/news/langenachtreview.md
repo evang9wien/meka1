@@ -3,7 +3,7 @@ title: Dankbarkeit
 excerpt: Am 7.6. lud die Messiaskapelle Alsergrund Kathrin Hopfgartner vom Viktor Frankl Zentrum ein, um zum Anlass der langen Nacht der Kirchen über die Rolle der Dankbarkeit für ein Leben in Fülle zu sinnieren. <a class="text-muted underline  font-medium" href="/news/langenachtreview">Mehr anzeigen</a>.
 category: start
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1718739251/Homepage/LangeNacht/IMG_1917_uekbzw.jpg
 publishDate: 2024-06-19T22:31:10.432Z
 author: eidmann
