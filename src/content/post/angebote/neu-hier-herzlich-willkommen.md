@@ -6,7 +6,7 @@ excerpt: In der Messiaskapelle freuen wir uns immer über neue Besucher und neue
   willkommen! 🙂
 category: angebote
 tags:
-  - old
+  - news
 image: https://images.unsplash.com/photo-1623178929748-5c468ae8d8d0?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
 publishDate: 2024-01-21T17:29:33.972Z
 author: Andreas

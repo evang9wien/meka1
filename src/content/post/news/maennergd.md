@@ -2,7 +2,7 @@
 title: Männergottestdienst
 excerpt: Sie lesen richtig – ob als Mann oder nicht 😊 – es gibt ihn, diesen „Männergottesdienst“. In diesem Jahr am Sonntag, 20. Oktober, 18.00 Uhr in der Messiaskapelle (1090 Wien, Seegasse 16). <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2FMa%CC%88nner_Gottesdienst_Plakat.pdf?alt=media&token=54bfd6b2-b632-45ea-8a4b-85c4b9f424df">Einladung</a> - <a class="text-muted underline  font-medium" href="/news/maennergd">Mehr anzeigen</a>.
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1728031164/Homepage/News/maenner_v2tlok.png
 publishDate: 2024-10-4T21:32:43.810Z
 author: Andreas
