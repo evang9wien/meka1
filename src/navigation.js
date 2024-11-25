@@ -188,10 +188,6 @@ export const footerData = {
           href: getPermalink('/combo/logoutFBpage'),
         },
         {
-          text: 'DecapCMS',
-          href: 'https://evang9-wien.netlify.app/decapcms/index.html',
-        },
-        {
           text: 'Github',
           href: 'https://github.com/evang9wien/meka1',
         },
@@ -211,6 +207,19 @@ export const footerData = {
           text: 'Helloly',
           href: 'https://www.helloly.com/',
         },
+        {
+          text: 'AstroWind',
+          href: 'https://github.com/onwidget/astrowind',
+        },
+        {
+          text: 'Flowbite Svelte',
+          href: 'https://flowbite-svelte.com/',
+        },
+        {
+          text: 'Brevo',
+          href: 'https://www.brevo.com/',
+        },
+
       ],
     },
   ],
