@@ -7,7 +7,7 @@ excerpt:
 category: angebote
 tags:
   - news
-image: https://res.cloudinary.com/dqjdjviob/image/upload/v1729000109/Homepage/News/241019_plakat_kunterbunt_2_no36qd.png
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1732566949/Homepage/News/Kirche-Kunterbunt_lltxpi.png
 publishDate: 2024-10-10T17:34:35.980Z
 author: Andreas
 ---
