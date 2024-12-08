@@ -22,6 +22,10 @@ export const headerData = {
           href: getPermalink('#lektoren'),
         },
         {
+          text: 'Gemeindezeitung',
+          href: getPermalink('/tag/impuls'),
+        },
+        {
           text: 'Bilder aus der Messiaskapelle',
           href: getPermalink('/mekabilderpage'),
         },
@@ -219,7 +223,6 @@ export const footerData = {
           text: 'Brevo',
           href: 'https://www.brevo.com/',
         },
-
       ],
     },
   ],
