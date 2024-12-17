@@ -7,7 +7,7 @@ metadata:
 title: MEKA Classic startet in den Herbst
 category: Documentation
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/w_768,h_768,c_lfill,f_auto/v1714831210/Homepage/Angebote/Mekaclassic_lfe4yz
 publishDate: 2024-07-17T00:00:00.000Z
 ---
