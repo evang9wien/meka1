@@ -1,6 +1,6 @@
 ---
 title: Kinderweihnacht
-excerpt: Was haben Micha, Benjamin, Ruben, ein Fremder & die Schafe gemeinsam? <br/>Finde es heraus am heiligen Abend, 24.12. um 15 Uhr bei der  <a class="text-muted underline  font-medium" href="/news/kinderweihnachten">Kinderweihnacht</a> in der Messiaskapelle.
+excerpt: Was haben Micha, Benjamin, Ruben, ein Fremder & die Schafe gemeinsam? <br/>Finde es heraus am heiligen Abend, 24.12. um 15 Uhr bei der  <a class="text-muted underline  font-medium" href="/news/kinderweihnacht">Kinderweihnacht</a> in der Messiaskapelle.
 category: angebote
 tags:
   - news
