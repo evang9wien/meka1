@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import RegisterNewsletter from '~/components/svelte/newsletter/RegisterNewsletter.svelte';
+import NewsletterPart2 from '~/parts/newsletter/newsletterpart2.astro';
 
 const metadata = {
   title: 'Newsletter',
@@ -8,17 +8,5 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <!--  <RegisterNewsletter client:load /> -->
-  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
-    <h1 class="font-bold font-heading text-4xl md:text-5xl leading-tighter tracking-tighter">Newsletter</h1>
-    <div
-      class="mx-auto prose prose-lg max-w-4xl dark:prose-invert dark:prose-headings:text-slate-300 prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8"
-    >
-      <p>
-        In der Messiaskapelle ist immer viel los. Unser Newsletter kommt monatlich in Ihr Postfach. Bleiben Sie rund um
-        unser Gemeindeleben informiert und melden Sie sich zu unseren Newsletter unverbindlich und kostenlos an.
-      </p>
-      <RegisterNewsletter client:only />
-    </div>
-  </section>
+  <NewsletterPart2 />
 </Layout>

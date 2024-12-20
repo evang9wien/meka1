@@ -1,0 +1,24 @@
+---
+import Content from '~/components/widgets/Content.astro';
+import RegisterNewsletter from '~/components/svelte/newsletter/RegisterNewsletter.svelte';
+---
+
+<Content
+  id="newsletter"
+  tagline=""
+  actions={[]}
+  classes={{ subtitleClass: 'text-left', container: 'max-w-4xl' }}
+  image={{
+    src: 'https://unsplash.com/photos/XmMsdtiGSfo/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fG5ld3NsZXR0ZXJ8ZGV8MHx8fHwxNzM0Njg0MzIxfDI&force=true',
+    alt: 'Newsletter',
+  }}
+>
+  <Fragment slot="title">Newsletter</Fragment>
+  <Fragment slot="subtitle">
+    In der Messiaskapelle ist immer viel los. Unser Newsletter kommt monatlich in Ihr Postfach. Bleiben Sie rund um
+    unser Gemeindeleben informiert und melden Sie sich zu unseren Newsletter unverbindlich und kostenlos an.
+  </Fragment>
+  <Fragment slot="content">
+    <RegisterNewsletter client:only />
+  </Fragment>
+</Content>

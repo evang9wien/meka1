@@ -22,10 +22,6 @@ export const headerData = {
           href: getPermalink('#lektoren'),
         },
         {
-          text: 'Gemeindezeitung',
-          href: getPermalink('/tag/impuls'),
-        },
-        {
           text: 'Bilder aus der Messiaskapelle',
           href: getPermalink('/mekabilderpage'),
         },
@@ -79,6 +75,14 @@ export const headerData = {
         {
           text: 'Meka Classic',
           href: getPermalink('/angebote#mekaclassic'),
+        },
+        {
+          text: 'Gemeindezeitung',
+          href: getPermalink('/tag/impuls'),
+        },
+        {
+          text: 'Newsletter',
+          href: getPermalink('/newsletter'),
         },
       ],
     },
