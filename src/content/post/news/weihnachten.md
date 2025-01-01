@@ -3,7 +3,7 @@ title: Advent und Weihnachten bei uns erleben
 excerpt: Im Advent laden wir dich ein, dich mit uns auf den Weg zu machen, innezuhalten und auf das große Fest vorzubereiten. Zu Weihnachten feiern wir gemeinsam die Menschwerdung Gottes und entdecken die Botschaft von der Geburt Jesu neu. Herzlich willkommen bei uns in der Messiaskapelle! <a class="text-muted underline  font-medium" href="/news/weihnachten">Termine</a>
 category: angebote
 tags:
-  - news
+  - old
 image: https://images.unsplash.com/photo-1511183984173-2d821acc8407?q=80&w=3569&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
 publishDate: 2024-12-01T01:00:00.000Z
 author: andreas
