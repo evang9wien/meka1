@@ -242,5 +242,5 @@ export const footerData = {
     { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: 'https://www.facebook.com/Messiaskapelle/' },
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/evang9wien/meka1' },
   ],
-  footNote: `Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund © 2024`,
+  footNote: `Evangelische Messiaskapelle, Pfarrgemeinde A.B. Wien Alsergrund © 2025`,
 };
