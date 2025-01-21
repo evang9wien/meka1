@@ -1,5 +1,5 @@
 ---
-title: SUCHET DER STADT BESTES
+title: Suchet der Stadt Bestes
 excerpt: 25.Februar und 27. März 2025 von 19-21 Uhr in der MESSIASKAPELLE. LESEPROBE aus dem Büchlein über die Verselbständigung der MESSIASKAPELLE in den Jahren 1992-2000. Ein Abend der Rückschau in Dankbarkeit und Freude mit feiner Musik, einem guten Gläschen und reschem Brot. Anmeldung über Kontakt erbeten.  <a class="text-muted underline  font-medium" href="/news/leseprobe">Mehr anzeigen</a>.
 category: news
 tags:
