@@ -3,7 +3,7 @@ title: Prüft alles und das Gute behaltet
 excerpt: Es trifft sich gut, dass dieser Spruch ausgerechnet für das neue Jahr
   2025 die biblische Jahreslosung ist. Denn unsere Messiaskapelle feiert in
   diesem Jahr ihr 25-jähriges Bestehen.
-category: impule
+category: impuls
 tags:
   - impuls
 image: http://res.cloudinary.com/dqjdjviob/image/upload/v1735463294/Homepage/News/study-6597766_900x600.jpg
