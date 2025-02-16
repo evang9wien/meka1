@@ -12,7 +12,7 @@ image: https://res.cloudinary.com/dqjdjviob/image/upload/v1739736096/Homepage/Ne
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202502.pdf?alt=media&token=5a93c8c5-1eeb-409e-9d82-74886480001a
 ---
-„Haben Sie Erbarmen mit den Menschen, die Angst
+„Haben Sie Erbarmen mit den Menschen, die Angst 
 haben, Herr Präsident!“ Es kommt nicht häufig vor, dass
 eine us-amerikanische Bischöfin aufgrund einer Predigt
 in unserer Medienberichterstattung Erwähnung findet.
