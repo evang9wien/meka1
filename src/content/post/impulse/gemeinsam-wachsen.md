@@ -1,10 +1,10 @@
 ---
 title: Gemeinsam Wachsen
-excerpt: '"Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser Jesus
-  wirklich gelebt? Als Pfarrer einer kleinen Großstadtgemeinde mache ich oft
-  diese Erfahrung: Menschen haben großes Interesse an spirituellen Fragen,
+excerpt: '"Hat das Leben mehr zu bieten? Bringt Beten etwas? Und hat dieser
+  Jesus wirklich gelebt? Als Pfarrer einer kleinen Großstadtgemeinde mache ich
+  oft diese Erfahrung: Menschen haben großes Interesse an spirituellen Fragen,
   wissen aber nicht genau, wo sie darauf Antworten finden sollen.'
-category: impulse
+category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714765482/Homepage/News/snowdrop-280950_scaled_qr78fz.jpg
