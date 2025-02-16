@@ -23,14 +23,14 @@ Gerichtet waren die Worte an US-Präsidenten Donald
 Trump während des Gottesdienstes anlässlich seiner
 Inauguration in der National Cathedral in Washington
 Mitte Jänner. Mit ihrer mutigen Stellungnahme erhob
-sie die Stimme für Migrant*innen gleichermaßen wie
+sie die Stimme für Migrant\*innen gleichermaßen wie
 für die LGBTIQ+ Community, die unter der neuen Regierung
 Verfolgung, Abschiebung und Diskriminierung zu
 befürchten hat. Mit ihrem klaren Bekenntnis aus christlicher
 Überzeugung heraus hat sie Mut bewiesen.<br><br>
 Mut und Bekenntnis, Mut zum Bekenntnis, das gehört
 sehr oft zusammen. Ich denke da etwa an demokratische
-Politiker*innen im Osten Deutschlands, die regelmäßig
+Politiker\*innen im Osten Deutschlands, die regelmäßig
 von Rechtsextremen bedroht oder gar Opfer
 politischer Gewalttaten werden. Oder an Propst Steffen
 Paar von der evangelisch-lutherischen Nordkirche in
