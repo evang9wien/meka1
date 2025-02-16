@@ -8,7 +8,7 @@ tags:
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1716416797/Homepage/News/230109_gv-wahl_160123_36a_epd_uschmannm_onsozu.jpg
 publishDate: 2023-8-26T21:32:39.382Z
 author: stfj
-pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung/Gemeindezeitung202308.pdf?alt=media&token=995ad18a-477c-48b4-8c1b-5b70fdf4d37a
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202308.pdf?alt=media&token=995ad18a-477c-48b4-8c1b-5b70fdf4d37a
 ---
 
 „First autumn day makes me a little sad”, singt die österreichische Gingerpop-Band “Daisy O’Hara” in ihrem gleichnamigen Song. „Der erste Herbsttag macht mich immer ein bisschen traurig“, so die deutsche Übersetzung der Liedzeile. Als Sommerfreund muss ich gestehen: mir geht es tatsächlich so. Wenn er erst einmal da ist, der Herbst, ist er eh fein. Aber das Ende vom Sommer ist für mich Jahr für Jahr schmerzhaft. Abschied nehmen von der Leichtigkeit, der Lebensfreude, die der Sommer mit sich bringt.
