@@ -7,9 +7,11 @@ category: impuls
 tags:
   - impuls
 image: http://res.cloudinary.com/dqjdjviob/image/upload/v1735463294/Homepage/News/study-6597766_900x600.jpg
+publishDate: 2024-12-29T20:20:56.000Z
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202501.pdf?alt=media&token=ecd66ed4-57f2-45d7-8e81-f42ad0adcda5
 ---
+
 „Behalte nur diese Dinge, an denen dein Herz hängt und
 trau dich anschließend, den Rest wegzuwerfen.“</br></br>Dieses
 Glaubensbekenntnis stammt von der japanischen

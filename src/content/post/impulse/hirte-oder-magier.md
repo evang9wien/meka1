@@ -7,9 +7,11 @@ category: Impuls
 tags:
   - Impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1730665451/airport-2373727_900x600_na2qjx.jpg
+publishDate: 2024-11-03T20:44:01.000Z
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202409.pdf?alt=media&token=22c2e2ef-5389-47ab-8f1d-d7f304d26e5f
 ---
+
 Die lange Zugfahrt zur Familienfeier, die gemütlichen
 Spaziergänge am Christlkindlmarkt, das eilige Hetzen
 durch die Kaufhausgänge. Advent und Weihnachten,

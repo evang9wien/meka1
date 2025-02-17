@@ -7,6 +7,7 @@ category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1724516937/wahl_900x600_bx1tgr.jpg
+publishDate: 2024-08-24T16:57:10.000Z
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202408.pdf?alt=media&token=06bc72b6-db24-4bf0-a01f-04b6ab8ca7a1
 ---
