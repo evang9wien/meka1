@@ -3,7 +3,7 @@ title: Brief an alle Pfarrgemeinden
 excerpt: Die Grundpfeiler der Demokratie sind von uns allen gemeinsam errungen worden. Sie einzuhalten und zu bewahren ist Aufgabe aller, auch der Christinnen und Christen, schreibt Bischof Michael Chalupka.  <a class="text-muted underline  font-medium" href="/news/brief2025">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://images.unsplash.com/photo-1720191457314-9c81eb753750?q=80&w=3690&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
 publishDate: 2025-01-15T01:00:00.000Z
 author: andreas
