@@ -5,7 +5,7 @@ excerpt: Herzlich willkommen zu unseren Gottesdiensten. Wir feiern jeden Sonntag
   Gesellschaft. <a class="text-muted underline  font-medium" href="/gottesdienste">Mehr anzeigen</a>.
 category: angebote
 tags:
-  - old
+  - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1714828353/Homepage/Ja-Altar_oghsnx_whfe42.jpg
 publishDate: 2024-03-04T01:00:00.000Z
 author: andreas
