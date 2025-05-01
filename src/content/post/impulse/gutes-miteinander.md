@@ -18,7 +18,7 @@ Seit 25 Jahren engagiert sich unsere Gemeinde für ein
 gutes Miteinander am Alsergrund. Dieses Jubiläum feiern
 wir heuer als eigenständige Pfarrgemeinde im Herzen
 des 9. Bezirks – offen für alle Menschen, die hier leben.<br/>
-„Suchet der Stadt Bestes“ (Jeremia 29,7) – dieser Vers ist
+__„Suchet der Stadt Bestes“__ (Jeremia 29,7) – dieser Vers ist
 für uns weit mehr als ein Motto. Wir verstehen ihn als
 Auftrag, Gottes Liebe in unserer Nachbarschaft erfahrbar
 zu machen. Nicht immer gelingt uns das so, wie wir
