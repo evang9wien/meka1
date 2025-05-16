@@ -45,6 +45,7 @@
     limitToFirst,
     startAt,
     endAt,
+    off,
   } from 'firebase/database';
 
   import dayjs from 'dayjs';
@@ -192,6 +193,9 @@
           handleTermine();
 
           popupSpinnerModal = false;
+
+          console.log('Listener in onMount entfernen');
+          off(dbRef);
         }
       });
     });
@@ -246,6 +250,9 @@
         console.log('LiederDBAuswahl: ', liederDBAuswahl);
         handleLiederDBAuswahl();
         popupSpinnerModal = false;
+        // Listener entfernen
+        console.log('Listener in SelectDate entfernen');
+        off(dbRefNow);
       });
     });
   };
