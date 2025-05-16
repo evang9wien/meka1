@@ -249,7 +249,7 @@
           <TableHead>
             <TableHeadCell columnId="Titel">Noten</TableHeadCell>
             <TableHeadCell sortable={false}>Hörprobe</TableHeadCell>
-            <TableHeadCell columnId="zuletzt">zuletzt</TableHeadCell>
+            <!-- <TableHeadCell columnId="zuletzt">zuletzt</TableHeadCell> -->
             <TableHeadCell></TableHeadCell>
           </TableHead>
           <TableBody>
@@ -296,9 +296,9 @@
                     </div>
                   {/if}
                 </TableBodyCell>
-                <TableBodyCell>
+                <!-- <TableBodyCell>
                   {lied.zuletzt < 2000 ? lied.zuletzt + ' Wochen' : ''}
-                </TableBodyCell>
+                </TableBodyCell> -->
                 <TableBodyCell>
                   <GradientButton
                     shadow
