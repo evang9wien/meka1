@@ -305,7 +305,7 @@
                     color="black"
                     pill={true}
                     class="!p-2"
-                    href="/combo/comboliedereditpage?lied_id={lied.ID}"
+                    href="/combo/comboliedereditFBpage?lied_id={lied.ID}"
                   >
                     <EditOutline class="w-4 h-4" />
                   </GradientButton>
