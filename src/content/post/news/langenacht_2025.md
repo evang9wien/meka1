@@ -3,7 +3,7 @@ title: „OMAS on Stage“
 excerpt: Am 23. Mai um 18:30 laden OMAS GEGEN RECHTS & die Evangelische Messiaskapelle im Rahmen der 'Langen Nacht der Kirchen' zu einem Abend voller Begegnung und kultureller Impulse ein. <a class="text-muted underline font-medium" href="/news/langenacht_2025">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1745857101/Homepage/LangeNacht/Ingrid_jenny_Kultursommer_r79afw.jpg
 publishDate: 2025-04-28T21:32:43.810Z
 author: Andreas
