@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import TerminCopy from '~/components/svelte/calendar/TerminCopy.svelte';
+
+const metadata = {
+  title: 'TerminCopy',
+};
+---
+
+<Layout metadata={metadata}>
+  <TerminCopy client:load />
+</Layout>
