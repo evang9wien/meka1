@@ -173,6 +173,10 @@ export const footerData = {
           text: 'Liederchronik',
           href: getPermalink('/combo/comboliederchronikFBpage'),
         },
+        {
+          text: 'Admin',
+          href: getPermalink('/combo/comboTerminCopyFBpage'),
+        }
       ],
     },
     {

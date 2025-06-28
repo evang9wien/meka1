@@ -13,9 +13,12 @@
     TableBodyCell,
     TableHeadCell,
   } from 'flowbite-svelte';
+  import { Button } from 'flowbite-svelte';
+  import { ArrowsRepeatOutline, TrashBinOutline, FolderPlusOutline, CheckCircleSolid } from 'flowbite-svelte-icons';
   import dayjs from 'dayjs';
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set } from 'firebase/database';
+  import { remove } from 'firebase/database'; // für Löschen
   import { firebaseConfig } from '../firebase/firebase.js';
   import { initializeApp, getApps, getApp } from 'firebase/app';
   import WaitPopup from '../popup/WaitPopup.svelte';
@@ -37,11 +40,34 @@
   const calendarId = '095lkf9ujgaa4u1qmi4e2vf00k@group.calendar.google.com';
   const apiKey = 'AIzaSyBU0NT8Jy8m_2UkJdThdIs1Ee0lL9ZzVus';
 
+  let dbRealtime;
+
   let googleEvents: any[] = [];
   let firebaseEvents: any[] = [];
 
   // Hilfsstruktur für kombinierte Darstellung
   let combinedEvents: any[] = [];
+
+  const predigerMapping = {
+    'Stefan FLEISCHNER-JANITS': 'SFJ',
+    'Harald GESCHL': 'GH',
+    'Wolfgang WALDSCHÜTZ': 'WW',
+    'Mark RUIZ HELLÍN': 'MRH',
+    'Tanja DIETRICH HÜBNER': 'TDH',
+  };
+
+  function extractVerantwortlich(description: string): string {
+    for (const name in predigerMapping) {
+      if (description?.toUpperCase().includes(name.toUpperCase())) {
+        return predigerMapping[name];
+      }
+    }
+    return '';
+  }
+
+  function extractAbendmahl(description: string): string {
+    return description?.includes('~ Y') ? '1' : '0';
+  }
 
   // Firebase App absichern
 
@@ -71,8 +97,6 @@
   }
 
   async function fetchFirebaseEvents() {
-    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    const dbRealtime = getDatabase(app);
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
     onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -82,6 +106,38 @@
       }
       combineEvents();
     });
+  }
+  async function deleteFromFirebase(timestamp: string) {
+    try {
+      await remove(dbref(dbRealtime, `combo/termine/${timestamp}`));
+      fetchFirebaseEvents();
+    } catch (error) {
+      console.error('Fehler beim Löschen aus Firebase:', error);
+    }
+  }
+
+  async function addComboprobe(timestamp: string) {
+    const data = {
+      Abendmahl: '',
+      Bass: '',
+      Combo: '',
+      Drums: '',
+      Gitarre: '',
+      KS_Koordination: '',
+      Melodie: '',
+      Tasten: '',
+      Termin: timestamp,
+      Veranstaltung: 'CP',
+      Verantwortlich: 'COM',
+      Zusatzinfo: 'Comboprobe',
+    };
+
+    try {
+      await set(dbref(dbRealtime, `combo/termine/${timestamp}`), data);
+      fetchFirebaseEvents();
+    } catch (error) {
+      console.error('Fehler beim Hinzufügen der Comboprobe:', error);
+    }
   }
 
   // Kombiniert Termine mit gleichem Zeitstempel
@@ -110,17 +166,17 @@
 
   async function syncToFirebase(event) {
     const data = {
-      Abendmahl: '',
+      Abendmahl: extractAbendmahl(event.description),
       Bass: '',
-      Combo: '',
+      Combo: '1',
       Drums: '',
       Gitarre: '',
       KS_Koordination: '',
       Melodie: '',
       Tasten: '',
       Termin: event.timestamp,
-      Veranstaltung: event.summary,
-      Verantwortlich: '',
+      Veranstaltung: 'GD',
+      Verantwortlich: extractVerantwortlich(event.description),
       Zusatzinfo: event.description,
     };
 
@@ -134,6 +190,8 @@
 
   onMount(() => {
     const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+    dbRealtime = getDatabase(app);
     auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -201,29 +259,98 @@
             <TableBodyCell>
               {#if entry.firebase}
                 <div class="font-bold">{entry.firebase.Veranstaltung}</div>
-                <div class="font-bold">{entry.firebase.Verantwortlich}</div>
+                <div class="text-sm">
+                  Verantworlich: <span class="font-semibold">{entry.firebase.Verantwortlich}</span>
+                </div>
+                {#if entry.firebase.Abendmahl === '1'}
+                  <div class="text-sm text-green-600 font-semibold">Abendmahl: Ja</div>
+                {/if}
                 <div class="text-sm text-gray-500">{entry.firebase.Zusatzinfo}</div>
               {:else}
                 <span class="text-gray-400 italic">Nicht vorhanden</span>
               {/if}
             </TableBodyCell>
-            <TableBodyCell>
-              {#if entry.google}
-                <button
-                  class="px-2 py-1 text-sm bg-blue-500 text-white rounded disabled:opacity-50"
+            <TableBodyCell class="flex flex-col gap-2">
+              {#if entry.google && entry.google?.summary !== 'Comboprobe'}
+                <Button
+                  size="xs"
+                  color="blue"
                   on:click={() => syncToFirebase(entry.google)}
                   disabled={isSynced(entry.timestamp)}
                 >
-                  {isSynced(entry.timestamp) ? '✓ Synced' : '→ Sync'}
-                </button>
-              {:else}
-                —
+                  <ArrowsRepeatOutline class="mr-2 h-4 w-4" />
+                  {isSynced(entry.timestamp) ? '✓ Synced' : 'Sync'}
+                </Button>
+              {/if}
+              {#if entry.google && entry.google?.summary === 'Comboprobe' && isSynced(entry.timestamp)}
+                <Button size="xs" color="blue" disabled={isSynced(entry.timestamp)}>
+                  <ArrowsRepeatOutline class="mr-2 h-4 w-4" />
+                  {isSynced(entry.timestamp) ? '✓ Synced' : 'Sync'}
+                </Button>
+              {/if}
+              {#if !entry.google}
+                <Button size="xs" color="red" on:click={() => deleteFromFirebase(entry.timestamp)}>
+                  <TrashBinOutline class="mr-2 h-4 w-4" />
+                  Löschen
+                </Button>
+              {:else if entry.google?.summary === 'Comboprobe' && !entry.firebase}
+                <Button size="xs" color="yellow" on:click={() => addComboprobe(entry.timestamp)}>
+                  <FolderPlusOutline class="mr-2 h-4 w-4" />
+                  Comboprobe
+                </Button>
               {/if}
             </TableBodyCell>
           </TableBodyRow>
         {/each}
       </TableBody>
     </Table>
+    <Card href="/cards" class="p-4 sm:p-6 md:p-8">
+      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        Anleitung für die Terminpflege
+      </h5>
+      <p class="leading-tight font-normal text-gray-700 dark:text-gray-400">
+        Zuerste müssen neue Termine im Meka Google Kalendar eingepflegt werden. <br />
+        Für Gottestdienste muss
+      </p>
+      <ul class="my-7 space-y-4">
+        <li class="flex space-x-2 rtl:space-x-reverse">
+          <CheckCircleSolid class="text-primary-600 dark:text-primary-500 h-4 w-4" /><span
+            class="text-base leading-tight font-normal text-gray-500 dark:text-gray-400">der Titel</span
+          >
+        </li>
+        <li class="flex space-x-2 rtl:space-x-reverse">
+          <CheckCircleSolid class="text-primary-600 dark:text-primary-500 h-4 w-4" /><span
+            class="text-base leading-tight font-normal text-gray-500 dark:text-gray-400"
+            >und in der Beschreibung der Name</span
+          >
+        </li>
+        <li class="flex space-x-2 rtl:space-x-reverse">
+          <CheckCircleSolid class="text-primary-600 dark:text-primary-500 h-4 w-4" /><span
+            class="text-base leading-tight font-normal text-gray-500 dark:text-gray-400">das Abendmahlzeichen ~ Y</span
+          >
+        </li>
+        <li class="flex space-x-2 rtl:space-x-reverse">
+          <CheckCircleSolid class="text-primary-600 dark:text-primary-500 h-4 w-4" /><span
+            class="text-base leading-tight font-normal text-gray-500 dark:text-gray-400"
+            >und optional Zusatzinfo
+          </span>
+        </li>
+      </ul>
+      eingetragen werden.<br /><br />
+      Für einen neuen Comboprobentermin muss
+      <ul class="my-7 space-y-4">
+        <li class="flex space-x-2 rtl:space-x-reverse">
+          <CheckCircleSolid class="text-primary-600 dark:text-primary-500 h-4 w-4" /><span
+            class="text-base leading-tight font-normal text-gray-500 dark:text-gray-400"
+            >ein Termin mit dem Titel Comboprobe
+          </span>
+        </li>
+      </ul>
+      eingetragen werden.<br /><br />
+      <p>
+        Sobald die Termine im Google Kalendar eingetragen sind, können sie hier in den Combo Kalendar kopiert werden.
+      </p>
+    </Card>
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Termine werden neu geladen." />
