@@ -72,7 +72,7 @@
       termin.LiedAuswahl = termin.LiedAuswahl.sort(
         (a, b) => parseInt(a.lied_im_GD_nummer) - parseInt(b.lied_im_GD_nummer)
       );
-
+ 
       termin.LiedAuswahl = termin.LiedAuswahl.map((l) => ({
         ...l,
         Beschreibung: comboReihenfolge.filter((f) => f.Reihenfolge == l.lied_im_GD_nummer)[0].Beschreibung,
@@ -91,20 +91,22 @@
       popupSpinnerModal = false;
       return;
     }
-    termin.LiedAuswahl.forEach(async (l) => {
+    
+
+    for (const l of termin.LiedAuswahl) {
       const liedRef = doc(dbFireStore, 'lieder', l.lied_liste_nummer);
       const docSnap = await getDoc(liedRef);
+
       if (docSnap.exists()) {
-        // console.log('Document data:', docSnap.data());
         const o = { ...l, ...docSnap.data() };
         liederAus.push(o);
-        liederauswahl = liederAus;
-        // console.log('Lieder: ', liederauswahl);
       } else {
-        // docSnap.data() will be undefined in this case
         console.log('No such document!');
       }
-    });
+    }
+
+    liederauswahl = liederAus;
+
 
     // console.log('Liederauswahl: ', liederauswahl);
     popupSpinnerModal = false;
