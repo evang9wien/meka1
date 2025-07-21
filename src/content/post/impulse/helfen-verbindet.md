@@ -7,7 +7,7 @@ excerpt: Manchmal sind es die kleinen Dinge, die Großes bewirken. Ein einzelnes
 category: impuls
 tags:
   - impuls
-image: https://res.cloudinary.com/dqjdjviob/image/upload/v1753116601/Homepage/News/IMG_3637_900x600_pvuyec.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1753120487/Homepage/News/IMG_3637_900x600_wreg32.jpg
 publishDate: 2025-07-21T19:03:00.000+02:00
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202504.pdf?alt=media&token=87bd7e34-7736-4e92-af9a-1aee30d1028d
