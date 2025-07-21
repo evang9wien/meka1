@@ -12,7 +12,6 @@ publishDate: 2025-07-21T19:03:00.000+02:00
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202504.pdf?alt=media&token=87bd7e34-7736-4e92-af9a-1aee30d1028d
 ---
-# Helfen verbindet<br/>Ein Puzzle der Hoffnung
 Liebe Gemeinde,<br />
 manchmal sind es die kleinen Dinge, die Großes
 bewirken. Ein einzelnes Puzzleteil scheint unbedeutend
