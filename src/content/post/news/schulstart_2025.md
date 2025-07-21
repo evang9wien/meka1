@@ -1,6 +1,6 @@
 ---
 title: Helfen verbindet
-excerpt: <b>Unsere Schulstartaktion für Familien in Not.</b><br/>Der Schulbeginn ist für viele Familien eine finanzielle Herausforderung – besonders dann, wenn das Geld ohnehin knapp ist. Mit unserer Aktion „Helfen verbindet möchten wir als Messiaskapelle konkret helfen und die Aktion der Stadtdiakonie zum Schulstart unterstützen. <a class="text-muted underline  font-medium" href="/news/schulstart_2025">Mehr anzeigen</a>.
+excerpt: <b>Unsere Schulstartaktion für Familien in Not.</b><br/>Der Schulbeginn ist für viele Familien eine finanzielle Herausforderung – besonders dann, wenn das Geld ohnehin knapp ist. Mit unserer Aktion „Helfen verbindet" möchten wir als Messiaskapelle konkret helfen und die Aktion der Stadtdiakonie zum Schulstart unterstützen. <a class="text-muted underline  font-medium" href="/news/schulstart_2025">Mehr anzeigen</a>.
 category: news
 tags:
   - news
