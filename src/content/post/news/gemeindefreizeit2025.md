@@ -5,6 +5,7 @@ category: angebote
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1752408864/Homepage/News/gemeindefreizeit_zpqjrr.jpg
+attribution: 'Foto: LightFieldStudios'
 publishDate: 2025-07-13T01:00:00.000Z
 author: andreas
 ---

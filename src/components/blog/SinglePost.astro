@@ -73,6 +73,7 @@ const { Content } = post;
 
     {
       post.image ? (
+      <div class="relative max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700">
         <Image
           src={post.image}
           class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
@@ -84,6 +85,8 @@ const { Content } = post;
           loading="eager"
           decoding="async"
         />
+        <div class="absolute z-20 text-muted text-[0.5rem] origin-top-left -bottom-4 ml-px pb-50 ">{post.attribution || ''}</div>
+      </div>
       ) : (
         <div class="max-w-3xl mx-auto px-4 sm:px-6">
           <div class="border-t dark:border-slate-700" />

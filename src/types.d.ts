@@ -45,6 +45,8 @@ export interface Post {
 
   /**  */
   pdf?: string;
+  /**  */
+  attribution?: string;
 }
 
 export interface MetaData {
