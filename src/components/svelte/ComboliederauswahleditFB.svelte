@@ -224,6 +224,7 @@
 
   const handleSelectDate = () => {
     // console.log(sel);
+    isLiedSelected = false;
     popupSpinnerModal = true;
     liederDBAuswahl = [];
     console.log('Sel 00: ', selectedTermin);
@@ -368,12 +369,14 @@
   };
 
   let sendEmailHref;
+  let isLiedSelected = false;
   const sendEmailHrefRefresh = () => {
     let body = 'Liebe Combo!%0D%0A%0D%0A';
     if (liedReihenfolgeSelected)
       liedReihenfolgeSelected.forEach((item) => {
         if (!item.notvisible && item.selectedLied) {
           console.log(item);
+          isLiedSelected = true;
           body = body + item.Beschreibung + ': ' + item.selectedLied.Titel + '%0D%0A';
         }
       });
@@ -393,6 +396,10 @@
     // anchor.target = '_blank';
     // anchor.click();
   };
+
+  const disableEmailButton = () => {
+    return !isLiedSelected;
+  }
 
   const isComboLied = (lied) => {
     // console.log('Combolied: ', lied);
@@ -434,7 +441,13 @@
             >
             <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
             <Tooltip>Für die Liederauswahl den Termin <br /> und die Lieder auswählen und speichern.</Tooltip>
-            <A class="mb-4 mr-4" color="cyanToBlue" href={sendEmailHref}>Liederauswahl verschicken</A>
+            <A class="mb-4 mr-4" color="cyanToBlue" disabled={disableEmailButton()} on:click={(e) => {
+                if (disableEmailButton()) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  alert('Bitte zuerst Lieder auswählen und speichern.');
+                }
+              }} href={sendEmailHref}>Liederauswahl verschicken</A>
             <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
             <Tooltip
               >Es sollte sich das Email Programm öffnen mit der Liederauswahl. Vor dem Versenden kann die Email ganz
