@@ -1,15 +1,15 @@
 ---
-excerpt: Unser Bibelkreis für Menschen mit Lebenserfahrung trifft sich in der
+excerpt: Begegnungen mit dem Mann aus Nazareth – betrachtet mit den Augen eines Evangelisten. Ausgewählte Stücke aus dem MARKUS-Evangelium.<br/>Unser Bibelkreis für Menschen mit Lebenserfahrung trifft sich in der
   Regel am 1. Donnerstag im Monat. Weiterführende Informationen finden Sie <a class="text-muted underline  font-medium" href="/angebote#mekaclassic">hier</a>.
 author: Andreas
 metadata:
   canonical: https://astrowind.vercel.app/astrowind-template-in-depth
-title: MEKA Classic startet in den Herbst
+title: MEKA Classic 9. Staffel im Herbst 2025
 category: Documentation
 tags:
-  - old
-image: https://res.cloudinary.com/dqjdjviob/image/upload/w_768,h_768,c_lfill,f_auto/v1714831210/Homepage/Angebote/Mekaclassic_lfe4yz
-publishDate: 2024-07-17T00:00:00.000Z
+  - news
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1756052024/Homepage/Angebote/Mekaclassic2025_nqcxck.jpg
+publishDate: 2025-08-17T00:00:00.000Z
 ---
 
 Wenn es für Sie keine Frage war, Beatles oder Rolling Stones, wenn Sie selbst einmal in einem „Käfer“ saßen, oder jemanden kennen, der einen „Käfer“ hatte, wenn Sie wissen, wer zu einem Journalisten sagte „Lernen Sie Geschichte!“, wenn Sie wissen was „Peace, Love and Understanding“ bedeutete und „franz“ nicht nur ein Vorname war, dann ist diese Einladung für Sie genau richtig. Es ist kein „Kaffeekränzchen“, und für einen „Seniorenkreis“ sind wir viel zu jung!

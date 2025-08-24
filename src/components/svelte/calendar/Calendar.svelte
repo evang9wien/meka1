@@ -31,15 +31,16 @@
           if (keyA > keyB) return 1;
           return 0;
         });
-
+        //console.log(items);
+        //console.log('Filter: ', filter);
         items = items.map((i) => {
           dayjs.locale('de');
           return { ...i, startDate: dayjs(new Date(i.start.dateTime)).format('dddd, D. MMMM  YYYY, H:mm ') };
         });
         if (filter) {
-          items = items.filter((f) => f.summary.toLowerCase().includes(filter));
+          items = items.filter((f) => f.summary.toLowerCase().includes(filter.toLowerCase()));
         }
-        console.log(items);
+        //console.log(items);
       });
   });
 </script>
@@ -52,7 +53,7 @@
           <span
             class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-blue-50 dark:ring-[#030620] dark:bg-primary-900"
           >
-            {#if item.summary.includes('meka Classic')}
+            {#if item.summary.includes('MEKA-Classic')}
               <PredigtAvatar clazz="w-6 h-6" title="meka classic" } />
             {:else if getImageCalAvatar(item.description ? item.description.split(' ')[0] : '')}
               <PredigtAvatar clazz="w-6 h-6" prediger={item.description.split(' ')[0]} />
