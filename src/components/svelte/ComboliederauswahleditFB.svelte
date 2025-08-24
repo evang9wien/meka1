@@ -305,6 +305,7 @@
     // popupSpinnerModal = true;
 
     set(dbref(dbRealtime, 'combo/termine/' + selectedTermin + '/LiedAuswahl'), liedReihenfolgeDB);
+    sendEmailHrefRefresh();
   };
 
   const addLied = (lied) => {
