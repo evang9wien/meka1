@@ -271,7 +271,7 @@
               {/if}
             </TableBodyCell>
             <TableBodyCell class="flex flex-col gap-2">
-              {#if entry.google && entry.google?.summary !== 'Comboprobe'}
+              {#if entry.google && entry.google?.summary.replaceAll(" ", "") !== 'Comboprobe'}
                 <Button
                   size="xs"
                   color="blue"
@@ -279,13 +279,13 @@
                   disabled={isSynced(entry.timestamp)}
                 >
                   <ArrowsRepeatOutline class="mr-2 h-4 w-4" />
-                  {isSynced(entry.timestamp) ? '✓ Synced' : 'Sync'}
+                  {isSynced(entry.timestamp) ? '✓ Synced' : 'Sync ' + entry.google?.summary}
                 </Button>
               {/if}
-              {#if entry.google && entry.google?.summary === 'Comboprobe' && isSynced(entry.timestamp)}
+              {#if entry.google && entry.google?.summary.replaceAll(" ", "") === 'Comboprobe' && isSynced(entry.timestamp)}
                 <Button size="xs" color="blue" disabled={isSynced(entry.timestamp)}>
                   <ArrowsRepeatOutline class="mr-2 h-4 w-4" />
-                  {isSynced(entry.timestamp) ? '✓ Synced' : 'Sync'}
+                  {isSynced(entry.timestamp) ? '✓ Synced Comboprobe' : 'Sync '}
                 </Button>
               {/if}
               {#if !entry.google}
@@ -293,10 +293,10 @@
                   <TrashBinOutline class="mr-2 h-4 w-4" />
                   Löschen
                 </Button>
-              {:else if entry.google?.summary === 'Comboprobe' && !entry.firebase}
+              {:else if entry.google?.summary.replaceAll(" ", "") === 'Comboprobe' && !entry.firebase}
                 <Button size="xs" color="yellow" on:click={() => addComboprobe(entry.timestamp)}>
                   <FolderPlusOutline class="mr-2 h-4 w-4" />
-                  Comboprobe
+                  Sync Comboprobe
                 </Button>
               {/if}
             </TableBodyCell>
