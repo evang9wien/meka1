@@ -20,6 +20,7 @@
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set } from 'firebase/database';
   import { remove } from 'firebase/database'; // für Löschen
   import { firebaseConfig } from '../firebase/firebase.js';
+  import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import { initializeApp, getApps, getApp } from 'firebase/app';
   import WaitPopup from '../popup/WaitPopup.svelte';
   import LoginFirebase from '../auth/LoginFirebase.svelte';
@@ -47,6 +48,9 @@
 
   // Hilfsstruktur für kombinierte Darstellung
   let combinedEvents: any[] = [];
+
+  let terminAdminRole = false;
+  let members;
 
   const predigerMapping = {
     'Stefan FLEISCHNER-JANITS': 'SFJ',
@@ -164,6 +168,37 @@
     return firebaseEvents.some((e) => e.Termin === timestamp);
   }
 
+  // Liste mit zusätzlichen zu entfernenden Wörtern
+  const removeWords = ['Pfarrer', 'Lektorin', 'Lektor', 'Pf.i.R.'];
+
+  function cleanDescription(description: string): string {
+    if (!description) return '';
+
+    let cleaned = description;
+
+    // 1. Abendmahl-Zeichen "~ Y" oder "~Y" entfernen
+    cleaned = cleaned.replace(/\s*~\s*Y\s*/gi, ' ');
+
+    // 2. Predigernamen aus predigerMapping entfernen (inkl. optionalem Komma)
+    for (const name in predigerMapping) {
+      const regex = new RegExp(name + '\\s*,?', 'gi');
+      cleaned = cleaned.replace(regex, ' ');
+    }
+
+    // 3. Zusatzwörter entfernen (inkl. optionalem Komma)
+    for (const word of removeWords) {
+      const regex = new RegExp(word + '\\s*,?', 'gi');
+      cleaned = cleaned.replace(regex, ' ');
+    }
+
+    // 4. Überflüssige Leerzeichen bereinigen
+    cleaned = cleaned.replace(/\s{2,}/g, ' ').trim();
+
+    return cleaned;
+  }
+
+
+
   async function syncToFirebase(event) {
     const data = {
       Abendmahl: extractAbendmahl(event.description),
@@ -177,7 +212,7 @@
       Termin: event.timestamp,
       Veranstaltung: 'GD',
       Verantwortlich: extractVerantwortlich(event.description),
-      Zusatzinfo: event.description,
+      Zusatzinfo: cleanDescription(event.description), // <- hier bereinigt
     };
 
     try {
@@ -203,14 +238,52 @@
       popupSpinnerModal = true;
       await fetchGoogleEvents();
       await fetchFirebaseEvents();
+      
+
+      const dbFireStore = getFirestore(app);
+      const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
+      const docSnap = await getDoc(maRef);
+      if (docSnap.exists()) {
+        members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
+        members = members
+          .map((t) => ({
+            ...t,
+            name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
+            value: t.ShortName,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        // rolle prüfen
+        console.log('Mitarbeiter: ', members);
+        console.log('User: ', user.providerData[0].email);
+        let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
+        if (loginUser.length > 0) {
+          console.log('LoginUser: ', loginUser[0]);
+          // if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
+          //   console.log('Role: ', loginUser[0].role);
+          //   comboAdminRole = true;
+          // }
+          if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'terminadmin').length > 0) {
+            console.log('Role: ', loginUser[0].role);
+            terminAdminRole = true;
+          }
+        }
+      }
       popupSpinnerModal = false;
+
     });
   });
 </script>
 
 <!-- UI -->
-
-{#if userAuth && !popupSpinnerModal}
+{#if userAuth && !popupSpinnerModal && !terminAdminRole}
+   <div class="p-4">
+    <Card class="border-2 border-red-600 bg-red-50 content-center">
+      <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+      <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
+    </Card>
+   </div>
+{/if}
+{#if userAuth && !popupSpinnerModal && terminAdminRole}
   <div class="p-4">
     <Card>
       <h1 class="text-xl font-bold mb-4">Terminübersicht</h1>

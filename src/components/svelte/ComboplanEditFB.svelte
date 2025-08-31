@@ -351,9 +351,7 @@
           {/each}
         </TableBody>
       </Table>
-      {#if terminAdminRole}
-        <TerminAdmin />
-      {/if}
+    
     </Card>
   </div>
 {/if}
