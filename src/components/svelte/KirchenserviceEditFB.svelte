@@ -225,7 +225,7 @@
 
 {#if userAuth && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
-    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Kirchenserviceplan Eintragung</h2>
       <div class="flex flex-row">
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"

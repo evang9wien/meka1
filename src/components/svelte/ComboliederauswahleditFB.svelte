@@ -411,7 +411,7 @@
 
 {#if userAuth && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
-    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <div>
         {#if termine}
           <div class="flex space-x-4 mb-6">
@@ -431,7 +431,7 @@
             class="mb-4 mr-4"
             items={termine}
             bind:value={selectedTermin}
-            on:change={handleSelectDate}
+            onchange={handleSelectDate}
             placeholder="Bitte Termin auswählen ..."
           />
 

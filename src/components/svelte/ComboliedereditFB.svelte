@@ -253,7 +253,7 @@
 
 {#if userAuth && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
-    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm">
+    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <div class="w-80">
         <Select
           items={alleLieder}

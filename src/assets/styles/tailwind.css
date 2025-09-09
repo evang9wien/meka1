@@ -3,7 +3,10 @@
 @plugin '@tailwindcss/typography';
 @plugin 'flowbite/plugin';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source "../../../node_modules/flowbite-svelte/dist";
+@source "../../../node_modules/flowbite-svelte-icons/dist";
 
 @theme {
   --color-primary: var(--aw-color-primary);
@@ -22,6 +25,7 @@
   --font-heading:
     var(--aw-font-heading), ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+ 
 }
 
 /*
@@ -39,6 +43,10 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+  /* disable chrome cancel button */
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
   }
 }
 
