@@ -45,27 +45,34 @@
   });
 </script>
 
-<div class="flex justify-center mb-6">
+<div class="flex justify-center mb-6 ml-6">
+  
   <Timeline order="vertical">
     {#each items as item}
-      <TimelineItem title={item.summary} date={item.startDate}>
-        <svelte:fragment slot="icon">
-          <span
-            class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-blue-50 dark:ring-[#030620] dark:bg-primary-900"
-          >
+      <TimelineItem title={item.summary} >        
+        
+        {#snippet orientationSlot()}
+          <span class="absolute bg-primary-200 dark:bg-primary-900 -start-10 flex h-6 w-6 items-center justify-center rounded-full ring-6 ring-white dark:ring-gray-900">
+        
+          
             {#if item.summary.includes('MEKA-Classic')}
               <PredigtAvatar clazz="w-6 h-6" title="meka classic" } />
+            {:else if item.summary.includes('Comboprobe')}
+              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />  
             {:else if getImageCalAvatar(item.description ? item.description.split(' ')[0] : '')}
               <PredigtAvatar clazz="w-6 h-6" prediger={item.description.split(' ')[0]} />
-            {:else}
-              <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+            {:else}            
+              <CalendarWeekSolid class="text-primary-600 dark:text-primary-400 h-4 w-4" />
             {/if}
-          </span>
-        </svelte:fragment>
-
-        <div class="flex space-x-4 text-base font-normal text-gray-500 dark:text-gray-400">
+          
+            </span>
+            {/snippet}        
+        <p class="mb-4 text-base font-normal text-gray-600 dark:text-gray-200">
+          {item.startDate}
+        </p>
+        <p class="mb-4 text-base font-normal text-gray-400 dark:text-gray-400">
           {item.description ? item.description : ''}
-        </div>
+        </p>
       </TimelineItem>
     {/each}
   </Timeline>
