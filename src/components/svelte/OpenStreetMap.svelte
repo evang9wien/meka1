@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import "leaflet/dist/leaflet.css";
   import L from 'leaflet';
 
   export let view;
@@ -34,8 +35,7 @@
   });
 </script>
 
-<div id="map" class="h-80 z-30"></div>
+<div id="map" class="h-100 z-30"></div>
 
-<style>
-  @import 'leaflet/dist/leaflet.css';
+<style>  
 </style>
