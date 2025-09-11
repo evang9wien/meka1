@@ -37,7 +37,7 @@
 </script>
 
 <div class="flex justify-center">
-  <Card class="mb-6">
+  <Card class="mb-6 p-4">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Login für Mitarbeiter</h5>
     <!-- <Title>Login</Title> -->
     {#if !loginSucess}
