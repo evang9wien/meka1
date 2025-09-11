@@ -299,7 +299,7 @@
       </div>
       <GradientButton
         color="cyanToBlue"
-        on:click={async () => {
+        onclick={async () => {
           popupSpinnerModal = true;
           await fetchGoogleEvents();
           await fetchFirebaseEvents();
@@ -348,7 +348,7 @@
                 <Button
                   size="xs"
                   color="blue"
-                  on:click={() => syncToFirebase(entry.google)}
+                  onclick={() => syncToFirebase(entry.google)}
                   disabled={isSynced(entry.timestamp)}
                 >
                   <ArrowsRepeatOutline class="mr-2 h-4 w-4" />
@@ -362,12 +362,12 @@
                 </Button>
               {/if}
               {#if !entry.google}
-                <Button size="xs" color="red" on:click={() => deleteFromFirebase(entry.timestamp)}>
+                <Button size="xs" color="red" onclick={() => deleteFromFirebase(entry.timestamp)}>
                   <TrashBinOutline class="mr-2 h-4 w-4" />
                   Löschen
                 </Button>
               {:else if entry.google?.summary.replaceAll(" ", "") === 'Comboprobe' && !entry.firebase}
-                <Button size="xs" color="yellow" on:click={() => addComboprobe(entry.timestamp)}>
+                <Button size="xs" color="yellow" onclick={() => addComboprobe(entry.timestamp)}>
                   <FolderPlusOutline class="mr-2 h-4 w-4" />
                   Sync Comboprobe
                 </Button>

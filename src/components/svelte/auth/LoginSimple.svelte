@@ -53,7 +53,7 @@
         <Label for="default-input-p" class="block mb-2">Password</Label>
         <Input bind:value={password} id="default-input-p" type="password" placeholder="Password" />
       </div>
-      <GradientButton class="mb-6" color="cyanToBlue" on:click={login}>Login</GradientButton>
+      <GradientButton class="mb-6" color="cyanToBlue" onclick={login}>Login</GradientButton>
       <!-- <div>
         <Button class="text-muted underline dark:text-slate-400 font-medium" on:click={resetPassword}
           >Passwort vergessen?</Button

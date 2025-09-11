@@ -72,7 +72,7 @@
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
         }));
-        termine = termine.filter((t) => t.Veranstaltung == 'GD');
+        termine = termine.filter((t) => t.Veranstaltung == 'GD' && t.Verantwortlich != 'COM');
         console.log('Termine: ', termine);
         popupSpinnerModal = false;
       }
@@ -231,7 +231,7 @@
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>
 
-        <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSave} disabled={!selectedmember}
+        <GradientButton class="mb-4 mr-4" color="cyanToBlue" onclick={handleSave} disabled={!selectedmember}
           >Bestätigen</GradientButton
         >
         <InfoCircleOutline size="xl"></InfoCircleOutline><Tooltip placement="left"
