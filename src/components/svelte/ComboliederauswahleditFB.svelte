@@ -481,12 +481,12 @@
 
                     <TableBodyCell class="w-4">
                       <div class="flex flex-row">
-                        <Button onclick={() => addLied(lied)} pill={true} outline={true} class="p-2!">
+                        <A onclick={() => addLied(lied)} pill={true} outline={true} class="p-2!">
                           <PlusOutline class="h-4 w-4" ></PlusOutline>
-                        </Button>
-                        <Button onclick={() => removeLied(lied)} pill={true} outline={true} class="p-2!" >
+                        </A>
+                        <A onclick={() => removeLied(lied)} pill={true} outline={true} class="p-2!" >
                           <TrashBinOutline  class="h-4 w-4" ></TrashBinOutline>
-                        </Button>
+                        </A>
                       </div>
                     </TableBodyCell>
                     <TableBodyCell class="w-4">

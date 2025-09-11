@@ -24,7 +24,7 @@
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
 
-  import { Modal } from 'flowbite-svelte';
+  import { Modal, P } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 
   import { comboKategorien } from './combo/combo.js';
@@ -268,7 +268,7 @@
                           </div>
                         </A>
                         <A
-                          on:click={() => {
+                          onclick={() => {
                             liedTextModal = true;
                             liedText = lied.Liedtext;
                             liedTextTitel = lied.Titel;
@@ -278,7 +278,7 @@
                         </A>
                       {/await}
                     {:else}
-                      <GradientButton shadow color="black" pill={true} class="!p-2" on:click={liedLaden(lied, index)}>
+                      <GradientButton color="cyanToBlue" shadow pill={true} class="!p-2" onclick={() => liedLaden(lied, index)}>
                         <MicrophoneOutline class="w-4 h-4" />
                         {lied.name}
                       </GradientButton>
@@ -302,7 +302,7 @@
                 <TableBodyCell>
                   <GradientButton
                     shadow
-                    color="black"
+                    color="cyanToBlue"
                     pill={true}
                     class="!p-2"
                     href="/combo/comboliedereditFBpage?lied_id={lied.ID}"
@@ -320,4 +320,9 @@
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederliste wird geladen." />
 <LoginFirebase {popupFireBaseLogin} {auth} />
-<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
+<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose ooutsideclose={true}>
+  <P>{liedText}</P>
+  {#snippet footer()}
+    <GradientButton color="cyanToBlue" type="submit" class="w-32">Schließen</GradientButton>   
+  {/snippet}
+</Modal>
