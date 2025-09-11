@@ -249,7 +249,7 @@
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>
 
-        <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSave} disabled={!selectedmember}
+        <GradientButton class="mb-4 mr-4" color="cyanToBlue" onclick={handleSave} disabled={!selectedmember}
           >Bestätigen</GradientButton
         >
         <InfoCircleOutline size="xl"></InfoCircleOutline><Tooltip placement="left"
@@ -258,7 +258,7 @@
         >
       </div>
       {#if comboAdminRole}
-        <div class="flex flex-row">
+        <div class="flex flex-row p-4">
           Comboplan Admin-Modus:&nbsp;
           <Checkbox bind:checked={comboAdminModus} />
           <InfoCircleOutline size="xl"></InfoCircleOutline><Tooltip
@@ -267,7 +267,7 @@
         </div>
       {/if}
 
-      <Toggle color="teal" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
+      <Toggle class="pb-4" color="teal" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       <Table striped={true}>
         <TableHead>
           <TableHeadCell>Termin</TableHeadCell>

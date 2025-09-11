@@ -95,7 +95,7 @@
   }
 </script>
 
-<Card class="flex justify-center" size="lg">
+<Card class="flex justify-center p-4" size="lg">
   {#if !registerSuccessful && !registerFailed}
     <div class="space-y-6">
       <div class="mb-6">

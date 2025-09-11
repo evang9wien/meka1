@@ -205,7 +205,12 @@
     window.setTimeout(() => {
       popupSpinnerModal = true;
       liederDBAuswahl = [];
-      termine = alleTermine.filter((t) => t.Veranstaltung == (showComboProben ? 'CP' : 'GD'));
+      if(!showComboProben) {
+        termine = alleTermine.filter((t) => t.Verantwortlich != 'COM');
+      } else {
+        termine = alleTermine.filter((t) => t.Verantwortlich == 'COM');
+      }
+    
       console.log('Termine: ', termine);
 
       const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
@@ -436,7 +441,7 @@
           />
 
           <div class="flex flex-row">
-            <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={handleSaveDBPre}
+            <GradientButton class="mb-4 mr-4" color="cyanToBlue" onclick={handleSaveDBPre}
               >Liederauswahl speichern</GradientButton
             >
             <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
@@ -456,7 +461,7 @@
             >
           </div>
         {/if}
-        <Toggle color="teal" bind:checked={showComboProben} on:click={handleTermine}>Comboproben anzeigen</Toggle>
+        <Toggle class="pb-4" color="teal" bind:checked={showComboProben} onclick={handleTermine}>Comboproben anzeigen</Toggle>
       </div>
       <div>
         {#if liedReihenfolgeSelected}
@@ -476,9 +481,12 @@
 
                     <TableBodyCell class="w-4">
                       <div class="flex flex-row">
-                        <PlusOutline size="md" class="mr-2" on:click={addLied(lied)}></PlusOutline>
-
-                        <TrashBinOutline size="md" class="mr-2" on:click={removeLied(lied)}></TrashBinOutline>
+                        <Button onclick={() => addLied(lied)} pill={true} outline={true} class="p-2!">
+                          <PlusOutline class="h-4 w-4" ></PlusOutline>
+                        </Button>
+                        <Button onclick={() => removeLied(lied)} pill={true} outline={true} class="p-2!" >
+                          <TrashBinOutline  class="h-4 w-4" ></TrashBinOutline>
+                        </Button>
                       </div>
                     </TableBodyCell>
                     <TableBodyCell class="w-4">
@@ -486,7 +494,7 @@
                         <Select
                           items={isComboLied(lied) ? comboLieder : alleLieder}
                           bind:value={lied.selectedLiedID}
-                          on:change={handleSave}
+                          onchange={handleSave}
                           placeholder="Bitte Lied auswählen ..."
                         />
                       </div>
@@ -540,7 +548,7 @@
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
       Soll der geänderte Liederablauf für den Gottestdienst am {selectedTermin} gespeichert werden?
     </h3>
-    <Button color="green" class="me-2" on:click={handleSaveDB}>Ja, ich bin mir sicher</Button>
+    <Button color="green" class="me-2" onclick={handleSaveDB}>Ja, ich bin mir sicher</Button>
     <Button color="alternative">Nein, abbrechen</Button>
   </div>
 </Modal>

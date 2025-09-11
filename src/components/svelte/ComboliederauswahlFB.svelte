@@ -161,8 +161,12 @@
   });
 
   const handleTermine = () => {
-    window.setTimeout(() => {
-      termine = alleTermine.filter((t) => t.Veranstaltung == (showComboProben ? 'CP' : 'GD'));
+    window.setTimeout(() => {      
+      if(!showComboProben) {
+        termine = alleTermine.filter((t) => t.Verantwortlich != 'COM');
+      } else {
+        termine = alleTermine.filter((t) => t.Verantwortlich == 'COM');
+      }
       console.log('Termine: ', termine);
 
       const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
@@ -170,9 +174,9 @@
 
       const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
       console.log('Termin: ', termin);
-
+      liederauswahl = undefined;
       loadLieder(termin);
-    });
+    }, 300);
   };
 
   const handleSelect = (sel) => {
@@ -220,9 +224,9 @@
           </Label>
         {/if}
       </div>
-      <div class="space-x-4 mb-6">
-        <Toggle color="teal" bind:checked={showComboProben} on:click={handleTermine}>Comboproben anzeigen</Toggle>
-      </div>
+      
+      <Toggle class="pb-4" color="teal" bind:checked={showComboProben} onclick={handleTermine}>Comboproben anzeigen</Toggle>
+      
       <div>
         {#if liederauswahl}
           <Table striped="true">
@@ -237,7 +241,7 @@
                   <TableBodyCell>
                     <div class="flex flex-row">
                       <A
-                        on:click={() => {
+                        onclick={() => {
                           liedTextModal = true;
                           liedText = lied.Liedtext;
                           liedTextTitel = lied.Titel;
