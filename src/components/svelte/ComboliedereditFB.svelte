@@ -57,11 +57,12 @@
   let popupSpinnerModal = false;
   let popupUserAuthModal = false;
   let popupSpinnerUploadModal = false;
+  let popupLiedGespeichert = false;
   let selectedLied;
   let loadedLied = {};
   let userAuth = false;
   let alleLieder;
-  let liedGesungen;
+  let liedGesungen=false;
 
   let notenPdf;
   let liedMp3;
@@ -236,6 +237,7 @@
           console.log('Uploaded MP3: ', loadedLied.Dateiname);
         });
       }
+      popupLiedGespeichert=true;
 
       return;
     } catch (error) {
@@ -258,7 +260,7 @@
         <Select
           items={alleLieder}
           bind:value={selectedLied}
-          on:input={handleSelectLied}
+          onchange={handleSelectLied}
           placeholder="Bitte Lied auswählen ..."
         />
       </div>
@@ -333,6 +335,14 @@
     <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Fehler beim Speichern: {responseData}</h3>
     <Button color="alternative">Abbrechen</Button>
+  </div>
+</Modal>
+
+<Modal bind:open={popupLiedGespeichert} size="xs" autoclose>
+  <div class="text-center">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Lied wurde gespeichert</h3>
+    <Button color="alternative">Schließen</Button>
   </div>
 </Modal>
 
