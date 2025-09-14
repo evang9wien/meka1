@@ -279,6 +279,7 @@ export interface Content extends Headline, Widget {
   items?: Array<Item>;
   columns?: number;
   isReversed?: boolean;
+  isFade?: boolean;
   isAfterContent?: boolean;
   callToAction?: CallToAction;
 }
