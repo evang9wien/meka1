@@ -136,7 +136,7 @@
       </div>
 
       <div class="mb-6">
-        <Button color="light" on:click={CheckAndSubmit}>Anmelden</Button>
+        <Button color="light" onclick={CheckAndSubmit}>Anmelden</Button>
       </div>
       <div class="mb-6 text-xs">
         <p>

@@ -71,7 +71,7 @@
 
 <div class="flex flex-row"><h2 class="text-gray-900 dark:text-white font-bold mb-4">TerminAdmin</h2></div>
 <div class="flex flex-row">
-  <GradientButton class="mb-4 mr-4" color="cyanToBlue" on:click={sync}>Termine abgleichen</GradientButton>
+  <GradientButton class="mb-4 mr-4" color="cyanToBlue" onclick={sync}>Termine abgleichen</GradientButton>
   <!-- <Timeline order="vertical">
     {#each items as item}
       <TimelineItem title={item.summary} date={item.startDate}>

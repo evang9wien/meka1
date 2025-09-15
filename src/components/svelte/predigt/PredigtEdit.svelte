@@ -184,7 +184,7 @@
               <Fileupload
                 id="predigt"
                 name="predigt"
-                on:change={(e) => (predigtMp3 = e.target.files[0])}
+                onchange={(e) => (predigtMp3 = e.target.files[0])}
                 class="mb-2"
               />
               <Helper class="mb-2">Bitte die Predigt als mp3 Datei auswählen!.</Helper>
