@@ -229,7 +229,7 @@
             <Select
               items={years}
               bind:value={selectedYear}
-              on:change={handleYearSelect}
+              onchange={handleYearSelect}
               placeholder="Auswahl des Jahres."
             ></Select>
           </div>

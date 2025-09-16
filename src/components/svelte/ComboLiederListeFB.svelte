@@ -234,13 +234,13 @@
               <Input
                 class=""
                 bind:value={filterNoten}
-                on:input={handleFilterNoten}
-                on:change={handleFilterNoten}
+                oninput={handleFilterNoten}
+                onchange={handleFilterNoten}
                 placeholder="Suche im Titel oder im Liedtext"
               />
             </ButtonGroup>
 
-            <Select items={kategorien} bind:value={filterKat} on:change={handleFilterKat} placeholder="Kategorie"
+            <Select class="w-100" items={kategorien} bind:value={filterKat} onchange={handleFilterKat} placeholder="Kategorie"
             ></Select>
           </div>
           <!-- <Helper class="text-sm mt-2">Auswahl der Lied Kategorie.</Helper> -->
