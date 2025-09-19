@@ -14,8 +14,8 @@
   import WaitPopup from './popup/WaitPopup.svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
   import { getUrl } from './url/url.js';
-  import { firebaseConfig } from './firebase/firebase.js';
-  import { initializeApp } from 'firebase/app';
+  
+  import { initAppCheck } from "./firebase/firebase.js";
   import {
     getDatabase,
     ref as dbref,
@@ -33,8 +33,9 @@
   let showComboProben = false;
   onMount(() => {
     popupSpinnerModal = true;
-    console.log('FireBase');
-    const app = initializeApp(firebaseConfig);
+    console.log('FireBase');    
+    const app = initAppCheck();
+
     const dbRealtime = getDatabase(app);
     const fromDate = dayjs().format('YYYY-MM-DD');
 

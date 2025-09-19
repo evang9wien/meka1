@@ -32,9 +32,7 @@
   import { getUrl } from './url/url.js';
 
   import { comboKategorien } from './combo/combo.js';
-  import { firebaseConfig } from './firebase/firebase.js';
-
-  import { initializeApp } from 'firebase/app';
+  import { initAppCheck } from "./firebase/firebase.js";
   import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
@@ -78,7 +76,7 @@
 
   onMount(async () => {
     console.log('onMount');
-    const app = initializeApp(firebaseConfig);
+    const app = initAppCheck();
     auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (!user) {

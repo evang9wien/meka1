@@ -22,8 +22,7 @@
   import { getUrl } from './url/url.js';
 
   import LoginSimple from './auth/LoginSimpleModal.svelte';
-  import { firebaseConfig } from './firebase/firebase.js';
-  import { initializeApp } from 'firebase/app';
+  import { initAppCheck } from "./firebase/firebase.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
@@ -87,7 +86,7 @@
 
   const login = async () => {
     // onMount(async () => {
-    const app = initializeApp(firebaseConfig);
+    const app = initAppCheck();    
     // auth = getAuth(app);
     // onAuthStateChanged(auth, async (user) => {
     //   if (!user) {

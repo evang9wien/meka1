@@ -24,10 +24,11 @@ export function initAppCheck() {
     return null;
   }
 
-  return initializeAppCheck(firebaseApp, {
+  initializeAppCheck(firebaseApp, {
     provider: new ReCaptchaV3Provider("6LfUBc8rAAAAABuA5imvRrJ7ofxm6Y9J1wd1bcDv"),
     isTokenAutoRefreshEnabled: true
   });
+  return firebaseApp;
 }
 
 export { firebaseApp };
