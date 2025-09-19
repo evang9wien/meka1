@@ -1,10 +1,14 @@
----
-import { GoogleAnalytics } from '@astrolib/analytics';
-import { ANALYTICS } from '~/utils/config';
----
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HM5NMGTPZ2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-{
-  ANALYTICS?.vendors?.googleAnalytics?.id ? (
-    <GoogleAnalytics id={String(ANALYTICS.vendors.googleAnalytics.id)} partytown={ANALYTICS?.vendors?.googleAnalytics?.partytown} />
-  ) : null
-}
+  gtag('config', 'G-HM5NMGTPZ2',
+    {
+        client_storage: 'none'
+       
+      }
+  );
+</script>
