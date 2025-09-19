@@ -23,9 +23,12 @@
   import { getUrl } from './url/url.js';
   import { comboReihenfolge } from './combo/combo.js';
 
-  import { firebaseConfig } from './firebase/firebase.js';
+  // import { firebaseConfig } from './firebase/firebase.js';
 
-  import { initializeApp } from 'firebase/app';
+  import { firebaseApp, initAppCheck } from "./firebase/firebase.js";
+
+
+  // import { initializeApp } from 'firebase/app';
   import { getStorage, ref as stref, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
@@ -114,7 +117,8 @@
 
   onMount(async () => {
     console.log('FireBase');
-    const app = initializeApp(firebaseConfig);
+    initAppCheck();
+    const app = firebaseApp;
     auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (!user) {

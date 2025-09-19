@@ -1,3 +1,7 @@
+// src/components/svelte/firebase/firebase.js
+import { initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
 const firebaseConfig = {
   apiKey: 'AIzaSyCCScuVEd_E1vQRPMkCuALcccPbly0JhPc',
   authDomain: 'evang9-combo-4cb8e.firebaseapp.com',
@@ -10,3 +14,20 @@ const firebaseConfig = {
 };
 
 export { firebaseConfig };
+
+const firebaseApp = initializeApp(firebaseConfig);
+
+// AppCheck nicht sofort initialisieren, sondern als Funktion exportieren
+export function initAppCheck() {
+  if (typeof window === "undefined") {
+    // Läuft im SSR → abbrechen
+    return null;
+  }
+
+  return initializeAppCheck(firebaseApp, {
+    provider: new ReCaptchaV3Provider("6LfUBc8rAAAAABuA5imvRrJ7ofxm6Y9J1wd1bcDv"),
+    isTokenAutoRefreshEnabled: true
+  });
+}
+
+export { firebaseApp };
