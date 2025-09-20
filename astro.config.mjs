@@ -83,15 +83,15 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      alias: {
-        '~': path.resolve(__dirname, './src'),
-      },
-    },
     define: {
       // Mach die Variable global für Svelte-Komponenten verfügbar
       'import.meta.env.VITE_FIREBASE_API_KEY': JSON.stringify(firebaseApiKey),
     },
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, './src'),
+      },
+    }
   },
   build: {
     assets: 'astro',
