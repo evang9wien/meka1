@@ -1,16 +1,16 @@
 <script>
   import { onMount } from 'svelte';
   import { getAuth, signOut } from 'firebase/auth';
-  import { firebaseConfig } from '../firebase/firebase.js';
-  import { initializeApp } from 'firebase/app';
+  import { initAppCheck } from "../firebase/firebase.js";  
   import { Alert } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  
 
   let result = '';
   onMount(async () => {
+    const app = initAppCheck();
+    const auth = getAuth(app);
     signOut(auth)
       .then(() => {
         // Sign-out successful.

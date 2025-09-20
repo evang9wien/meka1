@@ -18,9 +18,8 @@
   import { comboReihenfolge } from './combo/combo.js';
   import { getUrl } from './url/url.js';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { firebaseConfig } from './firebase/firebase.js';
+  import { initAppCheck } from "./firebase/firebase.js";
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initializeApp } from 'firebase/app';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
@@ -60,7 +59,7 @@
   let alleLieder;
 
   onMount(async () => {
-    const app = initializeApp(firebaseConfig);
+    const app = initAppCheck();
     auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (!user) {

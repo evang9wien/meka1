@@ -19,9 +19,8 @@
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set } from 'firebase/database';
   import { remove } from 'firebase/database'; // für Löschen
-  import { firebaseConfig } from '../firebase/firebase.js';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
-  import { initializeApp, getApps, getApp } from 'firebase/app';
+  import { initAppCheck } from "../firebase/firebase.js";  
+  import { getFirestore, doc, getDoc } from 'firebase/firestore';  
   import WaitPopup from '../popup/WaitPopup.svelte';
   import LoginFirebase from '../auth/LoginFirebase.svelte';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
@@ -224,11 +223,14 @@
   }
 
   onMount(() => {
-    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    
+    const app = initAppCheck();
 
-    dbRealtime = getDatabase(app);
+    if (!app) 
+      return;
     auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
+      dbRealtime = getDatabase(app);
       if (!user) {
         popupFireBaseLogin = true;
         return;
