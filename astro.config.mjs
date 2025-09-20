@@ -11,18 +11,8 @@ import tasks from './src/utils/tasks';
 import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 import { ANALYTICS, SITE } from './src/utils/config.ts';
 import svelte from '@astrojs/svelte';
-// Lade Umgebungsvariablen aus der .env-Datei oder dem System
-import { loadEnv } from 'vite';
 
-const { VITE_FIREBASE_API_KEY } = loadEnv(
-  'production',
-  process.cwd(),
-  ''
-);
-
-// Der Schlüssel: Verwende process.env als primäre Quelle
-// Dadurch wird der Wert direkt aus GitHub Actions übernommen
-const firebaseApiKey = process.env.VITE_FIREBASE_API_KEY || VITE_FIREBASE_API_KEY;
+const firebaseApiKey = process.env.VITE_FIREBASE_API_KEY;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) =>
