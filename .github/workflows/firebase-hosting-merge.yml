@@ -23,7 +23,7 @@ jobs:
 
       - name: 🔨 Build Project
         env:
-          PUBLIC_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          PUBLIC_FIREBASE_API_KEY: ${{ secrets.PUBLIC_FIREBASE_API_KEY }}
         run: |
           echo "Environment Variable: $PUBLIC_FIREBASE_API_KEY:"
           npm install
