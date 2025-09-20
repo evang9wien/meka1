@@ -12,8 +12,6 @@ import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 import { ANALYTICS, SITE } from './src/utils/config.ts';
 import svelte from '@astrojs/svelte';
 
-const firebaseApiKey = process.env.VITE_FIREBASE_API_KEY;
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) =>
   ANALYTICS.vendors.googleAnalytics.id && ANALYTICS.vendors.googleAnalytics.partytown
@@ -73,10 +71,6 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-    define: {
-      // Mach die Variable global für Svelte-Komponenten verfügbar
-      'import.meta.env.VITE_FIREBASE_API_KEY': JSON.stringify(firebaseApiKey),
-    },
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './src'),

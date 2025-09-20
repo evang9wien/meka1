@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
-const secret = import.meta.env.VITE_FIREBASE_API_KEY;
+const secret = import.meta.env.PUBLIC_FIREBASE_API_KEY;
 console.log("Secret:", secret);
 
 const firebaseConfig = {
