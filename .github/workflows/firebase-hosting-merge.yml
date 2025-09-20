@@ -25,6 +25,7 @@ jobs:
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
         run: |
+          echo "Environment Variable: $VITE_FIREBASE_API_KEY"
           npm install
           npm run astro build
 
