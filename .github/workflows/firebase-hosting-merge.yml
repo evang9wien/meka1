@@ -22,6 +22,8 @@ jobs:
           regex: false  
 
       - name: 🔨 Build Project
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
         run: |
           npm install
           npm run astro build

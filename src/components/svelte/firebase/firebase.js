@@ -2,6 +2,9 @@
 import { initializeApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
+const secret = import.meta.env.VITE_FIREBASE_API_KEY;
+console.log("Secret:", secret);
+
 const firebaseConfig = {
   apiKey: 'AIzaSyCCScuVEd_E1vQRPMkCuALcccPbly0JhPc',
   authDomain: 'evang9-combo-4cb8e.firebaseapp.com',
