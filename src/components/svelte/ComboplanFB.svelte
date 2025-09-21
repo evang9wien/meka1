@@ -16,6 +16,8 @@
   import { getUrl } from './url/url.js';
   
   import { initAppCheck } from "./firebase/firebase.js";
+  import { getAuth, onAuthStateChanged } from 'firebase/auth';
+  import LoginFirebase from './auth/LoginFirebase.svelte';
   import {
     getDatabase,
     ref as dbref,
@@ -31,29 +33,41 @@
   let termine;
   let popupSpinnerModal = true;
   let showComboProben = false;
+  let userAuth = false;
+  let auth;
+  let popupFireBaseLogin = false;
   onMount(() => {
-    popupSpinnerModal = true;
+    
     console.log('FireBase');    
     const app = initAppCheck();
-
-    const dbRealtime = getDatabase(app);
-    const fromDate = dayjs().format('YYYY-MM-DD');
-
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
-    // console.log('Temine: ', dbRef);
-
-    onValue(dbRef, async (snapshot) => {
-      if (snapshot) {
-        termine = Object.values(snapshot.val()).map((t) => ({
-          ...t,
-          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
-          value: t.Termin,
-        }));
-        console.log('Termine: ', termine);
-        popupSpinnerModal = false;
+    auth = getAuth(app);
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        popupFireBaseLogin = true;
+        return;
+      } else {
+        userAuth = true;
       }
+      popupSpinnerModal = true;
+      const dbRealtime = getDatabase(app);
+      const fromDate = dayjs().format('YYYY-MM-DD');
+
+      // console.log('Now: ', now.format('YYYY-MM-DD'));
+
+      const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
+      // console.log('Temine: ', dbRef);
+
+      onValue(dbRef, async (snapshot) => {
+        if (snapshot) {
+          termine = Object.values(snapshot.val()).map((t) => ({
+            ...t,
+            name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+            value: t.Termin,
+          }));
+          console.log('Termine: ', termine);
+          popupSpinnerModal = false;
+        }
+      });
     });
   });
 
@@ -63,7 +77,7 @@
   };
 </script>
 
-{#if !popupSpinnerModal}
+{#if userAuth && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
@@ -109,3 +123,4 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Comboplan wird geladen." />
+<LoginFirebase {popupFireBaseLogin} {auth} />
