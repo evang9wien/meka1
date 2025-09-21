@@ -21,9 +21,9 @@
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
-  import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
-  import { firebaseConfig } from './../firebase/firebase.js';
-  import { initializeApp } from 'firebase/app';
+  import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';  
+  import { initAppCheck } from "./../firebase/firebase.js";
+  
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import {
@@ -51,7 +51,7 @@
   let popupSpinnerUploadModal = false;
   onMount(() => {
     console.log('FireBase');
-    const app = initializeApp(firebaseConfig);
+    const app = initAppCheck();    
 
     storage = getStorage(app);
 
