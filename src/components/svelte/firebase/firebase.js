@@ -27,6 +27,12 @@ export function initAppCheck() {
     return null;
   }
 
+  if (import.meta.env.DEV) {
+    // Lokale Entwicklung: Debug Provider
+    // Muss im Browser gesetzt werden
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  }
+
   initializeAppCheck(firebaseApp, {
     provider: new ReCaptchaV3Provider("6LfUBc8rAAAAABuA5imvRrJ7ofxm6Y9J1wd1bcDv"),
     isTokenAutoRefreshEnabled: true
