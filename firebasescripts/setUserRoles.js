@@ -20,7 +20,7 @@ async function syncUsers() {
 
             let userData = {
                 email: userRecord.email,
-                role: "", // wird ggf. überschrieben
+                role1: "", // wird ggf. überschrieben
                 createdAt: new Date(),
             };
 
@@ -30,34 +30,60 @@ async function syncUsers() {
             // jede Rolle (combo, predigt, kirchenservice) durchsuchen
             for (const role of roles) {
                 if (found) break; // abbrechen, wenn schon ein Treffer
+                const roleDoc = await db.collection("mitarbeiter").doc(role).get();
 
-                // Alle Subcollections unter mitarbeiter/<role> auflisten
-                const subcols = await db.collection("mitarbeiter").doc(role).listCollections();
+                if (roleDoc.exists) {
+                    const data = roleDoc.data();
+                    // data ist ein Objekt mit allen Keys (= Attributnamen)
+                    // console.log("Alle Keys im Dokument:", Object.keys(data));
 
-                for (const subcol of subcols) {
-                    if (found) break;
+                    for (const [key, value] of Object.entries(data)) {
 
-                    const snap = await subcol
-                        .where("Email", "==", userRecord.email)
-                        .limit(1)
-                        .get();
-
-                    if (!snap.empty) {
-                        const doc = snap.docs[0].data();
-
-                        userData = {
-                            ...userData,
-                            role: role,
-                            VName: doc.VName || null,
-                            FName: doc.FName || null,
-                            ShortName: doc.ShortName || null,
-                            ID: doc.ID || null,
-                        };
-
-                        found = true;
-                        break;
+                        // value ist hier wieder ein Objekt mit Email, VName, FName etc.
+                        if (value.Email == userRecord.email) {
+                            userData = {
+                                ...userData,
+                                role1: role,
+                                VName: value.VName || null,
+                                FName: value.FName || null,
+                                ShortName: value.ShortName || null,
+                                ID: value.ID || null,
+                            };
+                            console.log(`👤 ${key} ->`, value);
+                            found = true;
+                            break;
+                        }
                     }
                 }
+
+
+                // // Alle Subcollections unter mitarbeiter/<role> auflisten
+                // const subcols = await db.collection("mitarbeiter").doc(role).listCollections();
+                // console.log(`🔍 Suche in Rolle: ${role}, Subcollections: ${subcols.map(c => c.id).join(", ")}`);
+                // for (const subcol of subcols) {
+                //     if (found) break;
+                //     console.log(`🔍 Suche in ${role}/${subcol.id} nach ${userRecord.email}`);
+                //     const snap = await subcol
+                //         .where("Email", "==", userRecord.email)
+                //         .limit(1)
+                //         .get();
+
+                //     if (!snap.empty) {
+                //         const doc = snap.docs[0].data();
+
+                //         userData = {
+                //             ...userData,
+                //             role: role,
+                //             VName: doc.VName || null,
+                //             FName: doc.FName || null,
+                //             ShortName: doc.ShortName || null,
+                //             ID: doc.ID || null,
+                //         };
+
+                //         found = true;
+                //         break;
+                //     }
+                // }
             }
 
             // In Haupt-Collection accounts speichern
