@@ -30,7 +30,8 @@ export function initAppCheck() {
   if (import.meta.env.DEV) {
     // Lokale Entwicklung: Debug Provider
     // Muss im Browser gesetzt werden
-    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    // self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    console.log("AppCheck im Debug-Modus");
   }
 
   initializeAppCheck(firebaseApp, {
