@@ -1,6 +1,6 @@
 ---
 title: ZEIT
-excerpt: Zeit -- immer da, nie greifbar. Mal schleicht sie dahin, mal rast sie davon. Wir wünschen uns mehr von ihr -- und verlieren sie doch so leicht. In dieser <b>OASE Gottesdienstreihe</b> wollen wir dem Geheimnis der Zeit nachspüren und entdecken, wie wir gut in ihr leben können.  <a class="text-muted underline  font-medium" href="/gottesdienste#oase">Termine</a>.
+excerpt: Zeit -- immer da, nie greifbar. Mal schleicht sie dahin, mal rast sie davon. Wir wünschen uns mehr von ihr -- und verlieren sie doch so leicht. In dieser <b>OASE Gottesdienstreihe</b> wollen wir dem Geheimnis der Zeit nachspüren und entdecken, wie wir gut in ihr leben können. <a class="text-muted underline  font-medium" href="/news/oasegottesdienst">Mehr anzeigen</a> -- <a class="text-muted underline  font-medium" href="/gottesdienste#oase">Termine</a>.
 category: news
 tags:
   - news
@@ -15,7 +15,9 @@ Sonntag, 2. Nov. 2025 um 19 Uhr:
 
 **Zeit, was ist das?**
 
-*Mit Gedenken an unsere Verstorbenen*
+*Gemeinsam gedenken wir der Verstorbenen des vergangenen Jahres* – und in besonderer Weise auch all jener, die in den vergangenen 25 Jahren seit Bestehen unserer Gemeinde von uns gegangen sind. 
+
+Im Vertrauen auf Gottes Nähe teilen wir Trauer und Hoffnung, erinnern uns an die, die fehlen, und halten dankbar ihr Leben in Ehren. Wer im Gottesdienst besonders an eine verstorbene Person erinnern möchte, ist herzlich eingeladen, den Namen an unseren Pfarrer zu schicken: pfarrer@evang9.wien. 
 
 Sonntag, 7. Dez. 2025 um 19 Uhr:
 
