@@ -39,7 +39,7 @@ export const headerData = {
           href: getPermalink('/gottesdienste'),
         },
         {
-          text: 'Sontags um 19 Uhr: OASE',
+          text: 'Sonntags um 19 Uhr: OASE',
           href: getPermalink('/gottesdienste#oase'),
         },
         {
