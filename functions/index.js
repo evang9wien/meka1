@@ -44,7 +44,12 @@ export const getAudioUrl = onCall(async (request) => {
         const bucket = getStorage().bucket();
         const file = bucket.file(filePath);
 
-        console.log("Requested file bucket:", file);
+        // Prüfen, ob die Datei existiert
+        const [exists] = await file.exists();
+        if (!exists) {
+            console.error(`File does not exist: ${filePath}`);
+            throw new HttpsError("not-found", "Requested file not found");
+        }
 
         // URL expiry 5 min
         const expires = Date.now() + 5 * 60 * 1000;

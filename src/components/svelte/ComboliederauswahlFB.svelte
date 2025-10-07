@@ -27,6 +27,7 @@
   
   import { getStorage, ref as stref, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+  import { getFunctions, httpsCallable } from "firebase/functions";
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
@@ -111,6 +112,18 @@
     popupSpinnerModal = false;
   };
 
+  const testUrl = async (app) => {   
+    const functions = getFunctions(app);
+    // connectFunctionsEmulator(functions, "localhost", 5001);
+    const getAudioUrl = httpsCallable(functions, 'getAudioUrl');
+    try {
+      const result = await getAudioUrl({ fileName: 'Wenn_du_f_r_mich_bist' });
+      console.log('Result: ', result);
+    } catch (error) {
+      console.error('Error calling function:', error);
+    }
+  };
+
   onMount(async () => {
     console.log('FireBase');    
     const app = initAppCheck();
@@ -120,6 +133,10 @@
         popupFireBaseLogin = true;
         return;
       }
+
+      
+      await testUrl(app);
+      
 
       storage = getStorage(app);
 
@@ -270,7 +287,7 @@
                       {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
                         <p>loading</p>
                       {:then url}
-                        <audio class="audio-border" src={url} controls="controls" preload="none" />
+                        <audio class="audio-border" src={url} controls="controls" preload="none" ></audio>
                       {/await}
                     {/if}
                   </TableBodyCell>
