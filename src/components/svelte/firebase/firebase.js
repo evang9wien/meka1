@@ -4,7 +4,7 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const secret = import.meta.env.PUBLIC_FIREBASE_API_KEY;
 const myDevMode = import.meta.env.PUBLIC_MY_DEV_MODE;
-console.log("Secret:", secret);
+// console.log("Secret:", secret);
 console.log("DevMode:", myDevMode);
 
 const firebaseConfig = {
