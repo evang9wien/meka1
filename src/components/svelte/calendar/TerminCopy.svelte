@@ -15,6 +15,7 @@
   } from 'flowbite-svelte';
   import { Button } from 'flowbite-svelte';
   import { ArrowsRepeatOutline, TrashBinOutline, FolderPlusOutline, CheckCircleSolid } from 'flowbite-svelte-icons';
+  import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import dayjs from 'dayjs';
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set } from 'firebase/database';
@@ -243,34 +244,45 @@
       
 
       const dbFireStore = getFirestore(app);
-      const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
-      const docSnap = await getDoc(maRef);
-      if (docSnap.exists()) {
-        members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-        members = members
-          .map((t) => ({
-            ...t,
-            name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-            value: t.ShortName,
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name));
-        // rolle prüfen
-        console.log('Mitarbeiter: ', members);
-        console.log('User: ', user.providerData[0].email);
-        let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
-        if (loginUser.length > 0) {
-          console.log('LoginUser: ', loginUser[0]);
-          // if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
-          //   console.log('Role: ', loginUser[0].role);
-          //   comboAdminRole = true;
-          // }
-          if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'terminadmin').length > 0) {
-            console.log('Role: ', loginUser[0].role);
-            terminAdminRole = true;
-          }
-        }
+       // check role
+      const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+      console.log('User Data: ', userDoc.data());
+      if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('terminadmin')) {
+        console.log('No combolist role!');        
+        popupSpinnerModal = false;
+        return;
+      
       }
+      terminAdminRole = true;
       popupSpinnerModal = false;
+      // const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
+      // const docSnap = await getDoc(maRef);
+      // if (docSnap.exists()) {
+      //   members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
+      //   members = members
+      //     .map((t) => ({
+      //       ...t,
+      //       name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
+      //       value: t.ShortName,
+      //     }))
+      //     .sort((a, b) => a.name.localeCompare(b.name));
+      //   // rolle prüfen
+      //   // console.log('Mitarbeiter: ', members);
+      //   // console.log('User: ', user.providerData[0].email);
+      //   // let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
+      //   // if (loginUser.length > 0) {
+      //   //   console.log('LoginUser: ', loginUser[0]);
+      //   //   // if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
+      //   //   //   console.log('Role: ', loginUser[0].role);
+      //   //   //   comboAdminRole = true;
+      //   //   // }
+      //   //   if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'terminadmin').length > 0) {
+      //   //     console.log('Role: ', loginUser[0].role);
+      //   //     terminAdminRole = true;
+      //   //   }
+      //   // }
+      // }
+      
 
     });
   });
@@ -278,10 +290,13 @@
 
 <!-- UI -->
 {#if userAuth && !popupSpinnerModal && !terminAdminRole}
-   <div class="p-4">
+   <div class="flex justify-center p-8 ">
     <Card class="border-2 border-red-600 bg-red-50 content-center">
-      <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
-      <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
+      <div class="p-8"    >
+        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
+      </div>  
     </Card>
    </div>
 {/if}

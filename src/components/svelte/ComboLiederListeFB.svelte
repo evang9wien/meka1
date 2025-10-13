@@ -67,7 +67,7 @@
   let dbFireStore;
   let dbRealtime;
   let popupFireBaseLogin = false;
-
+  let comboListRole = false;
   let liedTextModal = false;
   let liedText;
   let liedTextTitel;
@@ -80,14 +80,23 @@
         console.log('No Login');
         popupFireBaseLogin = true;
         return;
-      }
-
-      console.log('User Auth');
+      }      
+      console.log('User Auth: ', user.uid);
       userAuth = true;
       storage = getStorage(app);
       dbFireStore = getFirestore(app);
       popupSpinnerModal = true;
 
+      // check role
+      const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+      console.log('User Data: ', userDoc.data());
+      if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('combolist')) {
+        console.log('No combolist role!');        
+        popupSpinnerModal = false;
+        return;
+      
+      }
+      comboListRole = true;
       const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
       let comboLieder = [];
       for (const [key, value] of Object.entries(liederGes.data())) {
@@ -203,8 +212,18 @@
     }
   }
 </script>
-
-{#if userAuth && !popupSpinnerModal}
+{#if userAuth && !popupSpinnerModal && !comboListRole}
+   <div class="flex justify-center p-8 ">
+    <Card class="border-2 border-red-600 bg-red-50 content-center">
+      <div class="p-8"    >
+        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
+      </div>  
+    </Card>
+   </div>
+{/if}
+{#if userAuth && !popupSpinnerModal && comboListRole}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Lieder Liste</h2>
