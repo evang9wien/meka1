@@ -51,6 +51,7 @@
 
   let popupModal = false;
   let popupErrorModal = false;
+  let comboLiederEdit = false;
   let responseData;
   let popupSpinnerModal = false;
   let popupUserAuthModal = false;
@@ -90,23 +91,22 @@
       storage = getStorage(app);
       dbFireStore = getFirestore(app);
 
-      // userAuth = await isUserAuth();
-      // if (!userAuth) {
-      //   popupUserAuthModal = true;
-      //   return;
-      // }
+      // check role
+      const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+      console.log('User Data: ', userDoc.data());
+      if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('liederedit')) {
+        console.log('No combolist role!');        
+        popupSpinnerModal = false;
+        return;
+      
+      }
+      comboLiederEdit = true;
+     
       popupSpinnerModal = true;
-      // axios.get(getUrl() + '/root/wp-json/combo/v2/comboliedkat', getAuthHeader()).then((response) => {
-      //   kategorien = JSON.parse(response.data);
-      // kategorien = kategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
+     
       kategorien = comboKategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
       console.log(kategorien);
-      // });
-
-      // axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
-      //   alleLieder = JSON.parse(response.data);
-      //   alleLieder = alleLieder.map((t) => ({ ...t, name: t.Titel, value: t.ID }));
-      // const docRef = ;
+     
       const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
       const comboLieder = [];
       for (const [key, value] of Object.entries(liederGes.data())) {
@@ -155,20 +155,7 @@
         // docSnap.data() will be undefined in this case
         console.log('Lied nicht gefunden!');
       }
-      // });
-      // try {
-      //   const response = await axios.get(
-      //     getUrl() + '/root/wp-json/combo/v2/comboliedread?lied_id=' + selectedLied,
-      //     getAuthHeader()
-      //   );
-
-      //   console.log('Lied Res: ', response);
-      //   loadedLied = JSON.parse(response.data)[0];
-      //   liedGesungen = loadedLied.Aktiv == '1';
-      //   console.log('Lied: ', loadedLied);
-      // } catch (error) {
-      //   console.error('Fehler beim Upload:', error);
-      // }
+      
       popupSpinnerModal = false;
     });
   };
@@ -250,8 +237,18 @@
     }
   };
 </script>
-
-{#if userAuth && !popupSpinnerModal}
+{#if userAuth && !popupSpinnerModal && !comboLiederEdit}
+   <div class="flex justify-center p-8 ">
+    <Card class="border-2 border-red-600 bg-red-50 content-center">
+      <div class="p-8"    >
+        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
+      </div>  
+    </Card>
+   </div>
+{/if}
+{#if userAuth && !popupSpinnerModal && comboLiederEdit}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <div class="w-80">
