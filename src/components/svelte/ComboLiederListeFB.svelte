@@ -32,7 +32,7 @@
 
   import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField, collection, getDocs } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -71,6 +71,8 @@
   let liedTextModal = false;
   let liedText;
   let liedTextTitel;
+
+  let alleLiederTexte;
 
   onMount(async () => {
     const app = initAppCheck();
@@ -119,6 +121,12 @@
 
       console.log(liederListeAll);
 
+      alleLiederTexte = await getDocs(collection(dbFireStore, 'lieder'));
+      console.log("Lieder Texte: ", alleLiederTexte);
+
+      
+      
+
       // axios.get(getUrl() + '/root/wp-json/combo/v2/comboLiederListe', getAuthHeader()).then((response) => {
       //   liederListe = JSON.parse(response.data);
       //   liederListe = liederListe.map((lied) => {
@@ -153,16 +161,51 @@
     liederListeAll = liederListeAll;
   }
   let filterNoten = '';
+  let filterLiedtext = '';
   let inputA = '';
   let floatingLabelA;
 
-  function handleFilterNoten() {
+  function filterInLiedtext(suchtext) {
+    const ergebnisse = [];
+    console.log("Lieder Texte: ", alleLiederTexte);  
+    alleLiederTexte.forEach(doc => {
+      const data = doc.data();
+      // console.log("Lied Data: ", data);
+      if (data.Liedtext && data.Liedtext.toLowerCase().includes(suchtext.toLowerCase())) {
+        ergebnisse.push(doc.id);
+      }
+    });
+
+    console.log("Ergebnisse Suche: ", ergebnisse);
+    return ergebnisse;
+  };
+
+  let blockFilterLiedtext = false;
+  function handleFilterLiedtext() {
+    if (blockFilterLiedtext) return;
+    blockFilterLiedtext = true;
+    filterNoten = '';
     setTimeout(() => {
+      console.log("Filter Liedtext: ", filterLiedtext);
+      const ergebnisse = filterInLiedtext(filterLiedtext);
       liederListe = liederListeKat.filter(
-        (lied) => lied.name.toLowerCase().includes(filterNoten.toLowerCase()) //  ||
-        // lied.Liedtext.toLowerCase().includes(filterNoten.toLowerCase())
+        (lied) => ergebnisse.includes(lied.ID)
       );
       // handleFilterKat(liederListe);
+      blockFilterLiedtext = false;
+    }, 500);
+  };
+
+  function handleFilterNoten() {
+    if (blockFilterLiedtext) return;
+    blockFilterLiedtext = true;
+    filterLiedtext = '';
+    setTimeout(() => {
+      liederListe = liederListeKat.filter(
+        (lied) => lied.name.toLowerCase().includes(filterNoten.toLowerCase())
+      );
+      // handleFilterKat(liederListe);
+      blockFilterLiedtext = false;
     }, 500);
   }
 
@@ -254,7 +297,20 @@
                 bind:value={filterNoten}
                 oninput={handleFilterNoten}
                 onchange={handleFilterNoten}
-                placeholder="Suche im Titel oder im Liedtext"
+                placeholder="Suche im Titel"
+              />
+            </ButtonGroup>
+
+            <ButtonGroup class="w-full">
+              <InputAddon>
+                <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </InputAddon>
+              <Input
+                class=""
+                bind:value={filterLiedtext}
+                oninput={handleFilterLiedtext}
+                onchange={handleFilterLiedtext}
+                placeholder="Suche im Liedtext"
               />
             </ButtonGroup>
 
