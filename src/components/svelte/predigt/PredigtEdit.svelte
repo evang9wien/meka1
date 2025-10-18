@@ -86,23 +86,14 @@
       if (user) {
         console.log('user: ', user);
         const dbFireStore = getFirestore(app);
-        const maRef = doc(dbFireStore, 'mitarbeiter', 'predigt');
-        const docSnap = await getDoc(maRef);
-        if (docSnap.exists()) {
-          let members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-          // rolle prüfen
-          console.log('Mitarbeiter: ', members);
-          console.log('User: ', user.providerData[0].email);
-          let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
-          if (loginUser.length > 0) {
-            console.log('LoginUser: ', loginUser[0]);
-            if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'predigt').length > 0) {
-              console.log('Role: ', loginUser[0].role);
-              // comboAdminRole = true;
-              predigtEdit = true;
-            }
-          }
+
+         // check role predigtedit
+        const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+        console.log('User Data: ', userDoc.data());
+        if (userDoc.exists() && userDoc.data().roles && userDoc.data().roles.includes('predigtedit')) {
+          predigtEdit = true;        
         }
+       
       }
     });
   });
@@ -169,8 +160,9 @@
     <div>
       {#if termine}
         {#if predigtEdit}
+          <div class="p-4">
           <form id="predigtform" on:submit|preventDefault={submitForm}>
-            <Card>
+            <Card class="p-4">
               Administrator-Modus:
               {#if open}
                 <Alert border class="mb-2">
@@ -191,8 +183,9 @@
 
               <GradientButton color="cyanToBlue" type="submit">Speichern</GradientButton>
             </Card>
-          </form>
+          </form>          
           <br />
+          </div>
         {/if}
         <Table aria-label="Liederliste">
           <TableBody>
