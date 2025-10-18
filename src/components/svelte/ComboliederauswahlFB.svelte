@@ -135,7 +135,7 @@
       }
 
       
-      await testUrl(app);
+      testUrl(app);
       
 
       storage = getStorage(app);
