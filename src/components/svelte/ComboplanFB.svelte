@@ -90,6 +90,7 @@
           <TableHeadCell>Git.</TableHeadCell>
           <TableHeadCell>Drums</TableHeadCell>
           <TableHeadCell>Bass</TableHeadCell>
+          <TableHeadCell>Beamer</TableHeadCell>
           <TableHeadCell>Bemerkung</TableHeadCell>
         </TableHead>
         <TableBody>
@@ -108,6 +109,7 @@
                 <TableBodyCell>{termin.Gitarre}</TableBodyCell>
                 <TableBodyCell>{termin.Drums}</TableBodyCell>
                 <TableBodyCell>{termin.Bass}</TableBodyCell>
+                <TableBodyCell>{termin.Beamer}</TableBodyCell>
                 <TableBodyCell>
                   <div class="flex flex-col">
                     <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>

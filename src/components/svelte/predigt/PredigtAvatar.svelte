@@ -19,7 +19,7 @@
     if (title && title.toLowerCase().includes('comboprobe')) return musik.src;
     if (title && title.toLowerCase().includes('meka classic')) return mekaclassic.src;
     
-    console.log(prediger);
+    // console.log(prediger);
     if (prediger == 'SFJ' || prediger == 'Stefan') return stefan.src;
     if (prediger == 'MRH' || prediger == 'Mark') return mark.src;
     if (prediger == 'TDH' || prediger == 'Tanja') return tanja.src;

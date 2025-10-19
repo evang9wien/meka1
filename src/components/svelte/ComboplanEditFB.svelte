@@ -80,6 +80,7 @@
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
+          Beamer: t.Beamer || '',
         }));
         console.log('Termine: ', termine);
         popupSpinnerModal = false;
@@ -146,6 +147,7 @@
     combo.Melodie = [];
     combo.Drums = [];
     combo.Bass = [];
+    combo.Beamer = [];
     combo.Gitarre = [];
   };
 
@@ -275,6 +277,7 @@
           <TableHeadCell>Git.</TableHeadCell>
           <TableHeadCell>Drums</TableHeadCell>
           <TableHeadCell>Bass</TableHeadCell>
+          <TableHeadCell>Beamer</TableHeadCell>
           <TableHeadCell>Bemerkung</TableHeadCell>
         </TableHead>
 
@@ -336,6 +339,16 @@
                       value={termin.Termin + ',' + termin.Bass}
                     />
                     {termin.Bass}
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex flex-row">
+                    <Checkbox
+                      disabled={!selectedmember}
+                      bind:group={combo.Beamer}
+                      value={termin.Termin + ',' + termin.Beamer}
+                    />
+                    {termin.Beamer}
                   </div>
                 </TableBodyCell>
 
