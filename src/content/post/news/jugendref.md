@@ -5,7 +5,7 @@ category: news
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1757629879/Homepage/News/jugendref_upshkt.png
-publishDate: 2025-09-12T21:32:43.810Z
+publishDate: 2025-10-20T21:32:43.810Z
 author: Andreas
 ---
 
