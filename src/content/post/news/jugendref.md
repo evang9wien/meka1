@@ -3,9 +3,9 @@ title: Stellenanzeige - Jugend-Referent:in (m/w/d)
 excerpt: Die Evangelische Messiaskapelle im 9. Bezirk in Wien sucht ab sofort eine engagierte und kreative Persönlichkeit, die Freude daran hat, Kinder und Jugendliche im Glauben zu begleiten und in ihrem Alltag zu stärken. <a class="text-muted underline  font-medium" href="/news/jugendref">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1757629879/Homepage/News/jugendref_upshkt.png
-publishDate: 2025-10-20T21:32:43.810Z
+publishDate: 2025-08-25T21:32:43.810Z
 author: Andreas
 ---
 

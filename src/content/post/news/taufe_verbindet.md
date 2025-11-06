@@ -6,7 +6,6 @@ category: news
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1761072415/Homepage/News/Taufbecken_fzsfsq.jpg
-attribution: 'Foto: epd/M.Uschmann'
 publishDate: 2025-10-21T20:45:00.0Z
 author: Matthias Geist
 ---

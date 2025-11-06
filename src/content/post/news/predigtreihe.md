@@ -2,7 +2,7 @@
 title: Predigtreihe
 excerpt: Wir laden ein zu unserer neuen Predigtreihe im "Reformationsmonat" Oktober „Woran hängst du dein Herz? - Drei Sonntage, drei Fragen fürs Leben.“. <a class="text-muted underline  font-medium" href="/news/predigtreihe">Mehr anzeigen</a>.
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1758746942/Homepage/News/herz1_thgcec.png
 publishDate: 2025-10-24T21:32:43.810Z
 author: Andreas
