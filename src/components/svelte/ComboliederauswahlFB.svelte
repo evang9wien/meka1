@@ -68,47 +68,37 @@
 
   const loadLieder = async (termin) => {
     console.log('Selected Termin: ', termin);
-    if (termin.LiedAuswahl) {
-      termin.LiedAuswahl = termin.LiedAuswahl.sort(
-        (a, b) => parseInt(a.lied_im_GD_nummer) - parseInt(b.lied_im_GD_nummer)
-      );
- 
-      termin.LiedAuswahl = termin.LiedAuswahl.map((l) => ({
-        ...l,
-        Beschreibung: comboReihenfolge.filter((f) => f.Reihenfolge == l.lied_im_GD_nummer)[0].Beschreibung,
-      }));
-    }
-    verantwortlich = termin.Verantwortlich;
-    selectedTermin = termin.Termin;
-    lastSelectedTermin = selectedTermin;
-    // updateStarCount(postElement, data);
-    // console.log('Termin: ', termin);
-    const liederAus = [];
-
-    // for (const l of termin.LiedAuswahl) {
     if (!termin.LiedAuswahl) {
       console.log('Keine Liedauswahl vorhanden!');
       popupSpinnerModal = false;
       return;
     }
-    
 
-    for (const l of termin.LiedAuswahl) {
-      const liedRef = doc(dbFireStore, 'lieder', l.lied_liste_nummer);
-      const docSnap = await getDoc(liedRef);
+    verantwortlich = termin.Verantwortlich;
+    selectedTermin = termin.Termin;
+    lastSelectedTermin = selectedTermin;
 
-      if (docSnap.exists()) {
-        const o = { ...l, ...docSnap.data() };
-        liederAus.push(o);
-      } else {
-        console.log('No such document!');
-      }
+    // Sortiere die Lieder und füge Beschreibungen in einem Schritt hinzu
+    const sortedLieder = termin.LiedAuswahl
+      .sort((a, b) => parseInt(a.lied_im_GD_nummer) - parseInt(b.lied_im_GD_nummer))
+      .map(l => ({
+        ...l,
+        Beschreibung: comboReihenfolge.find(f => f.Reihenfolge == l.lied_im_GD_nummer)?.Beschreibung
+      }));
+
+    // Lade alle Lieder parallel statt sequentiell
+    try {
+      const liederPromises = sortedLieder.map(l => 
+        getDoc(doc(dbFireStore, 'lieder', l.lied_liste_nummer))
+          .then(docSnap => docSnap.exists() ? { ...l, ...docSnap.data() } : null)
+      );
+
+      const liederResults = await Promise.all(liederPromises);
+      liederauswahl = liederResults.filter(lied => lied !== null);
+    } catch (error) {
+      console.error('Fehler beim Laden der Lieder:', error);
     }
 
-    liederauswahl = liederAus;
-
-
-    // console.log('Liederauswahl: ', liederauswahl);
     popupSpinnerModal = false;
   };
 
@@ -135,7 +125,7 @@
       }
 
       
-      testUrl(app);
+      // testUrl(app);
       
 
       storage = getStorage(app);
