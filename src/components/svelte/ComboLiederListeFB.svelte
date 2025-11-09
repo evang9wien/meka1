@@ -99,16 +99,20 @@
       
       }
       comboListRole = true;
-      const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+      // Statt sequentieller Abfragen
+      const [liederGesDoc, liederNichtGesDoc, alleLiederTexte] = await Promise.all([
+        getDoc(doc(dbFireStore, 'allelieder', 'gesungen')),
+        getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen')),
+        getDocs(collection(dbFireStore, 'lieder'))
+      ]);
       let comboLieder = [];
-      for (const [key, value] of Object.entries(liederGes.data())) {
+      for (const [key, value] of Object.entries(liederGesDoc.data())) {
         comboLieder.push({ name: value, value: key, ID: key });
       }
 
       comboLieder = comboLieder.map((cl) => ({ ...cl, Aktiv: 1 }));
-      const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
       const nichtcomboLieder = [];
-      for (const [key, value] of Object.entries(liederNichtGes.data())) {
+      for (const [key, value] of Object.entries(liederNichtGesDoc.data())) {
         nichtcomboLieder.push({ name: value, value: key, ID: key });
       }
 
@@ -119,10 +123,9 @@
       liederListe = alleLieder;
       handleFilterKat();
 
-      console.log(liederListeAll);
-
-      alleLiederTexte = await getDocs(collection(dbFireStore, 'lieder'));
-      console.log("Lieder Texte: ", alleLiederTexte);
+      // console.log(liederListeAll);
+      
+      // console.log("Lieder Texte: ", alleLiederTexte);
 
       
       
