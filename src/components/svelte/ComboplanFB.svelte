@@ -37,36 +37,54 @@
   let auth;
   let popupFireBaseLogin = false;
   onMount(() => {
-    
     console.log('FireBase');    
     const app = initAppCheck();
     auth = getAuth(app);
+    
+    // Subscription für Firebase Realtime Database
+    let termineSubscription = null;
+    
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         popupFireBaseLogin = true;
         return;
-      } else {
-        userAuth = true;
       }
+      
+      userAuth = true;
       popupSpinnerModal = true;
+      
+      // Cleanup vorheriger Subscription
+      if (termineSubscription) {
+        termineSubscription();
+      }
+      
       const dbRealtime = getDatabase(app);
       const fromDate = dayjs().format('YYYY-MM-DD');
+      
+      // Optimierte Query mit Index
+      const dbRef = query(
+        dbref(dbRealtime, 'combo/termine'), 
+        orderByKey(), 
+        startAt(fromDate)
+      );
 
-      // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-      const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
-      // console.log('Temine: ', dbRef);
-
-      onValue(dbRef, async (snapshot) => {
-        if (snapshot) {
-          termine = Object.values(snapshot.val()).map((t) => ({
-            ...t,
-            name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
-            value: t.Termin,
-          }));
-          console.log('Termine: ', termine);
+      // Effizientere Datenverarbeitung mit Subscription
+      termineSubscription = onValue(dbRef, (snapshot) => {
+        if (snapshot?.val()) {
+          // Verarbeite Daten in einem Durchgang
+          termine = Object.entries(snapshot.val())
+            .map(([_, t]) => ({
+              ...t,
+              name: `${t.Termin}${t.Abendmahl === '1' ? ' (Y)' : ''}`,
+              value: t.Termin
+            }));
+          
+          console.log('Termine geladen:', termine.length);
           popupSpinnerModal = false;
         }
+      }, (error) => {
+        console.error('Fehler beim Laden der Termine:', error);
+        popupSpinnerModal = false;
       });
     });
   });
