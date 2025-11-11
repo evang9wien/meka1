@@ -34,22 +34,7 @@ const {
       )}
     >
       {items.map(({ title, description, icon, callToAction, qrCode, classes: itemClasses = {} }) => (
-        <div>
-          {qrCode ? (
-            <div class={twMerge('flex flex-col items-center justify-center max-w-md', panelClass, itemClasses?.panel)}>
-              <h3 class={twMerge('text-xl font-bold mb-4', titleClass, itemClasses?.title)} set:html={title} />
-              
-              {description && (
-                <p
-                  class={twMerge('mt-3 text-muted text-center text-sm', descriptionClass, itemClasses?.description)}
-                  set:html={description}
-                />
-              )}
-              <div class="mt-3">
-                <DonationQRCode client:load />
-              </div>  
-            </div>
-          ) : (
+        <div>          
             <div class={twMerge('flex flex-row max-w-md', panelClass, itemClasses?.panel)}>
               <div class="flex justify-center">
                 {(icon || defaultIcon) && (
@@ -67,14 +52,19 @@ const {
                     set:html={description}
                   />
                 )}
+                {qrCode && (
+                  <div class="mt-3">
+                    <DonationQRCode client:load />
+                  </div>
+                )
+                }  
                 {callToAction && (
                   <div class={twMerge(`${title || description ? 'mt-3' : ''}`, actionClass, itemClasses?.actionClass)}>
                     <Button variant="link" {...callToAction} />
                   </div>
                 )}
               </div>
-            </div>
-          )}
+            </div>          
         </div>
       ))}
     </div>
