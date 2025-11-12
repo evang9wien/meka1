@@ -98,14 +98,12 @@ const load = async function (): Promise<Array<Post>> {
   const posts = await getCollection('post');
   const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
 
+  const requiredTags = ['impuls', 'news'];
   const results = (await Promise.all(normalizedPosts))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
     .filter((post) => !post.draft)
-    .filter((post) => typeof(post.tags) !== 'undefined' && 
-                       (post.tags.length > 0 && 
-                        post.tags.findIndex((tag) => 
-                            tag == 'news' ||
-                            tag == 'impuls' ) != -1));
+    .filter((post) => Array.isArray(post.tags) && 
+                      post.tags.some((tag) => requiredTags.includes(tag)));
 
   return results;
 };
@@ -167,7 +165,7 @@ export const findPostsByTags = async (tags: Array<string>): Promise<Array<Post>>
 
   const posts = await fetchPosts();
   const _count = 4;
-  const filtersPost = posts.filter((p) => p.tags.some((r) => tags.includes(r)));
+  const filtersPost = posts.filter((p) => Array.isArray(p.tags) && p.tags.some((r) => tags.includes(r)));
 
   return filtersPost ? filtersPost.slice(0, _count) : [];
 };
