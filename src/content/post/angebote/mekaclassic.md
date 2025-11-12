@@ -5,7 +5,7 @@ author: Andreas
 metadata:
   canonical: https://astrowind.vercel.app/astrowind-template-in-depth
 title: MEKA Classic 9. Staffel im Herbst 2025
-category: Documentation
+category: angebote
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1756052024/Homepage/Angebote/Mekaclassic2025_nqcxck.jpg

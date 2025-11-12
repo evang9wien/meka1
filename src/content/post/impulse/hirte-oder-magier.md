@@ -3,9 +3,9 @@ title: Hirte oder Magier
 excerpt: Advent ist spirituell gesehen ein Weg. Ein Weg hin zur Krippe. Die
   Weihnachtsgeschichten, die zu Weihnachten verlesen werden, sind Weggeschichten
   mit unterschiedlichen Perspektiven.
-category: Impuls
+category: impuls
 tags:
-  - Impuls
+  - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1730665451/airport-2373727_900x600_na2qjx.jpg
 publishDate: 2024-11-03T20:44:01.000Z
 author: stfj

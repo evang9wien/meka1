@@ -5,7 +5,7 @@ excerpt: „Haben Sie Erbarmen mit den Menschen, die Angst haben, Herr Präsiden
   Predigt in unserer Medienberichterstattung Erwähnung findet. Mit ihren
   mahnenden Worten hat es Bischöfin Mariann Edgar Budde geschafft, auch jenseits
   des Atlantiks für – positive – Aufmerksamkeit zu sorgen.
-category: Impulse
+category: impuls
 tags:
   - Impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1739736096/Homepage/News/people-2582774_small_l3rvwv.jpg

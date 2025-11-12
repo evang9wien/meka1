@@ -1,6 +1,7 @@
 ---
 title: Beziehungsweise Bibel
 excerpt: Ein Gesprächskreis für junge Erwachsene (18-35 Jahre). Wir reden über Gott und die Welt, verknüpfen Fragenimpulse mit der eigenen Biographie und schauen, wie und wo sich Glaubensspuren in dieser finden lassen… oder eben auch nicht. Vieles geht, gar nichts muss. <a class="text-muted underline  font-medium" href="/news/beziehungsweisebibel">Mehr anzeigen</a>.
+category: news
 tags:
   - news
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1759748878/Homepage/News/BB_Glaube_und..._-_Semesteru%CC%88bersicht_A4_50_bf45gf.jpg
