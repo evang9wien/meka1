@@ -1,0 +1,148 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import sanitizeHtml from 'sanitize-html';
+import { JSDOM } from 'jsdom';
+import { span } from 'flowbite-svelte';
+
+const metadata = {
+  title: 'Newsletter',
+  ignoreTitleTemplate: true,
+};
+
+const res = await fetch(
+  'https://9vmz0.r.ag.d.sendibm3.com/mk/mr/sh/6rqJ8GoudeITQFYUFyZSYmptPK1/meUIlSOO43n9'
+);
+const rawHtml = await res.text();
+
+/* =====================================================
+   1) sanitize-html ZUERST
+   - Styles, Klassen, Skripte raus
+   - Tabellen bleiben erhalten
+===================================================== */
+const sanitizedHtml = sanitizeHtml(rawHtml, {
+  allowedTags: [
+    'h1', 'h2', 'h3', 'h4',
+    'p', 'span', 'br', 'hr',
+    'ul', 'ol', 'li',
+    'strong', 'em', 'b', 'i',
+    'a', 'img',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+  ],
+  allowedAttributes: {
+    a: ['href', 'target', 'rel', 'style'],
+    img: ['src', 'alt'],
+    span: ['style'],
+    p: ['style'],
+    h1: ['style'],
+  },
+  allowedSchemes: ['http', 'https', 'mailto'],
+  transformTags: {
+    a: sanitizeHtml.simpleTransform('a', {
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    }),
+    span: (tagName, attribs) => {
+      if (attribs.style) {
+        attribs.style = attribs.style
+          .split(';')
+          .filter(part => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
+          .join(';')
+          .replace(/;;/g, ';')
+          .trim();
+        if (!attribs.style) delete attribs.style;
+      }
+      return { tagName, attribs };
+    },
+    p: (tagName, attribs) => {
+      if (attribs.style) {
+        attribs.style = attribs.style
+          .split(';')
+          .filter(part => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
+          .join(';')
+          .replace(/;;/g, ';')
+          .trim();
+        if (!attribs.style) delete attribs.style;
+      }
+      return { tagName, attribs };
+    },
+    h1: (tagName, attribs) => {
+      if (attribs.style) {
+        attribs.style = attribs.style
+          .split(';')
+          .filter(part => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
+          .join(';')
+          .replace(/;;/g, ';')
+          .trim();
+        if (!attribs.style) delete attribs.style;
+      }
+      return { tagName, attribs };
+    },
+  },
+});
+
+// /* =====================================================
+//    2) jsdom: Tabellen bis zum Marker entfernen
+// ===================================================== */
+const dom = new JSDOM(sanitizedHtml);
+const document = dom.window.document;
+
+// /* Markertext (robust, ohne exakte Übereinstimmung) */
+// const START_TEXT = 'Liebe Freundin';
+
+// /* <p> suchen, das den Marker enthält */
+// const startParagraph = [...document.querySelectorAll('p')].find(p =>
+//   p.textContent.includes(START_TEXT)
+// );
+
+// // console.log('Gefundenes Start-Paragraph:', startParagraph?.textContent);
+
+// if (startParagraph) {
+//   const startTable = startParagraph.closest('table');
+
+//   if (startTable) {
+//     const allTables = Array.from(document.querySelectorAll('table'));
+
+//     for (const table of allTables) {
+//       // 1) Tabelle liegt vor der Start-Tabelle
+//       const isBefore =
+//         table.compareDocumentPosition(startTable) &
+//         dom.window.Node.DOCUMENT_POSITION_FOLLOWING;
+
+//       // 2) Tabelle ist KEIN Vorfahre der Start-Tabelle
+//       const isAncestor = table.contains(startTable);
+
+//       if (isBefore && !isAncestor) {
+//         table.remove();
+//       }
+//     }
+//   }
+// }
+
+// const firstTable = document.querySelector('table');
+
+// if (firstTable) {
+//   // 2) Alles davor entfernen (auch Textnodes)
+//   let node = firstTable.previousSibling;
+
+//   while (node) {
+//     const prev = node.previousSibling;
+//     node.remove();
+//     node = prev;
+//   }
+// }
+
+/* =====================================================
+   3) Ergebnis-HTML
+===================================================== */
+const finalHtml = document.body.innerHTML;
+---
+<Layout metadata={metadata}>
+  <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
+    <div class="mb-12 text-left">      
+      <div class="mt-4 text-lg md:text-xl text-muted dark:text-slate-400 break-normal">
+        <Fragment set:html={finalHtml} />
+      </div>
+    
+    
+  </section>
+</Layout>
