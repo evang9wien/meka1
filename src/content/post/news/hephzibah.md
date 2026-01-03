@@ -2,9 +2,9 @@
 title: Weihnachtsmusical Hephzibah erzählt
 excerpt: Komm und sing mit uns die Weihnachtsgeschichte:</br>
     In der Kinderweihnacht am 24.12. um 15 Uhr präsentieren wir das Musical “Hephzibah erzählt”. Und dabei brauchen wir deine Unterstützung.
-category: news
+category: old
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1762449921/Homepage/News/hephzibah2_jid59l.png
 publishDate: 2025-11-06T22:00:00.000Z
 author: stfj
