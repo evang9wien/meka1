@@ -4,7 +4,7 @@ excerpt: Ein Gesprächskreis für junge Erwachsene (18-35 Jahre). Wir reden übe
 category: news
 tags:
   - news
-image: https://res.cloudinary.com/dqjdjviob/image/upload/v1759748878/Homepage/News/BB_Glaube_und..._-_Semesteru%CC%88bersicht_A4_50_bf45gf.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1769067799/Homepage/News/BeziehungsweiseBibel%C3%9CbersichtAbM%C3%A4rz_xwvp3h.png
 publishDate: 2025-10-6T21:32:43.810Z
 author: Andreas
 ---
@@ -36,5 +36,5 @@ Termine (immer am zweiten Dienstag im Monat):
  
 Kooperationspartner:innen: EHG-Wien, EJW, EJÖ, Lutherische Stadtkirche, Messiaskapelle, WDH
 
-![](https://res.cloudinary.com/dqjdjviob/image/upload/v1759748878/Homepage/News/BB_Glaube_und..._-_Semesteru%CC%88bersicht_A4_50_bf45gf.jpg)
+![](https://res.cloudinary.com/dqjdjviob/image/upload/v1769067799/Homepage/News/BeziehungsweiseBibel%C3%9CbersichtAbM%C3%A4rz_xwvp3h.png)
  
