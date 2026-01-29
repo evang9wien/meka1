@@ -1,0 +1,97 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Image from '~/components/common/Image.astro';
+import PartH3 from '~/components/widgets/PartH3.astro';
+
+const metadata = {
+  title: 'Kinder und Familien',
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
+    <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
+      <h1 class="font-bold font-heading text-4xl md:text-5xl leading-tighter tracking-tighter">Kinder und Familien</h1>
+    </div>
+
+    <div class="py-2 md:py-4">
+      <div class="relative m-auto max-w-5xl">
+        <Image
+          class="mx-auto rounded-md w-full"
+          widths={[400, 768, 1024, 2040]}
+          sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+          loading="eager"
+          width={1024}
+          height={276}
+          src='https://res.cloudinary.com/dqjdjviob/image/upload/v1769703588/Homepage/Gottesdienst/20250420_112015_small_ztjlvk.jpg'
+          alt='Kinder in der Messiaskapelle'
+        />
+      </div>
+    </div>
+
+
+    <div
+      class="mx-auto prose prose-lg max-w-4xl dark:prose-invert dark:prose-headings:text-slate-300 prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8"
+    >
+      <PartH3 title="Kinder in der Messiaskapelle">
+        <p>
+        Kinder sind ein Geschenk - und ein lebendiger Teil unserer Gemeinde!
+        Sie bringen Bewegung, Lachen und neue Fragen mit, und das bereichert uns alle.
+        In der Messiaskapelle wollen wir, dass Kinder ihren Platz finden: beim Spielen, Staunen, Lernen und Feiern.</br>
+        Ob im Gottesdienst, im Kindergottesdienst oder einfach mittendrin - <span class="font-semibold text-gray-900 dark:text-white">hier dürfen Kinder Kirche erleben, so wie sie sind.</span>
+        Eltern dürfen entspannt sein: Kinder gehören dazu, auch wenn es manchmal etwas lauter wird.
+        </p>
+      </PartH3>
+
+      <PartH3 title="Kinder im Gottesdienst">
+        <p>
+        Bei uns sind Kinder mittendrin - nicht nur dabei!
+        Sie gehören zur Gemeinde, genauso wie die Großen. Darum ist es uns wichtig, dass sie den Gottesdienst kennenlernen dürfen - auf eine Weise, die zu ihrem Alter passt: mal im eigenen Kindergottesdienst, mal gemeinsam mit allen.
+        Natürlich braucht das gegenseitige Rücksicht und Verständnis. Die Erwachsenen wollen in Ruhe feiern, die Kinder dürfen neugierig und lebendig sein. Beides hat seinen Platz, denn Gottesdienst ist keine „Erwachsenenveranstaltung“, sondern unser gemeinsames Feiern.
+        Uns ist wichtig, dass sich Kinder in unserer Kirche willkommen fühlen - mit all dem, was sie mitbringen: Freude, Neugier, manchmal auch Unruhe.
+        Denn genau so, mit Groß und Klein, laut und leise, feiern wir, dass Gott mitten unter uns ist.
+        </p>
+      </PartH3>
+
+      <PartH3 title="Besondere Gottesdienste">
+         <p>
+         Am <span class="font-semibold text-gray-900 dark:text-white">ersten und zweiten Sonntag im Monat</span>
+         feiern wir parallel zu unserem Gottesdienst in der Kapelle einen 
+         <span class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Kindergottesdienst im Gemeindesaal</span>,
+         der von unserem Team liebevoll gestaltet wird. Wir beginnen gemeinsam in der Kapelle. Nach Begrüßung und erstem Lied
+         gehen die Kinder mit dem Kindergottesdienst-Team in den Gemeindesaal. Wer möchte, kann sie begleiten.
+        </br>
+        </br>
+         Am <span class="font-semibold text-gray-900 dark:text-white">dritten Sonntag im Monat</span>
+         feiern wir einen <span class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">kunterbunten Gottesdienst</span> 
+         für Groß und Klein. Nach dem gemeinsamen Beginn in der Kapelle gibt es anstelle der Lesung eine Geschichte für Kinder und einen kurzen Impuls.
+         Anschließend vertiefen die Kinder das Thema im Gemeindesaal - kreativ und kindgerecht. Zum Abendmahl kommen alle wieder in die Kapelle zurück,
+         wo wir gemeinsam feiern, dass Jesus unter uns ist und wir Brot und Traubensaft miteinander teilen.
+         </p>
+      </PartH3>
+
+      <PartH3 title="Kinderecke">
+        <p>
+        Im hinteren Teil unserer Kapelle gibt es eine gemütliche <span class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Kinderecke</span> mit Sofas, Büchern, Spielzeug und Malsachen - ein Lieblingsplatz vieler Familien.
+        Manchmal sind Gottesdienste lang oder anstrengend. Wenn ein Kind eine kurze Pause braucht, kann die Kapelle über den Hintereingang verlassen werden. In der Vorhalle oder im Gemeindesaal ist Raum für eine kleine Auszeit - und natürlich darf man jederzeit wieder dazukommen.
+        </p>
+      </PartH3>
+
+      <PartH3 title="Gemeindesaal" icon='tabler:users-group'>
+        <p>
+        Einen Stock über der Kapelle befindet sich unser <span class="font-semibold text-gray-900 dark:text-white">Gemeindesaal</span>. Damit sich alle wohlfühlen, gibt es dort Spielsachen und Platz zum Bewegen.
+        Wer also etwas Abstand oder Ruhe braucht, findet hier einen guten Ort - und kann jederzeit wieder in die Kapelle zurückkehren.
+        </p>
+      </PartH3>
+
+      <PartH3 title="Abendmahl" icon='tabler:users-group'>
+        <p>In unserer Kirche, der <span class="font-semibold text-gray-900 dark:text-white">Evangelischen Kirche A.B. in Österreich</span>
+        , wurde vor vielen Jahren das <span class="font-semibold text-gray-900 dark:text-white">kinderoffene Abendmahl</span> eingeführt.
+        Alle Getauften sind - unabhängig vom Alter - eingeladen, mitzufeiern. Denn wer getauft ist, gehört ganz und gar zur Gemeinschaft mit Jesus Christus.
+        Wir freuen uns, wenn Kinder mit nach vorne kommen und mit uns die Abendmahlsgaben teilen.
+        Am 1. und 3. Sonntag feiern wir Abendmahl mit <span class="font-semibold text-gray-900 dark:text-white">glutenfreiem Brot und alkoholfreiem Traubensaft.</span>
+        </p>
+      </PartH3>
+    </div>
+  </section>
+</Layout>

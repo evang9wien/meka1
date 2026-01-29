@@ -43,6 +43,10 @@ export const headerData = {
           href: getPermalink('/gottesdienste#oase'),
         },
         {
+          text: 'Kinder & Familien',
+          href: getPermalink('/kinderundfamilien'),
+        },
+        {
           text: 'Termine',
           href: getPermalink('/gottesdienste#termine'),
         },

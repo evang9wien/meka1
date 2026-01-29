@@ -2,6 +2,15 @@
 import Content from '~/components/widgets/Content.astro';
 import Calendar from '~/components/svelte/calendar/Calendar.svelte';
 import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  bg?: boolean;
+}
+
+const {
+  bg = true
+} = Astro.props;
+
 ---
 
 <Content
@@ -9,7 +18,7 @@ import { Icon } from 'astro-icon/components';
   title="Termine"
   image={{
     src: 'https://images.unsplash.com/photo-1560420025-9453f02b4751?q=80&w=1402&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    alt: 'Kalendar',
+    alt: 'Kalender',
   }}
   actions={[]}
 >
@@ -26,7 +35,12 @@ import { Icon } from 'astro-icon/components';
       target="_blank">auf dieser externen Seite <Icon name="tabler:external-link" class="inline" /></a
     > erreichbar.
   </Fragment>
-  <Fragment slot="bg">
-    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-  </Fragment>
+
+  {
+    bg && (
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+    )
+  }
 </Content>

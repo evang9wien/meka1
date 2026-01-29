@@ -51,6 +51,7 @@ const metadata = {
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
+
   <Content
     id="oase"
     isReversed
@@ -74,8 +75,43 @@ const metadata = {
       </div>
     </Fragment>
   </Content>
-  <Termine />
 
+  <section class="relative not-prose scroll-mt-[72px]" id="kinder"}>
+  <div class="absolute inset-0 pointer-events-none -z-[1]" aria-hidden="true">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </div>
+  <Hero
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Kinder und Familien',
+        href: getPermalink('/kinderundfamilien'),
+        icon: 'tabler:users-group',
+      },
+    ]}
+    image={{
+      src: 'https://res.cloudinary.com/dqjdjviob/image/upload/v1769703588/Homepage/Gottesdienst/20250420_112015_small_ztjlvk.jpg',
+      alt: 'Kinder in der Messiaskapelle',
+    }}
+    tagline="Mit Kindern in der Messiaskapelle"
+  >
+    <Fragment slot="title">Kinder und Familien</Fragment>
+
+    <Fragment slot="subtitle">
+      Kinder sind ein Geschenk - und ein lebendiger Teil unserer Gemeinde!
+      Sie bringen Bewegung, Lachen und neue Fragen mit, und das bereichert uns alle.
+      In der Messiaskapelle wollen wir, dass Kinder ihren Platz finden: beim Spielen, Staunen, Lernen und Feiern.
+    </Fragment>
+  </Hero>
+  </section>
+
+
+  <Termine bg={false}/>
+
+  <section class="relative not-prose scroll-mt-[72px]" id="kinder"}>
+  <div class="absolute inset-0 pointer-events-none -z-[1]" aria-hidden="true">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </div>
   <Hero
     actions={[
       {
@@ -97,5 +133,9 @@ const metadata = {
       Als besonderes Service können Sie die Predigt gerne zuhause nachhören. Sie finden sie innerhalb der Folgewoche
       <a class="text-muted underline font-medium" href={getPermalink('/nachhoeren')}>hier</a>.
     </Fragment>
-  </Hero>
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+</Hero>
+</section>
 </Layout>

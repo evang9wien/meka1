@@ -1,6 +1,19 @@
 ---
-const { title = '' } = Astro.props;
+import { Icon } from 'astro-icon/components';
+import { twMerge } from 'tailwind-merge';
+const { title = '', icon = '' } = Astro.props;
 ---
 
-{title && <h3>{title}</h3>}
+{title && (
+    <h3>
+        { icon && (
+        <Icon
+            name={icon}
+            class={twMerge('inline w-7 h-7 mr-2 rtl:mr-0 rtl:ml-2', icon)}
+        />
+        )}
+        {title}
+    </h3>
+)
+}
 <slot />
