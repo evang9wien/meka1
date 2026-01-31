@@ -4,12 +4,13 @@ import { twMerge } from 'tailwind-merge';
 const { title = '', icon = '' } = Astro.props;
 ---
 
+<!--            class={twMerge('inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2', icon)} -->
 {title && (
     <h3>
         { icon && (
         <Icon
             name={icon}
-            class={twMerge('inline w-7 h-7 mr-2 rtl:mr-0 rtl:ml-2', icon)}
+            class='inline w-6 h-6 mb-1 mr-2 rtl:mr-0 rtl:ml-2'
         />
         )}
         {title}
