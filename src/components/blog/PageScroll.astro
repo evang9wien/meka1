@@ -102,5 +102,5 @@ function getPageUrl(basePath: String, pageNumber: number)
             }
         icon="tabler:chevrons-right"
         class={twMerge("pl-3 pr-5 sm:mb-0", currentPage == page.lastPage ? "text-muted cursor-default" : "")}
-        title={commonText.pagination.toPage + lastButtonPage.toString()}/>
+        title={commonText.pagination.toPage + (pageCount-1).toString()}/>
 </div>
