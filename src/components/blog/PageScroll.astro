@@ -87,7 +87,7 @@ function getPageUrl(basePath: String, pageNumber: number)
         ))
     }
     <Button variant="tertiary"
-            href={ currentPage > 1 ? (
+            href={ currentPage < page.lastPage ? (
                     getPageUrl(getPermalink(basePath), currentPage + 1)
                     ) : undefined
                 }
