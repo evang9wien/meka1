@@ -2,6 +2,7 @@
 import { getPermalink } from '~/utils/permalinks';
 import Button from '~/components/ui/Button.astro';
 import { twMerge } from 'tailwind-merge';
+import { commonText } from '~/commontext';
 
 const { page, maxButtons } = Astro.props;
 
@@ -21,6 +22,10 @@ if (lastButtonPage >= pageCount)
 {
     lastButtonPage = pageCount - 1;
     firstButtonPage = pageCount - buttonCount;
+    if (firstButtonPage < 1)
+    {
+        firstButtonPage = 1;
+    }
 }
 
 let pageNumbers = Array();
@@ -50,57 +55,52 @@ function getPageUrl(basePath: String, pageNumber: number)
 
 ---
 
-<!--<div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-left gap-4">-->
 <div class="flex flex-nowrap flex-row -space-x-4 max-w-xs sm:max-w-md">
-<!--    {firstButtonPage}, {currentPage}, {buttonCount / 2}, {Math.floor((buttonCount / 2))}, {lastButtonPage} -->
-    <div class="inline">
-        <Button variant="tertiary"
-                href={ currentPage != 1 ? (
-                        getPageUrl(getPermalink(basePath), 1)
-                        ) : undefined
-                    }
-                icon="tabler:chevrons-left"
-                class={twMerge("sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")} />
-    </div>
-    <div class="inline">
-        <Button variant="tertiary"
-                href={ currentPage > 1 ? (
-                        getPageUrl(getPermalink(basePath), currentPage - 1)
-                        ) : undefined
-                    }
-                icon="tabler:chevron-left"
-                class={twMerge("sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")} />
-    </div>
+    <Button variant="tertiary"
+            href={ currentPage != 1 ? (
+                    getPageUrl(getPermalink(basePath), 1)
+                    ) : undefined
+                }
+            icon="tabler:chevrons-left"
+            class={twMerge("pl-3 pr-6 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
+            title={commonText.pagination.firstPage}/>
+
+    <Button variant="tertiary"
+            href={ currentPage > 1 ? (
+                    getPageUrl(getPermalink(basePath), currentPage - 1)
+                    ) : undefined
+                }
+            icon="tabler:chevron-left"
+            class={twMerge("pl-3 pr-6 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
+            title={commonText.pagination.prevPage}/>
     {
-        pageNumbers.map((pageNumber) => (
-        <div class="inline">
+        pageNumbers.map((pageNumber) => 
+        (
             <Button variant="tertiary"
                     href={ pageNumber != currentPage ? (
                         getPageUrl(getPermalink(basePath), pageNumber)
                         ) : undefined
                     }
                     text={pageNumber.toString()}
-                    class={twMerge("sm:mb-0", currentPage == pageNumber ? "text-muted cursor-default" : "")} />
-        </div>
+                    class={twMerge("pl-5 pr-5 sm:mb-0", currentPage == pageNumber ? "text-muted cursor-default" : "")}
+                    title={pageNumber != currentPage ? commonText.pagination.toPage + pageNumber.toString() : commonText.pagination.currentPage}/>
         ))
     }
-    <div class="inline">
-        <Button variant="tertiary"
-                href={ currentPage > 1 ? (
-                        getPageUrl(getPermalink(basePath), currentPage + 1)
-                        ) : undefined
-                    }
-                icon="tabler:chevron-right"
-                class={twMerge("sm:mb-0", currentPage == page.lastPage ? "text-muted cursor-default" : "")} />
-    </div>
-    <div class="inline">
-        <Button variant="tertiary"
-                href={ currentPage != page.lastPage ? (
-                        getPageUrl(getPermalink(basePath), page.lastPage)
-                        ) : undefined
-                    }
-                icon="tabler:chevrons-right"
-                class={twMerge("sm:mb-0", currentPage == page.lastPage ? "text-muted cursor-default" : "")} />
-    </div>
+    <Button variant="tertiary"
+            href={ currentPage > 1 ? (
+                    getPageUrl(getPermalink(basePath), currentPage + 1)
+                    ) : undefined
+                }
+            icon="tabler:chevron-right"
+            class={twMerge("pl-3 pr-5 sm:mb-0", currentPage == page.lastPage ? "text-muted cursor-default" : "")}
+            title={commonText.pagination.nextPage}/>
 
+    <Button variant="tertiary"
+        href={ currentPage != page.lastPage ? (
+                getPageUrl(getPermalink(basePath), page.lastPage)
+                ) : undefined
+            }
+        icon="tabler:chevrons-right"
+        class={twMerge("pl-3 pr-5 sm:mb-0", currentPage == page.lastPage ? "text-muted cursor-default" : "")}
+        title={commonText.pagination.toPage + lastButtonPage.toString()}/>
 </div>
