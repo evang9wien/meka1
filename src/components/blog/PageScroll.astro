@@ -63,7 +63,7 @@ function getPageUrl(basePath: String, pageNumber: number)
                 }
             icon="tabler:chevrons-left"
             class={twMerge("pl-3 pr-6 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
-            title={commonText.pagination.firstPage}/>
+            title={ currentPage > 1 ? commonText.pagination.toPage + "1" : commonText.pagination.page + "1"}/>
 
     <Button variant="tertiary"
             href={ currentPage > 1 ? (
@@ -72,7 +72,7 @@ function getPageUrl(basePath: String, pageNumber: number)
                 }
             icon="tabler:chevron-left"
             class={twMerge("pl-3 pr-6 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
-            title={commonText.pagination.prevPage}/>
+            title={ currentPage > 1 ? commonText.pagination.toPage + (currentPage - 1).toString() : commonText.pagination.page + "1"}/>
     {
         pageNumbers.map((pageNumber) => 
         (
@@ -82,8 +82,8 @@ function getPageUrl(basePath: String, pageNumber: number)
                         ) : undefined
                     }
                     text={pageNumber.toString()}
-                    class={twMerge("pl-5 pr-5 sm:mb-0", currentPage == pageNumber ? "text-muted cursor-default" : "")}
-                    title={pageNumber != currentPage ? commonText.pagination.toPage + pageNumber.toString() : commonText.pagination.currentPage}/>
+                    class={twMerge("pl-5 pr-5 sm:mb-0", currentPage == pageNumber ? "underline cursor-default" : "")}
+                    title={pageNumber != currentPage ? commonText.pagination.toPage + pageNumber.toString() : commonText.pagination.page + currentPage.toString()}/>
         ))
     }
     <Button variant="tertiary"
@@ -93,7 +93,7 @@ function getPageUrl(basePath: String, pageNumber: number)
                 }
             icon="tabler:chevron-right"
             class={twMerge("pl-3 pr-5 sm:mb-0", currentPage == page.lastPage ? "text-muted cursor-default" : "")}
-            title={commonText.pagination.nextPage}/>
+            title={ currentPage < page.lastPage ? commonText.pagination.toPage + (currentPage + 1).toString() : commonText.pagination.page + currentPage.toString()}/>
 
     <Button variant="tertiary"
         href={ currentPage != page.lastPage ? (

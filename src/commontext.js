@@ -29,6 +29,7 @@ export const commonText = {
     firstPage: 'Zur ersten Seite',
     prevPage: 'Zur vorhergehenden Seite',
     toPage: 'Zur Seite ',
+    page: 'Seite ',
     currentPage: 'Aktuelle Seite',
     nextPage: 'Zur nächsten Seite',
     lastPage: 'Zur letzten Seite',
