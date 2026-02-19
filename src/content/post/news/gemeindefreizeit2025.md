@@ -3,7 +3,7 @@ title: '"Das gute behaltet" Gemeindefreizeit 2025'
 excerpt: Dich erwartet ein Wochenende voller Austausch, Stille, ehrlicher Gespräche, kreativer Impulse und Zeit mit Gott und anderen Menschen, die auch auf dem Weg sind. <br/>Komm mit uns auf diese besondere Reise. <br/>Wann 21. bis 23.11.2025 <br/><a class="text-muted underline  font-medium" href="/news/gemeindefreizeit2025">Zur Anmeldung</a>.
 category: angebote
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1752408864/Homepage/News/gemeindefreizeit_zpqjrr.jpg
 attribution: 'Foto: LightFieldStudios'
 publishDate: 2025-07-13T01:00:00.000Z

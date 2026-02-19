@@ -3,7 +3,7 @@ title: 'Gottesdienst am Valentinstag'
 excerpt: Lass dich und deine Liebe(n) segnen - unter diesem Motto steht der diesjährige Gottesdienst am Valentinstag.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1770299074/Homepage/News/HappyValentinesDay2_hzgakt.jpg
 publishDate: 2026-02-04T12:00:00.000Z
 author: stfj
