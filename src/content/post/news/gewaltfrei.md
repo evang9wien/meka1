@@ -102,6 +102,6 @@ Unser vollständiges Gewaltschutzkonzept können Sie hier einsehen:
 
 Weitere Informationen zur Gewaltschutzrichtlinie der Evangelischen Jugend Österreich:
 
-<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://evang.at/wp-content/uploads/2024/03/240314_anhang9_vorlage-fuer-schutzkonzept_2024-03-13.pdf">Link zum Download Dokument EJW</a>
+<a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2FGSR-booklet_1.5.pdf?alt=media&token=81b7043f-454c-4087-8f95-895d4470eee3">Link zum Download Dokument EJW</a>
 
 Wenn Sie Fragen haben oder ein Anliegen besprechen möchten, wenden Sie sich bitte vertrauensvoll an unsere Gewaltschutzbeauftragte oder an das Pfarramt.
