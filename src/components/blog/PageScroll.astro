@@ -62,7 +62,7 @@ function getPageUrl(basePath: String, pageNumber: number)
                     ) : undefined
                 }
             icon="tabler:chevrons-left"
-            class={twMerge("pl-3 pr-6 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
+            class={twMerge("pl-3 pr-5 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
             title={ currentPage > 1 ? commonText.pagination.toPage + "1" : commonText.pagination.page + "1"}/>
 
     <Button variant="tertiary"
@@ -71,7 +71,7 @@ function getPageUrl(basePath: String, pageNumber: number)
                     ) : undefined
                 }
             icon="tabler:chevron-left"
-            class={twMerge("pl-3 pr-6 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
+            class={twMerge("pl-3 pr-5 sm:mb-0", currentPage == 1 ? "text-muted cursor-default" : "")}
             title={ currentPage > 1 ? commonText.pagination.toPage + (currentPage - 1).toString() : commonText.pagination.page + "1"}/>
     {
         pageNumbers.map((pageNumber) => 
@@ -82,7 +82,7 @@ function getPageUrl(basePath: String, pageNumber: number)
                         ) : undefined
                     }
                     text={pageNumber.toString()}
-                    class={twMerge("pl-5 pr-5 sm:mb-0", currentPage == pageNumber ? "underline cursor-default" : "")}
+                    class={twMerge("pl-5 pr-5 sm:mb-0", currentPage == pageNumber ? "font-bold cursor-default" : "")}
                     title={pageNumber != currentPage ? commonText.pagination.toPage + pageNumber.toString() : commonText.pagination.page + currentPage.toString()}/>
         ))
     }
