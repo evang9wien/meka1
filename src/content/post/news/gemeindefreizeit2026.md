@@ -8,6 +8,7 @@ tags:
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1772390451/Homepage/News/gemeindefreizeit2026_plakat_wlgpn5.png
 publishDate: 2026-03-01T01:00:00.000Z
 author: hans
+pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2FGemeinde%20Freizeit%202026.pdf?alt=media&token=bd2f29cd-bb88-4000-a6ca-1e04b46499b2
 ---
 Herzliche Einladung zur Gemeindefreizeit vom 26. bis 28. Juni 2026 in Raach am Hochgebirge.
 Zwischen zwei Menschen liegt oft mehr als Worte – ein Gedanke, eine Frage, eine Hoffnung.
@@ -16,7 +17,7 @@ Was geschieht, wenn wir ehrlich über unseren Glauben sprechen – und Gott mitt
 Vielleicht ist genau dieses Gespräch längst überfällig.
 
 ## Wann
-Unsere Freizeit findet am Wochenende Freitag 26. bis Sonntag 28. Juni 2026 statt.
+Nehmen Sie sich Zeit für das Wochenende vom Freitag 26. bis Sonntag 28. Juni 2026.
 
 ### Anmeldung
 Die Anmeldung ist bis 31.3.2026 bei Regina Schmid möglich, persönlich oder per Mail (schmidregina@hotmail.com).</br>
@@ -28,7 +29,10 @@ Raach 9</br>
 2640 Raach am Hochgebirge</br>
 
 <a href="https://www.bslh.at/raach/unser-haus" target="_blank">
+<div class="relative lg:max-w-[900px] mx-auto mb-6 sm:rounded-md">
 <img src="https://www.bslh.at/sites/default/files/raach/unser-haus/luftbild_raach.jpg" title="© Seminarzentrum Raach">
+<div class="absolute z-20 text-muted text-[0.5rem] origin-top-left -bottom-4 ml-px">Foto: © Seminarzentrum Raach</div>
+</div>
 </a>
 
 Raach am Hochgebirge liegt südlich von Gloggnitz im niederösterreichischen Industrieviertel. Das Gemeindegebiet befindet sich an der Grenze zwischen den landschaftlichen Großräumen der Buckligen Welt und des Semmeringgebietes.</br></br>
@@ -44,7 +48,11 @@ nach der Autobahnabfahrt bei der zweiten Kreuzung links abbiegen (Richtung Schla
 nach 100 m rechts abbiegen, und den Verkehrsschildern nach Raach folgen.
 
 <a href="https://www.google.at/maps/dir/Seegasse+16,+1090+Wien/Seminarzentrum+Raach,+Raach+9,+2640+Raach+am+Hochgebirge/@47.9249279,15.9418848,92022m/data=!3m1!1e3!4m13!4m12!1m5!1m1!1s0x476d07b73e6543c1:0x9e61d33fc0ca30ce!2m2!1d16.3641646!2d48.2232976!1m5!1m1!1s0x476dd8fe44216205:0x3f2715fc3a20b543!2m2!1d15.9307394!2d47.642712?entry=ttu&g_ep=EgoyMDI2MDIyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
+<div class="relative lg:max-w-[900px] mx-auto mb-6 sm:rounded-md">
 <img src="https://res.cloudinary.com/dqjdjviob/image/upload/v1772398596/Homepage/News/GoogleMapsRaach_3_zcb7xk.png" title="Zufahrt Raach von Gloggnitz, © 2026 Google Maps" >
+
+<div class="absolute z-20 text-muted text-[0.5rem] origin-top-left -bottom-4 ml-px">Foto: © 2026 Google Maps</div>
+</div>
 </a>
 
 **Öffentlich:**
