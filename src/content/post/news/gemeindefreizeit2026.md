@@ -45,13 +45,13 @@ einem guten Jahrhundert luft-, erholungs- und bildungshungrige Gäste. Die 25 00
 über A2-Südautobahn bis zum Knoten Seebenstein
 weiter auf der S6 Richtung Bruck/Mur bis zur Abfahrt Gloggnitz
 nach der Autobahnabfahrt bei der zweiten Kreuzung links abbiegen (Richtung Schlagl, Otterthal)
-nach 100 m rechts abbiegen, und den Verkehrsschildern nach Raach folgen.
+nach 100 m rechts abbiegen, und den Verkehrsschildern nach <a href="https://www.google.at/maps/dir/Seegasse+16,+1090+Wien/Seminarzentrum+Raach,+Raach+9,+2640+Raach+am+Hochgebirge/@47.9249279,15.9418848,92022m/data=!3m1!1e3!4m13!4m12!1m5!1m1!1s0x476d07b73e6543c1:0x9e61d33fc0ca30ce!2m2!1d16.3641646!2d48.2232976!1m5!1m1!1s0x476dd8fe44216205:0x3f2715fc3a20b543!2m2!1d15.9307394!2d47.642712?entry=ttu&g_ep=EgoyMDI2MDIyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">Raach</a> folgen.
 
 <a href="https://www.google.at/maps/dir/Seegasse+16,+1090+Wien/Seminarzentrum+Raach,+Raach+9,+2640+Raach+am+Hochgebirge/@47.9249279,15.9418848,92022m/data=!3m1!1e3!4m13!4m12!1m5!1m1!1s0x476d07b73e6543c1:0x9e61d33fc0ca30ce!2m2!1d16.3641646!2d48.2232976!1m5!1m1!1s0x476dd8fe44216205:0x3f2715fc3a20b543!2m2!1d15.9307394!2d47.642712?entry=ttu&g_ep=EgoyMDI2MDIyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
 <div class="relative lg:max-w-[900px] mx-auto mb-6 sm:rounded-md">
 <img src="https://res.cloudinary.com/dqjdjviob/image/upload/v1772398596/Homepage/News/GoogleMapsRaach_3_zcb7xk.png" title="Zufahrt Raach von Gloggnitz, © 2026 Google Maps" >
 
-<div class="absolute z-20 text-muted text-[0.5rem] origin-top-left -bottom-4 ml-px">Foto: © 2026 Google Maps</div>
+<div class="absolute z-20 text-muted text-[0.5rem] origin-top-left -bottom-4 ml-px">Foto: Screenshot, © 2026 Google Maps</div>
 </div>
 </a>
 
