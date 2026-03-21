@@ -17,6 +17,4 @@ Diesmal unter dem Motto: "Flood the zone with... love!".
 
 Der Gedenkweg endet gegen 19.40 Uhr in der Pfarre Rossau und findet mit einer gemeinsamen Agape seinen Abschluss.
 
-<div class="relative lg:max-w-[900px] mx-auto mb-6 sm:rounded-md">
-<img src="https://res.cloudinary.com/dqjdjviob/image/upload/v1774106668/PlakatGedenkweg2026_k5yz1c.png" title="Plakat zum Gedenkweg 2026">
-</div>
+![](https://res.cloudinary.com/dqjdjviob/image/upload/v1774106668/PlakatGedenkweg2026_k5yz1c.png)
