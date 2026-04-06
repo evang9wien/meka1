@@ -3,7 +3,7 @@ title: Gedenkweg
 excerpt: Mit einem interreligiösen Gedenkweg für Menschen in Not halten wir seit über 20 Jahren am Alsergrund die Erinnerung an die Opfer des NS-Regimes hoch. <a class="text-muted underline  font-medium" href="/news/gedenkweg">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1774106675/PlakatGedenkweg2026_small_kzqvpd.png
 publishDate: 2026-03-21T16:30:00.000Z
 author: Hans

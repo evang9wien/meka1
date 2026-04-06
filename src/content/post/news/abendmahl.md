@@ -3,7 +3,7 @@ title: Das vorletzte Abendmahl
 excerpt: Gründonnerstag einmal anders! "Das vorletzte Abendmahl", so der Titel einer Podiumsdiskussion mit anschließendem gemeinsamen Essen hier bei uns in der Messiaskapelle. <a class="text-muted underline  font-medium" href="/news/abendmahl">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1771538081/Homepage/News/Das_Vorletzte_Abendmahl_bhkdfd.png
 publishDate: 2026-2-19T21:32:43.810Z
 author: Andreas
