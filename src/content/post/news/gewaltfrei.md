@@ -3,7 +3,7 @@ title: Gewaltschutz in unserer Gemeinde
 excerpt: Ein sicherer Ort für alle Menschen. Unsere Gemeinde soll ein Ort der Geborgenheit, des Vertrauens und der Würde sein. Gerade dort, wo Nähe, Gemeinschaft und Glauben gelebt werden, tragen wir besondere Verantwortung. <a class="text-muted underline  font-medium" href="/news/gewaltfrei">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1771538591/Homepage/News/gewaltfrei_zkyhdl.png
 publishDate: 2026-2-19T21:32:43.810Z
 author: Andreas
