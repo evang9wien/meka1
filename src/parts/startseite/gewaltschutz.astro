@@ -1,0 +1,61 @@
+---
+import Features3 from '~/components/widgets/Features3.astro';
+---
+
+<Features3
+  id="gewaltschutz"
+  tagline="Gewaltschutz"
+  title="Ein sicherer Ort für alle Menschen"
+  columns={4}
+  image={{
+    src: 'https://res.cloudinary.com/dqjdjviob/image/upload/v1771538591/Homepage/News/gewaltfrei_zkyhdl.png',
+    alt: 'Gewaltschutz',
+  }}
+  items={[
+    {
+      title: 'Unsere Haltung',
+      description:
+        'Gewaltschutz ist für uns keine bloße Vorschrift, sondern Teil unseres christlichen Selbstverständnisses. \
+        Wir orientieren uns an einer Kultur der Achtsamkeit: aufmerksam sein, Grenzen respektieren, \
+        Machtverhältnisse reflektieren, bei Irritationen nicht wegsehen.',
+      icon: 'tabler:heart-handshake',
+    },
+    {
+      title: 'Prävention',
+      description:
+        'Verhaltenskodex für Mitarbeitende, Selbstverpflichtungserklärungen, verpflichtende Gewaltschutz-Schulungen, \
+        regelmäßige Risikoanalysen in allen Arbeitsbereichen und transparente Kommunikationsregeln schützen alle in unserer Gemeinde.',
+      icon: 'tabler:shield-check',
+    },
+    {
+      title: 'Gewaltformen',
+      description:
+        'Wir benennen verschiedene Formen von Gewalt: körperliche, psychische/emotionale, sexualisierte Gewalt, \
+        geistlicher Machtmissbrauch, strukturelle und institutionelle Gewalt sowie digitale Gewalt. \
+        Auch das Nicht-Einschreiten wird ernst genommen.',
+      icon: 'tabler:alert-triangle',
+    },
+    {
+      title: 'Intervention',
+      description:
+        'Bei Verdacht auf Gewalt handeln wir rasch, vertraulich, strukturiert und dokumentiert. \
+        Eine unabhängige Gewaltschutzbeauftragte Person ist erste Kontaktstelle bei Irritationen, Verdachtsfällen oder Fragen. \
+        Externe Stellen werden bei Bedarf eingebunden.',
+      icon: 'tabler:phone',
+    },
+  ]}
+>
+  <Fragment slot="subtitle">
+    Unsere Gemeinde soll ein Ort der Geborgenheit, des Vertrauens und der Würde sein. Gerade dort, wo Nähe, Gemeinschaft
+    und Glauben gelebt werden, tragen wir besondere Verantwortung. <strong>Wir schauen hin. Wir übernehmen Verantwortung.
+    Wir schützen.</strong>
+    <br /><br />
+    <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2F250627_gewaltschutzkonzept.pdf?alt=media&token=cd386aa6-702d-4a6a-bac2-5629070e0fab">
+      Gewaltschutzkonzept herunterladen
+    </a>
+    |
+    <a class="text-muted underline dark:text-slate-400 font-medium" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/news%2FGSR-booklet_1.5.pdf?alt=media&token=81b7043f-454c-4087-8f95-895d4470eee3">
+      EJÖ Gewaltschutzrichtlinie
+    </a>
+  </Fragment>
+</Features3>
