@@ -4,7 +4,7 @@ excerpt: Herzliche Einladung zur Gemeindefreizeit vom 26. bis 28. Juni 2026 in R
   <a class="text-muted underline  font-medium" href="/news/gemeindefreizeit2026">Zur Anmeldung</a>.
 category: angebote
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1772390451/Homepage/News/gemeindefreizeit2026_plakat_wlgpn5.png
 publishDate: 2026-03-01T01:00:00.000Z
 author: hans

@@ -7,7 +7,7 @@ metadata:
 title: MEKA Classic 9. Staffel im Herbst 2025
 category: angebote
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1756052024/Homepage/Angebote/Mekaclassic2025_nqcxck.jpg
 publishDate: 2025-08-17T00:00:00.000Z
 ---
