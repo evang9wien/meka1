@@ -14,7 +14,7 @@ Ab Mai laden wir Sie herzlich zu einer besonderen Aktion in unserer Gemeinde ein
 
 Die Idee ist einfach und macht doppelt Freude: Kaufen Sie ein Buch, das Ihnen am Herzen liegt, verpacken Sie es in neutrales Papier und schreiben Sie ein paar persönliche Zeilen dazu – worum es geht, was Sie daran begeistert und warum Sie es weiterempfehlen. Ergänzen Sie den Preis des Buches, der als Mindestspende gedacht ist, und bringen Sie Ihr „Buch-Date" in die Gemeinde.
 
-![Bücher Blind Date Grafik](https://res.cloudinary.com/dqjdjviob/image/upload/v1777408674/Bu%CC%88cher_Blind_Date_Grafik_ldkaoe.png)
+![Bücher Blind Date Grafik](https://res.cloudinary.com/dqjdjviob/image/upload/v1777495627/Blind_Date_mit_Buch_Grafik_neu_fklasl.png)
 
 Dann heißt es stöbern, entdecken und überraschen lassen: Wählen Sie selbst ein verpacktes Buch aus, ohne den Titel zu kennen, und unterstützen Sie dabei unsere Gemeinde mit Ihrer Spende.
 
