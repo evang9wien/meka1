@@ -22,6 +22,10 @@ export const headerData = {
           href: getPermalink('#lektoren'),
         },
         {
+          text: 'Kinder- und Jugendarbeit',
+          href: getPermalink('#jugendreferentin'),
+        },
+        {
           text: 'Gewaltschutz',
           href: getPermalink('#gewaltschutz'),
         },
