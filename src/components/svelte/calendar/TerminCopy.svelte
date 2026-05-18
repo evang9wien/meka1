@@ -57,7 +57,10 @@
     'Harald GESCHL': 'GH',
     'Wolfgang WALDSCHÜTZ': 'WW',
     'Mark RUIZ HELLÍN': 'MRH',
+    'Mark RUIZ HELLIN': 'MRH',    
+    'Mark RUIZ-HELLIN': 'MRH',    
     'Tanja DIETRICH HÜBNER': 'TDH',
+    'Tanja DIETRICH-HÜBNER': 'TDH',
   };
 
   function extractVerantwortlich(description: string): string {
@@ -327,35 +330,35 @@
       </GradientButton>
     </Card>
 
-    <Table class="mt-6">
+    <Table class="mt-6 table-fixed">
       <TableHead>
-        <TableHeadCell>Datum & Uhrzeit</TableHeadCell>
-        <TableHeadCell>Google Calendar</TableHeadCell>
-        <TableHeadCell>Firebase</TableHeadCell>
-        <TableHeadCell>Aktion</TableHeadCell>
+        <TableHeadCell class="w-[15%]">Datum & Uhrzeit</TableHeadCell>
+        <TableHeadCell class="w-[30%]">Google Calendar</TableHeadCell>
+        <TableHeadCell class="w-[30%]">Firebase</TableHeadCell>
+        <TableHeadCell class="w-[25%]">Aktion</TableHeadCell>
       </TableHead>
       <TableBody>
         {#each combinedEvents as entry}
           <TableBodyRow>
-            <TableBodyCell>{entry.timestamp}</TableBodyCell>
-            <TableBodyCell>
+            <TableBodyCell class="align-top">{entry.timestamp}</TableBodyCell>
+            <TableBodyCell class="align-top">
               {#if entry.google}
-                <div class="font-bold">{entry.google.summary}</div>
-                <div class="text-sm text-gray-500">{entry.google.description}</div>
+                <div class="font-bold break-words">{entry.google.summary}</div>
+                <div class="text-sm text-gray-500 break-words whitespace-normal">{entry.google.description}</div>
               {:else}
                 <span class="text-gray-400 italic">Kein Eintrag</span>
               {/if}
             </TableBodyCell>
-            <TableBodyCell>
+            <TableBodyCell class="align-top">
               {#if entry.firebase}
-                <div class="font-bold">{entry.firebase.Veranstaltung}</div>
-                <div class="text-sm">
+                <div class="font-bold break-words">{entry.firebase.Veranstaltung}</div>
+                <div class="text-sm break-words">
                   Verantworlich: <span class="font-semibold">{entry.firebase.Verantwortlich}</span>
                 </div>
                 {#if entry.firebase.Abendmahl === '1'}
                   <div class="text-sm text-green-600 font-semibold">Abendmahl: Ja</div>
                 {/if}
-                <div class="text-sm text-gray-500">{entry.firebase.Zusatzinfo}</div>
+                <div class="text-sm text-gray-500 break-words whitespace-normal">{entry.firebase.Zusatzinfo}</div>
               {:else}
                 <span class="text-gray-400 italic">Nicht vorhanden</span>
               {/if}
