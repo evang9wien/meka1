@@ -22,7 +22,7 @@ export const headerData = {
           href: getPermalink('#lektoren'),
         },
         {
-          text: 'Kinder- und Jugendarbeit',
+          text: 'Kinder- und Jugendreferentin',
           href: getPermalink('#jugendreferentin'),
         },
         {
