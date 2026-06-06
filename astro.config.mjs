@@ -82,6 +82,5 @@ export default defineConfig({
   },
   build: {
     assets: 'astro',
-    inlineStylesheets: 'auto',
   },
 });
