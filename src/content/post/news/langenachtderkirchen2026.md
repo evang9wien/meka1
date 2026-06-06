@@ -3,7 +3,7 @@ title: 'Lange Nacht der Kirchen 2026'
 excerpt: Bei der Langen Nacht der Kirchen am 29. Mai ist in diesem Jahr auch wieder die Messiaskapelle dabei. Ein besonderer Schwerpunkt liegt heuer auf der Gesprächsveranstaltung „Konsens unerwünscht", die sich mit Fragen der Erinnerungskultur in einer (post)migrantischen Gesellschaft auseinandersetzt.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1777496145/8c7c25a6-5179-44ea-aa98-585a90462ae8.png
 attribution: ''
 publishDate: 2026-04-29T20:00:00.000Z
