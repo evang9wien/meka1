@@ -1,6 +1,17 @@
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import type { OpenGraph } from '@astrolib/seo';
+
+type OpenGraph = {
+  url?: string;
+  site_name?: string;
+  images?: Array<{
+    url: string;
+    width?: number;
+    height?: number;
+  }>;
+  locale?: string;
+  type?: string;
+};
 
 const load = async function () {
   let images: Record<string, () => Promise<unknown>> | undefined = undefined;
@@ -77,11 +88,11 @@ export const adaptOpenGraphImages = async (
           height: image?.height || defaultHeight,
         });
 
-        if (typeof _image === 'object') {
+        if (typeof _image === 'object' && _image.src) {
           return {
             url: typeof _image.src === 'string' ? String(new URL(_image.src, astroSite)) : 'pepe',
-            width: typeof _image.width === 'number' ? _image.width : undefined,
-            height: typeof _image.height === 'number' ? _image.height : undefined,
+            width: image?.width || defaultWidth,
+            height: image?.height || defaultHeight,
           };
         }
         return {

@@ -1,8 +1,5 @@
 ---
 import merge from 'lodash.merge';
-import { AstroSeo } from '@astrolib/seo';
-
-import type { Props as AstroSeoProps } from '@astrolib/seo';
 
 import { SITE, METADATA, I18N } from '~/utils/config';
 import type { MetaData } from '~/types';
@@ -24,7 +21,7 @@ const {
   twitter = {},
 } = Astro.props;
 
-const seoProps: AstroSeoProps = merge(
+const seoProps = merge(
   {
     title: '',
     titleTemplate: '%s',
@@ -63,6 +60,47 @@ const seoProps: AstroSeoProps = merge(
     twitter: twitter,
   }
 );
+
+const adaptedOpenGraph = await adaptOpenGraphImages(seoProps?.openGraph, Astro.site);
+
+// Build title
+const finalTitle = seoProps.titleTemplate && seoProps.title && !ignoreTitleTemplate
+  ? seoProps.titleTemplate.replace('%s', seoProps.title)
+  : seoProps.title;
+
+// Build robots
+const robotsContent = [
+  seoProps.noindex ? 'noindex' : 'index',
+  seoProps.nofollow ? 'nofollow' : 'follow',
+].join(', ');
 ---
 
-<AstroSeo {...{ ...seoProps, openGraph: await adaptOpenGraphImages(seoProps?.openGraph, Astro.site) }} />
+<!-- Primary Meta Tags -->
+{finalTitle && <title>{finalTitle}</title>}
+{seoProps.description && <meta name="description" content={seoProps.description} />}
+{seoProps.canonical && <link rel="canonical" href={seoProps.canonical} />}
+<meta name="robots" content={robotsContent} />
+
+<!-- Open Graph / Facebook -->
+{adaptedOpenGraph?.type && <meta property="og:type" content={adaptedOpenGraph.type} />}
+{adaptedOpenGraph?.url && <meta property="og:url" content={adaptedOpenGraph.url} />}
+{finalTitle && <meta property="og:title" content={finalTitle} />}
+{seoProps.description && <meta property="og:description" content={seoProps.description} />}
+{adaptedOpenGraph?.site_name && <meta property="og:site_name" content={adaptedOpenGraph.site_name} />}
+{adaptedOpenGraph?.locale && <meta property="og:locale" content={adaptedOpenGraph.locale} />}
+{adaptedOpenGraph?.images?.map((image) => (
+  <>
+    {image.url && <meta property="og:image" content={image.url} />}
+    {image.width && <meta property="og:image:width" content={String(image.width)} />}
+    {image.height && <meta property="og:image:height" content={String(image.height)} />}
+  </>
+))}
+
+<!-- Twitter -->
+{seoProps.twitter?.cardType && <meta name="twitter:card" content={seoProps.twitter.cardType} />}
+{adaptedOpenGraph?.url && <meta name="twitter:url" content={adaptedOpenGraph.url} />}
+{finalTitle && <meta name="twitter:title" content={finalTitle} />}
+{seoProps.description && <meta name="twitter:description" content={seoProps.description} />}
+{seoProps.twitter?.handle && <meta name="twitter:creator" content={seoProps.twitter.handle} />}
+{seoProps.twitter?.site && <meta name="twitter:site" content={seoProps.twitter.site} />}
+{adaptedOpenGraph?.images?.[0]?.url && <meta name="twitter:image" content={adaptedOpenGraph.images[0].url} />}

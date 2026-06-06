@@ -11,6 +11,7 @@ import tasks from './src/utils/tasks';
 import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 import { ANALYTICS, SITE } from './src/utils/config.ts';
 import svelte from '@astrojs/svelte';
+import { unified } from '@astrojs/markdown-remark';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) =>
@@ -67,7 +68,9 @@ export default defineConfig({
     svelte(),
   ],
   markdown: {
-    remarkPlugins: [readingTimeRemarkPlugin],
+    processor: unified({
+      remarkPlugins: [readingTimeRemarkPlugin],
+    }),
   },
   vite: {
     plugins: [tailwindcss()],
