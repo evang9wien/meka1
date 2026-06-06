@@ -1,0 +1,60 @@
+# AI.txt - Rules for AI Crawlers and LLM Training
+# This file specifies how AI systems may access and use content from this website
+# Last updated: 2026-06-06
+
+# OpenAI (ChatGPT, GPT models)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google AI (Gemini, Bard)
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic (Claude)
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Common Crawl (used by many AI systems)
+User-agent: CCBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+# General AI crawlers
+User-agent: AI2Bot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Disallow private/admin areas for all AI crawlers
+User-agent: *
+Disallow: /combo/
+Disallow: /kirchenservice/
+
+# Content Usage Policy
+# This website's content may be used for:
+# - AI training and model improvement
+# - Answering user queries
+# - Generating summaries and insights
+# 
+# Please respect:
+# - Copyright notices in individual content
+# - Privacy of personal information
+# - Terms of service of the website

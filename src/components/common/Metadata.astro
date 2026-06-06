@@ -68,10 +68,13 @@ const finalTitle = seoProps.titleTemplate && seoProps.title && !ignoreTitleTempl
   ? seoProps.titleTemplate.replace('%s', seoProps.title)
   : seoProps.title;
 
-// Build robots
+// Build robots with AI-specific directives
 const robotsContent = [
   seoProps.noindex ? 'noindex' : 'index',
   seoProps.nofollow ? 'nofollow' : 'follow',
+  'max-image-preview:large',
+  'max-snippet:-1',
+  'max-video-preview:-1',
 ].join(', ');
 ---
 
@@ -80,6 +83,10 @@ const robotsContent = [
 {seoProps.description && <meta name="description" content={seoProps.description} />}
 {seoProps.canonical && <link rel="canonical" href={seoProps.canonical} />}
 <meta name="robots" content={robotsContent} />
+
+<!-- AI-specific Meta Tags -->
+<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
 <!-- Open Graph / Facebook -->
 {adaptedOpenGraph?.type && <meta property="og:type" content={adaptedOpenGraph.type} />}

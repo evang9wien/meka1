@@ -14,14 +14,67 @@ import Lektorat from '~/parts/startseite/lektorat.astro';
 import Jugendreferentin from '~/parts/startseite/jugendreferentin.astro';
 import Gewaltschutz from '~/parts/startseite/gewaltschutz.astro';
 import Spenden from '~/parts/angebote/spenden.astro';
+import JsonLD from '~/components/common/JsonLD.astro';
 
 const metadata = {
   title: 'Evangelischen Pfarrgemeinde am Alsergrund',
   ignoreTitleTemplate: true,
 };
+
+// JSON-LD structured data for the church
+const churchSchema = {
+  '@type': 'Church',
+  name: 'Evangelische Pfarrgemeinde am Alsergrund',
+  alternateName: 'Evangelische Kirche 9. Bezirk Wien',
+  description: 'Lebendig, einladend, ansprechend - Evangelische Pfarrgemeinde am Alsergrund in Wien',
+  url: 'https://evang9.wien',
+  telephone: '+43-0699-18877791',
+  email: 'stefan.fleischner-janits@evang.at',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Seegasse 16a',
+    addressLocality: 'Wien',
+    postalCode: '1090',
+    addressCountry: 'AT',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 48.2233,
+    longitude: 16.3641,    
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Sunday'],
+      opens: '10:00',
+      closes: '11:00',
+    },
+  ],
+  sameAs: [
+    'https://www.facebook.com/meka.at',
+  ],
+};
+
+// Organization schema
+const organizationSchema = {
+  '@type': 'Organization',
+  name: 'Evangelische Pfarrgemeinde am Alsergrund',
+  url: 'https://evang9.wien',
+  logo: 'https://evang9.wien/astro/Kreuz-bunt.Bwltv7vr.svg',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+43-0699-18877791',
+    contactType: 'customer service',
+    email: 'stefan.fleischner-janits@evang.at',
+    availableLanguage: ['German'],
+  },
+};
 ---
 
 <Layout metadata={metadata}>
+  <JsonLD schema={churchSchema} slot="head" />
+  <JsonLD schema={organizationSchema} slot="head" />
+
   <!-- Hero Widget ******************* -->
 
   <Hero

@@ -5,9 +5,11 @@ import { commonText } from '~/commontext';
 import Image from '~/components/common/Image.astro';
 import PostTags from '~/components/blog/Tags.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
+import JsonLD from '~/components/common/JsonLD.astro';
 
 import { getPermalink } from '~/utils/permalinks';
 import { getFormattedDate } from '~/utils/utils';
+import { SITE } from '~/utils/config';
 
 import type { Post } from '~/types';
 
@@ -23,7 +25,39 @@ if (!readingTime)
 {
   readingTime = 1;
 }
+
+// JSON-LD structured data for blog article
+const articleSchema = {
+  '@type': 'Article',
+  headline: post.title,
+  description: post.excerpt,
+  image: post.image ? (typeof post.image === 'string' ? post.image : post.image.src) : undefined,
+  datePublished: post.publishDate?.toISOString(),
+  dateModified: post.updateDate?.toISOString() || post.publishDate?.toISOString(),
+  author: {
+    '@type': post.author?.name ? 'Person' : 'Organization',
+    name: post.author?.name || 'Evangelische Pfarrgemeinde am Alsergrund',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.name || 'Evangelische Pfarrgemeinde am Alsergrund',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE.site}/astro/logo.png`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url,
+  },
+  keywords: post.tags?.join(', '),
+  articleSection: post.category,
+  wordCount: post.content?.split(/\s+/).length,
+  timeRequired: `PT${readingTime}M`,
+};
 ---
+
+<JsonLD schema={articleSchema} />
 
 <section class="py-8 sm:py-16 lg:py-20 mx-auto">
   <article>

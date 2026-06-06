@@ -1,0 +1,18 @@
+---
+// JSON-LD Component for Structured Data
+// Provides schema.org markup for better SEO and LLM understanding
+
+export interface Props {
+  schema: Record<string, any>;
+}
+
+const { schema } = Astro.props;
+
+// Ensure @context is always present
+const structuredData = {
+  '@context': 'https://schema.org',
+  ...schema,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
