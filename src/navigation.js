@@ -224,6 +224,14 @@ export const footerData = {
           href: 'https://cloudinary.com/',
         },
         {
+          text: 'Lummi',
+          href: 'https://www.lummi.ai/',
+        },
+        {
+          text: 'Unsplash',
+          href: 'https://unsplash.com/',
+        },
+        {
           text: 'EmailJS',
           href: 'https://emailjs.com/',
         },
