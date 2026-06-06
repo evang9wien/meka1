@@ -28,11 +28,27 @@ const { language, textDirection } = I18N;
   <head>
     <CommonMeta />
     <Favicons />
+    
+    <!-- Inline critical CSS to prevent render blocking -->
+    <style>
+      /* Critical CSS - Prevents flash of unstyled content */
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      .antialiased {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
+    
     <CustomStyles />
     <ApplyColorMode />
     <Metadata {...metadata} />
     <SiteVerification />
     <!-- <Analytics /> -->
+    
+    <slot name="head" />
   </head>
 
   <body class="antialiased text-default bg-page tracking-tight">
