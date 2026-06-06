@@ -20,7 +20,7 @@
   import WaitPopup from './popup/WaitPopup.svelte';
   import { initAppCheck } from "./firebase/firebase.js";
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
+  import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
   import {
@@ -30,8 +30,6 @@
     onValue,
     query,
     orderByKey,
-    limitToLast,
-    limitToFirst,
     startAt,
     endAt,
     endBefore,

@@ -21,7 +21,7 @@
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
-  import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';  
+  import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { initAppCheck } from "./../firebase/firebase.js";
   
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
@@ -32,8 +32,6 @@
     onValue,
     query,
     orderByKey,
-    limitToLast,
-    limitToFirst,
     startAt,
     endAt,
   } from 'firebase/database';

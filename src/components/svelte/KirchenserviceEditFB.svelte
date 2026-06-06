@@ -27,14 +27,11 @@
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
-    get,
     set,
     ref as dbref,
     onValue,
     query,
     orderByKey,
-    limitToLast,
-    limitToFirst,
     startAt,
     endAt,
   } from 'firebase/database';

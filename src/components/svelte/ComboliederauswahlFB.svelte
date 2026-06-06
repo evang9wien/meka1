@@ -25,7 +25,7 @@
   
   import { initAppCheck } from "./firebase/firebase.js";
   
-  import { getStorage, ref as stref, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
+  import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFunctions, httpsCallable } from "firebase/functions";
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
@@ -35,8 +35,6 @@
     onValue,
     query,
     orderByKey,
-    limitToLast,
-    limitToFirst,
     startAt,
     endAt,
   } from 'firebase/database';

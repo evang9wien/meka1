@@ -24,8 +24,6 @@
     onValue,
     query,
     orderByKey,
-    limitToLast,
-    limitToFirst,
     startAt,
     endAt,
   } from 'firebase/database';

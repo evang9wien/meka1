@@ -30,7 +30,7 @@
   import { comboKategorien } from './combo/combo.js';
   import { initAppCheck } from "./firebase/firebase.js";
 
-  import { getStorage, ref as stref, uploadBytes, getDownloadURL, connectStorageEmulator } from 'firebase/storage';
+  import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField, collection, getDocs } from 'firebase/firestore';
   import {
@@ -40,8 +40,6 @@
     onValue,
     query,
     orderByKey,
-    limitToLast,
-    limitToFirst,
     startAt,
     endAt,
   } from 'firebase/database';
