@@ -213,7 +213,7 @@
       const idToken = await user.getIdToken();
       
       // Call Firebase Function via HTTP POST
-      const response = await fetch('https://europe-west1-evang9-combo-4cb8e.cloudfunctions.net/searchLieder', {
+      const response = await fetch('https://europe-west1-evang9-combo-4cb8e.cloudfunctions.net/searchLiederHttp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

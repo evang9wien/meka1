@@ -13,10 +13,10 @@ const corsHandler = cors({
 });
 
 /**
- * Search Function for Liedertexte
+ * Search Function for Liedertexte (HTTP version with CORS)
  * Performs server-side search in song lyrics to minimize client-side data transfer
  */
-export const searchLieder = onRequest(
+export const searchLiederHttp = onRequest(
     {
         region: "europe-west1",
     },
