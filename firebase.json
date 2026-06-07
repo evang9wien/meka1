@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "evang9-combo-4cb8e",
     "source": ".",
     "ignore": [
       "firebase.json",

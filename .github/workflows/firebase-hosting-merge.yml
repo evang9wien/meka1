@@ -37,13 +37,17 @@ jobs:
           npm install
           cd ..
 
-      - name: 🔥 Deploy Functions to Firebase
+      - name: 🔥 Deploy to Firebase Hosting and Functions
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}
           channelId: live
           projectId: evang9-combo-4cb8e
-          target: hosting,functions
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+      
+      - name: 🔥 Deploy Functions
+        run: npx firebase-tools@latest deploy --only functions --project evang9-combo-4cb8e
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}
