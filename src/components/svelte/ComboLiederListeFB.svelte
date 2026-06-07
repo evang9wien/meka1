@@ -75,6 +75,7 @@
   let alleLiederTexte;
   let searchLiederFn;
   let searchTimeout;
+  let lastSearchTerm = '';  // Track last search to prevent duplicates
 
   onMount(async () => {
     const app = initAppCheck();
@@ -190,9 +191,10 @@
 
   let blockFilterLiedtext = false;
   async function handleFilterLiedtext() {
-    // Clear any existing timeout
+    // Clear previous timeout - resets the 2-second countdown on every keystroke
     if (searchTimeout) {
       clearTimeout(searchTimeout);
+      searchTimeout = null;
     }
     
     // Reset if search term is too short
@@ -201,9 +203,15 @@
       return;
     }
     
-    // Debounce: Wait 500ms after user stops typing
+    // Debounce: Wait 2 seconds after user stops typing before triggering search
     searchTimeout = setTimeout(async () => {
       if (blockFilterLiedtext) return;
+      
+      // Skip if same search term as last time (prevent duplicate searches)
+      if (filterLiedtext === lastSearchTerm) {
+        console.log("Skipping duplicate search for:", filterLiedtext);
+        return;
+      }
       
       blockFilterLiedtext = true;
       filterNoten = '';
@@ -224,6 +232,9 @@
         
         console.log(`Found ${result.data.count} songs matching "${filterLiedtext}"`);
         
+        // Remember this search term to prevent duplicates
+        lastSearchTerm = filterLiedtext;
+        
       } catch (error) {
         console.error('Server-side search error:', error);
         
@@ -237,7 +248,7 @@
         popupSpinnerModal = false;
         blockFilterLiedtext = false;
       }
-    }, 500); // Wait 500ms after last keystroke
+    }, 2000); // Wait 2 seconds after last keystroke
   }
 
   function handleFilterNoten() {
