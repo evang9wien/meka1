@@ -78,8 +78,8 @@
   onMount(async () => {
     const app = initAppCheck();
     auth = getAuth(app);
-    functions = getFunctions(app, 'europe-west1');
-    searchLiederFn = httpsCallable(functions, 'searchLieder');
+    // Note: searchLieder is now an onRequest function, not onCall
+    // We'll use fetch instead of httpsCallable
     
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -204,17 +204,40 @@
     try {
       console.log("Server-side search for:", filterLiedtext);
       
-      // Call Firebase Function for server-side search
-      const result = await searchLiederFn({ searchTerm: filterLiedtext });
+      // Get Firebase Auth token
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
       
-      console.log("Search results:", result.data);
+      const idToken = await user.getIdToken();
       
-      const ergebnisse = result.data.results.map(r => r.ID);
+      // Call Firebase Function via HTTP POST
+      const response = await fetch('https://europe-west1-evang9-combo-4cb8e.cloudfunctions.net/searchLieder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          data: { searchTerm: filterLiedtext }
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      console.log("Search results:", result);
+      
+      const ergebnisse = result.results.map(r => r.ID);
       liederListe = liederListeKat.filter(
         (lied) => ergebnisse.includes(lied.ID)
       );
       
-      console.log(`Found ${result.data.count} songs matching "${filterLiedtext}"`);
+      console.log(`Found ${result.count} songs matching "${filterLiedtext}"`);
       
     } catch (error) {
       console.error('Server-side search error:', error);

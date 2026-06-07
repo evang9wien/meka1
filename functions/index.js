@@ -2,89 +2,107 @@ import { onCall, onRequest } from "firebase-functions/v2/https";
 import { HttpsError } from "firebase-functions/v2/https";
 import admin from "firebase-admin";
 import { getStorage } from "firebase-admin/storage";
+import cors from "cors";
 
 admin.initializeApp();
+
+// Initialize CORS middleware
+const corsHandler = cors({
+    origin: ["https://evang9.wien", "http://localhost:4321"],
+    credentials: true,
+});
 
 /**
  * Search Function for Liedertexte
  * Performs server-side search in song lyrics to minimize client-side data transfer
  */
-export const searchLieder = onCall(
+export const searchLieder = onRequest(
     {
-        enforceAppCheck: false,  // Disabled - protected by authentication and role check
         region: "europe-west1",
-        cors: ["https://evang9.wien", "http://localhost:4321"],
     },
-    async (request) => {
-        console.log("searchLieder called with:", request.data);
+    async (req, res) => {
+        // Handle CORS
+        return corsHandler(req, res, async () => {
+            try {
+                console.log("searchLieder called with:", req.body);
 
-        // Authentication check
-        if (!request.auth) {
-            throw new HttpsError("unauthenticated", "Login required");
-        }
-
-        const uid = request.auth.uid;
-        const searchTerm = request.data.searchTerm;
-
-        // Validate search term
-        if (!searchTerm || searchTerm.length < 2) {
-            throw new HttpsError("invalid-argument", "Search term must be at least 2 characters");
-        }
-
-        try {
-            // Check user role
-            const accountRef = admin.firestore().doc(`accounts/${uid}`);
-            const accountSnap = await accountRef.get();
-
-            if (!accountSnap.exists) {
-                throw new HttpsError("not-found", "Account not found");
-            }
-
-            const accountData = accountSnap.data();
-            const roles = accountData?.roles || [];
-
-            if (!roles.includes("combolist")) {
-                console.warn(`Permission denied for UID ${uid}, roles=${roles}`);
-                throw new HttpsError("permission-denied", "Not allowed to search");
-            }
-
-            // Fetch all songs from Firestore
-            const liederSnapshot = await admin.firestore()
-                .collection('lieder')
-                .get();
-
-            // Server-side filtering
-            const results = [];
-            const searchLower = searchTerm.toLowerCase();
-
-            liederSnapshot.forEach(doc => {
-                const data = doc.data();
-
-                // Search in Liedtext and Titel
-                const liedtext = (data.Liedtext || '').toLowerCase();
-                const titel = (data.Titel || '').toLowerCase();
-
-                if (liedtext.includes(searchLower) || titel.includes(searchLower)) {
-                    results.push({
-                        ID: doc.id,
-                        Titel: data.Titel,
-                        snippet: extractSnippet(data.Liedtext, searchTerm, 60)
-                    });
+                // Get Firebase Auth token from header
+                const authHeader = req.headers.authorization;
+                if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                    res.status(401).json({ error: "Unauthorized - No token provided" });
+                    return;
                 }
-            });
 
-            console.log(`Found ${results.length} results for "${searchTerm}"`);
+                const idToken = authHeader.split('Bearer ')[1];
 
-            return {
-                results,
-                count: results.length,
-                searchTerm: searchTerm
-            };
+                // Verify the token
+                const decodedToken = await admin.auth().verifyIdToken(idToken);
+                const uid = decodedToken.uid;
 
-        } catch (error) {
-            console.error("Error in searchLieder:", error);
-            throw new HttpsError("internal", error.message || "Search failed");
-        }
+                const searchTerm = req.body.data?.searchTerm;
+
+                // Validate search term
+                if (!searchTerm || searchTerm.length < 2) {
+                    res.status(400).json({ error: "Search term must be at least 2 characters" });
+                    return;
+                }
+
+                // Check user role
+                const accountRef = admin.firestore().doc(`accounts/${uid}`);
+                const accountSnap = await accountRef.get();
+
+                if (!accountSnap.exists) {
+                    res.status(404).json({ error: "Account not found" });
+                    return;
+                }
+
+                const accountData = accountSnap.data();
+                const roles = accountData?.roles || [];
+
+                if (!roles.includes("combolist")) {
+                    console.warn(`Permission denied for UID ${uid}, roles=${roles}`);
+                    res.status(403).json({ error: "Not allowed to search" });
+                    return;
+                }
+
+                // Fetch all songs from Firestore
+                const liederSnapshot = await admin.firestore()
+                    .collection('lieder')
+                    .get();
+
+                // Server-side filtering
+                const results = [];
+                const searchLower = searchTerm.toLowerCase();
+
+                liederSnapshot.forEach(doc => {
+                    const data = doc.data();
+
+                    // Search in Liedtext and Titel
+                    const liedtext = (data.Liedtext || '').toLowerCase();
+                    const titel = (data.Titel || '').toLowerCase();
+
+                    if (liedtext.includes(searchLower) || titel.includes(searchLower)) {
+                        results.push({
+                            ID: doc.id,
+                            Titel: data.Titel,
+                            snippet: extractSnippet(data.Liedtext, searchTerm, 60)
+                        });
+                    }
+                });
+
+                console.log(`Found ${results.length} results for "${searchTerm}"`);
+
+                res.status(200).json({
+                    results,
+                    count: results.length,
+                    searchTerm: searchTerm
+                });
+
+            } catch (error) {
+                console.error("Error in searchLieder:", error);
+                res.status(500).json({ error: error.message || "Search failed" });
+            }
+        });
     }
 );
 
