@@ -26,6 +26,10 @@ export const headerData = {
           href: getPermalink('#jugendreferentin'),
         },
         {
+          text: 'Kinder und Familien',
+          href: getPermalink('#kinder'),
+        },
+        {
           text: 'Gewaltschutz',
           href: getPermalink('#gewaltschutz'),
         },
@@ -51,8 +55,8 @@ export const headerData = {
           href: getPermalink('/gottesdienste#oase'),
         },
         {
-          text: 'Kinder & Familien',
-          href: getPermalink('/kinderundfamilien'),
+          text: 'Kindergottesdienste',
+          href: getPermalink('/gottesdienste#kindergottesdienst'),
         },
         {
           text: 'Termine',
@@ -69,7 +73,7 @@ export const headerData = {
 
       links: [
         {
-          text: 'NEU IN DER GEMEINDE? WILLKOMMEN!',
+          text: 'Neu in der Gemeinde? Willkommen!',
           href: getPermalink('/angebote#neuindergemeinde'),
         },
         {

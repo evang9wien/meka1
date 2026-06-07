@@ -1,0 +1,80 @@
+---
+import Features3 from '~/components/widgets/Features3.astro';
+---
+
+<Features3
+  id="kinder"
+  tagline="Mit Kindern in der Messiaskapelle"
+  title="Kinder und Familien"
+  columns={3}
+  image={{
+    src: 'https://res.cloudinary.com/dqjdjviob/image/upload/v1769703588/Homepage/Gottesdienst/20250420_112015_small_ztjlvk.jpg',
+    alt: 'Kinder in der Messiaskapelle',
+  }}
+  items={[
+    {
+      title: 'Kinder in der Messiaskapelle',
+      description:
+        'Kinder sind ein Geschenk - und ein lebendiger Teil unserer Gemeinde! \
+        Sie bringen Bewegung, Lachen und neue Fragen mit, und das bereichert uns alle. \
+        In der Messiaskapelle wollen wir, dass Kinder ihren Platz finden: beim Spielen, Staunen, Lernen und Feiern. \
+        Ob im Gottesdienst, im Kindergottesdienst oder einfach mittendrin - hier dürfen Kinder Kirche erleben, so wie sie sind. \
+        Eltern dürfen entspannt sein: Kinder gehören dazu, auch wenn es manchmal etwas lauter wird.',
+      icon: 'tabler:building-church',
+    },
+    {
+      title: 'Kinder im Gottesdienst',
+      description:
+        'Bei uns sind Kinder mittendrin - nicht nur dabei! \
+        Sie gehören zur Gemeinde, genauso wie die Großen. Darum ist es uns wichtig, dass sie den Gottesdienst kennenlernen dürfen - auf eine Weise, die zu ihrem Alter passt: mal im eigenen Kindergottesdienst, mal gemeinsam mit allen. \
+        Natürlich braucht das gegenseitige Rücksicht und Verständnis. Die Erwachsenen wollen in Ruhe feiern, die Kinder dürfen neugierig und lebendig sein. Beides hat seinen Platz, denn Gottesdienst ist keine „Erwachsenenveranstaltung", sondern unser gemeinsames Feiern. \
+        Uns ist wichtig, dass sich Kinder in unserer Kirche willkommen fühlen - mit all dem, was sie mitbringen: Freude, Neugier, manchmal auch Unruhe. \
+        Denn genau so, mit Groß und Klein, laut und leise, feiern wir, dass Gott mitten unter uns ist.',
+      icon: 'tabler:users-group',
+    },
+    {
+      title: 'Besondere Gottesdienste',
+      description:
+        'Am <strong>ersten und zweiten Sonntag im Monat</strong> feiern wir parallel zu unserem Gottesdienst in der Kapelle einen <strong>Kindergottesdienst im Gemeindesaal</strong>, \
+        der von unserem Team liebevoll gestaltet wird. Wir beginnen gemeinsam in der Kapelle. Nach Begrüßung und erstem Lied \
+        gehen die Kinder mit dem Kindergottesdienst-Team in den Gemeindesaal. Wer möchte, kann sie begleiten. \
+        <br/><br/> \
+        Am <strong>dritten Sonntag im Monat</strong> feiern wir einen <strong>kunterbunten Gottesdienst</strong> für Groß und Klein. \
+        Nach dem gemeinsamen Beginn in der Kapelle gibt es anstelle der Lesung eine Geschichte für Kinder und einen kurzen Impuls. \
+        Anschließend vertiefen die Kinder das Thema im Gemeindesaal - kreativ und kindgerecht. Zum Abendmahl kommen alle wieder in die Kapelle zurück, \
+        wo wir gemeinsam feiern, dass Jesus unter uns ist und wir Brot und Traubensaft miteinander teilen.',
+      icon: 'tabler:chart-bar-popular',
+    },
+    {
+      title: 'Kinderecke',
+      description:
+        'Im hinteren Teil unserer Kapelle gibt es eine gemütliche <strong>Kinderecke</strong> mit Sofas, Büchern, Spielzeug und Malsachen - ein Lieblingsplatz vieler Familien. \
+        Manchmal sind Gottesdienste lang oder anstrengend. Wenn ein Kind eine kurze Pause braucht, kann die Kapelle über den Hintereingang verlassen werden. \
+        In der Vorhalle oder im Gemeindesaal ist Raum für eine kleine Auszeit - und natürlich darf man jederzeit wieder dazukommen.',
+      icon: 'tabler:mood-boy',
+    },
+    {
+      title: 'Gemeindesaal',
+      description:
+        'Einen Stock über der Kapelle befindet sich unser <strong>Gemeindesaal</strong>. \
+        Damit sich alle wohlfühlen, gibt es dort Spielsachen und Platz zum Bewegen. \
+        Wer also etwas Abstand oder Ruhe braucht, findet hier einen guten Ort - und kann jederzeit wieder in die Kapelle zurückkehren.',
+      icon: 'tabler:tractor',
+    },
+    {
+      title: 'Abendmahl',
+      description:
+        'In unserer Kirche, der <strong>Evangelischen Kirche A.B. in Österreich</strong>, wurde vor vielen Jahren das <strong>kinderoffene Abendmahl</strong> eingeführt. \
+        Alle Getauften sind - unabhängig vom Alter - eingeladen, mitzufeiern. Denn wer getauft ist, gehört ganz und gar zur Gemeinschaft mit Jesus Christus. \
+        Wir freuen uns, wenn Kinder mit nach vorne kommen und mit uns die Abendmahlsgaben teilen. \
+        Am 1. und 3. Sonntag feiern wir Abendmahl mit <strong>glutenfreiem Brot und alkoholfreiem Traubensaft.</strong>',
+      icon: 'tabler:glass-cocktail',
+    },
+  ]}
+>
+  <Fragment slot="subtitle">
+    Kinder sind ein Geschenk - und ein lebendiger Teil unserer Gemeinde!
+    Sie bringen Bewegung, Lachen und neue Fragen mit, und das bereichert uns alle.
+    In der Messiaskapelle wollen wir, dass Kinder ihren Platz finden: beim Spielen, Staunen, Lernen und Feiern.
+  </Fragment>
+</Features3>

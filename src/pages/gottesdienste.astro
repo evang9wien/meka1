@@ -83,16 +83,16 @@ const metadata = {
     </Fragment>
   </Content>
 
-  <section class="relative not-prose scroll-mt-[72px]" id="kinder"}>
-  <div class="absolute inset-0 pointer-events-none -z-[1]" aria-hidden="true">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-  </div>
-  <Hero
+  <Content
+    id="kindergottesdienst"
+    isFade
+    title="Kindergottesdienste"
+    tagline="Für unsere Jüngsten"
     actions={[
       {
         variant: 'primary',
-        text: 'Kinder und Familien',
-        href: getPermalink('/kinderundfamilien'),
+        text: 'Mehr über Kinder & Familien',
+        href: getPermalink('/#kinder'),
         icon: 'tabler:users-group',
       },
     ]}
@@ -100,18 +100,43 @@ const metadata = {
       src: 'https://res.cloudinary.com/dqjdjviob/image/upload/v1769703588/Homepage/Gottesdienst/20250420_112015_small_ztjlvk.jpg',
       alt: 'Kinder in der Messiaskapelle',
     }}
-    tagline="Mit Kindern in der Messiaskapelle"
+    items={[
+      
+      {
+        title: '1. & 2. Sonntag: Kindergottesdienst',
+        description: `Am ersten und zweiten Sonntag im Monat feiern wir parallel zu unserem Gottesdienst in der Kapelle einen \
+        Kindergottesdienst im Gemeindesaal, der von unserem Team liebevoll gestaltet wird. Wir beginnen gemeinsam in der Kapelle. \
+        Nach Begrüßung und erstem Lied gehen die Kinder mit dem Kindergottesdienst-Team in den Gemeindesaal.`,
+        icon: 'tabler:calendar-event',
+      },
+      {
+        title: '3. Sonntag: Kunterbunter Gottesdienst',
+        description: `Am dritten Sonntag im Monat feiern wir einen kunterbunten Gottesdienst für Groß und Klein. \
+        Nach dem gemeinsamen Beginn gibt es eine Geschichte für Kinder und einen kurzen Impuls. \
+        Anschließend vertiefen die Kinder das Thema im Gemeindesaal - kreativ und kindgerecht. \
+        Zum Abendmahl kommen alle wieder in die Kapelle zurück.`,
+        icon: 'tabler:chart-bar-popular',
+      },
+      {
+        title: 'Kinderecke & Gemeindesaal',
+        description: `Im hinteren Teil unserer Kapelle gibt es eine gemütliche Kinderecke mit Sofas, Büchern, Spielzeug und Malsachen. \
+        Einen Stock über der Kapelle befindet sich unser Gemeindesaal mit Spielsachen und Platz zum Bewegen. \
+        Wenn ein Kind eine kurze Pause braucht, ist hier Raum für eine kleine Auszeit.`,
+        icon: 'tabler:mood-boy',
+      },
+    ]}
   >
-    <Fragment slot="title">Kinder und Familien</Fragment>
-
-    <Fragment slot="subtitle">
+    <Fragment slot="content">
       Kinder sind ein Geschenk - und ein lebendiger Teil unserer Gemeinde!
-      Sie bringen Bewegung, Lachen und neue Fragen mit, und das bereichert uns alle.
       In der Messiaskapelle wollen wir, dass Kinder ihren Platz finden: beim Spielen, Staunen, Lernen und Feiern.
+      <span class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+        Hier dürfen Kinder Kirche erleben, so wie sie sind.
+      </span>
     </Fragment>
-  </Hero>
-  </section>
-
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
 
   <Termine bg={false}/>
 
