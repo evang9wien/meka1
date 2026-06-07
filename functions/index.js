@@ -11,8 +11,9 @@ admin.initializeApp();
  */
 export const searchLieder = onCall(
     {
-        enforceAppCheck: true,
+        enforceAppCheck: false,  // Disabled - protected by authentication and role check
         region: "europe-west1",
+        cors: true,
     },
     async (request) => {
         console.log("searchLieder called with:", request.data);
