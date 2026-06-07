@@ -74,6 +74,7 @@
 
   let alleLiederTexte;
   let searchLiederFn;
+  let searchTimeout;
 
   onMount(async () => {
     const app = initAppCheck();
@@ -189,7 +190,10 @@
 
   let blockFilterLiedtext = false;
   async function handleFilterLiedtext() {
-    if (blockFilterLiedtext) return;
+    // Clear any existing timeout
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
     
     // Reset if search term is too short
     if (!filterLiedtext || filterLiedtext.length < 2) {
@@ -197,61 +201,66 @@
       return;
     }
     
-    blockFilterLiedtext = true;
-    filterNoten = '';
-    popupSpinnerModal = true;
-    
-    try {
-      console.log("Server-side search for:", filterLiedtext);
+    // Debounce: Wait 500ms after user stops typing
+    searchTimeout = setTimeout(async () => {
+      if (blockFilterLiedtext) return;
       
-      // Get Firebase Auth token
-      const user = auth.currentUser;
-      if (!user) {
-        throw new Error("User not authenticated");
+      blockFilterLiedtext = true;
+      filterNoten = '';
+      popupSpinnerModal = true;
+      
+      try {
+        console.log("Server-side search for:", filterLiedtext);
+        
+        // Get Firebase Auth token
+        const user = auth.currentUser;
+        if (!user) {
+          throw new Error("User not authenticated");
+        }
+        
+        const idToken = await user.getIdToken();
+        
+        // Call Firebase Function via HTTP POST
+        const response = await fetch('https://europe-west1-evang9-combo-4cb8e.cloudfunctions.net/searchLiederHttp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
+          },
+          body: JSON.stringify({
+            data: { searchTerm: filterLiedtext }
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        console.log("Search results:", result);
+        
+        const ergebnisse = result.results.map(r => r.ID);
+        liederListe = liederListeKat.filter(
+          (lied) => ergebnisse.includes(lied.ID)
+        );
+        
+        console.log(`Found ${result.count} songs matching "${filterLiedtext}"`);
+        
+      } catch (error) {
+        console.error('Server-side search error:', error);
+        
+        // Fallback to client-side search if server fails
+        console.log("Falling back to client-side search");
+        const ergebnisse = filterInLiedtext(filterLiedtext);
+        liederListe = liederListeKat.filter(
+          (lied) => ergebnisse.includes(lied.ID)
+        );
+      } finally {
+        popupSpinnerModal = false;
+        blockFilterLiedtext = false;
       }
-      
-      const idToken = await user.getIdToken();
-      
-      // Call Firebase Function via HTTP POST
-      const response = await fetch('https://europe-west1-evang9-combo-4cb8e.cloudfunctions.net/searchLiederHttp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${idToken}`
-        },
-        body: JSON.stringify({
-          data: { searchTerm: filterLiedtext }
-        })
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      console.log("Search results:", result);
-      
-      const ergebnisse = result.results.map(r => r.ID);
-      liederListe = liederListeKat.filter(
-        (lied) => ergebnisse.includes(lied.ID)
-      );
-      
-      console.log(`Found ${result.count} songs matching "${filterLiedtext}"`);
-      
-    } catch (error) {
-      console.error('Server-side search error:', error);
-      
-      // Fallback to client-side search if server fails
-      console.log("Falling back to client-side search");
-      const ergebnisse = filterInLiedtext(filterLiedtext);
-      liederListe = liederListeKat.filter(
-        (lied) => ergebnisse.includes(lied.ID)
-      );
-    } finally {
-      popupSpinnerModal = false;
-      blockFilterLiedtext = false;
-    }
+    }, 500); // Wait 500ms after last keystroke
   }
 
   function handleFilterNoten() {
