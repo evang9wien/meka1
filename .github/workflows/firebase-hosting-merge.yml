@@ -37,7 +37,7 @@ jobs:
           npm install
           cd ..
 
-      - name: 🔥 Deploy to Firebase Hosting and Functions
+      - name: 🔥 Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
@@ -47,7 +47,10 @@ jobs:
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
       
+      - name: 🔐 Setup Firebase Service Account Credentials
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}' > $HOME/gcloud-service-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-service-key.json" >> $GITHUB_ENV
+      
       - name: 🔥 Deploy Functions
         run: npx firebase-tools@latest deploy --only functions --project evang9-combo-4cb8e
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}
