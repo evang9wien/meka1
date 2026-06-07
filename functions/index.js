@@ -1,4 +1,4 @@
-import { onCall } from "firebase-functions/v2/https";
+import { onCall, onRequest } from "firebase-functions/v2/https";
 import { HttpsError } from "firebase-functions/v2/https";
 import admin from "firebase-admin";
 import { getStorage } from "firebase-admin/storage";
@@ -13,6 +13,7 @@ export const searchLieder = onCall(
     {
         enforceAppCheck: false,  // Disabled - protected by authentication and role check
         region: "europe-west1",
+        cors: ["https://evang9.wien", "http://localhost:4321"],
     },
     async (request) => {
         console.log("searchLieder called with:", request.data);
