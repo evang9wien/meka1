@@ -33,6 +33,7 @@
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField, collection, getDocs } from 'firebase/firestore';
+  import { getFunctions, httpsCallable } from 'firebase/functions';
   import {
     getDatabase,
     set,
@@ -64,6 +65,7 @@
   let auth;
   let dbFireStore;
   let dbRealtime;
+  let functions;
   let popupFireBaseLogin = false;
   let comboListRole = false;
   let liedTextModal = false;
@@ -71,10 +73,14 @@
   let liedTextTitel;
 
   let alleLiederTexte;
+  let searchLiederFn;
 
   onMount(async () => {
     const app = initAppCheck();
     auth = getAuth(app);
+    functions = getFunctions(app, 'europe-west1');
+    searchLiederFn = httpsCallable(functions, 'searchLieder');
+    
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         console.log('No Login');
@@ -182,20 +188,48 @@
   };
 
   let blockFilterLiedtext = false;
-  function handleFilterLiedtext() {
+  async function handleFilterLiedtext() {
     if (blockFilterLiedtext) return;
+    
+    // Reset if search term is too short
+    if (!filterLiedtext || filterLiedtext.length < 2) {
+      liederListe = liederListeKat;
+      return;
+    }
+    
     blockFilterLiedtext = true;
     filterNoten = '';
-    setTimeout(() => {
-      console.log("Filter Liedtext: ", filterLiedtext);
+    popupSpinnerModal = true;
+    
+    try {
+      console.log("Server-side search for:", filterLiedtext);
+      
+      // Call Firebase Function for server-side search
+      const result = await searchLiederFn({ searchTerm: filterLiedtext });
+      
+      console.log("Search results:", result.data);
+      
+      const ergebnisse = result.data.results.map(r => r.ID);
+      liederListe = liederListeKat.filter(
+        (lied) => ergebnisse.includes(lied.ID)
+      );
+      
+      console.log(`Found ${result.data.count} songs matching "${filterLiedtext}"`);
+      
+    } catch (error) {
+      console.error('Server-side search error:', error);
+      
+      // Fallback to client-side search if server fails
+      console.log("Falling back to client-side search");
       const ergebnisse = filterInLiedtext(filterLiedtext);
       liederListe = liederListeKat.filter(
         (lied) => ergebnisse.includes(lied.ID)
       );
-      // handleFilterKat(liederListe);
+    } finally {
+      popupSpinnerModal = false;
       blockFilterLiedtext = false;
-    }, 500);
-  };
+    }
+  }
 
   function handleFilterNoten() {
     if (blockFilterLiedtext) return;

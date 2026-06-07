@@ -5,6 +5,110 @@ import { getStorage } from "firebase-admin/storage";
 
 admin.initializeApp();
 
+/**
+ * Search Function for Liedertexte
+ * Performs server-side search in song lyrics to minimize client-side data transfer
+ */
+export const searchLieder = onCall(
+    {
+        enforceAppCheck: true,
+        region: "europe-west1",
+    },
+    async (request) => {
+        console.log("searchLieder called with:", request.data);
+
+        // Authentication check
+        if (!request.auth) {
+            throw new HttpsError("unauthenticated", "Login required");
+        }
+
+        const uid = request.auth.uid;
+        const searchTerm = request.data.searchTerm;
+
+        // Validate search term
+        if (!searchTerm || searchTerm.length < 2) {
+            throw new HttpsError("invalid-argument", "Search term must be at least 2 characters");
+        }
+
+        try {
+            // Check user role
+            const accountRef = admin.firestore().doc(`accounts/${uid}`);
+            const accountSnap = await accountRef.get();
+
+            if (!accountSnap.exists) {
+                throw new HttpsError("not-found", "Account not found");
+            }
+
+            const accountData = accountSnap.data();
+            const roles = accountData?.roles || [];
+
+            if (!roles.includes("combolist")) {
+                console.warn(`Permission denied for UID ${uid}, roles=${roles}`);
+                throw new HttpsError("permission-denied", "Not allowed to search");
+            }
+
+            // Fetch all songs from Firestore
+            const liederSnapshot = await admin.firestore()
+                .collection('lieder')
+                .get();
+
+            // Server-side filtering
+            const results = [];
+            const searchLower = searchTerm.toLowerCase();
+
+            liederSnapshot.forEach(doc => {
+                const data = doc.data();
+
+                // Search in Liedtext and Titel
+                const liedtext = (data.Liedtext || '').toLowerCase();
+                const titel = (data.Titel || '').toLowerCase();
+
+                if (liedtext.includes(searchLower) || titel.includes(searchLower)) {
+                    results.push({
+                        ID: doc.id,
+                        Titel: data.Titel,
+                        snippet: extractSnippet(data.Liedtext, searchTerm, 60)
+                    });
+                }
+            });
+
+            console.log(`Found ${results.length} results for "${searchTerm}"`);
+
+            return {
+                results,
+                count: results.length,
+                searchTerm: searchTerm
+            };
+
+        } catch (error) {
+            console.error("Error in searchLieder:", error);
+            throw new HttpsError("internal", error.message || "Search failed");
+        }
+    }
+);
+
+/**
+ * Helper function: Extract text snippet with search term
+ */
+function extractSnippet(text, searchTerm, contextLength = 60) {
+    if (!text) return '';
+
+    const lowerText = text.toLowerCase();
+    const lowerTerm = searchTerm.toLowerCase();
+    const index = lowerText.indexOf(lowerTerm);
+
+    if (index === -1) return text.substring(0, 100) + '...';
+
+    const start = Math.max(0, index - contextLength);
+    const end = Math.min(text.length, index + searchTerm.length + contextLength);
+
+    let snippet = text.substring(start, end);
+    if (start > 0) snippet = '...' + snippet;
+    if (end < text.length) snippet = snippet + '...';
+
+    return snippet;
+}
+
 export const getAudioUrl = onCall(
     {
         enforceAppCheck: true, // Reject requests with missing or invalid App Check tokens.
