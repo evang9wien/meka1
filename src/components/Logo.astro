@@ -1,7 +1,8 @@
 ---
 import Image from '~/components/common/Image.astro';
-//import logoImg from '~/assets/images/cropped-Logo-für-Menue-4.png';
-import logoImg from '~/assets/images/Kreuz-bunt.svg';
+//import logoImg from '~/assets/images/cropped-Logo-für-Menue-4.png';
+// Use string path instead of import to avoid Vite warning about dynamic/static import conflict
+const logoImg = '~/assets/images/Kreuz-bunt.svg';
 ---
 
 <span
