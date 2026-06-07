@@ -52,9 +52,5 @@ jobs:
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}' > $HOME/gcloud-service-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-service-key.json" >> $GITHUB_ENV
       
-      - name: 🧹 Setup Cleanup Policy (prevent monthly costs)
-        run: |
-          npx firebase-tools@latest functions:artifacts:setpolicy --project evang9-combo-4cb8e --region europe-west1 --keep 5 || echo "Policy already exists or will be set during deploy"
-      
-      - name: 🔥 Deploy Functions
-        run: npx firebase-tools@latest deploy --only functions --project evang9-combo-4cb8e
+      - name: 🔥 Deploy Functions (with automatic cleanup policy)
+        run: npx firebase-tools@latest deploy --only functions --project evang9-combo-4cb8e --force
