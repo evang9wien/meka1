@@ -6,46 +6,38 @@ import { getStorage } from "firebase-admin/storage";
 admin.initializeApp();
 
 /**
- * Search Function for Liedertexte (HTTP version with built-in CORS)
+ * Search Function for Liedertexte
  * Performs server-side search in song lyrics to minimize client-side data transfer
+ * Uses onCall for automatic CORS and authentication handling
  */
-export const searchLiederHttp = onRequest(
+export const searchLieder = onCall(
     {
-        cors: ["https://evang9.wien", "http://localhost:4321"],
+        enforceAppCheck: false,  // Disabled - protected by authentication and role check
         region: "europe-west1",
     },
-    async (req, res) => {
+    async (request) => {
+        console.log("searchLieder called with:", request.data);
+
+        // Authentication check (automatic with onCall)
+        if (!request.auth) {
+            throw new HttpsError("unauthenticated", "Login required");
+        }
+
+        const uid = request.auth.uid;
+        const searchTerm = request.data.searchTerm;
+
+        // Validate search term
+        if (!searchTerm || searchTerm.length < 2) {
+            throw new HttpsError("invalid-argument", "Search term must be at least 2 characters");
+        }
+
         try {
-            console.log("searchLieder called with:", req.body);
-
-            // Get Firebase Auth token from header
-            const authHeader = req.headers.authorization;
-            if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                res.status(401).json({ error: "Unauthorized - No token provided" });
-                return;
-            }
-
-            const idToken = authHeader.split('Bearer ')[1];
-
-            // Verify the token
-            const decodedToken = await admin.auth().verifyIdToken(idToken);
-            const uid = decodedToken.uid;
-
-            const searchTerm = req.body.data?.searchTerm;
-
-            // Validate search term
-            if (!searchTerm || searchTerm.length < 2) {
-                res.status(400).json({ error: "Search term must be at least 2 characters" });
-                return;
-            }
-
             // Check user role
             const accountRef = admin.firestore().doc(`accounts/${uid}`);
             const accountSnap = await accountRef.get();
 
             if (!accountSnap.exists) {
-                res.status(404).json({ error: "Account not found" });
-                return;
+                throw new HttpsError("not-found", "Account not found");
             }
 
             const accountData = accountSnap.data();
@@ -53,8 +45,7 @@ export const searchLiederHttp = onRequest(
 
             if (!roles.includes("combolist")) {
                 console.warn(`Permission denied for UID ${uid}, roles=${roles}`);
-                res.status(403).json({ error: "Not allowed to search" });
-                return;
+                throw new HttpsError("permission-denied", "Not allowed to search");
             }
 
             // Fetch all songs from Firestore
@@ -84,15 +75,15 @@ export const searchLiederHttp = onRequest(
 
             console.log(`Found ${results.length} results for "${searchTerm}"`);
 
-            res.status(200).json({
+            return {
                 results,
                 count: results.length,
                 searchTerm: searchTerm
-            });
+            };
 
         } catch (error) {
             console.error("Error in searchLieder:", error);
-            res.status(500).json({ error: error.message || "Search failed" });
+            throw new HttpsError("internal", error.message || "Search failed");
         }
     }
 );
