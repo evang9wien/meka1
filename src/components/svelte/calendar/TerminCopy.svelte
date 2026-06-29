@@ -20,21 +20,19 @@
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set } from 'firebase/database';
   import { remove } from 'firebase/database'; // für Löschen
-  import { initAppCheck } from "../firebase/firebase.js";  
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';  
+  import { initAuth, currentUser, authReady } from '../stores/authStore.js';
+  import { initAppCheck } from '../firebase/firebase.js';
+  import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import WaitPopup from '../popup/WaitPopup.svelte';
   import LoginFirebase from '../auth/LoginFirebase.svelte';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import utc from 'dayjs/plugin/utc';
   import timezone from 'dayjs/plugin/timezone';
 
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  let userAuth = false;
   let popupSpinnerModal = false;
-  let auth;
-  let popupFireBaseLogin = false;
+  let dataLoaded = false;
 
   let fromDate: string = new Date().toISOString().split('T')[0];
   let toDate: string = new Date(Date.now() + 32 * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -227,72 +225,39 @@
   }
 
   onMount(() => {
-    
-    const app = initAppCheck();
-
-    if (!app) 
-      return;
-    auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      dbRealtime = getDatabase(app);
-      if (!user) {
-        popupFireBaseLogin = true;
-        return;
-      } else {
-        userAuth = true;
-      }
-      popupSpinnerModal = true;
-      await fetchGoogleEvents();
-      await fetchFirebaseEvents();
-      
-
-      const dbFireStore = getFirestore(app);
-       // check role
-      const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
-      console.log('User Data: ', userDoc.data());
-      if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('terminadmin')) {
-        console.log('No combolist role!');        
-        popupSpinnerModal = false;
-        return;
-      
-      }
-      terminAdminRole = true;
-      popupSpinnerModal = false;
-      // const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
-      // const docSnap = await getDoc(maRef);
-      // if (docSnap.exists()) {
-      //   members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-      //   members = members
-      //     .map((t) => ({
-      //       ...t,
-      //       name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-      //       value: t.ShortName,
-      //     }))
-      //     .sort((a, b) => a.name.localeCompare(b.name));
-      //   // rolle prüfen
-      //   // console.log('Mitarbeiter: ', members);
-      //   // console.log('User: ', user.providerData[0].email);
-      //   // let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
-      //   // if (loginUser.length > 0) {
-      //   //   console.log('LoginUser: ', loginUser[0]);
-      //   //   // if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
-      //   //   //   console.log('Role: ', loginUser[0].role);
-      //   //   //   comboAdminRole = true;
-      //   //   // }
-      //   //   if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'terminadmin').length > 0) {
-      //   //     console.log('Role: ', loginUser[0].role);
-      //   //     terminAdminRole = true;
-      //   //   }
-      //   // }
-      // }
-      
-
-    });
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    loadData($currentUser);
+  }
+
+  const loadData = async (user: any) => {
+    const app = initAppCheck();
+    if (!app) return;
+    dbRealtime = getDatabase(app);
+    popupSpinnerModal = true;
+    await fetchGoogleEvents();
+    await fetchFirebaseEvents();
+
+    const dbFireStore = getFirestore(app);
+    // Rollencheck
+    const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+    console.log('User Data: ', userDoc.data());
+    if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('terminadmin')) {
+      console.log('No terminadmin role!');
+      popupSpinnerModal = false;
+      return;
+    }
+    terminAdminRole = true;
+    popupSpinnerModal = false;
+  };
 </script>
 
 <!-- UI -->
-{#if userAuth && !popupSpinnerModal && !terminAdminRole}
+{#if $currentUser && !popupSpinnerModal && !terminAdminRole}
    <div class="flex justify-center p-8 ">
     <Card class="border-2 border-red-600 bg-red-50 content-center">
       <div class="p-8"    >
@@ -303,7 +268,7 @@
     </Card>
    </div>
 {/if}
-{#if userAuth && !popupSpinnerModal && terminAdminRole}
+{#if $currentUser && !popupSpinnerModal && terminAdminRole}
   <div class="p-4">
     <Card>
       <h1 class="text-xl font-bold mb-4">Terminübersicht</h1>
@@ -448,4 +413,4 @@
 {/if}
 <WaitPopup {popupSpinnerModal} message="Termine werden neu geladen." />
 <!-- <LoginWarn {popupUserAuthModal} /> -->
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />

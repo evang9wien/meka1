@@ -21,7 +21,6 @@
 
   import { getLongName } from './predigt/PredigtConstants.js';
 
-  import { getAuthHeader, isUserAuth } from './auth.js';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { openMp3, stopMp3 } from './mp3.js';
@@ -32,9 +31,9 @@
   import { getUrl } from './url/url.js';
 
   import { comboKategorien } from './combo/combo.js';
-  import { initAppCheck } from "./firebase/firebase.js";
+  import { initAuth, currentUser, authReady } from './stores/authStore.js';
+  import { initAppCheck } from './firebase/firebase.js';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
   import {
     getDatabase,
@@ -57,9 +56,8 @@
   let popupLiedGespeichert = false;
   let selectedLied;
   let loadedLied = {};
-  let userAuth = false;
   let alleLieder;
-  let liedGesungen=false;
+  let liedGesungen = false;
 
   let notenPdf;
   let liedMp3;
@@ -68,69 +66,66 @@
   let kategorie;
 
   let storage;
-  let auth;
   let dbFireStore;
-  let dbRealtime;
-  let popupFireBaseLogin = false;
 
-  onMount(async () => {
+  let dataLoaded = false;
+
+  onMount(() => {
     console.log('onMount');
-    const app = initAppCheck();
-    auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        console.log('No Login');
-        popupFireBaseLogin = true;
-        return;
-      }
-
-      console.log('User Auth');
-      userAuth = true;
-      storage = getStorage(app);
-      dbFireStore = getFirestore(app);
-
-      // check role
-      const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
-      console.log('User Data: ', userDoc.data());
-      if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('liederedit')) {
-        console.log('No combolist role!');        
-        popupSpinnerModal = false;
-        return;
-      
-      }
-      comboLiederEdit = true;
-     
-      popupSpinnerModal = true;
-     
-      kategorien = comboKategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
-      console.log(kategorien);
-     
-      const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-      const comboLieder = [];
-      for (const [key, value] of Object.entries(liederGes.data())) {
-        comboLieder.push({ name: value, value: key, ID: key });
-      }
-      const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-      const nichtcomboLieder = [];
-      for (const [key, value] of Object.entries(liederNichtGes.data())) {
-        nichtcomboLieder.push({ name: value, value: key, ID: key });
-      }
-
-      alleLieder = comboLieder.concat(nichtcomboLieder);
-      alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
-
-      console.log('Alle Lieder: ', alleLieder);
-
-      popupSpinnerModal = false;
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('lied_id')) {
-        selectedLied = urlParams.get('lied_id');
-        console.log('Liedid: ', selectedLied);
-        handleSelectLied();
-      }
-      // });
-    });
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    loadData($currentUser);
+  }
+
+  const loadData = async (user) => {
+    console.log('User Auth');
+    const app = initAppCheck();
+    storage = getStorage(app);
+    dbFireStore = getFirestore(app);
+
+    // Rollencheck
+    const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+    console.log('User Data: ', userDoc.data());
+    if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('liederedit')) {
+      console.log('No liederedit role!');
+      popupSpinnerModal = false;
+      return;
+    }
+    comboLiederEdit = true;
+
+    popupSpinnerModal = true;
+
+    kategorien = comboKategorien.map((l) => ({ ...l, value: l.Typ, name: l.Typ }));
+    console.log(kategorien);
+
+    const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+    const comboLieder = [];
+    for (const [key, value] of Object.entries(liederGes.data())) {
+      comboLieder.push({ name: value, value: key, ID: key });
+    }
+    const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
+    const nichtcomboLieder = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data())) {
+      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    }
+
+    alleLieder = comboLieder.concat(nichtcomboLieder);
+    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
+
+    console.log('Alle Lieder: ', alleLieder);
+
+    popupSpinnerModal = false;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('lied_id')) {
+      selectedLied = urlParams.get('lied_id');
+      console.log('Liedid: ', selectedLied);
+      handleSelectLied();
+    }
+  };
 
   const handleSelectLied = async () => {
     window.setTimeout(async () => {
@@ -235,7 +230,7 @@
     }
   };
 </script>
-{#if userAuth && !popupSpinnerModal && !comboLiederEdit}
+{#if $currentUser && !popupSpinnerModal && !comboLiederEdit}
    <div class="flex justify-center p-8 ">
     <Card class="border-2 border-red-600 bg-red-50 content-center">
       <div class="p-8"    >
@@ -246,7 +241,7 @@
     </Card>
    </div>
 {/if}
-{#if userAuth && !popupSpinnerModal && comboLiederEdit}
+{#if $currentUser && !popupSpinnerModal && comboLiederEdit}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <div class="w-80">
@@ -339,5 +334,5 @@
   </div>
 </Modal>
 
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
 <WaitPopup {popupSpinnerModal} message="Liederdaten werden neu geladen." />

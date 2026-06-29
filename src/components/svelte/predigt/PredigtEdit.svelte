@@ -16,16 +16,13 @@
   import { Modal } from 'flowbite-svelte';
 
   import PredigtAvatar from './PredigtAvatar.svelte';
-  import { getAuthHeader, isUserAuth } from '../auth.js';
-
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
-  import { initAppCheck } from "./../firebase/firebase.js";
-  
+  import { initAuth, currentUser, authReady } from './../stores/authStore.js';
+  import { initAppCheck } from './../firebase/firebase.js';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import {
     getDatabase,
     ref as dbref,
@@ -47,17 +44,16 @@
 
   let predigtMp3;
   let popupSpinnerUploadModal = false;
+
   onMount(() => {
     console.log('FireBase');
-    const app = initAppCheck();    
+    const app = initAppCheck();
 
     storage = getStorage(app);
 
     const dbRealtime = getDatabase(app);
     const fromDate = dayjs().subtract(50, 'days').format('YYYY-MM-DD');
     const toDate = dayjs().add(2, 'days').format('YYYY-MM-DD');
-
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
 
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
     onValue(dbRef, async (snapshot) => {
@@ -71,30 +67,29 @@
           const url = 'predigten/' + t.Termin.replaceAll(':', '_') + '_Predigt.mp3';
           return { ...t, url: url };
         });
-
         termine = termine.sort((a, b) => (a.Termin > b.Termin ? -1 : 1));
-
         console.log('Termine: ', termine);
-        // popupSpinnerModal = false;
       }
     });
 
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log('user: ', user);
-        const dbFireStore = getFirestore(app);
-
-         // check role predigtedit
-        const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
-        console.log('User Data: ', userDoc.data());
-        if (userDoc.exists() && userDoc.data().roles && userDoc.data().roles.includes('predigtedit')) {
-          predigtEdit = true;        
-        }
-       
-      }
-    });
+    // Auth initialisieren – Rollencheck reaktiv via Store
+    initAuth();
   });
+
+  // Reaktiv: Rollencheck sobald User bekannt
+  $: if ($currentUser) {
+    checkPredigtEditRole($currentUser);
+  }
+
+  const checkPredigtEditRole = async (user) => {
+    const app = initAppCheck();
+    const dbFireStore = getFirestore(app);
+    const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
+    console.log('User Data: ', userDoc.data());
+    if (userDoc.exists() && userDoc.data().roles && userDoc.data().roles.includes('predigtedit')) {
+      predigtEdit = true;
+    }
+  };
 
   function submitForm() {
     console.log('submit form');

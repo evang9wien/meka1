@@ -2,9 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
-const secret = import.meta.env.PUBLIC_FIREBASE_API_KEY;
 const myDevMode = import.meta.env.PUBLIC_MY_DEV_MODE;
-// console.log("Secret:", secret);
 console.log("DevMode:", myDevMode);
 
 const firebaseConfig = {
@@ -22,16 +20,22 @@ export { firebaseConfig };
 
 const firebaseApp = initializeApp(firebaseConfig);
 
-// AppCheck nicht sofort initialisieren, sondern als Funktion exportieren
+// AppCheck wird nur einmal initialisiert (Guard gegen Mehrfachaufruf)
+let appCheckInitialized = false;
+
 export function initAppCheck() {
   if (typeof window === "undefined") {
     // Läuft im SSR → abbrechen
-    return null;
+    return firebaseApp;
   }
 
+  if (appCheckInitialized) {
+    return firebaseApp;
+  }
+  appCheckInitialized = true;
+
   if (myDevMode) {
-    // Lokale Entwicklung: Debug Provider
-    // Muss im Browser gesetzt werden
+    // Debug-Token muss VOR initializeAppCheck gesetzt werden
     self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
     console.log("AppCheck im Debug-Modus");
   }
@@ -40,6 +44,7 @@ export function initAppCheck() {
     provider: new ReCaptchaV3Provider("6LfUBc8rAAAAABuA5imvRrJ7ofxm6Y9J1wd1bcDv"),
     isTokenAutoRefreshEnabled: true
   });
+
   return firebaseApp;
 }
 

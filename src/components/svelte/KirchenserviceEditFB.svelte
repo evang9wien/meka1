@@ -15,15 +15,14 @@
 
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
-  import { getAuthHeader, isUserAuth } from './auth.js';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
   import { getUrl } from './url/url.js';
 
   import LoginSimple from './auth/LoginSimpleModal.svelte';
-  import { initAppCheck } from "./firebase/firebase.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+  import { initAuth, currentUser, authReady } from './stores/authStore.js';
+  import { initAppCheck } from './firebase/firebase.js';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
@@ -44,10 +43,14 @@
   let members;
   let selectedmember;
   // let mySnackbar;
-  let userAuth = false;
   let dbRealtime;
-  let auth = false;
   let popupSimpleLogin = true;
+  let dataLoaded = false;
+
+  onMount(() => {
+    // Auth wird NICHT über Firebase für Kirchenservice genutzt (Dummy-Login bleibt bis Massnahme 3)
+    // initAuth() wird NICHT aufgerufen – login() wird via callback() des Dummy-Logins ausgelöst
+  });
 
   const loadkirchenservice = () => {
     popupSpinnerModal = true;
@@ -76,23 +79,14 @@
   };
 
   const callback = () => {
-    console.log('Auth:', auth);
+    console.log('Dummy-Login: Callback');
     popupSimpleLogin = false;
     login();
   };
 
   const login = async () => {
-    // onMount(async () => {
-    const app = initAppCheck();    
-    // auth = getAuth(app);
-    // onAuthStateChanged(auth, async (user) => {
-    //   if (!user) {
-    //     popupFireBaseLogin = true;
-    //     return;
-    //   } else {
-    //     userAuth = true;
-    //   }
-    userAuth = true;
+    const app = initAppCheck();
+    let userAuth = true;
     dbRealtime = getDatabase(app);
 
     popupSpinnerModal = true;
@@ -124,7 +118,6 @@
         });
       console.log('Mitarbeiter: ', members);
     }
-    // });
   };
 
   const formatDate = (date) => {
@@ -219,7 +212,7 @@
   };
 </script>
 
-{#if userAuth && !popupSpinnerModal}
+{#if !popupSimpleLogin && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Kirchenserviceplan Eintragung</h2>
@@ -325,4 +318,4 @@
 {/if}
 <WaitPopup {popupSpinnerModal} message="kirchenserviceplan wird neu geladen." />
 <!-- <LoginWarn {popupUserAuthModal} /> -->
-<LoginSimple {popupSimpleLogin} {auth} {callback} />
+<LoginSimple {popupSimpleLogin} auth={false} {callback} />

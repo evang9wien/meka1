@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import AdminUsers from '~/components/svelte/AdminUsersFB.svelte';
+
+const metadata = {
+  title: 'Benutzerverwaltung',
+};
+---
+
+<Layout metadata={metadata}>
+  <AdminUsers client:load />
+</Layout>

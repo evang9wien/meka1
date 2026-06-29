@@ -14,14 +14,13 @@
 
   import { openMp3, stopMp3 } from './mp3.js';
   import { openPdf } from './pdf.js';
-  import { getAuthHeader, isUserAuth } from './auth.js';
   import { comboReihenfolge } from './combo/combo.js';
   import { getUrl } from './url/url.js';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAppCheck } from "./firebase/firebase.js";
+  import { initAuth, currentUser, authReady } from './stores/authStore.js';
+  import { initAppCheck } from './firebase/firebase.js';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+  import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
   import {
     getDatabase,
@@ -44,69 +43,55 @@
   let liedtitelDlg;
   let response = 'Nothing yet.';
 
-  let userAuth;
   let popupSpinnerModal = false;
-  let popupUserAuthModal = false;
   const yearNow = new Date().getFullYear();
 
   let storage;
-  let auth;
   let dbFireStore;
   let dbRealtime;
-  let popupFireBaseLogin = false;
   let alleLieder;
+  let dataLoaded = false;
 
-  onMount(async () => {
-    const app = initAppCheck();
-    auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        console.log('No Login');
-        popupFireBaseLogin = true;
-        return;
-      }
-
-      console.log('User Auth');
-      userAuth = true;
-      storage = getStorage(app);
-      dbFireStore = getFirestore(app);
-      popupSpinnerModal = true;
-
-      // console.log('Temine: ', dbRef);
-
-      const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-      let comboLieder = [];
-      for (const [key, value] of Object.entries(liederGes.data())) {
-        comboLieder.push({ name: value, value: key, ID: key });
-      }
-
-      comboLieder = comboLieder.map((cl) => ({ ...cl, Aktiv: 1 }));
-      const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-      const nichtcomboLieder = [];
-      for (const [key, value] of Object.entries(liederNichtGes.data())) {
-        nichtcomboLieder.push({ name: value, value: key, ID: key });
-      }
-
-      alleLieder = comboLieder.concat(nichtcomboLieder);
-      alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
-
-      console.log('Alle Lieder: ', alleLieder);
-
-      dbRealtime = getDatabase(app);
-
-      loadLieder({ value: yearNow });
-
-      // popupSpinnerModal = true;
-      // userAuth = await isUserAuth();
-      // if (!userAuth) {
-      //   popupUserAuthModal = true;
-      //   return;
-      // }
-      // loadLieder({ value: yearNow });
-
-      popupSpinnerModal = false;
-    });
+  onMount(() => {
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    loadData($currentUser);
+  }
+
+  const loadData = async (user) => {
+    console.log('User Auth');
+    const app = initAppCheck();
+    storage = getStorage(app);
+    dbFireStore = getFirestore(app);
+    popupSpinnerModal = true;
+
+    const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+    let comboLieder = [];
+    for (const [key, value] of Object.entries(liederGes.data())) {
+      comboLieder.push({ name: value, value: key, ID: key });
+    }
+
+    comboLieder = comboLieder.map((cl) => ({ ...cl, Aktiv: 1 }));
+    const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
+    const nichtcomboLieder = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data())) {
+      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    }
+
+    alleLieder = comboLieder.concat(nichtcomboLieder);
+    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
+
+    console.log('Alle Lieder: ', alleLieder);
+
+    dbRealtime = getDatabase(app);
+    loadLieder({ value: yearNow });
+
+    popupSpinnerModal = false;
+  };
 
   const loadLieder = (year) => {
     let y = year.value ? year.value : year;
@@ -199,7 +184,7 @@
   }
 </script>
 
-{#if userAuth && !popupSpinnerModal}
+{#if $currentUser && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Chronik</h2>
@@ -329,4 +314,4 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederchronik wird geladen." />
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />

@@ -14,7 +14,6 @@
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
 
-  import { getAuthHeader, isUserAuth } from './auth.js';
   import WaitPopup from './popup/WaitPopup.svelte';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import { openMp3, stopMp3 } from './mp3.js';
@@ -22,11 +21,10 @@
 
   import { getUrl } from './url/url.js';
   import { comboReihenfolge } from './combo/combo.js';
-  
-  import { initAppCheck } from "./firebase/firebase.js";
-  
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAppCheck } from './firebase/firebase.js';
+
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFunctions, httpsCallable } from "firebase/functions";
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
@@ -47,22 +45,18 @@
   let termine;
 
   let verantwortlich;
-  let userAuth;
-
-  let popupUserAuthModal = false;
   let popupSpinnerModal = false;
-  let popupFireBaseLogin = false;
   let liedTextModal = false;
   let liedText;
   let liedTextTitel;
 
   let storage;
-  let auth;
   let dbFireStore;
 
   let showComboProben = false;
 
   let alleTermine;
+  let dataLoaded = false;
 
   const loadLieder = async (termin) => {
     console.log('Selected Termin: ', termin);
@@ -112,57 +106,42 @@
     }
   };
 
-  onMount(async () => {
-    console.log('FireBase');    
-    const app = initAppCheck();
-    auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        popupFireBaseLogin = true;
-        return;
-      }
-
-      
-      // testUrl(app);
-      
-
-      storage = getStorage(app);
-
-      console.log('onMount');
-      popupSpinnerModal = true;
-      userAuth = true;
-      // userAuth = await isUserAuth();
-      // if (!userAuth) {
-      //   popupUserAuthModal = true;
-      //   return;
-      // }
-
-      /// load firebase liederauswahl
-      console.log('Read Termine');
-      dbFireStore = getFirestore(app);
-
-      const dbRealtime = getDatabase(app);
-
-      const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
-      const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
-      // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-      const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
-      // console.log('Temine: ', dbRef);
-
-      onValue(dbRef, async (snapshot) => {
-        if (snapshot) {
-          alleTermine = Object.values(snapshot.val()).map((t) => ({
-            ...t,
-            name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
-            value: t.Termin,
-          }));
-          console.log('Alle Termine: ', alleTermine);
-          handleTermine();
-        }
-      });
-    });
+  onMount(() => {
+    console.log('FireBase');
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    loadData($currentUser);
+  }
+
+  const loadData = (user) => {
+    const app = initAppCheck();
+    storage = getStorage(app);
+    console.log('onMount');
+    popupSpinnerModal = true;
+    dbFireStore = getFirestore(app);
+
+    const dbRealtime = getDatabase(app);
+    const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
+    const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
+
+    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+
+    onValue(dbRef, async (snapshot) => {
+      if (snapshot) {
+        alleTermine = Object.values(snapshot.val()).map((t) => ({
+          ...t,
+          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+          value: t.Termin,
+        }));
+        console.log('Alle Termine: ', alleTermine);
+        handleTermine();
+      }
+    });
+  };
 
   const handleTermine = () => {
     window.setTimeout(() => {      
@@ -200,7 +179,18 @@
   };
 </script>
 
-{#if userAuth && !popupSpinnerModal}
+<!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
+{#if $currentUser && !$userRoles.includes('combo') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
+  <div class="flex justify-center p-8">
+    <div class="border-2 border-red-600 bg-red-50 rounded-lg p-8 text-center">
+      <p class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</p>
+      <p>Diese Seite ist nur für Combo-Mitglieder zugänglich.</p>
+    </div>
+  </div>
+{/if}
+
+<!-- ═══════ HAUPTINHALT ═══════ -->
+{#if $currentUser && ($userRoles.includes('combo') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <div class="space-x-4 mb-4">
@@ -291,8 +281,7 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
-<!--<LoginWarn {popupUserAuthModal} />-->
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
 <Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
 
 <style>

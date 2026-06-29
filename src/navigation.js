@@ -190,9 +190,13 @@ export const footerData = {
           href: getPermalink('/combo/comboliederchronikFBpage'),
         },
         {
-          text: 'Admin',
+          text: 'Termin-Admin',
           href: getPermalink('/combo/comboTerminCopyFBpage'),
-        }
+        },
+        {
+          text: 'Benutzerverwaltung',
+          href: getPermalink('/combo/adminUserspage'),
+        },
       ],
     },
     {

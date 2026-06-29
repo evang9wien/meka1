@@ -28,9 +28,9 @@
   import { getUrl } from './url/url.js';
 
   import { comboReihenfolge } from './combo/combo.js';
-  import { initAppCheck } from "./firebase/firebase.js";
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAppCheck } from './firebase/firebase.js';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
@@ -49,15 +49,11 @@
 
   let popupModal = false;
   let popupSpinnerModal = false;
-  let popupUserAuthModal = false;
-  let popupFireBaseLogin = false;
   let selectedTermin;
-  // let lastSelectedTermin;
 
   let termine;
 
   let verantwortlich;
-  let userAuth;
 
   // Entspricht der DB Tabelle lied_reihenfolge
   let liederReihenfolgeDBTemplate;
@@ -71,7 +67,6 @@
   let alleLieder;
 
   let storage;
-  let auth;
   let dbFireStore;
   let dbRealtime;
 
@@ -131,72 +126,69 @@
     sendEmailHrefRefresh();
   };
 
-  onMount(async () => {
+  let dataLoaded = false;
+
+  onMount(() => {
     console.log('FireBase');
-    const app = initAppCheck();
-    auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        popupFireBaseLogin = true;
-        return;
-      }
-
-      storage = getStorage(app);
-
-      console.log('onMount');
-
-      userAuth = true;
-
-      popupSpinnerModal = true;
-      dbFireStore = getFirestore(app);
-      // const docRef = ;
-      const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-      comboLieder = [];
-      for (const [key, value] of Object.entries(liederGes.data())) {
-        comboLieder.push({ name: value, value: key, ID: key });
-      }
-      comboLieder = comboLieder.sort((a, b) => a.name.localeCompare(b.name));
-      // console.log(comboLieder);
-
-      const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-      const nichtcomboLieder = [];
-      for (const [key, value] of Object.entries(liederNichtGes.data())) {
-        nichtcomboLieder.push({ name: value, value: key, ID: key });
-      }
-
-      alleLieder = comboLieder.concat(nichtcomboLieder);
-      alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
-      // console.log(alleLieder);
-
-      liederReihenfolgeDBTemplate = comboReihenfolge;
-      console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
-      dbRealtime = getDatabase(app);
-
-      const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
-      const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
-      // console.log('Now: ', now.format('YYYY-MM-DD'));
-
-      const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
-      // console.log('Temine: ', dbRef);
-
-      onValue(dbRef, async (snapshot) => {
-        if (snapshot) {
-          if (dbRealtimeOnce) return;
-          alleTermine = Object.values(snapshot.val()).map((t) => ({
-            ...t,
-            name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
-            value: t.Termin,
-          }));
-          handleTermine();
-
-          popupSpinnerModal = false;
-
-          console.log('Listener in onMount entfernen');
-          off(dbRef);
-        }
-      });
-    });
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    loadData($currentUser);
+  }
+
+  const loadData = async (user) => {
+    const app = initAppCheck();
+    storage = getStorage(app);
+
+    console.log('onMount');
+
+    popupSpinnerModal = true;
+    dbFireStore = getFirestore(app);
+    const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
+    comboLieder = [];
+    for (const [key, value] of Object.entries(liederGes.data())) {
+      comboLieder.push({ name: value, value: key, ID: key });
+    }
+    comboLieder = comboLieder.sort((a, b) => a.name.localeCompare(b.name));
+
+    const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
+    const nichtcomboLieder = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data())) {
+      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    }
+
+    alleLieder = comboLieder.concat(nichtcomboLieder);
+    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
+
+    liederReihenfolgeDBTemplate = comboReihenfolge;
+    console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
+    dbRealtime = getDatabase(app);
+
+    const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
+    const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
+
+    const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+
+    onValue(dbRef, async (snapshot) => {
+      if (snapshot) {
+        if (dbRealtimeOnce) return;
+        alleTermine = Object.values(snapshot.val()).map((t) => ({
+          ...t,
+          name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
+          value: t.Termin,
+        }));
+        handleTermine();
+
+        popupSpinnerModal = false;
+
+        console.log('Listener in onMount entfernen');
+        off(dbRef);
+      }
+    });
+  };
 
   const handleTermine = () => {
     window.setTimeout(() => {
@@ -411,7 +403,21 @@
   };
 </script>
 
-{#if userAuth && !popupSpinnerModal}
+<!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
+{#if $currentUser && !$userRoles.includes('liederauswahledit') && !$userRoles.includes('admin') && !popupSpinnerModal}
+  <div class="flex justify-center p-8">
+    <Card class="border-2 border-red-600 bg-red-50">
+      <div class="p-8">
+        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <p>Diese Seite ist nur für Benutzer mit der Rolle „Liederauswahl Edit" zugänglich.</p>
+      </div>
+    </Card>
+  </div>
+{/if}
+
+<!-- ═══════ HAUPTINHALT ═══════ -->
+{#if $currentUser && ($userRoles.includes('liederauswahledit') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <div>
@@ -551,4 +557,4 @@
 </Modal>
 
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />

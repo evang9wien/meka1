@@ -15,8 +15,7 @@
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
   import { getUrl } from './url/url.js';
   
-  import { initAppCheck } from "./firebase/firebase.js";
-  import { getAuth, onAuthStateChanged } from 'firebase/auth';
+  import { initAuth, currentUser, authReady } from './stores/authStore.js';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import {
     getDatabase,
@@ -27,65 +26,53 @@
     startAt,
     endAt,
   } from 'firebase/database';
+  import { initAppCheck } from './firebase/firebase.js';
 
   let termine;
   let popupSpinnerModal = true;
   let showComboProben = false;
-  let userAuth = false;
-  let auth;
-  let popupFireBaseLogin = false;
-  onMount(() => {
-    console.log('FireBase');    
-    const app = initAppCheck();
-    auth = getAuth(app);
-    
-    // Subscription für Firebase Realtime Database
-    let termineSubscription = null;
-    
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        popupFireBaseLogin = true;
-        return;
-      }
-      
-      userAuth = true;
-      popupSpinnerModal = true;
-      
-      // Cleanup vorheriger Subscription
-      if (termineSubscription) {
-        termineSubscription();
-      }
-      
-      const dbRealtime = getDatabase(app);
-      const fromDate = dayjs().format('YYYY-MM-DD');
-      
-      // Optimierte Query mit Index
-      const dbRef = query(
-        dbref(dbRealtime, 'combo/termine'), 
-        orderByKey(), 
-        startAt(fromDate)
-      );
 
-      // Effizientere Datenverarbeitung mit Subscription
-      termineSubscription = onValue(dbRef, (snapshot) => {
-        if (snapshot?.val()) {
-          // Verarbeite Daten in einem Durchgang
-          termine = Object.entries(snapshot.val())
-            .map(([_, t]) => ({
-              ...t,
-              name: `${t.Termin}${t.Abendmahl === '1' ? ' (Y)' : ''}`,
-              value: t.Termin
-            }));
-          
-          console.log('Termine geladen:', termine.length);
-          popupSpinnerModal = false;
-        }
-      }, (error) => {
-        console.error('Fehler beim Laden der Termine:', error);
-        popupSpinnerModal = false;
-      });
-    });
+  // Subscription für Firebase Realtime Database
+  let termineSubscription = null;
+
+  onMount(() => {
+    console.log('FireBase');
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden
+  $: if ($currentUser && !termineSubscription) {
+    loadTermine();
+  }
+
+  const loadTermine = () => {
+    popupSpinnerModal = true;
+    const app = initAppCheck();
+    const dbRealtime = getDatabase(app);
+    const fromDate = dayjs().format('YYYY-MM-DD');
+
+    const dbRef = query(
+      dbref(dbRealtime, 'combo/termine'),
+      orderByKey(),
+      startAt(fromDate)
+    );
+
+    termineSubscription = onValue(dbRef, (snapshot) => {
+      if (snapshot?.val()) {
+        termine = Object.entries(snapshot.val())
+          .map(([_, t]) => ({
+            ...t,
+            name: `${t.Termin}${t.Abendmahl === '1' ? ' (Y)' : ''}`,
+            value: t.Termin
+          }));
+        console.log('Termine geladen:', termine.length);
+        popupSpinnerModal = false;
+      }
+    }, (error) => {
+      console.error('Fehler beim Laden der Termine:', error);
+      popupSpinnerModal = false;
+    });
+  };
 
   let formatDate = (date) => {
     dayjs.locale('de');
@@ -93,7 +80,7 @@
   };
 </script>
 
-{#if userAuth && !popupSpinnerModal}
+{#if $currentUser && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
@@ -141,4 +128,4 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Comboplan wird geladen." />
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />

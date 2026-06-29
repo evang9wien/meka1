@@ -15,8 +15,6 @@
 
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
-  import { getAuthHeader, isUserAuth } from './auth.js';
-
   import TerminAdmin from './calendar/TerminAdmin.svelte';
 
   import WaitPopup from './popup/WaitPopup.svelte';
@@ -25,8 +23,9 @@
   import { getUrl } from './url/url.js';
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAppCheck } from "./firebase/firebase.js";  
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
+  import { initAppCheck } from './firebase/firebase.js';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
@@ -46,18 +45,13 @@
   let termine;
   let members;
   let selectedmember;
-  // let mySnackbar;
-  let userAuth = false;
   let dbRealtime;
-  let auth;
-  let popupFireBaseLogin = false;
 
-  let comboAdminRole = false;
   let comboAdminModus = false;
 
-  let terminAdminRole = false;
-
   let showComboProben = false;
+
+  let dataLoaded = false;
 
   const loadCombo = () => {
     popupSpinnerModal = true;
@@ -65,10 +59,7 @@
 
     const fromDate = dayjs().format('YYYY-MM-DD');
 
-    // console.log('Now: ', now.format('YYYY-MM-DD'));
-
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
-    // console.log('Temine: ', dbRef);
 
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
@@ -85,52 +76,39 @@
     });
   };
 
-  onMount(async () => {
-    const app = initAppCheck();
-    auth = getAuth(app);
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        popupFireBaseLogin = true;
-        return;
-      } else {
-        userAuth = true;
-      }
-
-      dbRealtime = getDatabase(app);
-
-      popupSpinnerModal = true;
-      loadCombo();
-
-      const dbFireStore = getFirestore(app);
-      const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
-      const docSnap = await getDoc(maRef);
-      if (docSnap.exists()) {
-        members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-        members = members
-          .map((t) => ({
-            ...t,
-            name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-            value: t.ShortName,
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name));
-        // rolle prüfen
-        console.log('Mitarbeiter: ', members);
-        console.log('User: ', user.providerData[0].email);
-        let loginUser = members.filter((m) => m.Email == user.providerData[0].email);
-        if (loginUser.length > 0) {
-          console.log('LoginUser: ', loginUser[0]);
-          if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'comboadmin').length > 0) {
-            console.log('Role: ', loginUser[0].role);
-            comboAdminRole = true;
-          }
-          if (loginUser[0].role && loginUser[0].role.filter((r) => r == 'terminadmin').length > 0) {
-            console.log('Role: ', loginUser[0].role);
-            terminAdminRole = true;
-          }
-        }
-      }
-    });
+  onMount(() => {
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    loadData($currentUser);
+  }
+
+  const loadData = async (user) => {
+    const app = initAppCheck();
+    dbRealtime = getDatabase(app);
+
+    popupSpinnerModal = true;
+    loadCombo();
+
+    // Mitgliederliste für Dropdown laden
+    const dbFireStore = getFirestore(app);
+    const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
+    const docSnap = await getDoc(maRef);
+    if (docSnap.exists()) {
+      members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
+      members = members
+        .map((t) => ({
+          ...t,
+          name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
+          value: t.ShortName,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      console.log('Mitarbeiter: ', members);
+    }
+  };
 
   let formatDate = (date) => {
     dayjs.locale('de');
@@ -239,7 +217,21 @@
   };
 </script>
 
-{#if userAuth && !popupSpinnerModal}
+<!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
+{#if $currentUser && !$userRoles.includes('combo') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
+  <div class="flex justify-center p-8">
+    <Card class="border-2 border-red-600 bg-red-50">
+      <div class="p-8">
+        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <p>Diese Seite ist nur für Combo-Mitglieder zugänglich.</p>
+      </div>
+    </Card>
+  </div>
+{/if}
+
+<!-- ═══════ HAUPTINHALT ═══════ -->
+{#if $currentUser && ($userRoles.includes('combo') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
@@ -255,7 +247,7 @@
           Termin nochmal auswählen <br />und bestätigen.</Tooltip
         >
       </div>
-      {#if comboAdminRole}
+      {#if $userRoles.includes('comboadmin') || $userRoles.includes('admin')}
         <div class="flex flex-row p-4">
           Comboplan Admin-Modus:&nbsp;
           <Checkbox bind:checked={comboAdminModus} />
@@ -365,5 +357,4 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="Comboplan wird neu geladen." />
-<!-- <LoginWarn {popupUserAuthModal} /> -->
-<LoginFirebase {popupFireBaseLogin} {auth} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
