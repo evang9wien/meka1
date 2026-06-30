@@ -9,7 +9,7 @@
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { initAppCheck } from './firebase/firebase.js';
-  import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+  import { getFirestore, collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
   import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
   // ─── Alle verfügbaren Rollen mit Beschreibung ─────────────────────────────
@@ -88,16 +88,20 @@
 
   // ─── Benutzer bearbeiten (Rollen + Namen) ─────────────────────────────────
 
+  let editUid = '';
   let editVName = '';
   let editFName = '';
   let editEmail = '';
+  let editShortName = '';
 
   const openEdit = (user) => {
     editUser = user;
+    editUid = user.uid;
     editRoles = [...user.roles];
     editVName = user.VName ?? '';
     editFName = user.FName ?? '';
     editEmail = user.email ?? '';
+    editShortName = user.ShortName ?? '';
     saveStatus = '';
     editModalOpen = true;
   };
@@ -112,17 +116,30 @@
 
   const saveUser = async () => {
     saveStatus = 'saving';
+    const newUidTrimmed = editUid.trim();
+    const data = {
+      roles: editRoles,
+      VName: editVName.trim(),
+      FName: editFName.trim(),
+      email: editEmail.trim(),
+      ShortName: editShortName.trim(),
+    };
     try {
-      await updateDoc(doc(dbFireStore, 'accounts', editUser.uid), {
-        roles: editRoles,
-        VName: editVName.trim(),
-        FName: editFName.trim(),
-        email: editEmail.trim(),
-      });
-      users = users.map(u => u.uid === editUser.uid
-        ? { ...u, roles: editRoles, VName: editVName.trim(), FName: editFName.trim(), email: editEmail.trim() }
-        : u
-      );
+      if (newUidTrimmed !== editUser.uid) {
+        // UID geändert: altes Dokument löschen, neues anlegen
+        await setDoc(doc(dbFireStore, 'accounts', newUidTrimmed), data);
+        await deleteDoc(doc(dbFireStore, 'accounts', editUser.uid));
+        users = users.map(u => u.uid === editUser.uid
+          ? { ...u, uid: newUidTrimmed, ...data }
+          : u
+        );
+      } else {
+        await updateDoc(doc(dbFireStore, 'accounts', editUser.uid), data);
+        users = users.map(u => u.uid === editUser.uid
+          ? { ...u, ...data }
+          : u
+        );
+      }
       editModalOpen = false;
       showToast(`${editVName.trim() || editEmail.trim()} gespeichert.`, 'green');
     } catch (e) {
@@ -133,11 +150,14 @@
 
   // ─── Neuen User anlegen ───────────────────────────────────────────────────
 
+  let newShortName = '';
+
   const openNew = () => {
     newUid = '';
     newEmail = '';
     newVName = '';
     newFName = '';
+    newShortName = '';
     newRoles = [];
     newStatus = '';
     newModalOpen = true;
@@ -152,21 +172,27 @@
   };
 
   const createUser = async () => {
-    if (!newUid.trim()) return;
     newStatus = 'saving';
     try {
-      // Prüfen ob UID schon als Dokument existiert
-      if (users.find(u => u.uid === newUid.trim())) {
-        newStatus = 'exists';
-        return;
-      }
-      // Firestore-Dokument unter der echten UID anlegen
-      await setDoc(doc(dbFireStore, 'accounts', newUid.trim()), {
+      const data = {
         email: newEmail.trim(),
         VName: newVName.trim(),
         FName: newFName.trim(),
+        ShortName: newShortName.trim(),
         roles: newRoles,
-      });
+      };
+      if (newUid.trim()) {
+        // Prüfen ob UID schon als Dokument existiert
+        if (users.find(u => u.uid === newUid.trim())) {
+          newStatus = 'exists';
+          return;
+        }
+        // Firestore-Dokument unter der angegebenen UID anlegen
+        await setDoc(doc(dbFireStore, 'accounts', newUid.trim()), data);
+      } else {
+        // Keine UID angegeben → auto-generierte Firestore-ID verwenden
+        await addDoc(collection(dbFireStore, 'accounts'), data);
+      }
       newStatus = 'ok';
       await loadUsers();
       setTimeout(() => { newModalOpen = false; }, 1000);
@@ -277,7 +303,9 @@
           {#each users as user}
             <TableBodyRow>
               <TableBodyCell>
-                <div class="font-medium text-gray-900 dark:text-white">{fullName(user)}</div>
+                <div class="font-medium text-gray-900 dark:text-white">
+                  {fullName(user)}{#if user.ShortName}&nbsp;<span class="text-gray-400 font-normal">({user.ShortName})</span>{/if}
+                </div>
                 <div class="text-xs text-gray-500">{user.email || '—'}</div>
                 <div class="text-xs text-gray-400 font-mono">{user.uid}</div>
               </TableBodyCell>
@@ -316,8 +344,14 @@
 <!-- ═══════ MODAL: BENUTZER BEARBEITEN ═══════ -->
 <Modal title="Benutzer bearbeiten" bind:open={editModalOpen} size="md">
   {#if editUser}
-    <div class="mb-4 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs font-mono text-gray-400">
-      UID: {editUser.uid}
+    <div class="mb-4">
+      <Label for="edit-uid" class="mb-1 text-xs text-gray-500">Firebase UID</Label>
+      <Input
+        id="edit-uid"
+        bind:value={editUid}
+        placeholder="Firebase UID"
+        class="font-mono text-sm"
+      />
     </div>
 
     <div class="mb-3 grid grid-cols-2 gap-3">
@@ -331,9 +365,15 @@
       </div>
     </div>
 
-    <div class="mb-5">
-      <Label for="edit-email" class="mb-1">E-Mail</Label>
-      <Input id="edit-email" type="email" bind:value={editEmail} placeholder="name@evang9.wien" />
+    <div class="mb-5 grid grid-cols-2 gap-3">
+      <div>
+        <Label for="edit-email" class="mb-1">E-Mail</Label>
+        <Input id="edit-email" type="email" bind:value={editEmail} placeholder="name@evang9.wien" />
+      </div>
+      <div>
+        <Label for="edit-shortname" class="mb-1">ShortName</Label>
+        <Input id="edit-shortname" bind:value={editShortName} placeholder="z.B. EP" />
+      </div>
     </div>
 
     <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Rollen</p>
@@ -394,9 +434,7 @@
   </div>
 
   <div class="mb-3">
-    <Label for="new-uid" class="mb-1">
-      Firebase UID <span class="text-red-500">*</span>
-    </Label>
+    <Label for="new-uid" class="mb-1">Firebase UID</Label>
     <Input
       id="new-uid"
       bind:value={newUid}
@@ -419,9 +457,15 @@
     </div>
   </div>
 
-  <div class="mb-5">
-    <Label for="new-email" class="mb-1">E-Mail</Label>
-    <Input id="new-email" type="email" bind:value={newEmail} placeholder="name@evang9.wien" />
+  <div class="mb-5 grid grid-cols-2 gap-3">
+    <div>
+      <Label for="new-email" class="mb-1">E-Mail</Label>
+      <Input id="new-email" type="email" bind:value={newEmail} placeholder="name@evang9.wien" />
+    </div>
+    <div>
+      <Label for="new-shortname" class="mb-1">ShortName</Label>
+      <Input id="new-shortname" bind:value={newShortName} placeholder="z.B. EP" />
+    </div>
   </div>
 
   <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Rollen</p>
@@ -463,7 +507,7 @@
     <GradientButton
       color="cyanToBlue"
       onclick={createUser}
-      disabled={!newUid.trim() || newStatus === 'saving' || newStatus === 'ok'}
+      disabled={newStatus === 'saving' || newStatus === 'ok'}
     >
       {#if newStatus === 'saving'}<Spinner size={4} class="mr-2" />Anlegen…{:else}Anlegen{/if}
     </GradientButton>

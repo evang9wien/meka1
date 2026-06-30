@@ -23,7 +23,7 @@
   import LoginSimple from './auth/LoginSimpleModal.svelte';
   import { initAuth, currentUser, authReady } from './stores/authStore.js';
   import { initAppCheck } from './firebase/firebase.js';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { getFirestore, collection, getDocs } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -93,31 +93,17 @@
     loadkirchenservice();
 
     const dbFireStore = getFirestore(app);
-    const maRef = doc(dbFireStore, 'mitarbeiter', 'kirchenservice');
-    const docSnap = await getDoc(maRef);
-    if (docSnap.exists()) {
-      members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-      members = members
-        .map((t) => ({
-          ...t,
-          name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-          value: t.ShortName,
-        }))
-        .sort((a, b) => {
-          const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-          const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-
-          // names must be equal
-          return 0;
-        });
-      console.log('Mitarbeiter: ', members);
-    }
+    const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
+    members = accountsSnap.docs
+      .map(d => ({ uid: d.id, ...d.data() }))
+      .filter(a => Array.isArray(a.roles) && a.roles.includes('kirchenservice') && a.ShortName)
+      .map(a => ({
+        ...a,
+        name: [a.VName, a.FName].filter(Boolean).join(' ') + ' (' + a.ShortName + ')',
+        value: a.ShortName,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    console.log('Mitarbeiter (aus accounts): ', members);
   };
 
   const formatDate = (date) => {
