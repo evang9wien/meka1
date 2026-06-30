@@ -27,6 +27,10 @@ export const currentUser = writable(null);
  *  Leer-Array wenn kein User eingeloggt oder kein roles-Feld vorhanden. */
 export const userRoles = writable(/** @type {string[]} */ ([]));
 
+/** Profilfelder aus accounts/{uid}: { VName, FName, email }.
+ *  Null solange kein User eingeloggt. */
+export const userProfile = writable(/** @type {{ VName: string, FName: string, email: string } | null} */ (null));
+
 /** Wird true, sobald onAuthStateChanged seinen ersten Callback ausgeführt hat.
  *  Solange false: Auth-Status ist noch unbekannt → noch keinen Login-Dialog zeigen. */
 export const authReady = writable(false);
@@ -61,18 +65,21 @@ export function initAuth() {
     if (user) {
       try {
         const snap = await getDoc(doc(db, 'accounts', user.uid));
-        const roles = snap.exists() ? (snap.data().roles ?? []) : [];
+        const data = snap.exists() ? snap.data() : {};
+        const roles = data.roles ?? [];
         // combolist impliziert combo
         const effectiveRoles = roles.includes('combolist') && !roles.includes('combo')
           ? [...roles, 'combo']
           : roles;
         userRoles.set(effectiveRoles);
+        userProfile.set({ VName: data.VName ?? '', FName: data.FName ?? '', email: data.email ?? user.email ?? '' });
       } catch (e) {
         console.error('authStore: Fehler beim Laden der Rollen:', e);
         userRoles.set([]);
       }
     } else {
       userRoles.set([]);
+      userProfile.set(null);
     }
 
     authReady.set(true);

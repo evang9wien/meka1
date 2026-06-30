@@ -4,6 +4,7 @@ import Logo from '~/components/Logo.astro';
 import ToggleTheme from '~/components/common/ToggleTheme.astro';
 import ToggleMenu from '~/components/common/ToggleMenu.astro';
 import Button from '~/components/ui/Button.astro';
+import UserMenuFB from '~/components/svelte/UserMenuFB.svelte';
 
 import { getHomePermalink } from '~/utils/permalinks';
 import { trimSlash, getAsset } from '~/utils/permalinks';
@@ -31,6 +32,7 @@ export interface Props {
   isFullWidth?: boolean;
   showToggleTheme?: boolean;
   showRssFeed?: boolean;
+  showUserMenu?: boolean;
   position?: string;
 }
 
@@ -43,6 +45,7 @@ const {
   isFullWidth = false,
   showToggleTheme = false,
   showRssFeed = false,
+  showUserMenu = false,
   position = 'center',
 } = Astro.props;
 
@@ -128,7 +131,8 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       ]}
     >
       <div class="items-center flex justify-between w-full lg:w-auto">
-        <div class="flex">
+        <div class="flex items-center">
+          {showUserMenu && <UserMenuFB client:load />}
           {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 lg:w-5 lg:h-5 lg:inline-block" />}
           {
             showRssFeed && (

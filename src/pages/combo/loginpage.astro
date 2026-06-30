@@ -9,5 +9,13 @@ const loginReload = false;
 ---
 
 <Layout metadata={metadata}>
-  <LoginFB client:load {loginReload} />
+  <div class="flex justify-center items-start min-h-[60vh] pt-12 px-4">
+    <div class="w-full max-w-sm border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg bg-white dark:bg-gray-800">
+      <div class="px-6 pt-6 pb-2 border-b border-gray-200 dark:border-gray-700">
+        <h1 class="text-lg font-bold text-gray-900 dark:text-white">Mitarbeiter-Login</h1>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bitte anmelden um fortzufahren.</p>
+      </div>
+      <LoginFB client:load {loginReload} />
+    </div>
+  </div>
 </Layout>

@@ -3,7 +3,6 @@
   import axios from 'axios';
   import { Button, GradientButton } from 'flowbite-svelte';
   import { Label, Input } from 'flowbite-svelte';
-  import { Card } from 'flowbite-svelte';
   import { Alert } from 'flowbite-svelte';
   import { InfoCircleSolid } from 'flowbite-svelte-icons';
   import { initAppCheck } from "./../firebase/firebase.js";
@@ -60,41 +59,37 @@
   };
 </script>
 
-<div class="flex justify-center">
-  <Card class="mb-6">
-    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Login für Mitarbeiter</h5>
-    <!-- <Title>Login</Title> -->
-    {#if !loginSucess}
-      {#if loginError}
-        <Alert color="red">
-          <InfoCircleSolid slot="icon" class="w-4 h-4" />
-          <div class="font-medium">Login Fehler!</div>
-          E-Mail oder Passwort ist fehlerhaft.
-        </Alert>
-      {/if}
-      <div class="mb-6">
-        <Label for="default-input-n" class="block mb-2">E-Mail</Label>
-        <Input bind:value={name} id="default-input-n" placeholder="E-Mail" />
-      </div>
-      <div class="mb-6">
-        <Label for="default-input-p" class="block mb-2">Password</Label>
-        <Input bind:value={password} id="default-input-p" type="password" placeholder="Password" />
-      </div>
-      <GradientButton class="mb-6" color="cyanToBlue" onclick={login}>Login</GradientButton>
-      <div>
-        <Button class="text-muted underline dark:text-slate-400 font-medium" onclick={resetPassword}
-          >Passwort vergessen?</Button
-        >
-      </div>
-      <div>
-        {passwordResetMsg}
-      </div>
-    {:else}
-      <Alert color="green">
+<div class="p-6">
+  {#if !loginSucess}
+    {#if loginError}
+      <Alert color="red" class="mb-4">
         <InfoCircleSolid slot="icon" class="w-4 h-4" />
-        <div class="font-medium">Login erfolgreich!</div>
-        Die Seiten im geschützen Bereich können nun geöffnet werden.
+        <div class="font-medium">Login Fehler!</div>
+        E-Mail oder Passwort ist fehlerhaft.
       </Alert>
     {/if}
-  </Card>
+    <div class="mb-3">
+      <Label for="login-email" class="block mb-1 text-sm">E-Mail</Label>
+      <Input bind:value={name} id="login-email" placeholder="name@evang9.wien" type="email" />
+    </div>
+    <div class="mb-4">
+      <Label for="login-pw" class="block mb-1 text-sm">Passwort</Label>
+      <Input bind:value={password} id="login-pw" type="password" placeholder="Passwort" />
+    </div>
+    <GradientButton class="w-full mb-3" color="cyanToBlue" onclick={login}>Anmelden</GradientButton>
+    <div class="text-center">
+      <Button color="light" size="xs" class="text-xs text-gray-500 dark:text-gray-400 underline" onclick={resetPassword}>
+        Passwort vergessen?
+      </Button>
+    </div>
+    {#if passwordResetMsg}
+      <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">{passwordResetMsg}</p>
+    {/if}
+  {:else}
+    <Alert color="green">
+      <InfoCircleSolid slot="icon" class="w-4 h-4" />
+      <div class="font-medium">Login erfolgreich!</div>
+      Die Seiten im geschützen Bereich können nun geöffnet werden.
+    </Alert>
+  {/if}
 </div>
