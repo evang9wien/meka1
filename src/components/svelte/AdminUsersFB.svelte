@@ -115,7 +115,6 @@
     try {
       await updateDoc(doc(dbFireStore, 'accounts', editUser.uid), {
         roles: editRoles,
-        role1: editRoles.includes('combo') ? 'combo' : '',
         VName: editVName.trim(),
         FName: editFName.trim(),
         email: editEmail.trim(),
@@ -167,7 +166,6 @@
         VName: newVName.trim(),
         FName: newFName.trim(),
         roles: newRoles,
-        role1: newRoles.includes('combo') ? 'combo' : '',
       });
       newStatus = 'ok';
       await loadUsers();
@@ -290,13 +288,6 @@
                   {/each}
                   {#if user.roles.length === 0}
                     <span class="text-gray-400 text-xs italic">keine Rollen</span>
-                  {/if}
-                </div>
-                <div class="mt-1 text-xs">
-                  {#if user.role1 === 'combo'}
-                    <Badge color="green" class="text-xs">Storage: combo ✓</Badge>
-                  {:else}
-                    <Badge color="red" class="text-xs">Storage: role1 nicht gesetzt</Badge>
                   {/if}
                 </div>
               </TableBodyCell>

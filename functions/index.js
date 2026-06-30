@@ -136,11 +136,11 @@ export const getAudioUrl = onCall(
             }
 
             const accountData = accountSnap.data();
-            const role = accountData?.role1;
-            console.log(`User role for UID ${uid}:`, role);
+            const roles = accountData?.roles || [];
+            console.log(`User roles for UID ${uid}:`, roles);
 
-            if (role !== "combo") {
-                console.warn(`Permission denied for UID ${uid}, role=${role}`);
+            if (!roles.includes("combo")) {
+                console.warn(`Permission denied for UID ${uid}, roles=${roles}`);
                 throw new HttpsError("permission-denied", "Not allowed");
             }
 
