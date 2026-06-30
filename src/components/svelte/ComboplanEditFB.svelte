@@ -26,7 +26,7 @@
   import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import { initAppCheck } from './firebase/firebase.js';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { getFirestore, getDocs, collection } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -93,21 +93,19 @@
     popupSpinnerModal = true;
     loadCombo();
 
-    // Mitgliederliste für Dropdown laden
+    // Mitgliederliste aus accounts laden (Rolle 'combo', ShortName vorhanden)
     const dbFireStore = getFirestore(app);
-    const maRef = doc(dbFireStore, 'mitarbeiter', 'combo');
-    const docSnap = await getDoc(maRef);
-    if (docSnap.exists()) {
-      members = Object.values(docSnap.data()).filter((m) => m.Active == '1');
-      members = members
-        .map((t) => ({
-          ...t,
-          name: t.VName + ' ' + t.FName + ' (' + t.ShortName + ')',
-          value: t.ShortName,
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name));
-      console.log('Mitarbeiter: ', members);
-    }
+    const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
+    members = accountsSnap.docs
+      .map(d => ({ uid: d.id, ...d.data() }))
+      .filter(a => Array.isArray(a.roles) && a.roles.includes('combo') && a.ShortName)
+      .map(a => ({
+        ...a,
+        name: [a.VName, a.FName].filter(Boolean).join(' ') + ' (' + a.ShortName + ')',
+        value: a.ShortName,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    console.log('Mitarbeiter (aus accounts): ', members);
   };
 
   let formatDate = (date) => {
