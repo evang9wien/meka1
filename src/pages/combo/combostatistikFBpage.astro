@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import ComboStatistik from '~/components/svelte/ComboStatistikFB.svelte';
+
+const metadata = {
+  title: 'Combo Statistik',
+};
+---
+
+<Layout metadata={metadata}>
+  <ComboStatistik client:load />
+</Layout>
