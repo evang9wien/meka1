@@ -87,59 +87,71 @@ const metadata = {
     </Fragment>
   </Features2>
 
-  <!-- ═══ ADMINISTRATION ═══ -->
-  <Features
-    id="administration"
-    tagline="Administration"
-    title="Combo-Admin"
-    columns={2}
-    items={[
-      {
-        title: 'Lieder anlegen &amp; bearbeiten',
-        description: 'Neue Lieder ins Archiv aufnehmen oder bestehende Einträge ändern.',
-        icon: 'tabler:file-music',
-        callToAction: {
-          text: 'Öffnen →',
-          href: getPermalink('/combo/comboliedereditFBpage'),
-        },
-      },
-      {
-        title: 'Liederchronik',
-        description: 'Welche Lieder wurden wann gespielt?',
-        icon: 'tabler:history',
-        callToAction: {
-          text: 'Öffnen →',
-          href: getPermalink('/combo/comboliederchronikFBpage'),
-        },
-      },
-      {
-        title: 'Combo Statistik',
-        description: 'Rangliste der Musiker nach Einsatzhäufigkeit.',
-        icon: 'tabler:chart-bar',
-        callToAction: {
-          text: 'Öffnen →',
-          href: getPermalink('/combo/combostatistikFBpage'),
-        },
-      },
-      {
-        title: 'Termin-Admin',
-        description: 'Gottesdienst-Termine anlegen, kopieren und verwalten.',
-        icon: 'tabler:settings',
-        callToAction: {
-          text: 'Öffnen →',
-          href: getPermalink('/combo/comboTerminCopyFBpage'),
-        },
-      },
-      {
-        title: 'Benutzerverwaltung',
-        description: 'Rollen und Zugriffsrechte für alle Combo-Apps verwalten.',
-        icon: 'tabler:users',
-        callToAction: {
-          text: 'Öffnen →',
-          href: getPermalink('/combo/adminUserspage'),
-        },
-      },
-    ]}
-  />
+  <!-- ═══ ADMINISTRATION – eingeklappt ═══ -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+    <details class="group">
+      <summary class="flex items-center gap-2 cursor-pointer list-none text-sm font-medium text-muted hover:text-primary transition-colors select-none w-fit">
+        <svg class="w-4 h-4 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        Combo-Administration
+      </summary>
+      <div class="mt-6">
+        <Features
+          id="administration"
+          tagline="Administration"
+          title="Combo-Admin"
+          columns={2}
+          items={[
+            {
+              title: 'Lieder anlegen &amp; bearbeiten',
+              description: 'Neue Lieder ins Archiv aufnehmen oder bestehende Einträge ändern.',
+              icon: 'tabler:file-music',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboliedereditFBpage'),
+              },
+            },
+            {
+              title: 'Liederchronik',
+              description: 'Welche Lieder wurden wann gespielt?',
+              icon: 'tabler:history',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboliederchronikFBpage'),
+              },
+            },
+            {
+              title: 'Combo Statistik',
+              description: 'Rangliste der Musiker nach Einsatzhäufigkeit.',
+              icon: 'tabler:chart-bar',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/combostatistikFBpage'),
+              },
+            },
+            {
+              title: 'Termin-Admin',
+              description: 'Gottesdienst-Termine anlegen, kopieren und verwalten.',
+              icon: 'tabler:settings',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboTerminCopyFBpage'),
+              },
+            },
+            {
+              title: 'Benutzerverwaltung',
+              description: 'Rollen und Zugriffsrechte für alle Combo-Apps verwalten.',
+              icon: 'tabler:users',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/adminUserspage'),
+              },
+            },
+          ]}
+        />
+      </div>
+    </details>
+  </div>
 
 </Layout>
