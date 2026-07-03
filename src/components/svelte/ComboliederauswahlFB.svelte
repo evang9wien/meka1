@@ -1,15 +1,10 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { Label, Select, Toggle } from 'flowbite-svelte';
-  import { Button, Modal } from 'flowbite-svelte';
-  import { Card } from 'flowbite-svelte';
-  import { A } from 'flowbite-svelte';
+  import { Label, Select, Toggle, Button, Modal, Spinner, Card, A } from 'flowbite-svelte';
 
-  import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid, ListMusicOutline } from 'flowbite-svelte-icons';
+  import { FileMusicOutline, ListMusicOutline } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { Spinner } from 'flowbite-svelte';
-  import { Avatar, Popover } from 'flowbite-svelte';
 
   import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
@@ -233,17 +228,17 @@
               {#each liederauswahl as lied}
                 <TableBodyRow>
                   <TableBodyCell>
-                    <div class="flex flex-row">
-                      <A
-                        onclick={() => {
-                          liedTextModal = true;
-                          liedText = lied.Liedtext;
-                          liedTextTitel = lied.Titel;
-                        }}
-                      >
-                        <div class="mr-2">{lied.Beschreibung}</div>
-                        <ListMusicOutline size="md" class="mr-2" />
-                      </A>
+                    <div class="flex items-center gap-2">
+                      <span>{lied.Beschreibung}</span>
+                      {#if lied.Liedtext}
+                        <button
+                          class="p-1 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                          title="Liedtext anzeigen"
+                          onclick={() => { liedTextModal = true; liedText = lied.Liedtext; liedTextTitel = lied.Titel; }}
+                        >
+                          <ListMusicOutline size="sm" />
+                        </button>
+                      {/if}
                     </div>
                   </TableBodyCell>
                   <TableBodyCell class="w-4">
@@ -282,7 +277,20 @@
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
 <LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
-<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
+
+<!-- ═══════ LIEDTEXT-POPUP ═══════ -->
+<Modal title={liedTextTitel ?? ''} bind:open={liedTextModal} outsideclose size="lg">
+  {#if liedText}
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-96 overflow-y-auto border border-gray-200 dark:border-gray-700">
+      {liedText}
+    </div>
+  {:else}
+    <p class="text-gray-400 text-sm py-2">Kein Liedtext vorhanden.</p>
+  {/if}
+  {#snippet footer()}
+    <Button color="alternative" onclick={() => (liedTextModal = false)}>Schließen</Button>
+  {/snippet}
+</Modal>
 
 <style>
   :global(html audio::-webkit-media-controls-panel) {

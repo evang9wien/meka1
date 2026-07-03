@@ -7,10 +7,8 @@
   import { Card } from 'flowbite-svelte';
   import {
     InfoCircleOutline,
-    MicrophoneOutline,
     FileMusicOutline,
-    PlaySolid,
-    PauseSolid,
+    ListMusicOutline,
     PlusOutline,
     TrashBinOutline,
   } from 'flowbite-svelte-icons';
@@ -49,6 +47,9 @@
 
   let popupModal = false;
   let popupSpinnerModal = false;
+  let liedTextModal = false;
+  let liedText = '';
+  let liedTextTitel = '';
   let selectedTermin;
 
   let termine;
@@ -480,7 +481,20 @@
               {#each liedReihenfolgeSelected as lied}
                 {#if !lied.notvisible}
                   <TableBodyRow>
-                    <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
+                    <TableBodyCell>
+                      <div class="flex items-center gap-2">
+                        <span>{lied.Beschreibung}</span>
+                        {#if lied.selectedLied?.Liedtext}
+                          <button
+                            class="p-1 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                            title="Liedtext anzeigen"
+                            onclick={() => { liedTextModal = true; liedText = lied.selectedLied.Liedtext; liedTextTitel = lied.selectedLied.Titel; }}
+                          >
+                            <ListMusicOutline size="sm" />
+                          </button>
+                        {/if}
+                      </div>
+                    </TableBodyCell>
 
                     <TableBodyCell class="w-4">
                       <div class="flex flex-row">
@@ -558,3 +572,17 @@
 
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
 <LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
+
+<!-- ═══════ LIEDTEXT-POPUP ═══════ -->
+<Modal title={liedTextTitel} bind:open={liedTextModal} outsideclose size="lg">
+  {#if liedText}
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-96 overflow-y-auto border border-gray-200 dark:border-gray-700">
+      {liedText}
+    </div>
+  {:else}
+    <p class="text-gray-400 text-sm py-2">Kein Liedtext vorhanden.</p>
+  {/if}
+  {#snippet footer()}
+    <Button color="alternative" onclick={() => (liedTextModal = false)}>Schließen</Button>
+  {/snippet}
+</Modal>
