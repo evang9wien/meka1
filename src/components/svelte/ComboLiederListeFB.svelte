@@ -1,73 +1,76 @@
 <script>
   import { onMount } from 'svelte';
+  import dayjs from 'dayjs';
 
-  import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
-  import { Button, ButtonGroup } from 'flowbite-svelte';
-  import { Card, A } from 'flowbite-svelte';
+  import { Select, Input, InputAddon, Button, ButtonGroup, Card, Modal, Spinner, Badge } from 'flowbite-svelte';
   import {
-    MicrophoneOutline,
-    EditOutline,
+    ExclamationCircleOutline,
     FileMusicOutline,
-    PlaySolid,
-    PauseSolid,
-    ListMusicOutline,
+    EditOutline,
+    ChevronRightOutline,
+    MusicOutline,
+    CalendarMonthOutline,
+    FireSolid,
   } from 'flowbite-svelte-icons';
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { Spinner } from 'flowbite-svelte';
-  import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
-  import { getUrl } from './url/url.js';
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
 
-  import { Modal, P } from 'flowbite-svelte';
-  import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-
-  import { comboKategorien } from './combo/combo.js';
   import { initAuth, currentUser, authReady } from './stores/authStore.js';
   import { initAppCheck } from './firebase/firebase.js';
 
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFirestore, doc, getDoc, collection, getDocs } from 'firebase/firestore';
   import { getFunctions, httpsCallable } from 'firebase/functions';
+  import {
+    getDatabase,
+    ref as dbref,
+    get,
+    query,
+    orderByKey,
+    startAt,
+    endBefore,
+  } from 'firebase/database';
 
-  let liederListe;
-  let liederListeAll;
-  let liederListeKat;
-
-  let alleLieder;
+  // ---------------------------------------------------------------------------
+  // State
+  // ---------------------------------------------------------------------------
+  let liederListe = [];
+  let liederListeAll = [];
+  let liederListeKat = [];
 
   let popupSpinnerModal = false;
-
   let storage;
   let dbFireStore;
   let functions;
   let comboListRole = false;
-  let liedTextModal = false;
-  let liedText;
-  let liedTextTitel;
+  let dataLoaded = false;
 
   let alleLiederTexte;
   let searchLiederFn;
   let searchTimeout;
-  let lastSearchTerm = '';  // Track last search to prevent duplicates
+  let lastSearchTerm = '';
 
-  let dataLoaded = false;
+  /**
+   * Spielstatistik aus den letzten 12 Monaten.
+   * @type {Map<string, { count: number, lastPlayed: string }>}
+   */
+  let spielstatistikMap = new Map();
+  const STATISTIK_MONATE = 12;
 
   onMount(() => {
     initAuth();
   });
 
-  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
   $: if ($currentUser && !dataLoaded) {
     dataLoaded = true;
     loadData($currentUser);
   }
 
+  // ---------------------------------------------------------------------------
+  // Daten laden
+  // ---------------------------------------------------------------------------
   const loadData = async (user) => {
-    console.log('User Auth: ', user.uid);
     const app = initAppCheck();
     functions = getFunctions(app, 'europe-west1');
     searchLiederFn = httpsCallable(functions, 'searchLieder');
@@ -77,9 +80,7 @@
 
     // Rollencheck
     const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
-    console.log('User Data: ', userDoc.data());
     if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('combolist')) {
-      console.log('No combolist role!');
       popupSpinnerModal = false;
       return;
     }
@@ -88,7 +89,7 @@
     const [liederGesDoc, liederNichtGesDoc, alleLiederTexteSnap] = await Promise.all([
       getDoc(doc(dbFireStore, 'allelieder', 'gesungen')),
       getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen')),
-      getDocs(collection(dbFireStore, 'lieder'))
+      getDocs(collection(dbFireStore, 'lieder')),
     ]);
     alleLiederTexte = alleLiederTexteSnap;
 
@@ -96,116 +97,97 @@
     for (const [key, value] of Object.entries(liederGesDoc.data())) {
       comboLieder.push({ name: value, value: key, ID: key });
     }
-
     comboLieder = comboLieder.map((cl) => ({ ...cl, Aktiv: 1 }));
+
     const nichtcomboLieder = [];
     for (const [key, value] of Object.entries(liederNichtGesDoc.data())) {
       nichtcomboLieder.push({ name: value, value: key, ID: key });
     }
 
-    alleLieder = comboLieder.concat(nichtcomboLieder);
-    alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
-
-    liederListeAll = alleLieder;
-    liederListe = alleLieder;
+    liederListeAll = comboLieder.concat(nichtcomboLieder).sort((a, b) => a.name.localeCompare(b.name));
+    liederListe = liederListeAll;
     handleFilterKat();
 
     popupSpinnerModal = false;
+
+    // Spielstatistik im Hintergrund nachladen (kein Spinner)
+    loadSpielstatistik(getDatabase(initAppCheck()));
   };
 
-  let sort = 'Titel';
-  let sortDirection = 'ascending';
-  function handleSort() {
-    const sortFct = (a, b) => {
-      const [aVal, bVal] = [a[sort], b[sort]][sortDirection === 'ascending' ? 'slice' : 'reverse']();
-      if (typeof aVal === 'string' && typeof bVal === 'string') {
-        return aVal.localeCompare(bVal);
-      }
-      return Number(aVal) - Number(bVal);
-    };
-    liederListe.sort(sortFct);
-    liederListe = liederListe;
+  /**
+   * Lädt die Spielhäufigkeit + letztes Spieldatum der letzten STATISTIK_MONATE
+   * aus combo/termine. Läuft nach dem initialen Render (kein Spinner nötig).
+   */
+  async function loadSpielstatistik(db) {
+    const fromDate = dayjs().subtract(STATISTIK_MONATE, 'month').format('YYYY-MM-DD');
+    const toDate   = dayjs().add(1, 'day').format('YYYY-MM-DD');
 
-    liederListeAll.sort(sortFct);
-    liederListeAll = liederListeAll;
+    const dbRef = query(
+      dbref(db, 'combo/termine'),
+      orderByKey(),
+      startAt(fromDate),
+      endBefore(toDate)
+    );
+
+    try {
+      const snapshot = await get(dbRef);
+      if (!snapshot?.val()) return;
+
+      /** @type {Map<string, { count: number, lastPlayed: string }>} */
+      const map = new Map();
+
+      for (const termin of Object.values(snapshot.val())) {
+        if (!termin.LiedAuswahl || !Array.isArray(termin.LiedAuswahl)) continue;
+        for (const eintrag of termin.LiedAuswahl) {
+          const id = String(eintrag.lied_liste_nummer);
+          if (!id || id === 'undefined') continue;
+
+          const prev = map.get(id);
+          const date = termin.Termin ?? '';
+          if (!prev) {
+            map.set(id, { count: 1, lastPlayed: date });
+          } else {
+            map.set(id, {
+              count: prev.count + 1,
+              lastPlayed: date > prev.lastPlayed ? date : prev.lastPlayed,
+            });
+          }
+        }
+      }
+
+      spielstatistikMap = map; // triggers reactive update
+    } catch (e) {
+      console.error('Fehler beim Laden der Spielstatistik:', e);
+    }
   }
+
+  // ---------------------------------------------------------------------------
+  // Filter
+  // ---------------------------------------------------------------------------
   let filterNoten = '';
   let filterLiedtext = '';
-
-  function filterInLiedtext(suchtext) {
-    const ergebnisse = [];
-    console.log("Lieder Texte: ", alleLiederTexte);
-    alleLiederTexte.forEach(doc => {
-      const data = doc.data();
-      if (data.Liedtext && data.Liedtext.toLowerCase().includes(suchtext.toLowerCase())) {
-        ergebnisse.push(doc.id);
-      }
-    });
-
-    console.log("Ergebnisse Suche: ", ergebnisse);
-    return ergebnisse;
-  };
-
+  let filterKat = 'Combolieder';
   let blockFilterLiedtext = false;
-  async function handleFilterLiedtext() {
-    // Clear previous timeout - resets the 2-second countdown on every keystroke
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
-      searchTimeout = null;
-    }
 
-    // Reset if search term is too short
-    if (!filterLiedtext || filterLiedtext.length < 2) {
-      liederListe = liederListeKat;
-      return;
-    }
+  const kategorien = [
+    { value: 'Alle Lieder',  name: 'Alle Lieder'      },
+    { value: 'Combolieder',  name: 'Gesungene Lieder'  },
+  ];
 
-    // Debounce: Wait 2 seconds after user stops typing before triggering search
-    searchTimeout = setTimeout(async () => {
-      if (blockFilterLiedtext) return;
-
-      // Skip if same search term as last time (prevent duplicate searches)
-      if (filterLiedtext === lastSearchTerm) {
-        console.log("Skipping duplicate search for:", filterLiedtext);
-        return;
+  function handleFilterKat() {
+    setTimeout(() => {
+      if (filterKat === 'Alle Lieder') {
+        liederListe = liederListeAll;
+      } else if (filterKat === 'Combolieder') {
+        liederListe = liederListeAll.filter((l) => l.Aktiv == 1);
+      } else if (filterKat === 'EG-Lieder') {
+        liederListe = liederListeAll.filter((l) => l.EG != 0);
+      } else {
+        liederListe = liederListeAll.filter((l) => l.Kategorie?.toLowerCase().includes(filterKat.toLowerCase()));
       }
-
-      blockFilterLiedtext = true;
+      liederListeKat = liederListe;
       filterNoten = '';
-      popupSpinnerModal = true;
-
-      try {
-        console.log("Server-side search for:", filterLiedtext);
-
-        // Call Firebase Function using httpsCallable
-        const result = await searchLiederFn({ searchTerm: filterLiedtext });
-
-        console.log("Search results:", result.data);
-
-        const ergebnisse = result.data.results.map(r => r.ID);
-        liederListe = liederListeKat.filter(
-          (lied) => ergebnisse.includes(lied.ID)
-        );
-
-        console.log(`Found ${result.data.count} songs matching "${filterLiedtext}"`);
-
-        // Remember this search term to prevent duplicates
-        lastSearchTerm = filterLiedtext;
-
-      } catch (error) {
-        console.error('Server-side search error:', error);
-
-        // Fallback to client-side search if server fails
-        console.log("Falling back to client-side search");
-        const ergebnisse = filterInLiedtext(filterLiedtext);
-        liederListe = liederListeKat.filter(
-          (lied) => ergebnisse.includes(lied.ID)
-        );
-      } finally {
-        popupSpinnerModal = false;
-        blockFilterLiedtext = false;
-      }
-    }, 2000); // Wait 2 seconds after last keystroke
+    }, 200);
   }
 
   function handleFilterNoten() {
@@ -213,175 +195,347 @@
     blockFilterLiedtext = true;
     filterLiedtext = '';
     setTimeout(() => {
-      liederListe = liederListeKat.filter(
-        (lied) => lied.name.toLowerCase().includes(filterNoten.toLowerCase())
-      );
+      liederListe = liederListeKat.filter((l) => l.name.toLowerCase().includes(filterNoten.toLowerCase()));
       blockFilterLiedtext = false;
     }, 500);
   }
 
-  let filterKat = 'Combolieder';
-  let kategorien = [
-    { value: 'Alle Lieder', name: 'Alle Lieder' },
-    { value: 'Combolieder', name: 'Gesungene Lieder' },
-  ];
-
-  function handleFilterKat() {
-    setTimeout(() => {
-      if (filterKat == 'Alle Lieder') {
-        liederListe = liederListeAll;
-      } else if (filterKat == 'Combolieder') {
-        liederListe = liederListeAll.filter((lied) => lied.Aktiv == 1);
-      } else if (filterKat == 'EG-Lieder') {
-        liederListe = liederListeAll.filter((lied) => lied.EG != 0);
-      } else {
-        liederListe = liederListeAll.filter((lied) => lied.Kategorie.toLowerCase().includes(filterKat.toLowerCase()));
+  function filterInLiedtext(suchtext) {
+    const ergebnisse = [];
+    alleLiederTexte.forEach((d) => {
+      const data = d.data();
+      if (data.Liedtext && data.Liedtext.toLowerCase().includes(suchtext.toLowerCase())) {
+        ergebnisse.push(d.id);
       }
-      liederListeKat = liederListe;
-      filterNoten = '';
-    }, 200);
+    });
+    return ergebnisse;
   }
-  async function liedLaden(lied) {
-    console.log('Lied init: ', lied);
-    const liedRef = doc(dbFireStore, 'lieder', lied.ID);
-    const docSnap = await getDoc(liedRef);
-    if (docSnap.exists()) {
-      const loadedLied = { ...docSnap.data() };
-      const index1 = liederListe.findIndex((l) => l.ID == lied.ID);
-      liederListe[index1] = { ...lied, ...loadedLied };
 
-      const index2 = liederListeKat.findIndex((l) => l.ID == lied.ID);
-      liederListeKat[index2] = { ...lied, ...loadedLied };
+  async function handleFilterLiedtext() {
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+      searchTimeout = null;
+    }
+    if (!filterLiedtext || filterLiedtext.length < 2) {
+      liederListe = liederListeKat;
+      return;
+    }
+    searchTimeout = setTimeout(async () => {
+      if (blockFilterLiedtext) return;
+      if (filterLiedtext === lastSearchTerm) return;
 
-      console.log('Lied: ', loadedLied);
-    } else {
-      console.log('Lied nicht gefunden!');
+      blockFilterLiedtext = true;
+      filterNoten = '';
+      popupSpinnerModal = true;
+
+      try {
+        const result = await searchLiederFn({ searchTerm: filterLiedtext });
+        const ergebnisse = result.data.results.map((r) => r.ID);
+        liederListe = liederListeKat.filter((l) => ergebnisse.includes(l.ID));
+        lastSearchTerm = filterLiedtext;
+      } catch {
+        const ergebnisse = filterInLiedtext(filterLiedtext);
+        liederListe = liederListeKat.filter((l) => ergebnisse.includes(l.ID));
+      } finally {
+        popupSpinnerModal = false;
+        blockFilterLiedtext = false;
+      }
+    }, 2000);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Detail-Popup – lazy (nur beim Öffnen wird Firestore/Storage angefragt)
+  // ---------------------------------------------------------------------------
+  let detailOpen = false;
+  /** @type {{ ID: string, name: string } | null} */
+  let detailLied = null;
+  /** Firestore-Daten: null=loading, false=nicht vorhanden, object=geladen */
+  let detailDaten = null;
+  let detailLoading = false;
+  let mp3UrlPromise = null;
+  let notenUrlPromise = null;
+
+  /** Reaktive Spielstatistik für das aktuell geöffnete Lied */
+  $: detailStat = detailLied ? spielstatistikMap.get(detailLied.ID) ?? null : null;
+
+  async function openDetail(lied) {
+    detailLied = lied;
+    detailDaten = null;
+    detailLoading = true;
+    mp3UrlPromise = null;
+    notenUrlPromise = null;
+    detailOpen = true;
+
+    try {
+      const snap = await getDoc(doc(dbFireStore, 'lieder', lied.ID));
+      if (snap.exists()) {
+        detailDaten = snap.data();
+        if (detailDaten.Dateiname) {
+          if (detailDaten.MP3 !== '0' && detailDaten.MP3) {
+            mp3UrlPromise = getDownloadURL(stref(storage, 'lieder/mp3/' + detailDaten.Dateiname + '.mp3'));
+          }
+          notenUrlPromise = getDownloadURL(stref(storage, 'lieder/noten/' + detailDaten.Dateiname + '.pdf'));
+        }
+      } else {
+        detailDaten = false;
+      }
+    } catch (e) {
+      console.error('Fehler beim Laden der Lieddetails:', e);
+      detailDaten = false;
+    } finally {
+      detailLoading = false;
     }
   }
+
+  function closeDetail() {
+    detailOpen = false;
+    setTimeout(() => {
+      detailLied = null;
+      detailDaten = null;
+      mp3UrlPromise = null;
+      notenUrlPromise = null;
+    }, 300);
+  }
 </script>
+
+<!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !popupSpinnerModal && !comboListRole}
-   <div class="flex justify-center p-8 ">
-    <Card class="border-2 border-red-600 bg-red-50 content-center">
-      <div class="p-8"    >
+  <div class="flex justify-center p-8">
+    <Card class="border-2 border-red-600 bg-red-50">
+      <div class="p-8">
         <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
         <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
         <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
-      </div>  
-    </Card>
-   </div>
-{/if}
-{#if $currentUser && !popupSpinnerModal && comboListRole}
-  <div class="flex justify-center mb-6">
-    <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
-      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Lieder Liste</h2>
-
-      <div>
-        <div class="">
-          <div class="flex space-x-4 mb-6">
-            <ButtonGroup class="w-full">
-              <InputAddon>
-                <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              </InputAddon>
-              <Input
-                class=""
-                bind:value={filterNoten}
-                oninput={handleFilterNoten}
-                onchange={handleFilterNoten}
-                placeholder="Suche im Titel"
-              />
-            </ButtonGroup>
-
-            <ButtonGroup class="w-full">
-              <InputAddon>
-                <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              </InputAddon>
-              <Input
-                class=""
-                bind:value={filterLiedtext}
-                oninput={handleFilterLiedtext}
-                onchange={handleFilterLiedtext}
-                placeholder="Suche im Liedtext"
-              />
-            </ButtonGroup>
-
-            <Select class="w-100" items={kategorien} bind:value={filterKat} onchange={handleFilterKat} placeholder="Kategorie"
-            ></Select>
-          </div>
-        </div>
-        <Table striped={true} sortable>
-          <TableHead>
-            <TableHeadCell columnId="Titel">Noten</TableHeadCell>
-            <TableHeadCell sortable={false}>Hörprobe</TableHeadCell>
-            <TableHeadCell></TableHeadCell>
-          </TableHead>
-          <TableBody>
-            {#each liederListe as lied, index}
-              <TableBodyRow>
-                <TableBodyCell>
-                  <div class="flex flex-row">
-                    {#if lied.Dateiname}
-                      {#await getDownloadURL(stref(storage, 'lieder/noten/' + lied.Dateiname + '.pdf'))}
-                        <p>loading</p>
-                      {:then url}
-                        <A href={url} target="_blank">
-                          <FileMusicOutline size="md" class="mr-2" />
-                          <div class="mr-2">
-                            {lied.Titel}
-                          </div>
-                        </A>
-                        <A
-                          onclick={() => {
-                            liedTextModal = true;
-                            liedText = lied.Liedtext;
-                            liedTextTitel = lied.Titel;
-                          }}
-                        >
-                          <ListMusicOutline size="md" class="mr-2" />
-                        </A>
-                      {/await}
-                    {:else}
-                      <GradientButton color="cyanToBlue" shadow pill={true} class="!p-2" onclick={() => liedLaden(lied, index)}>
-                        <MicrophoneOutline class="w-4 h-4" />
-                        {lied.name}
-                      </GradientButton>
-                    {/if}
-                  </div>
-                </TableBodyCell>
-                <TableBodyCell>
-                  {#if lied.Dateiname && lied.MP3 != '0'}
-                    <div class="flex flex-row">
-                      {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
-                        <p>loading</p>
-                      {:then url}
-                        <audio controls src={url}></audio>
-                      {/await}
-                    </div>
-                  {/if}
-                </TableBodyCell>
-                <TableBodyCell>
-                  <GradientButton
-                    shadow
-                    color="cyanToBlue"
-                    pill={true}
-                    class="!p-2"
-                    href="/combo/comboliedereditFBpage?lied_id={lied.ID}"
-                  >
-                    <EditOutline class="w-4 h-4" />
-                  </GradientButton>
-                </TableBodyCell>
-              </TableBodyRow>
-            {/each}
-          </TableBody>
-        </Table>
       </div>
     </Card>
   </div>
 {/if}
-<WaitPopup {popupSpinnerModal} message="Liederliste wird geladen." />
-<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
-<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose ooutsideclose={true}>
-  <P>{liedText}</P>
+
+<!-- ═══════ HAUPTINHALT ═══════ -->
+{#if $currentUser && !popupSpinnerModal && comboListRole}
+  <div class="flex justify-center mb-6 px-2">
+    <Card class="w-full lg:max-w-screen-lg md:max-w-screen-md p-4">
+
+      <!-- Titel -->
+      <div class="flex items-center gap-2 mb-4">
+        <MusicOutline class="text-blue-600" size="lg" />
+        <h2 class="text-gray-900 dark:text-white text-xl font-bold">Lieder Liste</h2>
+      </div>
+
+      <!-- Filter-Leiste -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <ButtonGroup class="flex-1 min-w-40">
+          <InputAddon>
+            <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </InputAddon>
+          <Input
+            bind:value={filterNoten}
+            oninput={handleFilterNoten}
+            onchange={handleFilterNoten}
+            placeholder="Suche im Titel"
+          />
+        </ButtonGroup>
+
+        <ButtonGroup class="flex-1 min-w-40">
+          <InputAddon>
+            <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </InputAddon>
+          <Input
+            bind:value={filterLiedtext}
+            oninput={handleFilterLiedtext}
+            onchange={handleFilterLiedtext}
+            placeholder="Suche im Liedtext"
+          />
+        </ButtonGroup>
+
+        <Select class="flex-1 min-w-40" items={kategorien} bind:value={filterKat} onchange={handleFilterKat} />
+      </div>
+
+      <!-- Anzahl -->
+      <div class="mb-3 text-sm text-gray-500 dark:text-gray-400">
+        <strong>{liederListe.length}</strong> Lieder
+      </div>
+
+      {#if liederListe.length === 0}
+        <p class="text-gray-500 dark:text-gray-400">Keine Lieder gefunden.</p>
+      {:else}
+        <!-- Lieder-Liste -->
+        <div class="space-y-2">
+          {#each liederListe as lied}
+            {@const stat = spielstatistikMap.get(lied.ID)}
+            <div class="flex items-center gap-3 p-3 rounded-lg border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:brightness-95 transition-all">
+
+              <!-- Icon -->
+              <div class="w-8 flex-shrink-0 flex justify-center">
+                <MusicOutline class="text-blue-400" size="sm" />
+              </div>
+
+              <!-- Name – klickbar für Detail-Popup -->
+              <div
+                class="flex-1 min-w-0 cursor-pointer"
+                role="button"
+                tabindex="0"
+                onclick={() => openDetail(lied)}
+                onkeydown={(e) => e.key === 'Enter' && openDetail(lied)}
+              >
+                <div class="font-semibold text-gray-900 dark:text-white truncate">{lied.name}</div>
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5">
+                  {#if lied.Aktiv}
+                    <span class="text-xs text-blue-500 dark:text-blue-400">Gesungenes Lied</span>
+                  {/if}
+                  {#if stat}
+                    <span class="text-xs text-orange-500 dark:text-orange-400 flex items-center gap-0.5">
+                      <FireSolid size="xs" />
+                      {stat.count}× in {STATISTIK_MONATE} Mon.
+                    </span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-0.5">
+                      <CalendarMonthOutline size="xs" />
+                      Zuletzt: {stat.lastPlayed}
+                    </span>
+                  {/if}
+                </div>
+              </div>
+
+              <!-- Aktionen -->
+              <div class="flex items-center gap-1 flex-shrink-0">
+                <!-- Detail-Popup öffnen -->
+                <button
+                  class="p-1 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                  title="Details anzeigen"
+                  onclick={() => openDetail(lied)}
+                >
+                  <ChevronRightOutline size="sm" />
+                </button>
+                <!-- Bearbeiten -->
+                <a
+                  href="/combo/comboliedereditFBpage?lied_id={lied.ID}"
+                  class="p-1 rounded-full text-gray-400 hover:text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-900/30 transition-colors"
+                  title="Lied bearbeiten"
+                >
+                  <EditOutline size="sm" />
+                </a>
+              </div>
+            </div>
+          {/each}
+        </div>
+      {/if}
+
+    </Card>
+  </div>
+{/if}
+
+<!-- ═══════ DETAIL-POPUP ═══════ -->
+<Modal
+  title={detailLied?.name ?? ''}
+  bind:open={detailOpen}
+  outsideclose
+  size="lg"
+>
+  {#if detailLoading}
+    <div class="flex justify-center items-center py-10">
+      <Spinner size="10" color="blue" />
+    </div>
+
+  {:else if detailDaten === false}
+    <p class="text-gray-500 dark:text-gray-400 py-4">
+      Für dieses Lied sind keine weiteren Details vorhanden.
+    </p>
+
+  {:else if detailDaten}
+    <div class="space-y-5">
+
+      <!-- Badges: gesungen + Spielstatistik -->
+      <div class="flex flex-wrap gap-2 items-center">
+        {#if detailLied?.Aktiv}
+          <Badge color="blue">Gesungenes Lied</Badge>
+        {:else}
+          <Badge color="light">Nicht gesungen</Badge>
+        {/if}
+        {#if detailStat}
+          <Badge color="orange">{detailStat.count}× in {STATISTIK_MONATE} Monaten gespielt</Badge>
+        {/if}
+      </div>
+
+      <!-- Spielstatistik -->
+      {#if detailStat}
+        <div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700">
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+            Gespielt (letzte {STATISTIK_MONATE} Monate)
+          </p>
+          <div class="flex flex-wrap gap-4 text-sm">
+            <span class="flex items-center gap-1 text-orange-700 dark:text-orange-300 font-semibold">
+              <FireSolid size="sm" class="text-orange-500" />
+              {detailStat.count}× gespielt
+            </span>
+            <span class="flex items-center gap-1 text-gray-600 dark:text-gray-300">
+              <CalendarMonthOutline size="sm" />
+              Zuletzt: <strong>{detailStat.lastPlayed}</strong>
+            </span>
+          </div>
+        </div>
+      {:else}
+        <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-400">
+          In den letzten {STATISTIK_MONATE} Monaten nicht gespielt.
+        </div>
+      {/if}
+
+      <!-- Noten -->
+      {#if notenUrlPromise}
+        <div>
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Noten</p>
+          {#await notenUrlPromise}
+            <div class="flex items-center gap-2 text-sm text-gray-400">
+              <Spinner size="4" /> Noten werden geladen …
+            </div>
+          {:then url}
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            >
+              <FileMusicOutline size="sm" />
+              Noten öffnen (PDF)
+            </a>
+          {:catch}
+            <p class="text-xs text-gray-400">Noten nicht verfügbar.</p>
+          {/await}
+        </div>
+      {/if}
+
+      <!-- MP3-Player – lazy, kein Traffic bis Popup öffnet -->
+      {#if mp3UrlPromise}
+        <div>
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Hörprobe</p>
+          {#await mp3UrlPromise}
+            <div class="flex items-center gap-2 text-sm text-gray-400">
+              <Spinner size="4" /> Audio wird geladen …
+            </div>
+          {:then url}
+            <audio controls src={url} class="w-full"></audio>
+          {:catch}
+            <p class="text-xs text-gray-400">Hörprobe nicht verfügbar.</p>
+          {/await}
+        </div>
+      {/if}
+
+      <!-- Liedtext -->
+      {#if detailDaten.Liedtext}
+        <div>
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Liedtext</p>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-700">
+            {detailDaten.Liedtext}
+          </div>
+        </div>
+      {/if}
+
+    </div>
+  {/if}
+
   {#snippet footer()}
-    <GradientButton color="cyanToBlue" type="submit" class="w-32">Schließen</GradientButton>   
+    <Button color="alternative" onclick={closeDetail}>Schließen</Button>
   {/snippet}
 </Modal>
+
+<WaitPopup {popupSpinnerModal} message="Liederliste wird geladen." />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
