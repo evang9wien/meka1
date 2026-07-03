@@ -216,20 +216,20 @@
 </script>
 
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
-{#if $currentUser && !$userRoles.includes('combo') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
+{#if $authReady && $currentUser && !$userRoles.includes('comboedit') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
     <Card class="border-2 border-red-600 bg-red-50">
       <div class="p-8">
         <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
         <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
-        <p>Diese Seite ist nur für Combo-Mitglieder zugänglich.</p>
+        <p>Diese Seite ist nur für Benutzer mit der Rolle <strong>Combo Edit</strong> zugänglich.</p>
       </div>
     </Card>
   </div>
 {/if}
 
 <!-- ═══════ HAUPTINHALT ═══════ -->
-{#if $currentUser && ($userRoles.includes('combo') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
+{#if $currentUser && ($userRoles.includes('comboedit') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
