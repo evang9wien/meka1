@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import QRCode from 'qrcode';
 
-  let qrCodeDataUrl = '';
-  let loading = true;
+  let qrCodeDataUrl: string = '';
+  let loading: boolean = true;
 
   onMount(async () => {
     // SEPA-Überweisung QR-Code Daten (EPC QR-Code Format)

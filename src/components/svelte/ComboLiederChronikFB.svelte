@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import dayjs from 'dayjs';
 
@@ -11,13 +11,13 @@
 
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
-  import { comboReihenfolge } from './combo/combo.js';
-  import { getUrl } from './url/url.js';
+  import { openMp3, stopMp3 } from './mp3.ts';
+  import { openPdf } from './pdf.ts';
+  import { comboReihenfolge } from './combo/combo.ts';
+  import { getUrl } from './url/url.ts';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
@@ -33,22 +33,37 @@
     endBefore,
   } from 'firebase/database';
 
-  let liederListe = [];
-  let liederListeAll = [];
-  let liederListeKat;
+  interface LiedEintrag {
+    name: string;
+    value: string;
+    ID: string;
+    Aktiv?: number;
+  }
+
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    LiedAuswahl?: Array<{ lied_liste_nummer: string; lied_im_GD_nummer: string; Tasten?: string }>;
+    [key: string]: unknown;
+  }
+
+  let liederListe: Termin[] = [];
+  let liederListeAll: Termin[] = [];
+  let liederListeKat: string | undefined;
 
   let open = false;
-  let liedtext;
-  let liedtitelDlg;
+  let liedtext: string | undefined;
+  let liedtitelDlg: string | undefined;
   let response = 'Nothing yet.';
 
   let popupSpinnerModal = false;
   const yearNow = new Date().getFullYear();
 
-  let storage;
-  let dbFireStore;
-  let dbRealtime;
-  let alleLieder;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbRealtime: ReturnType<typeof getDatabase>;
+  let alleLieder: LiedEintrag[];
   let dataLoaded = false;
 
   onMount(() => {
@@ -150,8 +165,8 @@
   let sort = 'Termin_Liedliste';
   let sortDirection = 'decending';
   function handleSort() {
-    const sortFct = (a, b) => {
-      const [aVal, bVal] = [a[sort], b[sort]][sortDirection === 'ascending' ? 'slice' : 'reverse']();
+    const sortFct = (a: Record<string, unknown>, b: Record<string, unknown>) => {
+      const [aVal, bVal] = ([a[sort], b[sort]] as [unknown, unknown])[sortDirection === 'ascending' ? 'slice' : 'reverse']() as [unknown, unknown];
       if (typeof aVal === 'string' && typeof bVal === 'string') {
         return aVal.localeCompare(bVal);
       }
@@ -165,9 +180,9 @@
   }
   let filterNoten = '';
   let inputA = '';
-  let floatingLabelA;
+  let floatingLabelA: unknown;
 
-  let selectedYear = yearNow;
+  let selectedYear: number = yearNow;
   let years = [...Array(10).keys()]
     .map((x) => yearNow - x)
     .map((y) => ({

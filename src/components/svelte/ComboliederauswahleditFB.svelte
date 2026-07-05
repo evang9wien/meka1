@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // Anlegen und bearbeiten der Liederauswahl für den nächsten Sonntag
   import { onMount } from 'svelte';
   import { Label, Select } from 'flowbite-svelte';
@@ -17,17 +17,17 @@
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
 
-  import { comboReihenfolge } from './combo/combo.js';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { comboReihenfolge } from './combo/combo.ts';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
   import {
@@ -45,37 +45,67 @@
 
   import dayjs from 'dayjs';
 
+  interface TerminItem {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    LiedAuswahl?: Array<Record<string, unknown>>;
+    name: string;
+    value: string;
+    [key: string]: unknown;
+  }
+
+  interface LiedEintrag {
+    name: string;
+    value: string;
+    ID: string;
+    [key: string]: unknown;
+  }
+
+  interface LiedReihenfolgeItem {
+    Reihenfolge: string;
+    Beschreibung?: string;
+    GD_mit_Abendmahl?: string;
+    GD_ohne_Abendmahl?: string;
+    duplicate?: boolean;
+    notvisible?: boolean;
+    selectedLied?: Record<string, unknown>;
+    selectedLiedID?: string;
+    Liedtext?: string;
+    [key: string]: unknown;
+  }
+
   let popupModal = false;
   let popupSpinnerModal = false;
   let liedTextModal = false;
   let liedText = '';
   let liedTextTitel = '';
-  let selectedTermin;
+  let selectedTermin: string | undefined;
 
-  let termine;
+  let termine: TerminItem[] | undefined;
 
-  let verantwortlich;
+  let verantwortlich: string | undefined;
 
   // Entspricht der DB Tabelle lied_reihenfolge
-  let liederReihenfolgeDBTemplate;
+  let liederReihenfolgeDBTemplate: LiedReihenfolgeItem[];
   // Entspricht der DB Tabelle lied_auswahl für das selektierte Datum
-  let liederDBAuswahl = [];
+  let liederDBAuswahl: Array<Record<string, unknown>> = [];
   // Entspricht den den akteuell selektierten Liedern inklusive der geladenen Liedauswahl
-  let liedReihenfolgeSelected;
+  let liedReihenfolgeSelected: LiedReihenfolgeItem[];
 
-  let comboLieder;
+  let comboLieder: LiedEintrag[];
   const comboLiederDef = ['2', '3', '5', '6', '7', '8'];
-  let alleLieder;
+  let alleLieder: LiedEintrag[];
 
-  let storage;
-  let dbFireStore;
-  let dbRealtime;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbRealtime: ReturnType<typeof getDatabase>;
 
   let dbRealtimeOnce = false;
 
   let showComboProben = false;
 
-  let alleTermine;
+  let alleTermine: TerminItem[];
 
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
@@ -140,7 +170,7 @@
     loadData($currentUser);
   }
 
-  const loadData = async (user) => {
+  const loadData = async (_user: unknown) => {
     const app = initAppCheck();
     storage = getStorage(app);
 
@@ -254,7 +284,7 @@
     });
   };
 
-  const handleSave = (ev, ev1, ev2) => {
+  const handleSave = (_ev?: unknown, _ev1?: unknown, _ev2?: unknown) => {
     window.setTimeout(async () => {
       console.log('Lieder Selected:', liedReihenfolgeSelected);
       for (const l of liedReihenfolgeSelected) {
@@ -364,7 +394,7 @@
     // console.log('Dupl: ', liedReihenfolgeSelected);
   };
 
-  let sendEmailHref;
+  let sendEmailHref: string | undefined;
   let isLiedSelected = false;
   const sendEmailHrefRefresh = () => {
     let body = 'Liebe Combo!%0D%0A%0D%0A';
@@ -393,11 +423,11 @@
     // anchor.click();
   };
 
-  const disableEmailButton = () => {
+  const disableEmailButton = (): boolean => {
     return !isLiedSelected;
-  }
+  };
 
-  const isComboLied = (lied) => {
+  const isComboLied = (lied: LiedReihenfolgeItem): boolean => {
     // console.log('Combolied: ', lied);
     // console.log('IsCombilied: ', comboLiederDef.includes(lied.Reihenfolge));
     // console.log('Def: ', comboLiederDef);

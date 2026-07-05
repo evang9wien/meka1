@@ -1,5 +1,5 @@
-<script>
-  // Anlegen und bearbeitn eines Liedes
+<script lang="ts">
+  // Anlegen und bearbeiten eines Liedes
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Section } from 'flowbite-svelte-blocks';
@@ -21,16 +21,16 @@
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
+  import { openMp3, stopMp3 } from './mp3.ts';
+  import { openPdf } from './pdf.ts';
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
 
-  import { comboKategorien } from './combo/combo.js';
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { comboKategorien } from './combo/combo.ts';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
   import {
@@ -44,27 +44,40 @@
     endAt,
   } from 'firebase/database';
 
+  interface Lied {
+    ID?: string;
+    Titel?: string;
+    Dateiname?: string;
+    EG?: string;
+    Kategorie?: string;
+    Liedtext?: string;
+    Aktiv?: string;
+    PDF?: number;
+    MP3?: number;
+    [key: string]: unknown;
+  }
+
   let popupModal = false;
   let popupErrorModal = false;
   let comboLiederEdit = false;
-  let responseData;
+  let responseData: unknown;
   let popupSpinnerModal = false;
   let popupUserAuthModal = false;
   let popupSpinnerUploadModal = false;
   let popupLiedGespeichert = false;
-  let selectedLied;
-  let loadedLied = {};
-  let alleLieder;
+  let selectedLied: string | undefined;
+  let loadedLied: Lied = {};
+  let alleLieder: Array<{ name: string; value: string; ID: string }>;
   let liedGesungen = false;
 
-  let notenPdf;
-  let liedMp3;
+  let notenPdf: File | undefined;
+  let liedMp3: File | undefined;
 
-  let kategorien = [];
-  let kategorie;
+  let kategorien: Array<{ value: string; name: string; Typ: string }> = [];
+  let kategorie: string | undefined;
 
-  let storage;
-  let dbFireStore;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: ReturnType<typeof getFirestore>;
 
   let dataLoaded = false;
 
@@ -79,7 +92,7 @@
     loadData($currentUser);
   }
 
-  const loadData = async (user) => {
+  const loadData = async (user: { uid: string }) => {
     console.log('User Auth');
     const app = initAppCheck();
     storage = getStorage(app);
@@ -278,12 +291,12 @@
           </div>
           <div class="sm:col-span-2">
             <Label class="pb-2">Noten*</Label>
-            <Fileupload id="noten" name="noten" onchange={(e) => (notenPdf = e.target.files[0])} class="mb-2" />
+            <Fileupload id="noten" name="noten" onchange={(e: Event) => { const t = e.target as HTMLInputElement; notenPdf = t.files?.[0]; }} class="mb-2" />
             <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!</Helper>
           </div>
           <div class="sm:col-span-2">
             <Label class="pb-2">Hörprobe</Label>
-            <Fileupload id="mp3" name="mp3" onchange={(e) => (liedMp3 = e.target.files[0])} class="mb-2" />
+            <Fileupload id="mp3" name="mp3" onchange={(e: Event) => { const t = e.target as HTMLInputElement; liedMp3 = t.files?.[0]; }} class="mb-2" />
             <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!</Helper>
           </div>
           <div class="sm:col-span-2">

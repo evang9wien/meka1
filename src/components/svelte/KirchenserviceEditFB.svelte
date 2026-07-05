@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
   import { Label, Select } from 'flowbite-svelte';
@@ -17,11 +17,11 @@
   import 'dayjs/locale/de';
   import WaitPopup from './popup/WaitPopup.svelte';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
 
   import LoginSimple from './auth/LoginSimpleModal.svelte';
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getFirestore, collection, getDocs } from 'firebase/firestore';
   import {
     getDatabase,
@@ -36,13 +36,39 @@
 
   import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string | number;
+    Verantwortlich?: string;
+    Veranstaltung?: string;
+    KS_Koordination?: string;
+    KS_Begruessung?: string;
+    KS_Abendmahl?: string;
+    KS_Bar?: string;
+    KS_Kuchen?: string;
+    Zusatzinfo?: string;
+    name: string;
+    value: string;
+  }
+
+  interface Member {
+    uid: string;
+    name: string;
+    value: string;
+    ShortName?: string;
+    roles?: string[];
+    VName?: string;
+    FName?: string;
+    [key: string]: unknown;
+  }
+
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
-  let termine;
-  let members;
-  let selectedmember;
+  let termine: Termin[] | undefined;
+  let members: Member[] | undefined;
+  let selectedmember: string | undefined;
   // let mySnackbar;
-  let dbRealtime;
+  let dbRealtime: ReturnType<typeof getDatabase>;
   let popupSimpleLogin = true;
   let dataLoaded = false;
 
@@ -105,12 +131,12 @@
     console.log('Mitarbeiter (aus accounts): ', members);
   };
 
-  const formatDate = (date) => {
+  const formatDate = (date: Date) => {
     dayjs.locale('de');
     return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
   };
 
-  let kirchenservice = {};
+  let kirchenservice: Record<string, string[]> = {};
 
   const resetSelection = () => {
     kirchenservice.KS_Koordination = [];
@@ -120,7 +146,7 @@
     kirchenservice.KS_Kuchen = [];
   };
 
-  const checkEntries = (newEntry, oldEntry) => {
+  const checkEntries = (newEntry: string, oldEntry: string | undefined): string => {
     if (!oldEntry) {
       return newEntry;
     }
@@ -155,7 +181,7 @@
     }
   };
 
-  let handleSave = (event) => {
+  let handleSave = (_event?: unknown) => {
     // mySnackbar.open();
     let newEntries = [];
     Object.entries(kirchenservice).forEach(([key, values]) => {

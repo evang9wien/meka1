@@ -20,13 +20,13 @@
   import dayjs from 'dayjs';
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set, update, remove } from 'firebase/database';
-  import { initAuth, currentUser, authReady } from '../stores/authStore.js';
-  import { initAppCheck } from '../firebase/firebase.js';
+  import { initAuth, currentUser, authReady } from '../stores/authStore.ts';
+  import { initAppCheck } from '../firebase/firebase.ts';
   import {
     predigerList,
     initPredigerStore,
     getPredigerKuerzelFromStore,
-  } from '../stores/predigerStore.js';
+  } from '../stores/predigerStore.ts';
   import { getFirestore, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
   import WaitPopup from '../popup/WaitPopup.svelte';
   import LoginFirebase from '../auth/LoginFirebase.svelte';

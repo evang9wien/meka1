@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Label, Select, Toggle, Button, Modal, Spinner, Card, A } from 'flowbite-svelte';
@@ -7,17 +7,17 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
 
   import WaitPopup from './popup/WaitPopup.svelte';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
+  import { openMp3, stopMp3 } from './mp3.ts';
+  import { openPdf } from './pdf.ts';
 
-  import { getUrl } from './url/url.js';
-  import { comboReihenfolge } from './combo/combo.js';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { getUrl } from './url/url.ts';
+  import { comboReihenfolge } from './combo/combo.ts';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
 
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFunctions, httpsCallable } from "firebase/functions";
@@ -34,26 +34,36 @@
 
   import dayjs from 'dayjs';
 
-  let selectedTermin;
-  let lastSelectedTermin;
-  let liederauswahl;
-  let termine;
+  interface TerminItem {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    LiedAuswahl?: Array<Record<string, unknown>>;
+    name: string;
+    value: string;
+    [key: string]: unknown;
+  }
 
-  let verantwortlich;
+  let selectedTermin: string | undefined;
+  let lastSelectedTermin: string | undefined;
+  let liederauswahl: Record<string, unknown>[] | undefined;
+  let termine: TerminItem[] | undefined;
+
+  let verantwortlich: string | undefined;
   let popupSpinnerModal = false;
   let liedTextModal = false;
-  let liedText;
-  let liedTextTitel;
+  let liedText: string | undefined;
+  let liedTextTitel: string | undefined;
 
-  let storage;
-  let dbFireStore;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: ReturnType<typeof getFirestore>;
 
   let showComboProben = false;
 
-  let alleTermine;
+  let alleTermine: TerminItem[];
   let dataLoaded = false;
 
-  const loadLieder = async (termin) => {
+  const loadLieder = async (termin: TerminItem) => {
     console.log('Selected Termin: ', termin);
 
     verantwortlich = termin.Verantwortlich;
@@ -90,7 +100,7 @@
     popupSpinnerModal = false;
   };
 
-  const testUrl = async (app) => {   
+  const testUrl = async (app: ReturnType<typeof initAppCheck>) => {
     const functions = getFunctions(app);
     // connectFunctionsEmulator(functions, "localhost", 5001);
     const getAudioUrl = httpsCallable(functions, 'getAudioUrl');
@@ -113,7 +123,7 @@
     loadData($currentUser);
   }
 
-  const loadData = (user) => {
+  const loadData = (_user: unknown) => {
     const app = initAppCheck();
     storage = getStorage(app);
     console.log('onMount');
@@ -159,7 +169,7 @@
     }, 300);
   };
 
-  const handleSelect = (sel) => {
+  const handleSelect = (_sel: unknown) => {
     console.log(sel);
     popupSpinnerModal = true;
     window.setTimeout(() => {

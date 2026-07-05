@@ -7,8 +7,8 @@
   import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
-  import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.js';
-  import { initAppCheck } from '../firebase/firebase.js';
+  import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.ts';
+  import { initAppCheck } from '../firebase/firebase.ts';
   import { getFirestore } from 'firebase/firestore';
 
   // Reaktiv: gibt Kürzel zurück — list-Parameter zwingt Svelte zur Neuauswertung

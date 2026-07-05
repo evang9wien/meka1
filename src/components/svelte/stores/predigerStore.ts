@@ -1,5 +1,5 @@
 /**
- * predigerStore.js
+ * predigerStore.ts
  *
  * Lädt die Prediger-Stammdaten aus Firestore (Collection "prediger")
  * und stellt sie als reaktiven Svelte-Store bereit.
@@ -16,32 +16,42 @@
  */
 
 import { writable, get } from 'svelte/store';
+import type { Firestore } from 'firebase/firestore';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+export interface PredigerEntry {
+  kuerzel: string;
+  langname?: string;
+  vorname?: string;
+  varianten?: string[];
+  avatarUrl?: string;
+  localImage?: string;
+  [key: string]: unknown;
+}
 
 // ---- Stores ----------------------------------------------------------------
 
-/** @type {import('svelte/store').Writable<Array|null>} */
-export const predigerList = writable(null); // null = noch nicht geladen
+export const predigerList = writable<PredigerEntry[] | null>(null); // null = noch nicht geladen
 
 /** true sobald Firestore-Daten mindestens einmal geladen wurden */
-export const predigerReady = writable(false);
+export const predigerReady = writable<boolean>(false);
 
 // ---- Firestore-Anbindung ---------------------------------------------------
 
-let unsubscribeSnapshot = null;
+let unsubscribeSnapshot: (() => void) | null = null;
 
 /**
  * Startet den Firestore-Listener auf Collection "prediger".
  * Wird einmal aus einer Svelte-Komponente mit Firebase-Zugang aufgerufen.
- *
- * @param {import('firebase/firestore').Firestore} db  Firestore-Instanz
  */
-export function initPredigerStore(db) {
+export function initPredigerStore(db: Firestore): void {
   if (unsubscribeSnapshot) return; // bereits aktiv
   if (typeof window === 'undefined') return; // kein SSR
   _startListener(db);
 }
 
-async function _startListener(db) {
+async function _startListener(db: Firestore): Promise<void> {
   const { collection, onSnapshot } = await import('firebase/firestore');
 
   const col = collection(db, 'prediger');
@@ -50,15 +60,13 @@ async function _startListener(db) {
     col,
     (snapshot) => {
       if (!snapshot.empty) {
-        const list = snapshot.docs.map((d) => ({ ...d.data() }));
+        const list: PredigerEntry[] = snapshot.docs.map((d) => ({ ...d.data() } as PredigerEntry));
         predigerList.set(list);
         predigerReady.set(true);
       }
-      // Leere Collection → Store bleibt null, kein automatisches Seeden mehr.
     },
     (error) => {
       console.error('predigerStore: onSnapshot Fehler:', error);
-      // Kein statischer Fallback mehr — Store bleibt null.
     }
   );
 }
@@ -67,16 +75,14 @@ async function _startListener(db) {
 
 /**
  * Gibt das Kürzel zurück, dessen Name-Variante in `text` vorkommt.
- * @param {string} text
- * @returns {string}
  */
-export function getPredigerKuerzelFromStore(text) {
+export function getPredigerKuerzelFromStore(text: string): string {
   if (!text) return '';
   const list = get(predigerList);
   if (!list) return '';
   const upper = text.toUpperCase();
   for (const p of list) {
-    for (const v of (p.varianten || [])) {
+    for (const v of (p.varianten ?? [])) {
       if (upper.includes(v.toUpperCase())) return p.kuerzel;
     }
   }
@@ -85,10 +91,8 @@ export function getPredigerKuerzelFromStore(text) {
 
 /**
  * Gibt den langen Namen für ein Kürzel zurück.
- * @param {string} kuerzel
- * @returns {string}
  */
-export function getLongNameFromStore(kuerzel) {
+export function getLongNameFromStore(kuerzel: string): string {
   if (!kuerzel) return '';
   const list = get(predigerList);
   if (list) {

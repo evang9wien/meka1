@@ -16,7 +16,7 @@
   import { Modal } from 'flowbite-svelte';
 
   import PredigtAvatar from './PredigtAvatar.svelte';
-  import { getLongNameFromStore, initPredigerStore } from '../stores/predigerStore.js';
+  import { getLongNameFromStore, initPredigerStore } from '../stores/predigerStore.ts';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';

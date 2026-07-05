@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
   import { Label, Select, Toggle } from 'flowbite-svelte';
@@ -19,13 +19,13 @@
 
   import WaitPopup from './popup/WaitPopup.svelte';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
-  import { getUrl } from './url/url.js';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
+  import { getUrl } from './url/url.ts';
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getFirestore, getDocs, collection } from 'firebase/firestore';
   import {
     getDatabase,
@@ -40,12 +40,38 @@
 
   import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string | number;
+    Verantwortlich?: string;
+    Tasten?: string;
+    Melodie?: string;
+    Gitarre?: string;
+    Drums?: string;
+    Bass?: string;
+    Beamer?: string;
+    Zusatzinfo?: string;
+    name: string;
+    value: string;
+  }
+
+  interface Member {
+    uid: string;
+    name: string;
+    value: string;
+    ShortName?: string;
+    roles?: string[];
+    VName?: string;
+    FName?: string;
+    [key: string]: unknown;
+  }
+
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
-  let termine;
-  let members;
-  let selectedmember;
-  let dbRealtime;
+  let termine: Termin[] | undefined;
+  let members: Member[] | undefined;
+  let selectedmember: string | undefined;
+  let dbRealtime: ReturnType<typeof getDatabase>;
 
   let comboAdminModus = false;
 
@@ -109,12 +135,12 @@
     console.log('Mitarbeiter (aus accounts): ', members);
   };
 
-  let formatDate = (date) => {
+  let formatDate = (date: string) => {
     dayjs.locale('de');
     return dayjs(date).format('dd. D.M. H:mm ');
   };
 
-  let combo = {};
+  let combo: Record<string, string[]> = {};
 
   const resetSelection = () => {
     combo.Tasten = [];
@@ -125,7 +151,7 @@
     combo.Gitarre = [];
   };
 
-  const checkEntries = (newEntry, oldEntry) => {
+  const checkEntries = (newEntry: string, oldEntry: string | undefined): string => {
     console.log('newEntry: ', newEntry);
     console.log('oldEntry: ', oldEntry);
     if (!oldEntry) {
@@ -171,7 +197,7 @@
     }
   };
 
-  let handleSave = (event) => {
+  let handleSave = (_event: unknown) => {
     console.log('ComboAdminModus: ', comboAdminModus);
     // mySnackbar.open();
     let newEntries = [];

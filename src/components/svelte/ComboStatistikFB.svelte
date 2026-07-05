@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
@@ -15,9 +15,9 @@
   } from 'flowbite-svelte-icons';
 
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getFirestore, getDocs, collection } from 'firebase/firestore';
   import {
     getDatabase,
@@ -51,6 +51,13 @@
     { value: 48, name: 'Letzte 48 Monate' },
   ];
 
+  interface RankingEntry {
+    shortName: string;
+    displayName: string;
+    instruments: string[];
+    count: number;
+  }
+
   let selectedZeitraum = 6;
 
   /** Comboproben (17:30-Termine) einschließen – nur für terminadmin sichtbar */
@@ -61,15 +68,15 @@
   // ---------------------------------------------------------------------------
   let popupSpinnerModal = true;
   let dataLoaded = false;
-  let ranking = [];
+  let ranking: RankingEntry[] = [];
   let totalGottesdienste = 0;
   let totalProben = 0;
 
-  /** @type {Map<string, string>} ShortName → "Vorname Nachname" */
-  let nameMap = new Map();
+  /** ShortName → "Vorname Nachname" */
+  let nameMap: Map<string, string> = new Map();
 
   // Subscription handle
-  let unsubscribe = null;
+  let unsubscribe: (() => void) | null = null;
 
   onMount(() => {
     initAuth();
@@ -152,7 +159,7 @@
    *  - Sonst werden alle durch Leerzeichen getrennten Tokens einzeln gezählt.
    *  - Leere Tokens, "-" werden ignoriert.
    */
-  function parseField(raw) {
+  function parseField(raw: string | undefined | null): string[] {
     if (!raw || !raw.trim() || raw.trim() === '-') return [];
 
     const starred = [...raw.matchAll(/\*(\S+)\*/g)].map((m) => m[1]);
@@ -165,7 +172,7 @@
    * Gibt den Anzeigenamen für einen ShortName zurück.
    * Fallback: ShortName selbst.
    */
-  function displayName(shortName) {
+  function displayName(shortName: string): string {
     return nameMap.get(shortName) || shortName;
   }
 
@@ -182,22 +189,18 @@
    * @param {object[]} termine
    * @returns {{ shortName:string, displayName:string, instruments:string[], count:number }[]}
    */
-  function buildRanking(termine, withProben) {
-    /**
-     * Pro Person: Menge der Termine (dates) + Menge der Instrumente
-     * @type {Map<string, { dates: Set<string>, instruments: Set<string> }>}
-     */
-    const map = new Map();
+  function buildRanking(termine: Record<string, unknown>[], withProben: boolean): RankingEntry[] {
+    const map = new Map<string, { dates: Set<string>; instruments: Set<string> }>();
 
     for (const termin of termine) {
       // Comboprobe-Erkennung: Verantwortlich === 'COM' (gleiche Logik wie ComboplanFB)
-      const isComboprobe = termin.Verantwortlich === 'COM';
+      const isComboprobe = (termin as Record<string, unknown>).Verantwortlich === 'COM';
       if (isComboprobe && !withProben) continue;
 
-      const date = termin.Termin; // z.B. "2024-11-03 10:00"
+      const date = (termin as Record<string, unknown>).Termin as string;
 
       for (const inst of INSTRUMENTS) {
-        const shortNames = parseField(termin[inst.key]);
+        const shortNames = parseField((termin as Record<string, unknown>)[inst.key] as string | undefined);
         for (const sn of shortNames) {
           if (!map.has(sn)) {
             map.set(sn, { dates: new Set(), instruments: new Set() });
@@ -241,14 +244,14 @@
     return result;
   })();
 
-  function rankStyle(place) {
+  function rankStyle(place: number): 'gold' | 'silver' | 'bronze' | null {
     if (place === 1) return 'gold';
     if (place === 2) return 'silver';
     if (place === 3) return 'bronze';
     return null;
   }
 
-  const rankColors = {
+  const rankColors: Record<string, string> = {
     gold:   'text-yellow-400',
     silver: 'text-gray-400',
     bronze: 'text-orange-600',

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
@@ -15,9 +15,9 @@
   } from 'flowbite-svelte-icons';
 
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getFirestore, doc, getDoc, collection } from 'firebase/firestore';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import {
@@ -43,6 +43,13 @@
     { value: 48, name: 'Letzte 48 Monate' },
   ];
 
+  interface HitlistenEintrag {
+    id: string;
+    titel: string;
+    count: number;
+    daten: string[];
+  }
+
   let selectedZeitraum = 2;
 
   // ---------------------------------------------------------------------------
@@ -50,15 +57,15 @@
   // ---------------------------------------------------------------------------
   let popupSpinnerModal = true;
   let dataLoaded = false;
-  let hitliste = [];
+  let hitliste: HitlistenEintrag[] = [];
 
-  /** @type {Map<string, string>} ID → Liedtitel */
-  let liederMap = new Map();
+  /** ID → Liedtitel */
+  let liederMap: Map<string, string> = new Map();
 
-  let unsubscribe = null;
-  let dbRealtime = null;
-  let dbFireStore = null;
-  let storage = null;
+  let unsubscribe: (() => void) | null = null;
+  let dbRealtime: ReturnType<typeof getDatabase> | null = null;
+  let dbFireStore: ReturnType<typeof getFirestore> | null = null;
+  let storage: ReturnType<typeof getStorage> | null = null;
   let comboListRole = false;
 
   onMount(() => {
@@ -75,7 +82,7 @@
   }
 
   /** Lädt alle Liedtitel aus Firestore und danach die Hitliste */
-  const loadAll = async (months) => {
+  const loadAll = async (months: number) => {
     popupSpinnerModal = true;
     const app = initAppCheck();
     dbFireStore = getFirestore(app);
@@ -111,7 +118,7 @@
     loadHitliste(months);
   };
 
-  const loadHitliste = (months) => {
+  const loadHitliste = (months: number) => {
     popupSpinnerModal = true;
     if (unsubscribe) {
       unsubscribe();
@@ -148,9 +155,8 @@
    * Aggregiert alle gespielten Lieder aus den Terminen zu einer Hitliste.
    * Ab 3 Monaten werden Lieder, die nur einmal gespielt wurden, ausgeblendet.
    */
-  function buildHitliste(termine, months) {
-    /** @type {Map<string, { count: number, daten: Set<string> }>} */
-    const map = new Map();
+  function buildHitliste(termine: Record<string, unknown>[], months: number): HitlistenEintrag[] {
+    const map = new Map<string, { count: number; daten: Set<string> }>();
 
     for (const termin of termine) {
       if (termin.Verantwortlich === 'COM') continue; // Comboproben ausschließen
@@ -199,14 +205,14 @@
     return result;
   })();
 
-  function rankStyle(place) {
+  function rankStyle(place: number): 'gold' | 'silver' | 'bronze' | null {
     if (place === 1) return 'gold';
     if (place === 2) return 'silver';
     if (place === 3) return 'bronze';
     return null;
   }
 
-  const rankColors = {
+  const rankColors: Record<string, string> = {
     gold:   'text-yellow-400',
     silver: 'text-gray-400',
     bronze: 'text-orange-600',
@@ -217,26 +223,16 @@
   // ---------------------------------------------------------------------------
   let detailOpen = false;
 
-  /**
-   * Das aktuell im Popup angezeigte Lied.
-   * @type {{ id: string, titel: string, count: number, daten: string[] } | null}
-   */
-  let detailLied = null;
+  let detailLied: HitlistenEintrag | null = null;
 
-  /**
-   * Firestore-Daten des Liedes (Dateiname, MP3, Liedtext).
-   * null = noch nicht geladen / wird gerade geladen
-   * false = kein Eintrag in Firestore vorhanden
-   */
-  let detailDaten = null;
+  /** Firestore-Daten des Liedes. null=loading, false=nicht vorhanden, object=geladen */
+  let detailDaten: Record<string, unknown> | null | false = null;
   let detailLoading = false;
 
-  /** Promise für die MP3-URL – wird erst gesetzt wenn detailDaten.Dateiname vorhanden */
-  let mp3UrlPromise = null;
-  /** Promise für die Noten-URL */
-  let notenUrlPromise = null;
+  let mp3UrlPromise: Promise<string> | null = null;
+  let notenUrlPromise: Promise<string> | null = null;
 
-  async function openDetail(lied) {
+  async function openDetail(lied: HitlistenEintrag) {
     detailLied = lied;
     detailDaten = null;
     detailLoading = true;

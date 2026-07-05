@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { initPredigerStore } from './stores/predigerStore.js';
+  import { initPredigerStore } from './stores/predigerStore.ts';
 
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
@@ -13,9 +13,9 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider } from 'flowbite-svelte';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
   
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import {
     getDatabase,
@@ -26,15 +26,30 @@
     startAt,
     endAt,
   } from 'firebase/database';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getFirestore } from 'firebase/firestore';
 
-  let termine;
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    Tasten?: string;
+    Melodie?: string;
+    Gitarre?: string;
+    Drums?: string;
+    Bass?: string;
+    Beamer?: string;
+    Zusatzinfo?: string;
+    name: string;
+    value: string;
+  }
+
+  let termine: Termin[] | undefined;
   let popupSpinnerModal = true;
   let showComboProben = false;
 
   // Subscription für Firebase Realtime Database
-  let termineSubscription = null;
+  let termineSubscription: ReturnType<typeof onValue> | null = null;
 
   onMount(() => {
     console.log('FireBase');
@@ -76,7 +91,7 @@
     });
   };
 
-  let formatDate = (date) => {
+  let formatDate = (date: string) => {
     dayjs.locale('de');
     return dayjs(date).format('dd. D.M. H:mm ');
   };

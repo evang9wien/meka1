@@ -1,6 +1,6 @@
 <script>
   import { Avatar, Tooltip } from 'flowbite-svelte';
-  import { predigerList } from '../stores/predigerStore.js';
+  import { predigerList } from '../stores/predigerStore.ts';
   import { resolveLocalAvatarSrc } from './PredigtConstants.js';
 
   export let prediger = '';

@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { GradientButton, Button, Card, Badge, Input, Label, Spinner, Alert } from 'flowbite-svelte';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline, UserAddOutline, TrashBinOutline, CheckCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
 
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAppCheck } from './firebase/firebase.ts';
   import { getFirestore, collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
   import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
@@ -29,16 +29,26 @@
 
   // ─── State ────────────────────────────────────────────────────────────────
 
-  let dbFireStore;
-  let users = [];
+  interface UserRecord {
+    uid: string;
+    email?: string;
+    VName?: string;
+    FName?: string;
+    ShortName?: string;
+    roles: string[];
+    [key: string]: unknown;
+  }
+
+  let dbFireStore: ReturnType<typeof getFirestore>;
+  let users: UserRecord[] = [];
   let popupSpinnerModal = false;
   let dataLoaded = false;
 
   // Rollen bearbeiten
-  let editUser = null;
-  let editRoles = [];
+  let editUser: UserRecord | null = null;
+  let editRoles: string[] = [];
   let editModalOpen = false;
-  let saveStatus = '';   // '' | 'saving' | 'error'
+  let saveStatus: '' | 'saving' | 'error' = '';
 
   // Neuer User
   let newModalOpen = false;
@@ -46,18 +56,18 @@
   let newEmail = '';
   let newVName = '';
   let newFName = '';
-  let newRoles = [];
-  let newStatus = '';    // '' | 'saving' | 'ok' | 'error' | 'exists'
+  let newRoles: string[] = [];
+  let newStatus: '' | 'saving' | 'ok' | 'error' | 'exists' = '';
 
   // Löschen
-  let deleteUser = null;
+  let deleteUser: UserRecord | null = null;
   let deleteModalOpen = false;
 
   // Toast
   let toastMsg = '';
-  let toastType = 'green';
+  let toastType: string = 'green';
   let toastVisible = false;
-  let toastTimeout;
+  let toastTimeout: ReturnType<typeof setTimeout>;
 
   // ─── Auth & Laden ─────────────────────────────────────────────────────────
 
@@ -83,7 +93,7 @@
       .sort((a, b) => fullName(a).localeCompare(fullName(b)));
   };
 
-  const fullName = (user) =>
+  const fullName = (user: UserRecord): string =>
     [user.VName, user.FName].filter(Boolean).join(' ') || user.email || user.uid;
 
   // ─── Benutzer bearbeiten (Rollen + Namen) ─────────────────────────────────
@@ -94,7 +104,7 @@
   let editEmail = '';
   let editShortName = '';
 
-  const openEdit = (user) => {
+  const openEdit = (user: UserRecord) => {
     editUser = user;
     editUid = user.uid;
     editRoles = [...user.roles];
@@ -106,7 +116,7 @@
     editModalOpen = true;
   };
 
-  const toggleEditRole = (roleId) => {
+  const toggleEditRole = (roleId: string) => {
     if (editRoles.includes(roleId)) {
       editRoles = editRoles.filter(r => r !== roleId);
     } else {
@@ -163,7 +173,7 @@
     newModalOpen = true;
   };
 
-  const toggleNewRole = (roleId) => {
+  const toggleNewRole = (roleId: string) => {
     if (newRoles.includes(roleId)) {
       newRoles = newRoles.filter(r => r !== roleId);
     } else {
@@ -205,7 +215,7 @@
 
   // ─── Passwort-Reset senden ────────────────────────────────────────────────
 
-  const sendReset = async (user) => {
+  const sendReset = async (user: UserRecord) => {
     if (!user.email) { showToast('Keine E-Mail-Adresse hinterlegt.', 'red'); return; }
     try {
       const app = initAppCheck();
@@ -213,13 +223,13 @@
       await sendPasswordResetEmail(auth, user.email);
       showToast(`Passwort-Reset an ${user.email} gesendet.`, 'green');
     } catch (e) {
-      showToast(`Fehler: ${e.message}`, 'red');
+      showToast(`Fehler: ${(e as Error).message}`, 'red');
     }
   };
 
   // ─── User löschen ─────────────────────────────────────────────────────────
 
-  const openDelete = (user) => {
+  const openDelete = (user: UserRecord) => {
     deleteUser = user;
     deleteModalOpen = true;
   };
@@ -239,7 +249,7 @@
 
   // ─── Toast ────────────────────────────────────────────────────────────────
 
-  const showToast = (msg, type = 'green') => {
+  const showToast = (msg: string, type = 'green') => {
     clearTimeout(toastTimeout);
     toastMsg = msg;
     toastType = type;
@@ -247,7 +257,7 @@
     toastTimeout = setTimeout(() => { toastVisible = false; }, 4000);
   };
 
-  const roleLabel = (roleId) => ALL_ROLES.find(r => r.id === roleId)?.label ?? roleId;
+  const roleLabel = (roleId: string): string => ALL_ROLES.find(r => r.id === roleId)?.label ?? roleId;
 </script>
 
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->

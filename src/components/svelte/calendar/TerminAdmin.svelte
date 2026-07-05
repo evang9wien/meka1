@@ -7,7 +7,7 @@
   import { Timeline, TimelineItem, Avatar, GradientButton } from 'flowbite-svelte';
   import { CalendarWeekSolid } from 'flowbite-svelte-icons';
   import { ArrowRightOutline } from 'flowbite-svelte-icons';
-  import { getLocalAvatarByVorname } from '../predigt/PredigtConstants.js';
+  import { getLocalAvatarByVorname } from '../predigt/PredigtConstants.ts';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
 
   const sync = () => {

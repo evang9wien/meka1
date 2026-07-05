@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { getAuth, signOut } from 'firebase/auth';
-  import { initAuth, currentUser, userRoles, userProfile, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAuth, currentUser, userRoles, userProfile, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
   import LoginFire from './auth/LoginFire.svelte';
 
   let open = false;
   let openUpward = false;
-  let buttonEl;
-  let popupEl;
+  let buttonEl: HTMLButtonElement;
+  let popupEl: HTMLDivElement;
 
   onMount(() => {
     initAuth();
@@ -40,7 +40,7 @@
   };
 
   // Rollen-Label aus bekannten IDs
-  const ROLE_LABELS = {
+  const ROLE_LABELS: Record<string, string> = {
     admin:             'Admin',
     combo:             'Combo',
     comboedit:         'Combo Edit',
@@ -52,13 +52,13 @@
     predigtedit:       'Predigt Edit',
     kirchenservice:    'Kirchenservice',
   };
-  const roleLabel = (id) => ROLE_LABELS[id] ?? id;
+  const roleLabel = (id: string): string => ROLE_LABELS[id] ?? id;
 
   $: displayName = $userProfile
     ? ([($userProfile.VName ?? ''), ($userProfile.FName ?? '')].filter(Boolean).join(' ') || $userProfile.email || $currentUser?.email || '')
     : ($currentUser?.email ?? '');
 
-  const gravatarUrl = (email) => {
+  const gravatarUrl = (email: string | null | undefined): string | null => {
     if (!email) return null;
     // MD5 via SubtleCrypto (async) ist zu aufwändig – wir nutzen eine kleine sync-Implementierung
     const hash = md5(email.trim().toLowerCase());
@@ -66,24 +66,24 @@
   };
 
   // Minimale sync MD5-Implementierung (kein externesPackage nötig)
-  function md5(str) {
-    function safeAdd(x, y) { const lsw = (x & 0xffff) + (y & 0xffff); return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xffff); }
-    function bitRotateLeft(num, cnt) { return (num << cnt) | (num >>> (32 - cnt)); }
-    function md5cmn(q, a, b, x, s, t) { return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
-    function md5ff(a,b,c,d,x,s,t){return md5cmn((b&c)|((~b)&d),a,b,x,s,t);}
-    function md5gg(a,b,c,d,x,s,t){return md5cmn((b&d)|(c&(~d)),a,b,x,s,t);}
-    function md5hh(a,b,c,d,x,s,t){return md5cmn(b^c^d,a,b,x,s,t);}
-    function md5ii(a,b,c,d,x,s,t){return md5cmn(c^(b|(~d)),a,b,x,s,t);}
-    function utf8Encode(s) { return decodeURIComponent(encodeURIComponent(s).replace(/%../g, (m) => String.fromCharCode(parseInt(m.slice(1), 16)))); }
-    function str2binl(str) {
-      const bin = []; for (let i=0;i<str.length*8;i+=8) bin[i>>5]|=(str.charCodeAt(i/8)&0xff)<<(i%32); return bin;
+  function md5(str: string): string {
+    function safeAdd(x: number, y: number): number { const lsw = (x & 0xffff) + (y & 0xffff); return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xffff); }
+    function bitRotateLeft(num: number, cnt: number): number { return (num << cnt) | (num >>> (32 - cnt)); }
+    function md5cmn(q: number, a: number, b: number, x: number, s: number, t: number): number { return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
+    function md5ff(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn((b&c)|((~b)&d),a,b,x,s,t);}
+    function md5gg(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn((b&d)|(c&(~d)),a,b,x,s,t);}
+    function md5hh(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn(b^c^d,a,b,x,s,t);}
+    function md5ii(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn(c^(b|(~d)),a,b,x,s,t);}
+    function utf8Encode(s: string): string { return decodeURIComponent(encodeURIComponent(s).replace(/%../g, (m) => String.fromCharCode(parseInt(m.slice(1), 16)))); }
+    function str2binl(str: string): number[] {
+      const bin: number[] = []; for (let i=0;i<str.length*8;i+=8) bin[i>>5]|=(str.charCodeAt(i/8)&0xff)<<(i%32); return bin;
     }
-    function binl2hex(binarray) {
+    function binl2hex(binarray: number[]): string {
       const hex='0123456789abcdef'; let str='';
       for(let i=0;i<binarray.length*4;i++) str+=hex[(binarray[i>>2]>>((i%4)*8+4))&0xf]+hex[(binarray[i>>2]>>((i%4)*8))&0xf];
       return str;
     }
-    function binlMD5(x, len) {
+    function binlMD5(x: number[], len: number): number[] {
       x[len>>5]|=0x80<<(len%32); x[(((len+64)>>>9)<<4)+14]=len;
       let a=1732584193,b=-271733879,c=-1732584194,d=271733878;
       for(let i=0;i<x.length;i+=16){
@@ -112,7 +112,7 @@
     return binl2hex(binlMD5(str2binl(s), s.length * 8));
   }
 
-  $: avatarUrl = $currentUser?.photoURL ?? gravatarUrl($currentUser?.email);
+  $: avatarUrl = $currentUser?.photoURL ?? gravatarUrl($currentUser?.email ?? null);
   let avatarError = false;
   $: if ($currentUser) avatarError = false; // reset on user change
 </script>

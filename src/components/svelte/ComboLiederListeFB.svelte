@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import dayjs from 'dayjs';
 
@@ -16,8 +16,8 @@
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
 
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
 
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFirestore, doc, getDoc, collection, getDocs } from 'firebase/firestore';
@@ -35,27 +35,34 @@
   // ---------------------------------------------------------------------------
   // State
   // ---------------------------------------------------------------------------
-  let liederListe = [];
-  let liederListeAll = [];
-  let liederListeKat = [];
+  interface LiedEintrag {
+    name: string;
+    value: string;
+    ID: string;
+    Aktiv?: number;
+    EG?: string | number;
+    Kategorie?: string;
+    [key: string]: unknown;
+  }
+
+  let liederListe: LiedEintrag[] = [];
+  let liederListeAll: LiedEintrag[] = [];
+  let liederListeKat: LiedEintrag[] = [];
 
   let popupSpinnerModal = false;
-  let storage;
-  let dbFireStore;
-  let functions;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: ReturnType<typeof getFirestore>;
+  let functions: ReturnType<typeof getFunctions>;
   let comboListRole = false;
   let dataLoaded = false;
 
-  let alleLiederTexte;
-  let searchLiederFn;
-  let searchTimeout;
+  let alleLiederTexte: import('firebase/firestore').QuerySnapshot;
+  let searchLiederFn: import('firebase/functions').HttpsCallable;
+  let searchTimeout: ReturnType<typeof setTimeout> | null = null;
   let lastSearchTerm = '';
 
-  /**
-   * Spielstatistik aus den letzten 12 Monaten.
-   * @type {Map<string, { count: number, lastPlayed: string }>}
-   */
-  let spielstatistikMap = new Map();
+  /** Spielstatistik aus den letzten 12 Monaten. */
+  let spielstatistikMap: Map<string, { count: number; lastPlayed: string }> = new Map();
   const STATISTIK_MONATE = 12;
 
   onMount(() => {
@@ -70,7 +77,7 @@
   // ---------------------------------------------------------------------------
   // Daten laden
   // ---------------------------------------------------------------------------
-  const loadData = async (user) => {
+  const loadData = async (user: { uid: string }) => {
     const app = initAppCheck();
     functions = getFunctions(app, 'europe-west1');
     searchLiederFn = httpsCallable(functions, 'searchLieder');
@@ -118,7 +125,7 @@
    * Lädt die Spielhäufigkeit + letztes Spieldatum der letzten STATISTIK_MONATE
    * aus combo/termine. Läuft nach dem initialen Render (kein Spinner nötig).
    */
-  async function loadSpielstatistik(db) {
+  async function loadSpielstatistik(db: ReturnType<typeof getDatabase>) {
     const fromDate = dayjs().subtract(STATISTIK_MONATE, 'month').format('YYYY-MM-DD');
     const toDate   = dayjs().add(1, 'day').format('YYYY-MM-DD');
 
@@ -200,8 +207,8 @@
     }, 500);
   }
 
-  function filterInLiedtext(suchtext) {
-    const ergebnisse = [];
+  function filterInLiedtext(suchtext: string): string[] {
+    const ergebnisse: string[] = [];
     alleLiederTexte.forEach((d) => {
       const data = d.data();
       if (data.Liedtext && data.Liedtext.toLowerCase().includes(suchtext.toLowerCase())) {
@@ -247,18 +254,17 @@
   // Detail-Popup – lazy (nur beim Öffnen wird Firestore/Storage angefragt)
   // ---------------------------------------------------------------------------
   let detailOpen = false;
-  /** @type {{ ID: string, name: string } | null} */
-  let detailLied = null;
+  let detailLied: LiedEintrag | null = null;
   /** Firestore-Daten: null=loading, false=nicht vorhanden, object=geladen */
-  let detailDaten = null;
+  let detailDaten: Record<string, unknown> | null | false = null;
   let detailLoading = false;
-  let mp3UrlPromise = null;
-  let notenUrlPromise = null;
+  let mp3UrlPromise: Promise<string> | null = null;
+  let notenUrlPromise: Promise<string> | null = null;
 
   /** Reaktive Spielstatistik für das aktuell geöffnete Lied */
   $: detailStat = detailLied ? spielstatistikMap.get(detailLied.ID) ?? null : null;
 
-  async function openDetail(lied) {
+  async function openDetail(lied: LiedEintrag) {
     detailLied = lied;
     detailDaten = null;
     detailLoading = true;

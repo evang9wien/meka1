@@ -1,19 +1,19 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import "leaflet/dist/leaflet.css";
   import L from 'leaflet';
+  import type { Map as LeafletMap, Marker } from 'leaflet';
 
-  export let view;
-  export let zoom;
-  export let maxZoom;
-  export let minZoom;
-  export let marker;
-  export let markerPopup;
-  export let markerPath;
+  export let view: [number, number];
+  export let zoom: number;
+  export let maxZoom: number;
+  export let minZoom: number;
+  export let marker: [number, number];
+  export let markerPopup: string;
+  export let markerPath: string;
 
-  var map;
-  var mark;
-  var attr;
+  let map: LeafletMap;
+  let mark: Marker;
 
   L.Icon.Default.prototype.options.imagePath = String(markerPath);
 
