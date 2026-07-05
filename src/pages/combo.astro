@@ -26,6 +26,11 @@ const metadata = {
         icon: 'tabler:calendar-plus',
       },
       {
+        text: 'Comboplan ansehen',
+        href: getPermalink('/combo/comboplanFBpage'),
+        icon: 'tabler:calendar-event',
+      },
+      {
         text: 'Lieder für den Gottesdienst',
         href: getPermalink('/combo/comboliederauswahlFBpage'),
         icon: 'tabler:music',
@@ -40,8 +45,8 @@ const metadata = {
   <!-- ═══ LEKTOREN / LIEDVERANTWORTLICHE ═══ -->
   <Features2
     id="lektoren"
-    tagline="Lektoren &amp; Liedverantwortliche"
-    title="Lieder &amp; Planung"
+    tagline="Lektorinnen &amp; Lektoren"
+    title="Liederplanung"
     columns={2}
     items={[
       {
@@ -123,7 +128,7 @@ const metadata = {
             },
             {
               title: 'Combo Statistik',
-              description: 'Rangliste der Musiker nach Einsatzhäufigkeit.',
+              description: 'Rangliste der Musikteam-Mitglieder nach Einsatzhäufigkeit.',
               icon: 'tabler:chart-bar',
               callToAction: {
                 text: 'Öffnen →',
