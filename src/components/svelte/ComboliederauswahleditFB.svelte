@@ -16,8 +16,8 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
@@ -148,6 +148,7 @@
 
     popupSpinnerModal = true;
     dbFireStore = getFirestore(app);
+    initPredigerStore(dbFireStore);
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
     comboLieder = [];
     for (const [key, value] of Object.entries(liederGes.data())) {
@@ -432,7 +433,7 @@
             <div class="space-y-1 font-medium dark:text-white">
               <div>Liederauswahl bearbeiten</div>
               {#if verantwortlich}
-                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongNameFromStore(verantwortlich)}</div>
               {/if}
             </div>
           </div>

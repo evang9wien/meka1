@@ -1,44 +1,53 @@
 <script>
-  // Statische Fallback-Imports (werden verwendet wenn Firebase-URL noch nicht geladen)
-  import stefan      from '../../../assets/images/avatar/stefan-Avatar.png';
-  import harald      from '../../../assets/images/avatar/Harald-Geschl-Avatar.png';
-  import mark        from '../../../assets/images/avatar/Mark-Ruiz-Hellin-Avatar.png';
-  import tanja       from '../../../assets/images/avatar/Tanja-Avatar.png';
-  import wolfgang    from '../../../assets/images/avatar/Wolfgang-Avatar.png';
-  import mekaclassic from '../../../assets/images/avatar/meka-classic.png';
-  import musik       from '../../../assets/images/avatar/musik.png';
-
-  import { Avatar } from 'flowbite-svelte';
+  import { Avatar, Tooltip } from 'flowbite-svelte';
   import { predigerList } from '../stores/predigerStore.js';
+  import { resolveLocalAvatarSrc } from './PredigtConstants.js';
 
   export let prediger = '';
   export let clazz = '';
   export let title = '';
 
-  // Statische Fallback-Map (Kürzel + Vornamen → lokales Bild)
-  const staticFallback = {
-    SFJ: stefan.src,     Stefan:   stefan.src,
-    GH:  harald.src,     Harald:   harald.src,
-    MRH: mark.src,       Mark:     mark.src,
-    TDH: tanja.src,      Tanja:    tanja.src,
-    WW:  wolfgang.src,   Wolfgang: wolfgang.src,
-    COM: musik.src,
-  };
+  const musikSrc     = resolveLocalAvatarSrc('musik.png')      ?? '';
+  const mekaclassicSrc = resolveLocalAvatarSrc('meka-classic.png') ?? '';
 
-  function getAvatar(list) {
+  function getAvatar(list, p, t) {
     // Sondertitel (Comboprobe, MEKA-Classic)
-    if (title?.toLowerCase().includes('comboprobe'))  return musik.src;
-    if (title?.toLowerCase().includes('meka classic')) return mekaclassic.src;
+    if (t?.toLowerCase().includes('comboprobe'))   return musikSrc;
+    if (t?.toLowerCase().includes('meka classic')) return mekaclassicSrc;
 
-    // Firebase-Store: avatarUrl vorhanden?
-    if (list && prediger) {
-      const entry = list.find((p) => p.kuerzel === prediger || p.vorname === prediger);
-      if (entry?.avatarUrl) return entry.avatarUrl;
+    if (list && p) {
+      const entry = list.find((e) => e.kuerzel === p || e.vorname === p);
+      if (entry) {
+        // localImage: Dateiname → lokales Bild aus /assets/images/avatar/
+        if (entry.localImage) {
+          const local = resolveLocalAvatarSrc(entry.localImage);
+          if (local) return local;
+        }
+        // avatarUrl: Firebase Storage URL
+        if (entry.avatarUrl) return entry.avatarUrl;
+      }
     }
 
-    // Statischer Fallback
-    return staticFallback[prediger] ?? '';
+    // COM (Comboprobe ohne title-Hint)
+    if (p === 'COM') return musikSrc;
+
+    return '';
   }
+
+  function getLongName(list, p) {
+    if (!p) return '';
+    if (list) {
+      const entry = list.find((e) => e.kuerzel === p || e.vorname === p);
+      if (entry?.langname) return entry.langname;
+    }
+    return '';
+  }
+
+  $: avatarSrc = getAvatar($predigerList, prediger, title);
+  $: longName  = getLongName($predigerList, prediger);
 </script>
 
-<Avatar size="md" class="object-cover {clazz}" src={getAvatar($predigerList)} />
+<Avatar size="md" class="object-cover {clazz}" src={avatarSrc} />
+{#if longName}
+  <Tooltip>{longName}</Tooltip>
+{/if}

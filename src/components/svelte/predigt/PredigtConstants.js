@@ -1,87 +1,58 @@
-const namenMap = new Map();
+/**
+ * PredigtConstants.js
+ *
+ * Verwaltet lokale Avatar-Bilddateien für Prediger.
+ * Alle Prediger-Stammdaten (Namen, Kürzel, Varianten) werden zur Laufzeit
+ * aus der Firestore Collection "prediger" geladen (→ predigerStore.js).
+ *
+ * localImage-Feld in Firestore:
+ *   Dateiname eines Bildes aus /assets/images/avatar/ (z.B. "stefan-Avatar.png").
+ *   Um ein neues Bild zu unterstützen: PNG in diesen Ordner legen, dann den
+ *   Dateinamen in Firestore unter `localImage` eintragen — fertig.
+ */
 
-namenMap.set('GH', 'Pfarrer i.R. Harald Geschl');
-namenMap.set('SFJ', 'Pfarrer Stefan Fleischner-Janits');
-namenMap.set('WW', 'Lektor Wolfgang Waldschütz');
-namenMap.set('TDH', 'Lektorin Tanja Dietrich-Hübner');
-namenMap.set('MRH', 'Lektor Mark Ruiz-Hellin');
-namenMap.set('COM', 'Comboprobe');
+// Alle PNGs aus dem Avatar-Ordner per Glob importieren.
+// Vite verarbeitet damit automatisch jede neue Datei im Ordner.
+const avatarModules = import.meta.glob(
+  '../../../assets/images/avatar/*.png',
+  { eager: true }
+);
+
+// Dateiname → build-verarbeitete URL  (z.B. "stefan-Avatar.png" → "/_astro/stefan-Avatar.XXX.png")
+const avatarByFilename = Object.fromEntries(
+  Object.entries(avatarModules).map(([path, mod]) => {
+    const filename = path.split('/').at(-1);
+    return [filename, mod.default?.src ?? mod.default ?? ''];
+  })
+);
+
+// ─── Exports ─────────────────────────────────────────────────────────────────
 
 /**
- * Static fallback list of prediger.
- * This is the seed data for Firebase (combo/prediger) and a build-time fallback.
- * The live data is managed in Firebase — use predigerStore.js for runtime access.
+ * Gibt die build-verarbeitete Avatar-URL für einen Dateinamen zurück,
+ * der im Firestore-Dokument unter `localImage` gespeichert ist.
+ * Gibt null zurück wenn die Datei nicht im Avatar-Ordner gefunden wird.
+ *
+ * @param {string} filename  z.B. "stefan-Avatar.png"
+ * @returns {string|null}
  */
-export const PREDIGER = [
-  { kuerzel: 'SFJ', vornamen: ['Stefan'],   langname: 'Pfarrer Stefan Fleischner-Janits',  varianten: ['Stefan FLEISCHNER-JANITS', 'Stefan Fleischner-Janits'] },
-  { kuerzel: 'GH',  vornamen: ['Harald'],   langname: 'Pfarrer i.R. Harald Geschl',        varianten: ['Harald GESCHL', 'Harald Geschl'] },
-  { kuerzel: 'WW',  vornamen: ['Wolfgang'], langname: 'Lektor Wolfgang Waldschütz',         varianten: ['Wolfgang WALDSCHÜTZ', 'Wolfgang Waldschütz'] },
-  { kuerzel: 'MRH', vornamen: ['Mark'],     langname: 'Lektor Mark Ruiz-Hellin',            varianten: ['Mark RUIZ HELLÍN', 'Mark RUIZ HELLIN', 'Mark RUIZ-HELLIN', 'Mark Ruiz-Hellin'] },
-  { kuerzel: 'TDH', vornamen: ['Tanja'],    langname: 'Lektorin Tanja Dietrich-Hübner',    varianten: ['Tanja DIETRICH HÜBNER', 'Tanja DIETRICH-HÜBNER', 'Tanja Dietrich-Hübner'] },
-];
+export function resolveLocalAvatarSrc(filename) {
+  if (!filename) return null;
+  return avatarByFilename[filename] ?? null;
+}
 
 /**
- * Returns the Kürzel for a prediger found anywhere in `text`, or '' if none found.
+ * Gibt die Avatar-URL für einen Vornamen zurück (Kalender-Lookup).
+ * Sucht nach einer Datei deren Name den Vornamen enthält.
+ *
+ * @param {string} vorname  z.B. "Stefan"
+ * @returns {string|null}
  */
-export function getPredigerKuerzel(text) {
-  if (!text) return '';
-  const upper = text.toUpperCase();
-  for (const p of PREDIGER) {
-    for (const v of p.varianten) {
-      if (upper.includes(v.toUpperCase())) return p.kuerzel;
-    }
-  }
-  return '';
-}
-
-export function getLongName(name) {
-  return namenMap.get(name) ? namenMap.get(name) : '';
-}
-
-const imgMap = new Map();
-
-imgMap.set('GH', 'Harald-Geschl.png');
-imgMap.set('SFJ', 'stefan.png');
-imgMap.set('WW', 'Wolfgang.png');
-imgMap.set('TDH', 'Tanja.png');
-imgMap.set('MRH', 'Mark-Ruiz-Hellin.png');
-
-export function getImage(name) {
-  return imgMap.get(name);
-}
-
-const avatarImgMap = new Map();
-
-avatarImgMap.set('GH', 'Harald-Geschl-Avatar.png');
-avatarImgMap.set('SFJ', 'stefan-Avatar.png');
-avatarImgMap.set('WW', 'Wolfgang-Avatar.png');
-avatarImgMap.set('TDH', 'Tanja-Avatar.png');
-avatarImgMap.set('MRH', 'Mark-Ruiz-Hellin-Avatar.png');
-
-export function getImageAvatar(name) {
-  return avatarImgMap.get(name);
-}
-
-const imgMapCal = new Map();
-
-imgMapCal.set('Harald', 'Harald-Geschl.png');
-imgMapCal.set('Stefan', 'stefan.png');
-imgMapCal.set('Wolfgang', 'Wolfgang.png');
-imgMapCal.set('Tanja', 'Tanja.png');
-imgMapCal.set('Mark', 'Mark-Ruiz-Hellin.png');
-
-export function getImageCal(name) {
-  return imgMapCal.get(name);
-}
-
-const avatarImgMapCal = new Map();
-
-avatarImgMapCal.set('Harald', 'Harald-Geschl-Avatar.png');
-avatarImgMapCal.set('Stefan', 'stefan-Avatar.png');
-avatarImgMapCal.set('Wolfgang', 'Wolfgang-Avatar.png');
-avatarImgMapCal.set('Tanja', 'Tanja-Avatar.png');
-avatarImgMapCal.set('Mark', 'Mark-Ruiz-Hellin-Avatar.png');
-
-export function getImageCalAvatar(name) {
-  return avatarImgMapCal.get(name);
+export function getLocalAvatarByVorname(vorname) {
+  if (!vorname) return null;
+  const lower = vorname.toLowerCase();
+  const entry = Object.entries(avatarByFilename).find(([name]) =>
+    name.toLowerCase().includes(lower)
+  );
+  return entry?.[1] ?? null;
 }

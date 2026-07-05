@@ -16,8 +16,7 @@
   import { Modal } from 'flowbite-svelte';
 
   import PredigtAvatar from './PredigtAvatar.svelte';
-  import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
-  import { getLongNameFromStore, predigerReady, initPredigerStore } from '../stores/predigerStore.js';
+  import { getLongNameFromStore, initPredigerStore } from '../stores/predigerStore.js';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -119,11 +118,7 @@
   }
 
   function getName(termin) {
-    // Store bevorzugen wenn geladen, sonst statischer Fallback
-    const langName = $predigerReady
-      ? getLongNameFromStore(termin.Verantwortlich)
-      : getLongName(termin.Verantwortlich);
-    return langName || termin.Verantwortlich;
+    return getLongNameFromStore(termin.Verantwortlich) || termin.Verantwortlich;
   }
 
   // function getImgAvatar(termin) {

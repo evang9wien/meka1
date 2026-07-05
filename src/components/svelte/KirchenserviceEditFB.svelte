@@ -16,7 +16,6 @@
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
   import { getUrl } from './url/url.js';
 

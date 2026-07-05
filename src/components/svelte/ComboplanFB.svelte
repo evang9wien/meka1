@@ -4,7 +4,7 @@
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
+  import { initPredigerStore } from './stores/predigerStore.js';
 
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
@@ -12,7 +12,7 @@
   import { MicrophoneOutline, EditOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
+  import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import { getUrl } from './url/url.js';
   
   import { initAuth, currentUser, authReady } from './stores/authStore.js';
@@ -105,7 +105,6 @@
                 <TableBodyCell>
                   <div class="flex flex-col place-items-center">
                     <PredigtAvatar prediger={termin.Verantwortlich} />
-                    <Tooltip>{getLongNameFromStore(termin.Verantwortlich)}</Tooltip>
                     {formatDate(termin.Termin)}
                   </div>
                 </TableBodyCell>

@@ -55,15 +55,16 @@
 
   const loadLieder = async (termin) => {
     console.log('Selected Termin: ', termin);
+
+    verantwortlich = termin.Verantwortlich;
+    selectedTermin = termin.Termin;
+    lastSelectedTermin = selectedTermin;
+
     if (!termin.LiedAuswahl) {
       console.log('Keine Liedauswahl vorhanden!');
       popupSpinnerModal = false;
       return;
     }
-
-    verantwortlich = termin.Verantwortlich;
-    selectedTermin = termin.Termin;
-    lastSelectedTermin = selectedTermin;
 
     // Sortiere die Lieder und füge Beschreibungen in einem Schritt hinzu
     const sortedLieder = termin.LiedAuswahl

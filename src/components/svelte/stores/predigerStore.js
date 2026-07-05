@@ -5,18 +5,17 @@
  * und stellt sie als reaktiven Svelte-Store bereit.
  *
  * Firestore Collection: prediger/{kuerzel}
- *   kuerzel:   string      z.B. "SFJ"
- *   langname:  string      z.B. "Pfarrer Stefan Fleischner-Janits"
- *   vorname:   string      z.B. "Stefan"  (für Avatar-Lookup in Calendar)
- *   varianten: string[]    Name-Varianten wie im Google Kalender
- *   avatarUrl: string      Download-URL aus Firebase Storage (oder '')
- *
- * Hinweis: Die Collection heißt "prediger", nicht "combo/prediger" —
- * Prediger-Stammdaten sind unabhängig vom Combo-Bereich.
+ *   kuerzel:    string      z.B. "SFJ"
+ *   langname:   string      z.B. "Pfarrer Stefan Fleischner-Janits"
+ *   vorname:    string      z.B. "Stefan"
+ *   varianten:  string[]    Name-Varianten wie im Google Kalender
+ *   avatarUrl:  string      Download-URL aus Firebase Storage (oder '')
+ *   localImage: string      Dateiname des lokalen Avatarbildes (oder ''),
+ *                           z.B. "stefan-Avatar.png". Wenn gesetzt, wird das
+ *                           lokale Bild aus /assets/images/avatar/ verwendet.
  */
 
 import { writable, get } from 'svelte/store';
-import { PREDIGER as STATIC_PREDIGER } from '../predigt/PredigtConstants.js';
 
 // ---- Stores ----------------------------------------------------------------
 
@@ -43,81 +42,40 @@ export function initPredigerStore(db) {
 }
 
 async function _startListener(db) {
-  const { collection, onSnapshot, doc, setDoc } = await import('firebase/firestore');
+  const { collection, onSnapshot } = await import('firebase/firestore');
 
   const col = collection(db, 'prediger');
 
   unsubscribeSnapshot = onSnapshot(
     col,
-    async (snapshot) => {
+    (snapshot) => {
       if (!snapshot.empty) {
         const list = snapshot.docs.map((d) => ({ ...d.data() }));
         predigerList.set(list);
         predigerReady.set(true);
-      } else {
-        // Collection leer → einmalig mit statischen Daten seeden
-        try {
-          await _seedFromStatic(db, doc, setDoc);
-          // onSnapshot feuert danach erneut mit den neuen Docs
-        } catch (e) {
-          console.error('predigerStore: Seed fehlgeschlagen:', e);
-          // Fallback: statische Daten direkt in den Store laden
-          _loadStaticFallback();
-        }
       }
+      // Leere Collection → Store bleibt null, kein automatisches Seeden mehr.
     },
     (error) => {
-      // Firestore-Zugriffsfehler (z.B. Security Rules) → statischer Fallback
       console.error('predigerStore: onSnapshot Fehler:', error);
-      _loadStaticFallback();
+      // Kein statischer Fallback mehr — Store bleibt null.
     }
   );
-}
-
-/** Lädt die statischen Prediger direkt in den Store (kein Firestore-Schreiben). */
-function _loadStaticFallback() {
-  const list = STATIC_PREDIGER.map((p) => ({
-    kuerzel:   p.kuerzel,
-    langname:  p.langname || '',
-    vorname:   p.vornamen[0],
-    varianten: p.varianten,
-    avatarUrl: '',
-  }));
-  predigerList.set(list);
-  predigerReady.set(true);
-  console.warn('predigerStore: Statischer Fallback aktiv — Firestore nicht erreichbar.');
-}
-
-/**
- * Schreibt die statischen Prediger einmalig in Firestore.
- */
-async function _seedFromStatic(db, doc, setDoc) {
-  for (const p of STATIC_PREDIGER) {
-    const entry = {
-      kuerzel:   p.kuerzel,
-      langname:  p.langname || '',
-      vorname:   p.vornamen[0],
-      varianten: p.varianten,
-      avatarUrl: '',
-    };
-    await setDoc(doc(db, 'prediger', p.kuerzel), entry);
-  }
 }
 
 // ---- Hilfsfunktionen -------------------------------------------------------
 
 /**
  * Gibt das Kürzel zurück, dessen Name-Variante in `text` vorkommt.
- * Verwendet Store-Daten wenn vorhanden, sonst statischen Fallback.
  * @param {string} text
  * @returns {string}
  */
 export function getPredigerKuerzelFromStore(text) {
   if (!text) return '';
   const list = get(predigerList);
-  const source = list ?? STATIC_PREDIGER;
+  if (!list) return '';
   const upper = text.toUpperCase();
-  for (const p of source) {
+  for (const p of list) {
     for (const v of (p.varianten || [])) {
       if (upper.includes(v.toUpperCase())) return p.kuerzel;
     }
@@ -131,40 +89,11 @@ export function getPredigerKuerzelFromStore(text) {
  * @returns {string}
  */
 export function getLongNameFromStore(kuerzel) {
+  if (!kuerzel) return '';
   const list = get(predigerList);
   if (list) {
     const found = list.find((p) => p.kuerzel === kuerzel);
-    if (found) return found.langname || kuerzel;
+    if (found?.langname) return found.langname;
   }
-  const staticP = STATIC_PREDIGER.find((p) => p.kuerzel === kuerzel);
-  return staticP ? (staticP.langname || kuerzel) : kuerzel;
-}
-
-/**
- * Gibt die Avatar-URL für ein Kürzel zurück.
- * @param {string} kuerzel
- * @returns {string}
- */
-export function getAvatarUrlFromStore(kuerzel) {
-  const list = get(predigerList);
-  if (list) {
-    const found = list.find((p) => p.kuerzel === kuerzel);
-    if (found) return found.avatarUrl || '';
-  }
-  return '';
-}
-
-/**
- * Gibt den Vornamen für ein Kürzel zurück (für Avatar-Lookup in Calendar).
- * @param {string} kuerzel
- * @returns {string}
- */
-export function getVornameFromStore(kuerzel) {
-  const list = get(predigerList);
-  if (list) {
-    const found = list.find((p) => p.kuerzel === kuerzel);
-    if (found) return found.vorname || '';
-  }
-  const staticP = STATIC_PREDIGER.find((p) => p.kuerzel === kuerzel);
-  return staticP ? staticP.vornamen[0] : '';
+  return kuerzel;
 }

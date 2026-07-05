@@ -22,10 +22,8 @@
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set, update, remove } from 'firebase/database';
   import { initAuth, currentUser, authReady } from '../stores/authStore.js';
   import { initAppCheck } from '../firebase/firebase.js';
-  import { PREDIGER } from '../predigt/PredigtConstants.js';
   import {
     predigerList,
-    predigerReady,
     initPredigerStore,
     getPredigerKuerzelFromStore,
   } from '../stores/predigerStore.js';
@@ -202,8 +200,8 @@
   // Entfernt alle bekannten Predigernamen und Titel aus einem Text
   function stripPredigerAndTitles(text: string): string {
     let result = text;
-    // Predigernamen aus Store (oder statischem Fallback) entfernen
-    const sourceList = $predigerList ?? PREDIGER;
+    // Predigernamen aus Store entfernen (nur wenn geladen)
+    const sourceList = $predigerList ?? [];
     for (const p of sourceList) {
       for (const v of (p.varianten || [])) {
         result = result.replace(new RegExp(v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*,?', 'gi'), ' ');
