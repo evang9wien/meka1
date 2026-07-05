@@ -8,6 +8,17 @@
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
   import { getImageCalAvatar } from '../predigt/PredigtConstants.js';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
+  import { predigerList, getPredigerKuerzelFromStore, getVornameFromStore, initPredigerStore } from '../stores/predigerStore.js';
+  import { initAppCheck } from '../firebase/firebase.js';
+  import { getFirestore } from 'firebase/firestore';
+
+  // Gibt den Vornamen (für Avatar-Lookup in avatarImgMapCal) anhand der Beschreibung zurück
+  function getVornameForAvatar(description, list) {
+    if (!description) return '';
+    const kuerzel = getPredigerKuerzelFromStore(description);
+    if (!kuerzel) return '';
+    return getVornameFromStore(kuerzel);
+  }
 
   export let filter;
 
@@ -15,6 +26,9 @@
 
   onMount(async () => {
     dayjs.locale('de');
+    // Prediger-Store initialisieren (lädt Firestore "prediger", einmaliger Seed wenn leer)
+    const app = initAppCheck();
+    initPredigerStore(getFirestore(app));
     // console.log(dayjs(1316116057189).fromNow());
     axios
       .get(
@@ -59,8 +73,8 @@
               <PredigtAvatar clazz="w-6 h-6" title="meka classic" } />
             {:else if item.summary.includes('Comboprobe')}
               <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />  
-            {:else if getImageCalAvatar(item.description ? item.description.split(' ')[0] : '')}
-              <PredigtAvatar clazz="w-6 h-6" prediger={item.description.split(' ')[0]} />
+            {:else if getImageCalAvatar(getVornameForAvatar(item.description, $predigerList))}
+              <PredigtAvatar clazz="w-6 h-6" prediger={getVornameForAvatar(item.description, $predigerList)} />
             {:else}            
               <CalendarWeekSolid class="text-primary-600 dark:text-primary-400 h-4 w-4" />
             {/if}

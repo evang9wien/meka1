@@ -17,6 +17,7 @@
 
   import PredigtAvatar from './PredigtAvatar.svelte';
   import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
+  import { getLongNameFromStore, predigerReady, initPredigerStore } from '../stores/predigerStore.js';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -48,6 +49,9 @@
   onMount(() => {
     console.log('FireBase');
     const app = initAppCheck();
+
+    // Prediger-Store initialisieren (lädt Firestore "prediger", einmaliger Seed wenn leer)
+    initPredigerStore(getFirestore(app));
 
     storage = getStorage(app);
 
@@ -115,9 +119,11 @@
   }
 
   function getName(termin) {
-    const langName = getLongName(termin.Verantwortlich);
-
-    return langName ? langName : termin.Verantwortlich;
+    // Store bevorzugen wenn geladen, sonst statischer Fallback
+    const langName = $predigerReady
+      ? getLongNameFromStore(termin.Verantwortlich)
+      : getLongName(termin.Verantwortlich);
+    return langName || termin.Verantwortlich;
   }
 
   // function getImgAvatar(termin) {
