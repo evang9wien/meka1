@@ -153,6 +153,7 @@
     const map = new Map();
 
     for (const termin of termine) {
+      if (termin.Verantwortlich === 'COM') continue; // Comboproben ausschließen
       if (!termin.LiedAuswahl || !Array.isArray(termin.LiedAuswahl)) continue;
 
       for (const eintrag of termin.LiedAuswahl) {
