@@ -18,8 +18,8 @@
   import TerminAdmin from './calendar/TerminAdmin.svelte';
 
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
   import { getUrl } from './url/url.js';
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
@@ -88,6 +88,7 @@
 
   const loadData = async (user) => {
     const app = initAppCheck();
+    initPredigerStore(getFirestore(app));
     dbRealtime = getDatabase(app);
 
     popupSpinnerModal = true;

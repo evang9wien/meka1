@@ -3,8 +3,8 @@
   import axios from 'axios';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
 
   import { Label, Select, Input, InputAddon, Helper, GradientButton } from 'flowbite-svelte';
   import { Button, ButtonGroup } from 'flowbite-svelte';
@@ -27,6 +27,7 @@
     endAt,
   } from 'firebase/database';
   import { initAppCheck } from './firebase/firebase.js';
+  import { getFirestore } from 'firebase/firestore';
 
   let termine;
   let popupSpinnerModal = true;
@@ -48,6 +49,7 @@
   const loadTermine = () => {
     popupSpinnerModal = true;
     const app = initAppCheck();
+    initPredigerStore(getFirestore(app));
     const dbRealtime = getDatabase(app);
     const fromDate = dayjs().format('YYYY-MM-DD');
 
@@ -103,7 +105,7 @@
                 <TableBodyCell>
                   <div class="flex flex-col place-items-center">
                     <PredigtAvatar prediger={termin.Verantwortlich} />
-                    <Tooltip>{getLongName(termin.Verantwortlich)}</Tooltip>
+                    <Tooltip>{getLongNameFromStore(termin.Verantwortlich)}</Tooltip>
                     {formatDate(termin.Termin)}
                   </div>
                 </TableBodyCell>

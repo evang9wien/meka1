@@ -6,18 +6,16 @@
 
   import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
-  import { getImageCalAvatar } from '../predigt/PredigtConstants.js';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
-  import { predigerList, getPredigerKuerzelFromStore, getVornameFromStore, initPredigerStore } from '../stores/predigerStore.js';
+  import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.js';
   import { initAppCheck } from '../firebase/firebase.js';
   import { getFirestore } from 'firebase/firestore';
 
-  // Gibt den Vornamen (für Avatar-Lookup in avatarImgMapCal) anhand der Beschreibung zurück
-  function getVornameForAvatar(description, list) {
+  // Reaktiv: gibt Kürzel zurück — list-Parameter zwingt Svelte zur Neuauswertung
+  // wenn sich $predigerList ändert
+  function getKuerzelForAvatar(description, list) {
     if (!description) return '';
-    const kuerzel = getPredigerKuerzelFromStore(description);
-    if (!kuerzel) return '';
-    return getVornameFromStore(kuerzel);
+    return getPredigerKuerzelFromStore(description);
   }
 
   export let filter;
@@ -72,10 +70,10 @@
             {#if item.summary.includes('MEKA-Classic')}
               <PredigtAvatar clazz="w-6 h-6" title="meka classic" } />
             {:else if item.summary.includes('Comboprobe')}
-              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />  
-            {:else if getImageCalAvatar(getVornameForAvatar(item.description, $predigerList))}
-              <PredigtAvatar clazz="w-6 h-6" prediger={getVornameForAvatar(item.description, $predigerList)} />
-            {:else}            
+              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />
+            {:else if getKuerzelForAvatar(item.description, $predigerList)}
+              <PredigtAvatar clazz="w-6 h-6" prediger={getKuerzelForAvatar(item.description, $predigerList)} />
+            {:else}
               <CalendarWeekSolid class="text-primary-600 dark:text-primary-400 h-4 w-4" />
             {/if}
           

@@ -15,11 +15,11 @@
   } from 'flowbite-svelte';
   import { Button } from 'flowbite-svelte';
   import { ArrowsRepeatOutline, TrashBinOutline, FolderPlusOutline, CheckCircleSolid } from 'flowbite-svelte-icons';
+  import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import dayjs from 'dayjs';
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set, update, remove } from 'firebase/database';
-  import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { initAuth, currentUser, authReady } from '../stores/authStore.js';
   import { initAppCheck } from '../firebase/firebase.js';
   import { PREDIGER } from '../predigt/PredigtConstants.js';
@@ -70,16 +70,14 @@
   } = { kuerzel: '', langname: '', vorname: '', varianten: '', avatarUrl: '' };
   let predigerEditKuerzel: string | null = null; // null = neuer Eintrag, string = Edit
   let predigerFormOpen = false;
-  let avatarUploadFile: File | null = null;
-  let avatarUploading = false;
   let predigerSaving = false;
-  let storage: any;
+  let predigerFormEl: HTMLElement | null = null; // Referenz zum Scrollen
 
   function openNewPrediger() {
     predigerEditKuerzel = null;
     predigerForm = { kuerzel: '', langname: '', vorname: '', varianten: '', avatarUrl: '' };
-    avatarUploadFile = null;
     predigerFormOpen = true;
+    scrollToForm();
   }
 
   function openEditPrediger(p: any) {
@@ -91,39 +89,30 @@
       varianten: Array.isArray(p.varianten) ? p.varianten.join(', ') : '',
       avatarUrl: p.avatarUrl || '',
     };
-    avatarUploadFile = null;
     predigerFormOpen = true;
+    scrollToForm();
+  }
+
+  function scrollToForm() {
+    // Nach dem nächsten Render-Zyklus scrollen damit das Element sichtbar ist
+    setTimeout(() => predigerFormEl?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }
 
   async function savePrediger() {
     if (!predigerForm.kuerzel.trim()) return;
     predigerSaving = true;
     try {
-      let avatarUrl = predigerForm.avatarUrl;
-
-      // Avatar hochladen wenn ausgewählt
-      if (avatarUploadFile) {
-        avatarUploading = true;
-        const ext = avatarUploadFile.name.split('.').pop();
-        const storageRef = stref(storage, `prediger-avatars/${predigerForm.kuerzel}.${ext}`);
-        await uploadBytes(storageRef, avatarUploadFile);
-        avatarUrl = await getDownloadURL(storageRef);
-        avatarUploading = false;
-      }
-
       const entry = {
         kuerzel:   predigerForm.kuerzel.trim(),
         langname:  predigerForm.langname.trim(),
         vorname:   predigerForm.vorname.trim(),
         varianten: predigerForm.varianten.split(',').map((v) => v.trim()).filter(Boolean),
-        avatarUrl,
+        avatarUrl: predigerForm.avatarUrl.trim(),
       };
-
       await setDoc(doc(dbFireStore, 'prediger', entry.kuerzel), entry);
       predigerFormOpen = false;
     } finally {
       predigerSaving = false;
-      avatarUploading = false;
     }
   }
 
@@ -136,7 +125,8 @@
   // Titel/Bezeichnungen die aus der Beschreibung herausgefiltert werden sollen
   // ---------------------------------------------------------------------------
   const REMOVE_TITLES = [
-    /Pf(?:arrer)?\.?\s*i\.?\s*[Rr]\.?\s*,?/gi,  // Pf.i.R. / Pfarrer i.R. u.ä.
+    /Pf(?:arrer(?:in)?)?\.?\s*i\.?\s*[Rr]\.?\s*,?/gi,  // Pf.i.R. / Pfarrer(in) i.R. u.ä.
+    /Pfarrerin\s*,?/gi,
     /Pfarrer\s*,?/gi,
     /Lektorin\s*,?/gi,
     /Lektor\s*,?/gi,
@@ -394,7 +384,6 @@
     const app = initAppCheck();
     if (!app) return;
     dbRealtime = getDatabase(app);
-    storage = getStorage(app);
     dbFireStore = getFirestore(app);
     // Prediger-Store starten (lädt Firestore collection "prediger", seeded bei erstem Start)
     initPredigerStore(dbFireStore);
@@ -652,7 +641,7 @@ Jubiläumsgottesdienst</pre>
 
       <!-- Formular (Neu / Bearbeiten) -->
       {#if predigerFormOpen}
-        <div class="mb-6 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950">
+        <div bind:this={predigerFormEl} class="mb-6 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950">
           <h6 class="mb-3 font-semibold text-gray-800 dark:text-gray-200">
             {predigerEditKuerzel ? `Bearbeiten: ${predigerEditKuerzel}` : 'Neuer Eintrag'}
           </h6>
@@ -680,25 +669,21 @@ Jubiläumsgottesdienst</pre>
                 placeholder="Stefan FLEISCHNER-JANITS, Stefan Fleischner-Janits" />
             </div>
             <div class="sm:col-span-2">
-              <Label class="mb-1 text-xs">Avatar-Bild</Label>
-              {#if predigerForm.avatarUrl}
-                <div class="mb-2 flex items-center gap-3">
-                  <img src={predigerForm.avatarUrl} alt="Avatar" class="h-12 w-12 rounded-full object-cover" />
-                  <span class="text-xs text-gray-500">Aktuelles Bild</span>
-                </div>
-              {/if}
-              <input type="file" accept="image/*"
-                class="block w-full text-sm text-gray-500 file:mr-3 file:rounded file:border-0 file:bg-blue-50 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-                onchange={(e) => { avatarUploadFile = (e.target as HTMLInputElement).files?.[0] ?? null; }}
-              />
-              {#if avatarUploadFile}
-                <p class="mt-1 text-xs text-blue-600">Ausgewählt: {avatarUploadFile.name}</p>
-              {/if}
+              <Label for="p-avatarUrl" class="mb-1 text-xs">
+                Avatar-URL <span class="font-normal text-gray-400">(z.B. Cloudinary-Link)</span>
+              </Label>
+              <div class="flex items-center gap-3">
+                {#if predigerForm.avatarUrl}
+                  <img src={predigerForm.avatarUrl} alt="Vorschau" class="h-10 w-10 rounded-full object-cover shrink-0" />
+                {/if}
+                <Input id="p-avatarUrl" bind:value={predigerForm.avatarUrl}
+                  placeholder="https://res.cloudinary.com/…/avatar.jpg" />
+              </div>
             </div>
           </div>
           <div class="mt-4 flex gap-2">
             <Button size="xs" color="blue" onclick={savePrediger} disabled={predigerSaving}>
-              {#if avatarUploading}Bild wird hochgeladen…{:else if predigerSaving}Speichern…{:else}Speichern{/if}
+              {predigerSaving ? 'Speichern…' : 'Speichern'}
             </Button>
             <Button size="xs" color="alternative" onclick={() => (predigerFormOpen = false)}>Abbrechen</Button>
           </div>
@@ -719,13 +704,14 @@ Jubiläumsgottesdienst</pre>
             {#each $predigerList as p}
               <TableBodyRow>
                 <TableBodyCell>
-                  {#if p.avatarUrl}
-                    <img src={p.avatarUrl} alt={p.vorname} class="h-9 w-9 rounded-full object-cover" />
-                  {:else}
-                    <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-500 dark:bg-gray-700">
-                      {p.kuerzel}
-                    </div>
-                  {/if}
+                  <div class="flex flex-col items-center gap-1">
+                    <PredigtAvatar prediger={p.kuerzel} clazz="w-9 h-9 object-cover" />
+                    {#if p.avatarUrl}
+                      <span class="rounded bg-blue-100 px-1 py-0.5 text-[10px] font-semibold text-blue-700">URL</span>
+                    {:else}
+                      <span class="rounded bg-gray-100 px-1 py-0.5 text-[10px] font-semibold text-gray-500">statisch</span>
+                    {/if}
+                  </div>
                 </TableBodyCell>
                 <TableBodyCell class="font-mono font-semibold">{p.kuerzel}</TableBodyCell>
                 <TableBodyCell class="text-sm">{p.langname || '–'}</TableBodyCell>

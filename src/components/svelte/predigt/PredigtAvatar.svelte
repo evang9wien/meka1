@@ -41,4 +41,4 @@
   }
 </script>
 
-<Avatar size="md" class={clazz} src={getAvatar($predigerList)} />
+<Avatar size="md" class="object-cover {clazz}" src={getAvatar($predigerList)} />

@@ -6,8 +6,8 @@
   import { FileMusicOutline, ListMusicOutline } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.js';
 
   import WaitPopup from './popup/WaitPopup.svelte';
   import LoginFirebase from './auth/LoginFirebase.svelte';
@@ -118,6 +118,7 @@
     console.log('onMount');
     popupSpinnerModal = true;
     dbFireStore = getFirestore(app);
+    initPredigerStore(dbFireStore);
 
     const dbRealtime = getDatabase(app);
     const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
@@ -200,7 +201,7 @@
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>
                 {#if verantwortlich}
-                  <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400">{getLongNameFromStore(verantwortlich)}</div>
                 {/if}
               </div>
             </div>
