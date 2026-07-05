@@ -170,7 +170,7 @@
   };
 
   const handleSelect = (_sel: unknown) => {
-    console.log(sel);
+    console.log(_sel);
     popupSpinnerModal = true;
     window.setTimeout(() => {
       // console.log('Sel: ', selectedTermin);
