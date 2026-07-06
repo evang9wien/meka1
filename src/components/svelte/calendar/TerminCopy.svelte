@@ -21,13 +21,13 @@
 
   import { getDatabase, ref as dbref, query, orderByKey, startAt, onValue, set, update, remove } from 'firebase/database';
   import { initAuth, currentUser, authReady } from '../stores/authStore.ts';
-  import { initAppCheck } from '../firebase/firebase.ts';
+  import { initAppCheck, getDb } from '../firebase/firebase.ts';
   import {
     predigerList,
     initPredigerStore,
     getPredigerKuerzelFromStore,
   } from '../stores/predigerStore.ts';
-  import { getFirestore, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+  import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
   import WaitPopup from '../popup/WaitPopup.svelte';
   import LoginFirebase from '../auth/LoginFirebase.svelte';
   import utc from 'dayjs/plugin/utc';
@@ -382,7 +382,7 @@
     const app = initAppCheck();
     if (!app) return;
     dbRealtime = getDatabase(app);
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     // Prediger-Store starten (lädt Firestore collection "prediger", seeded bei erstem Start)
     initPredigerStore(dbFireStore);
     popupSpinnerModal = true;

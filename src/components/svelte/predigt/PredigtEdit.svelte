@@ -21,8 +21,8 @@
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { initAuth, currentUser, authReady } from './../stores/authStore.js';
-  import { initAppCheck } from './../firebase/firebase.js';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './../firebase/firebase.js';
+  import { doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
     ref as dbref,
@@ -50,7 +50,7 @@
     const app = initAppCheck();
 
     // Prediger-Store initialisieren (lädt Firestore "prediger", einmaliger Seed wenn leer)
-    initPredigerStore(getFirestore(app));
+    initPredigerStore(getDb());
 
     storage = getStorage(app);
 

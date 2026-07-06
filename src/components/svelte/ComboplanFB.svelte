@@ -26,8 +26,7 @@
     startAt,
     endAt,
   } from 'firebase/database';
-  import { initAppCheck } from './firebase/firebase.ts';
-  import { getFirestore } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
 
   interface Termin {
     Termin: string;
@@ -64,7 +63,7 @@
   const loadTermine = () => {
     popupSpinnerModal = true;
     const app = initAppCheck();
-    initPredigerStore(getFirestore(app));
+    initPredigerStore(getDb());
     const dbRealtime = getDatabase(app);
     const fromDate = dayjs().format('YYYY-MM-DD');
 

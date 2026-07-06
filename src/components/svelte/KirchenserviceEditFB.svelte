@@ -21,8 +21,8 @@
 
   import LoginSimple from './auth/LoginSimpleModal.svelte';
   import { initAuth, currentUser, authReady } from './stores/authStore.ts';
-  import { initAppCheck } from './firebase/firebase.ts';
-  import { getFirestore, collection, getDocs } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { collection, getDocs } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -117,7 +117,7 @@
     popupSpinnerModal = true;
     loadkirchenservice();
 
-    const dbFireStore = getFirestore(app);
+    const dbFireStore = getDb();
     const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
     members = accountsSnap.docs
       .map(d => ({ uid: d.id, ...d.data() }))

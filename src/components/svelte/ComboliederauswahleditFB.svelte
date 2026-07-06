@@ -27,9 +27,10 @@
 
   import { comboReihenfolge } from './combo/combo.ts';
   import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
-  import { initAppCheck } from './firebase/firebase.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { doc, getDoc } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -98,7 +99,7 @@
   let alleLieder: LiedEintrag[];
 
   let storage: ReturnType<typeof getStorage>;
-  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbFireStore: Firestore;
   let dbRealtime: ReturnType<typeof getDatabase>;
 
   let dbRealtimeOnce = false;
@@ -177,7 +178,7 @@
     console.log('onMount');
 
     popupSpinnerModal = true;
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     initPredigerStore(dbFireStore);
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
     comboLieder = [];

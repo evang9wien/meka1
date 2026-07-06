@@ -14,9 +14,9 @@
 //   $: accessGranted  = $authReady && $currentUser && $userRoles.includes('combolist');
 
 import { writable, derived, type Readable } from 'svelte/store';
-import { initAppCheck } from '../firebase/firebase.ts';
+import { initAppCheck, getDb } from '../firebase/firebase.ts';
 import { getAuth, onAuthStateChanged, type Auth, type User } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -65,7 +65,7 @@ export function initAuth(): Auth {
 
   const app = initAppCheck();
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  const db = getDb();
 
   onAuthStateChanged(auth, async (user) => {
     currentUser.set(user);
@@ -118,7 +118,7 @@ export async function refreshUserRoles(): Promise<void> {
   const user = auth.currentUser;
   if (!user) return;
 
-  const db = getFirestore(app);
+  const db = getDb();
   try {
     const snap = await getDoc(doc(db, 'accounts', user.uid));
     const roles: string[] = snap.exists() ? (snap.data()['roles'] ?? []) : [];

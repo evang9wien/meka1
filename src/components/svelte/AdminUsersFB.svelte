@@ -8,8 +8,9 @@
   import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAppCheck } from './firebase/firebase.ts';
-  import { getFirestore, collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
   // ─── Alle verfügbaren Rollen mit Beschreibung ─────────────────────────────
@@ -39,7 +40,7 @@
     [key: string]: unknown;
   }
 
-  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbFireStore: Firestore;
   let users: UserRecord[] = [];
   let popupSpinnerModal = false;
   let dataLoaded = false;
@@ -80,7 +81,7 @@
 
   const loadData = async () => {
     const app = initAppCheck();
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     popupSpinnerModal = true;
     await loadUsers();
     popupSpinnerModal = false;

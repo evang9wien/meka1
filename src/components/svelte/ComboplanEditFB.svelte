@@ -25,8 +25,8 @@
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-  import { initAppCheck } from './firebase/firebase.ts';
-  import { getFirestore, getDocs, collection } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { getDocs, collection } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -114,14 +114,14 @@
 
   const loadData = async (user) => {
     const app = initAppCheck();
-    initPredigerStore(getFirestore(app));
+    initPredigerStore(getDb());
     dbRealtime = getDatabase(app);
 
     popupSpinnerModal = true;
     loadCombo();
 
     // Mitgliederliste aus accounts laden (Rolle 'combo', ShortName vorhanden)
-    const dbFireStore = getFirestore(app);
+    const dbFireStore = getDb();
     const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
     members = accountsSnap.docs
       .map(d => ({ uid: d.id, ...d.data() }))

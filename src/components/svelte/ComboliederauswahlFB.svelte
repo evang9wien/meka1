@@ -17,11 +17,12 @@
   import { getUrl } from './url/url.ts';
   import { comboReihenfolge } from './combo/combo.ts';
   import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
-  import { initAppCheck } from './firebase/firebase.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
 
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFunctions, httpsCallable } from "firebase/functions";
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { doc, getDoc } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import {
     getDatabase,
     ref as dbref,
@@ -56,7 +57,7 @@
   let liedTextTitel: string | undefined;
 
   let storage: ReturnType<typeof getStorage>;
-  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbFireStore: Firestore;
 
   let showComboProben = false;
 
@@ -128,7 +129,7 @@
     storage = getStorage(app);
     console.log('onMount');
     popupSpinnerModal = true;
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     initPredigerStore(dbFireStore);
 
     const dbRealtime = getDatabase(app);

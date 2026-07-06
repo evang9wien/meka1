@@ -8,8 +8,7 @@
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
   import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.ts';
-  import { initAppCheck } from '../firebase/firebase.ts';
-  import { getFirestore } from 'firebase/firestore';
+  import { initAppCheck, getDb } from '../firebase/firebase.ts';
 
   // Reaktiv: gibt Kürzel zurück — list-Parameter zwingt Svelte zur Neuauswertung
   // wenn sich $predigerList ändert
@@ -26,7 +25,7 @@
     dayjs.locale('de');
     // Prediger-Store initialisieren (lädt Firestore "prediger", einmaliger Seed wenn leer)
     const app = initAppCheck();
-    initPredigerStore(getFirestore(app));
+    initPredigerStore(getDb());
     // console.log(dayjs(1316116057189).fromNow());
     axios
       .get(

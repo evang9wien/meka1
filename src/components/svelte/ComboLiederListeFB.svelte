@@ -17,10 +17,11 @@
   import WaitPopup from './popup/WaitPopup.svelte';
 
   import { initAuth, currentUser, authReady } from './stores/authStore.ts';
-  import { initAppCheck } from './firebase/firebase.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
 
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
-  import { getFirestore, doc, getDoc, collection, getDocs } from 'firebase/firestore';
+  import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import { getFunctions, httpsCallable } from 'firebase/functions';
   import {
     getDatabase,
@@ -51,7 +52,7 @@
 
   let popupSpinnerModal = false;
   let storage: ReturnType<typeof getStorage>;
-  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbFireStore: Firestore;
   let functions: ReturnType<typeof getFunctions>;
   let comboListRole = false;
   let dataLoaded = false;
@@ -82,7 +83,7 @@
     functions = getFunctions(app, 'europe-west1');
     searchLiederFn = httpsCallable(functions, 'searchLieder');
     storage = getStorage(app);
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     popupSpinnerModal = true;
 
     // Rollencheck

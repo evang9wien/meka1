@@ -17,10 +17,11 @@
   import { getUrl } from './url/url.ts';
   import WaitPopup from './popup/WaitPopup.svelte';
   import { initAuth, currentUser, authReady } from './stores/authStore.ts';
-  import { initAppCheck } from './firebase/firebase.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
+  import { doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -61,7 +62,7 @@
   const yearNow = new Date().getFullYear();
 
   let storage: ReturnType<typeof getStorage>;
-  let dbFireStore: ReturnType<typeof getFirestore>;
+  let dbFireStore: Firestore;
   let dbRealtime: ReturnType<typeof getDatabase>;
   let alleLieder: LiedEintrag[];
   let dataLoaded = false;
@@ -80,7 +81,7 @@
     console.log('User Auth');
     const app = initAppCheck();
     storage = getStorage(app);
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     popupSpinnerModal = true;
 
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));

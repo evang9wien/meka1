@@ -17,8 +17,9 @@
   import WaitPopup from './popup/WaitPopup.svelte';
   import { initAuth, currentUser, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAppCheck } from './firebase/firebase.ts';
-  import { getFirestore, doc, getDoc, collection } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { doc, getDoc, collection } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import {
     getDatabase,
@@ -64,7 +65,7 @@
 
   let unsubscribe: (() => void) | null = null;
   let dbRealtime: ReturnType<typeof getDatabase> | null = null;
-  let dbFireStore: ReturnType<typeof getFirestore> | null = null;
+  let dbFireStore: Firestore | null = null;
   let storage: ReturnType<typeof getStorage> | null = null;
   let comboListRole = false;
 
@@ -85,7 +86,7 @@
   const loadAll = async (months: number) => {
     popupSpinnerModal = true;
     const app = initAppCheck();
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     storage = getStorage(app);
 
     // Rollencheck

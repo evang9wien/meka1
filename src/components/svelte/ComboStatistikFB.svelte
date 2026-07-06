@@ -17,8 +17,8 @@
   import WaitPopup from './popup/WaitPopup.svelte';
   import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAppCheck } from './firebase/firebase.ts';
-  import { getFirestore, getDocs, collection } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { getDocs, collection } from 'firebase/firestore';
   import {
     getDatabase,
     ref as dbref,
@@ -97,7 +97,7 @@
     const app = initAppCheck();
 
     // Mitglieder laden → ShortName-Map aufbauen
-    const dbFireStore = getFirestore(app);
+    const dbFireStore = getDb();
     const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
     nameMap = new Map();
     accountsSnap.docs.forEach((d) => {

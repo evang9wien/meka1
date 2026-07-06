@@ -1,6 +1,7 @@
 // src/components/svelte/firebase/firebase.ts
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { initializeFirestore, type Firestore } from 'firebase/firestore';
 
 const myDevMode = import.meta.env.PUBLIC_MY_DEV_MODE;
 console.log('DevMode:', myDevMode);
@@ -19,6 +20,21 @@ const firebaseConfig = {
 export { firebaseConfig };
 
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
+
+// Firestore einmalig mit Long-Polling initialisieren.
+// Safari blockiert das Standard-XHR-Streaming (TYPE=xmlhttp) wegen
+// Cross-Origin-Restriktionen (ITP). experimentalForceLongPolling
+// ersetzt den XHR-Stream durch normale HTTP-Requests.
+// WICHTIG: initializeFirestore muss VOR jedem getFirestore()-Aufruf
+// aufgerufen werden — deshalb hier auf Modulebene, nicht lazy.
+const firestoreDb: Firestore = initializeFirestore(firebaseApp, {
+  experimentalForceLongPolling: true,
+});
+
+/** Gibt die vorinitialisierte Firestore-Instanz zurück (Long-Polling aktiv). */
+export function getDb(): Firestore {
+  return firestoreDb;
+}
 
 // AppCheck wird nur einmal initialisiert (Guard gegen Mehrfachaufruf)
 let appCheckInitialized = false;
