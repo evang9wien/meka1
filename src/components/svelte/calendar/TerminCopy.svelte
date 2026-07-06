@@ -392,8 +392,9 @@
     // Rollencheck
     const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
     console.log('User Data: ', userDoc.data());
-    if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('terminadmin')) {
-      console.log('No terminadmin role!');
+    const roles = userDoc.exists() && userDoc.data().roles ? userDoc.data().roles : [];
+    if (!roles.includes('terminadmin') && !roles.includes('admin')) {
+      console.log('No terminadmin or admin role!');
       popupSpinnerModal = false;
       return;
     }

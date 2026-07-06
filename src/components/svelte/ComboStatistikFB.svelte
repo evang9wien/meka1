@@ -259,20 +259,20 @@
 </script>
 
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
-{#if $currentUser && !popupSpinnerModal && !$userRoles.includes('terminadmin') && !$userRoles.includes('admin')}
+{#if $currentUser && !popupSpinnerModal && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin')}
   <div class="flex justify-center p-8">
     <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
         <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
         <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
-        <p>Diese Seite ist nur für Termin-Admins zugänglich.</p>
+        <p>Diese Seite ist nur für Combo-Admins zugänglich.</p>
       </div>
     </Card>
   </div>
 {/if}
 
 <!-- ═══════ HAUPTINHALT ═══════ -->
-{#if $currentUser && !popupSpinnerModal && ($userRoles.includes('terminadmin') || $userRoles.includes('admin'))}
+{#if $currentUser && !popupSpinnerModal && ($userRoles.includes('comboadmin') || $userRoles.includes('admin'))}
   <div class="flex justify-center mb-6 px-2">
     <Card class="w-full lg:max-w-screen-lg md:max-w-screen-md p-4">
 
