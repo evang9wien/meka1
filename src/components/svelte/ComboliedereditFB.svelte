@@ -81,6 +81,7 @@
   let dbFireStore: Firestore;
 
   let dataLoaded = false;
+  let roleCheckDone = false;
 
   onMount(() => {
     console.log('onMount');
@@ -102,6 +103,7 @@
     // Rollencheck
     const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
     console.log('User Data: ', userDoc.data());
+    roleCheckDone = true;
     if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('liederedit')) {
       console.log('No liederedit role!');
       popupSpinnerModal = false;
@@ -242,7 +244,7 @@
     }
   };
 </script>
-{#if $currentUser && !popupSpinnerModal && !comboLiederEdit}
+{#if $currentUser && !popupSpinnerModal && roleCheckDone && !comboLiederEdit}
    <div class="flex justify-center p-8 ">
     <Card class="border-2 border-red-600 bg-red-50 content-center">
       <div class="p-8"    >

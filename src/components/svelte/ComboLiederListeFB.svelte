@@ -60,7 +60,6 @@
   let alleLiederTexte: import('firebase/firestore').QuerySnapshot;
   let searchLiederFn: import('firebase/functions').HttpsCallable;
   let searchTimeout: ReturnType<typeof setTimeout> | null = null;
-  let lastSearchTerm = '';
 
   /** Spielstatistik aus den letzten 12 Monaten. */
   let spielstatistikMap: Map<string, { count: number; lastPlayed: string }> = new Map();
@@ -113,8 +112,9 @@
     }
 
     liederListeAll = comboLieder.concat(nichtcomboLieder).sort((a, b) => a.name.localeCompare(b.name));
-    liederListe = liederListeAll;
-    handleFilterKat();
+    liederListeKat = liederListeAll.filter((l) => l.Aktiv == 1); // Standardkategorie 'Combolieder'
+    liederListe    = liederListeKat;
+    appliedFilterKat = filterKat;
 
     popupSpinnerModal = false;
 
@@ -175,37 +175,35 @@
   let filterNoten = '';
   let filterLiedtext = '';
   let filterKat = 'Combolieder';
-  let blockFilterLiedtext = false;
+
+  /** true = Filterwerte haben sich geändert, aber noch nicht gesucht */
+  let filterDirty = false;
 
   const kategorien = [
     { value: 'Alle Lieder',  name: 'Alle Lieder'      },
     { value: 'Combolieder',  name: 'Gesungene Lieder'  },
   ];
 
-  function handleFilterKat() {
-    setTimeout(() => {
-      if (filterKat === 'Alle Lieder') {
-        liederListe = liederListeAll;
-      } else if (filterKat === 'Combolieder') {
-        liederListe = liederListeAll.filter((l) => l.Aktiv == 1);
-      } else if (filterKat === 'EG-Lieder') {
-        liederListe = liederListeAll.filter((l) => l.EG != 0);
-      } else {
-        liederListe = liederListeAll.filter((l) => l.Kategorie?.toLowerCase().includes(filterKat.toLowerCase()));
-      }
-      liederListeKat = liederListe;
-      filterNoten = '';
-    }, 200);
+  // Snapshot der zuletzt angewendeten Filterwerte – für Dirty-Vergleich
+  let appliedFilterNoten = '';
+  let appliedFilterLiedtext = '';
+  let appliedFilterKat = 'Combolieder';
+
+  function markDirty() {
+    filterDirty =
+      filterNoten !== appliedFilterNoten ||
+      filterLiedtext !== appliedFilterLiedtext ||
+      filterKat !== appliedFilterKat;
   }
 
-  function handleFilterNoten() {
-    if (blockFilterLiedtext) return;
-    blockFilterLiedtext = true;
-    filterLiedtext = '';
-    setTimeout(() => {
-      liederListe = liederListeKat.filter((l) => l.name.toLowerCase().includes(filterNoten.toLowerCase()));
-      blockFilterLiedtext = false;
-    }, 500);
+  /** Wendet Kategorie-Filter auf liederListeAll an und liefert das Ergebnis. */
+  function applyKatFilter(): LiedEintrag[] {
+    if (filterKat === 'Alle Lieder') return liederListeAll;
+    if (filterKat === 'Combolieder') return liederListeAll.filter((l) => l.Aktiv == 1);
+    if (filterKat === 'EG-Lieder')   return liederListeAll.filter((l) => l.EG != 0);
+    return liederListeAll.filter((l) =>
+      l.Kategorie?.toLowerCase().includes(filterKat.toLowerCase())
+    );
   }
 
   function filterInLiedtext(suchtext: string): string[] {
@@ -219,36 +217,49 @@
     return ergebnisse;
   }
 
-  async function handleFilterLiedtext() {
+  /**
+   * Wird durch den Suchen-Button ausgelöst.
+   * Wendet alle drei Filter kombiniert an.
+   */
+  async function handleSuchen() {
     if (searchTimeout) {
       clearTimeout(searchTimeout);
       searchTimeout = null;
     }
-    if (!filterLiedtext || filterLiedtext.length < 2) {
-      liederListe = liederListeKat;
-      return;
+
+    // 1. Kategorie
+    let basis = applyKatFilter();
+    liederListeKat = basis;
+
+    // 2. Titelsuche
+    if (filterNoten.trim().length > 0) {
+      basis = basis.filter((l) =>
+        l.name.toLowerCase().includes(filterNoten.trim().toLowerCase())
+      );
     }
-    searchTimeout = setTimeout(async () => {
-      if (blockFilterLiedtext) return;
-      if (filterLiedtext === lastSearchTerm) return;
 
-      blockFilterLiedtext = true;
-      filterNoten = '';
+    // 3. Liedtext-Suche (async, ggf. Cloud Function)
+    if (filterLiedtext.trim().length >= 2) {
       popupSpinnerModal = true;
-
       try {
-        const result = await searchLiederFn({ searchTerm: filterLiedtext });
-        const ergebnisse = result.data.results.map((r) => r.ID);
-        liederListe = liederListeKat.filter((l) => ergebnisse.includes(l.ID));
-        lastSearchTerm = filterLiedtext;
+        const result = await searchLiederFn({ searchTerm: filterLiedtext.trim() });
+        const ergebnisse: string[] = result.data.results.map((r: { ID: string }) => r.ID);
+        basis = basis.filter((l) => ergebnisse.includes(l.ID));
       } catch {
-        const ergebnisse = filterInLiedtext(filterLiedtext);
-        liederListe = liederListeKat.filter((l) => ergebnisse.includes(l.ID));
+        const ergebnisse = filterInLiedtext(filterLiedtext.trim());
+        basis = basis.filter((l) => ergebnisse.includes(l.ID));
       } finally {
         popupSpinnerModal = false;
-        blockFilterLiedtext = false;
       }
-    }, 2000);
+    }
+
+    liederListe = basis;
+
+    // Dirty-State zurücksetzen
+    appliedFilterNoten    = filterNoten;
+    appliedFilterLiedtext = filterLiedtext;
+    appliedFilterKat      = filterKat;
+    filterDirty = false;
   }
 
   // ---------------------------------------------------------------------------
@@ -330,15 +341,14 @@
       </div>
 
       <!-- Filter-Leiste -->
-      <div class="flex flex-wrap gap-3 mb-6">
+      <div class="flex flex-wrap gap-3 mb-2">
         <ButtonGroup class="flex-1 min-w-40">
           <InputAddon>
             <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </InputAddon>
           <Input
             bind:value={filterNoten}
-            oninput={handleFilterNoten}
-            onchange={handleFilterNoten}
+            oninput={markDirty}
             placeholder="Suche im Titel"
           />
         </ButtonGroup>
@@ -349,14 +359,25 @@
           </InputAddon>
           <Input
             bind:value={filterLiedtext}
-            oninput={handleFilterLiedtext}
-            onchange={handleFilterLiedtext}
+            oninput={markDirty}
             placeholder="Suche im Liedtext"
           />
         </ButtonGroup>
 
-        <Select class="flex-1 min-w-40" items={kategorien} bind:value={filterKat} onchange={handleFilterKat} />
+        <Select class="flex-1 min-w-40" items={kategorien} bind:value={filterKat} onchange={markDirty} />
+
+        <Button color={filterDirty ? 'yellow' : 'blue'} onclick={handleSuchen} class="whitespace-nowrap">
+          Suchen{filterDirty ? ' ●' : ''}
+        </Button>
       </div>
+
+      {#if filterDirty}
+        <p class="mb-4 text-xs text-yellow-600 dark:text-yellow-400">
+          Filter geändert – bitte auf „Suchen" klicken, um die Ergebnisse zu aktualisieren.
+        </p>
+      {:else}
+        <div class="mb-4"></div>
+      {/if}
 
       <!-- Anzahl -->
       <div class="mb-3 text-sm text-gray-500 dark:text-gray-400">
@@ -372,10 +393,14 @@
             {@const stat = spielstatistikMap.get(lied.ID)}
             <div class="flex items-center gap-3 p-3 rounded-lg border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:brightness-95 transition-all">
 
-              <!-- Icon -->
-              <div class="w-8 flex-shrink-0 flex justify-center">
+              <!-- Icon – klickbar für Detail-Popup -->
+              <button
+                class="w-8 flex-shrink-0 flex justify-center p-0 bg-transparent border-none cursor-pointer hover:text-blue-600 transition-colors"
+                title="Details anzeigen"
+                onclick={() => openDetail(lied)}
+              >
                 <MusicOutline class="text-blue-400" size="sm" />
-              </div>
+              </button>
 
               <!-- Name – klickbar für Detail-Popup -->
               <div
@@ -413,14 +438,6 @@
                 >
                   <ChevronRightOutline size="sm" />
                 </button>
-                <!-- Bearbeiten -->
-                <a
-                  href="/combo/comboliedereditFBpage?lied_id={lied.ID}"
-                  class="p-1 rounded-full text-gray-400 hover:text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-900/30 transition-colors"
-                  title="Lied bearbeiten"
-                >
-                  <EditOutline size="sm" />
-                </a>
               </div>
             </div>
           {/each}
@@ -535,6 +552,18 @@
           </div>
         </div>
       {/if}
+
+      <!-- Bearbeiten -->
+      <div>
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Bearbeiten</p>
+        <a
+          href="/combo/comboliedereditFBpage?lied_id={detailLied?.ID}"
+          class="inline-flex items-center gap-2 text-sm font-medium text-cyan-600 hover:underline dark:text-cyan-400"
+        >
+          <EditOutline size="sm" />
+          Lied bearbeiten
+        </a>
+      </div>
 
     </div>
   {/if}
