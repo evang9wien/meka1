@@ -99,7 +99,7 @@
 {#if $currentUser && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
-      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan</h2>
+      <h2 class="text-[#1e3257] dark:text-[#dce9f7] font-bold mb-4">Comboplan</h2>
       <Toggle color="teal" class="pb-4" bind:checked={showComboProben}>Comboproben anzeigen</Toggle>
       <Table striped={true}>
         <TableHead>

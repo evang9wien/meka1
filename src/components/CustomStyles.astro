@@ -23,24 +23,34 @@ import '@fontsource-variable/inter';
 ---
 
 <style is:inline is:global>
+  /*
+   * Meka-Blue Farbpalette – Basis: #bcd0ed
+   * meka-50:  #f0f5fb   meka-100: #dce9f7   meka-200: #bcd0ed (Basis)
+   * meka-300: #93b3e0   meka-400: #6a96d3   meka-500: #4a7ac1
+   * meka-600: #3a61a0   meka-700: #2c4a7c   meka-800: #1e3257   meka-900: #111d33
+   */
+
   :root {
     --aw-font-sans: 'Inter Variable';
     --aw-font-serif: var(--aw-font-sans);
     --aw-font-heading: var(--aw-font-sans);
 
-    --aw-color-primary: rgb(28, 58, 103);
-    --aw-color-secondary: rgb(128, 166, 221);
-    --aw-color-accent: rgb(128, 166, 221);
+    /* Primärfarbe: satt, hell genug für weißen Text */
+    --aw-color-primary: #4a7ac1;
+    /* Sekundär: Meka-Blau selbst */
+    --aw-color-secondary: #bcd0ed;
+    --aw-color-accent: #3a61a0;
 
-    --aw-color-text-heading: rgb(0 0 0);
-    --aw-color-text-default: rgb(16 16 16);
-    --aw-color-text-muted: rgb(16 16 16 / 66%);
-    --aw-color-bg-page: rgb(255 255 255);
+    --aw-color-text-heading: #1e3257;
+    --aw-color-text-default: #1e2a3a;
+    --aw-color-text-muted: rgb(46 64 90 / 66%);
+    --aw-color-bg-page: #f0f5fb;
 
-    --aw-color-bg-page-dark: rgb(3 6 32);
+    --aw-color-bg-page-dark: #111d33;
 
     ::selection {
-      background-color: rgb(228, 236, 248);
+      background-color: #bcd0ed;
+      color: #1e3257;
     }
   }
 
@@ -49,18 +59,19 @@ import '@fontsource-variable/inter';
     --aw-font-serif: var(--aw-font-sans);
     --aw-font-heading: var(--aw-font-sans);
 
-    --aw-color-primary: rgb(30 64 175);
-    --aw-color-secondary: rgb(30 58 138);
-    --aw-color-accent: rgb(109 40 217);
+    /* Im Dark-Mode: hellere Primary damit Text auf dunklem Bg sichtbar ist */
+    --aw-color-primary: #6a96d3;
+    --aw-color-secondary: #3a61a0;
+    --aw-color-accent: #93b3e0;
 
-    --aw-color-text-heading: rgb(0 0 0);
-    --aw-color-text-default: rgb(229 236 246);
-    --aw-color-text-muted: rgb(229 236 246 / 66%);
+    --aw-color-text-heading: #dce9f7;
+    --aw-color-text-default: #dce9f7;
+    --aw-color-text-muted: rgb(220 233 247 / 66%);
     --aw-color-bg-page: var(--aw-color-bg-page-dark);
 
     ::selection {
-      background-color: black;
-      color: snow;
+      background-color: #2c4a7c;
+      color: #dce9f7;
     }
   }
 </style>

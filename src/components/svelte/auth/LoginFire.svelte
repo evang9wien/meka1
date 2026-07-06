@@ -78,12 +78,12 @@
     </div>
     <GradientButton class="w-full mb-3" color="cyanToBlue" onclick={login}>Anmelden</GradientButton>
     <div class="text-center">
-      <Button color="light" size="xs" class="text-xs text-gray-500 dark:text-gray-400 underline" onclick={resetPassword}>
+      <Button color="alternative" size="xs" class="text-xs text-[#3a61a0] dark:text-[#93b3e0] underline" onclick={resetPassword}>
         Passwort vergessen?
       </Button>
     </div>
     {#if passwordResetMsg}
-      <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">{passwordResetMsg}</p>
+      <p class="mt-2 text-xs text-[#3a61a0] dark:text-[#93b3e0] text-center">{passwordResetMsg}</p>
     {/if}
   {:else}
     <Alert color="green">

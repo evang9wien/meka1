@@ -14,6 +14,19 @@
   --color-accent: var(--aw-color-accent);
   --color-default: var(--aw-color-text-default);
   --color-muted: var(--aw-color-text-muted);
+
+  /* === Meka-Blue Palette === */
+  --color-meka-50:  #f0f5fb;
+  --color-meka-100: #dce9f7;
+  --color-meka-200: #bcd0ed;
+  --color-meka-300: #93b3e0;
+  --color-meka-400: #6a96d3;
+  --color-meka-500: #4a7ac1;
+  --color-meka-600: #3a61a0;
+  --color-meka-700: #2c4a7c;
+  --color-meka-800: #1e3257;
+  --color-meka-900: #111d33;
+  /* Legacy alias */
   --color-meka-blue: #bcd0ed;
 
   --font-sans:
@@ -25,7 +38,7 @@
   --font-heading:
     var(--aw-font-heading), ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
- 
+
 }
 
 /*
@@ -42,7 +55,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--color-meka-100, currentcolor);
   }
   /* disable chrome cancel button */
   input[type="search"]::-webkit-search-cancel-button {
@@ -71,11 +84,11 @@
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
+  @apply inline-flex items-center justify-center rounded-full border-[#93b3e0] border bg-transparent font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-[#4a7ac1] focus:ring-offset-[#bcd0ed] focus:ring-2 focus:ring-offset-2 hover:bg-[#dce9f7] hover:border-[#4a7ac1] dark:text-[#bcd0ed] dark:border-[#3a61a0] dark:hover:bg-[#1e3257] dark:hover:border-[#6a96d3] cursor-pointer;
 }
 
 @utility btn-primary {
-  @apply btn font-semibold bg-primary text-white border-primary hover:bg-secondary hover:border-secondary hover:text-white dark:text-white dark:bg-primary dark:border-primary dark:hover:border-secondary dark:hover:bg-secondary;
+  @apply btn font-semibold bg-primary text-white border-primary hover:bg-[#3a61a0] hover:border-[#3a61a0] hover:text-white dark:text-white dark:bg-primary dark:border-primary dark:hover:border-[#93b3e0] dark:hover:bg-[#2c4a7c];
 }
 
 @utility btn-secondary {
@@ -83,16 +96,16 @@
 }
 
 @utility btn-tertiary {
-  @apply btn border-none shadow-none text-muted hover:text-gray-900 dark:text-gray-400 dark:hover:text-white;
+  @apply btn border-none shadow-none text-muted hover:text-[#1e3257] dark:text-[#93b3e0] dark:hover:text-[#dce9f7];
 }
 
 #header.scroll > div:first-child {
-  @apply bg-page md:bg-white/90 md:backdrop-blur-md;
-  box-shadow: 0 0.375rem 1.5rem 0 rgb(140 152 164 / 13%);
+  @apply bg-page md:bg-[#f0f5fbeb] md:backdrop-blur-md;
+  box-shadow: 0 0.375rem 1.5rem 0 rgb(74 122 193 / 13%);
 }
 .dark #header.scroll > div:first-child,
 #header.scroll.dark > div:first-child {
-  @apply bg-page md:bg-[#030621e6] border-b border-gray-500/20;
+  @apply bg-page md:bg-[#111d33e6] border-b border-[#2c4a7c]/40;
   box-shadow: none;
 }
 /* #header.scroll > div:last-child {
@@ -135,4 +148,29 @@
 
 .dd *:first-child {
   margin-top: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Flowbite-Svelte Theming: Meka-Blue Palette Override
+   Overrides flowbite-svelte's primary/blue color scale so all
+   flowbite components (Toggle, Badge, Button, Spinner, etc.) render
+   in the Meka palette without touching individual class names.
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* primary scale → meka-blue */
+  --color-primary-50:  #f0f5fb;
+  --color-primary-100: #dce9f7;
+  --color-primary-200: #bcd0ed;
+  --color-primary-300: #93b3e0;
+  --color-primary-400: #6a96d3;
+  --color-primary-500: #4a7ac1;
+  --color-primary-600: #3a61a0;
+  --color-primary-700: #2c4a7c;
+  --color-primary-800: #1e3257;
+  --color-primary-900: #111d33;
+  --color-primary-950: #0a1220;
+
+  /* flowbite surface / card backgrounds */
+  --color-surface-50:  #f0f5fb;
+  --color-surface-100: #dce9f7;
 }

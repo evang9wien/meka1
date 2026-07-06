@@ -253,18 +253,18 @@
 
   const rankColors: Record<string, string> = {
     gold:   'text-yellow-400',
-    silver: 'text-gray-400',
-    bronze: 'text-orange-600',
+    silver: 'text-[#6a96d3]',
+    bronze: 'text-[#c06000]',
   };
 </script>
 
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !popupSpinnerModal && !$userRoles.includes('terminadmin') && !$userRoles.includes('admin')}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Diese Seite ist nur für Termin-Admins zugänglich.</p>
       </div>
     </Card>
@@ -278,8 +278,8 @@
 
       <!-- Titel -->
       <div class="flex items-center gap-2 mb-4">
-        <MusicOutline class="text-purple-600" size="lg" />
-        <h2 class="text-gray-900 dark:text-white text-xl font-bold">Combo Statistik</h2>
+        <MusicOutline class="text-primary-600" size="lg" />
+        <h2 class="text-[#1e3257] dark:text-[#dce9f7] text-xl font-bold">Combo Statistik</h2>
       </div>
 
       <!-- Zeitraum-Auswahl -->
@@ -304,25 +304,25 @@
       </div>
 
       {#if ranking.length === 0}
-        <p class="text-gray-500 dark:text-gray-400">Keine Daten im gewählten Zeitraum.</p>
+        <p class="text-[#3a61a0] dark:text-[#93b3e0]">Keine Daten im gewählten Zeitraum.</p>
       {:else}
        <!-- Hinweis-Banner -->
        <div class="flex flex-wrap gap-3 mb-4">
-         <div class="flex items-center gap-2 flex-1 min-w-fit p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700">
-           <FireSolid class="text-orange-500 flex-shrink-0" size="sm" />
-           <span class="text-sm text-purple-800 dark:text-purple-200">
+         <div class="flex items-center gap-2 flex-1 min-w-fit p-3 rounded-lg bg-[#f0f5fb] dark:bg-[#1e3257]/80 border border-[#93b3e0] dark:border-[#2c4a7c]">
+           <FireSolid class="text-[#c06000] flex-shrink-0" size="sm" />
+           <span class="text-sm text-[#1e3257] dark:text-[#dce9f7]">
              Rangliste · <strong>{ranking.length}</strong> Musiker · max. <strong>{ranking[0]?.count}×</strong> gespielt
            </span>
          </div>
-         <div class="flex items-center gap-2 flex-1 min-w-fit p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700">
-           <MusicOutline class="text-blue-500 flex-shrink-0" size="sm" />
-           <span class="text-sm text-blue-800 dark:text-blue-200">
+         <div class="flex items-center gap-2 flex-1 min-w-fit p-3 rounded-lg bg-[#dce9f7] dark:bg-[#1e3257] border border-[#bcd0ed] dark:border-[#2c4a7c]">
+           <MusicOutline class="text-primary-500 flex-shrink-0" size="sm" />
+           <span class="text-sm text-[#1e3257] dark:text-[#bcd0ed]">
              <strong>{totalGottesdienste}</strong> Gottesdienste
            </span>
          </div>
-         <div class="flex items-center gap-2 flex-1 min-w-fit p-3 rounded-lg bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-700">
-           <DrumstickBiteOutline class="text-teal-500 flex-shrink-0" size="sm" />
-           <span class="text-sm text-teal-800 dark:text-teal-200">
+         <div class="flex items-center gap-2 flex-1 min-w-fit p-3 rounded-lg bg-[#f0f5fb] dark:bg-[#111d33] border border-[#93b3e0] dark:border-[#3a61a0]">
+           <DrumstickBiteOutline class="text-[#3a61a0] flex-shrink-0" size="sm" />
+           <span class="text-sm text-[#2c4a7c] dark:text-[#93b3e0]">
              <strong>{totalProben}</strong> Comboproben
            </span>
          </div>
@@ -335,10 +335,10 @@
             {@const rank = rankStyle(place)}
             <div
               class="flex items-center gap-3 p-3 rounded-lg border
-                {rank === 'gold'   ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300' :
-                 rank === 'silver' ? 'bg-gray-50   dark:bg-gray-800/40   border-gray-300'   :
-                 rank === 'bronze' ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-300' :
-                                     'bg-white     dark:bg-gray-800      border-gray-200 dark:border-gray-700'}"
+                {rank === 'gold'   ? 'bg-[#fdf9e8] dark:bg-[#2a2000]/40 border-[#e8cc60]' :
+                 rank === 'silver' ? 'bg-[#f0f5fb] dark:bg-[#1e2d40]/40 border-[#93b3e0]' :
+                 rank === 'bronze' ? 'bg-[#fff0e0] dark:bg-[#2c1800]/40 border-[#f0a040]' :
+                                     'bg-white     dark:bg-[#1e3257]    border-[#bcd0ed] dark:border-[#2c4a7c]'}"
             >
               <!-- Platz -->
               <div class="w-10 flex-shrink-0 flex justify-center items-center">
@@ -346,13 +346,13 @@
                   <AwardSolid class="text-yellow-400" size="xl" />
                   <Tooltip>Platz 1 🥇</Tooltip>
                 {:else if rank === 'silver'}
-                  <AwardSolid class="text-gray-400" size="xl" />
+                  <AwardSolid class="text-[#6a96d3]" size="xl" />
                   <Tooltip>Platz 2 🥈</Tooltip>
                 {:else if rank === 'bronze'}
                   <AwardSolid class="text-orange-600" size="lg" />
                   <Tooltip>Platz 3 🥉</Tooltip>
                 {:else}
-                  <span class="text-sm font-semibold text-gray-500 dark:text-gray-400 w-full text-center">
+                  <span class="text-sm font-semibold text-[#3a61a0] dark:text-[#93b3e0] w-full text-center">
                     {place}.
                   </span>
                 {/if}
@@ -360,13 +360,13 @@
 
              <!-- Name + Instrumente -->
              <div class="flex-1 min-w-0">
-               <div class="font-semibold text-gray-900 dark:text-white truncate">
+               <div class="font-semibold text-[#1e3257] dark:text-[#dce9f7] truncate">
                  {entry.displayName}
                  {#if entry.displayName !== entry.shortName}
-                   <span class="ml-1 text-xs text-gray-400 dark:text-gray-500">({entry.shortName})</span>
+                   <span class="ml-1 text-xs text-[#6a96d3] dark:text-[#6a96d3]">({entry.shortName})</span>
                  {/if}
                </div>
-               <div class="text-xs text-gray-500 dark:text-gray-400 flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
+               <div class="text-xs text-[#3a61a0] dark:text-[#93b3e0] flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
                  {#each entry.instruments as inst}
                    <span class="flex items-center gap-0.5">
                      {#if inst === 'Drums'}
@@ -384,9 +384,9 @@
 
              <!-- Balken-Fortschritt -->
              <div class="hidden sm:flex flex-1 items-center gap-2">
-               <div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+               <div class="flex-1 bg-[#dce9f7] dark:bg-[#2c4a7c] rounded-full h-2">
                  <div
-                   class="h-2 rounded-full bg-purple-500"
+                   class="h-2 rounded-full bg-primary-500"
                    style="width: {Math.round((entry.count / ranking[0].count) * 100)}%"
                  ></div>
                </div>
@@ -397,7 +397,7 @@
                {#if i < 3}
                  <StarSolid class="{rankColors[rank] ?? 'text-gray-400'}" size="sm" />
                {/if}
-               <Badge color="purple" class="text-sm font-bold px-3 py-1">
+               <Badge color="primary" class="text-sm font-bold px-3 py-1">
                  {entry.count}×
                </Badge>
              </div>

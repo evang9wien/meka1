@@ -439,10 +439,10 @@
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !$userRoles.includes('liederauswahledit') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Diese Seite ist nur für Benutzer mit der Rolle „Liederauswahl Edit" zugänglich.</p>
       </div>
     </Card>
@@ -464,7 +464,7 @@
             <div class="space-y-1 font-medium dark:text-white">
               <div>Liederauswahl bearbeiten</div>
               {#if verantwortlich}
-                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongNameFromStore(verantwortlich)}</div>
+                <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(verantwortlich)}</div>
               {/if}
             </div>
           </div>
@@ -518,7 +518,7 @@
                         <span>{lied.Beschreibung}</span>
                         {#if lied.selectedLied?.Liedtext}
                           <button
-                            class="p-1 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                            class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
                             title="Liedtext anzeigen"
                             onclick={() => { liedTextModal = true; liedText = lied.selectedLied.Liedtext; liedTextTitel = lied.selectedLied.Titel; }}
                           >
@@ -593,8 +593,8 @@
 
 <Modal bind:open={popupModal} size="xs" autoclose>
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
       Soll der geänderte Liederablauf für den Gottestdienst am {selectedTermin} gespeichert werden?
     </h3>
     <Button color="green" class="me-2" onclick={handleSaveDB}>Ja, ich bin mir sicher</Button>
@@ -608,11 +608,11 @@
 <!-- ═══════ LIEDTEXT-POPUP ═══════ -->
 <Modal title={liedTextTitel} bind:open={liedTextModal} outsideclose size="lg">
   {#if liedText}
-    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-96 overflow-y-auto border border-gray-200 dark:border-gray-700">
+    <div class="bg-[#f0f5fb] dark:bg-[#1e3257] rounded-lg p-4 text-sm text-[#1e2a3a] dark:text-[#dce9f7] whitespace-pre-wrap max-h-96 overflow-y-auto border border-[#bcd0ed] dark:border-[#2c4a7c]">
       {liedText}
     </div>
   {:else}
-    <p class="text-gray-400 text-sm py-2">Kein Liedtext vorhanden.</p>
+    <p class="text-[#93b3e0] text-sm py-2">Kein Liedtext vorhanden.</p>
   {/if}
   {#snippet footer()}
     <Button color="alternative" onclick={() => (liedTextModal = false)}>Schließen</Button>

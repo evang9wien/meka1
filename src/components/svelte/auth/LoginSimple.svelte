@@ -38,7 +38,7 @@
 
 <div class="flex justify-center">
   <Card class="mb-6 p-4">
-    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Login für Mitarbeiter</h5>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-[#1e3257] dark:text-[#dce9f7]">Login für Mitarbeiter</h5>
     <!-- <Title>Login</Title> -->
     {#if !loginSucess}
       {#if loginError}

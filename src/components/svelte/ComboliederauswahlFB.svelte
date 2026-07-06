@@ -190,8 +190,8 @@
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !$userRoles.includes('combo') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <div class="border-2 border-red-600 bg-red-50 rounded-lg p-8 text-center">
-      <p class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</p>
+    <div class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a] rounded-lg p-8 text-center">
+      <p class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</p>
       <p>Diese Seite ist nur für Combo-Mitglieder zugänglich.</p>
     </div>
   </div>
@@ -213,7 +213,7 @@
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>
                 {#if verantwortlich}
-                  <div class="text-sm text-gray-500 dark:text-gray-400">{getLongNameFromStore(verantwortlich)}</div>
+                  <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(verantwortlich)}</div>
                 {/if}
               </div>
             </div>
@@ -245,7 +245,7 @@
                       <span>{lied.Beschreibung}</span>
                       {#if lied.Liedtext}
                         <button
-                          class="p-1 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                          class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
                           title="Liedtext anzeigen"
                           onclick={() => { liedTextModal = true; liedText = lied.Liedtext; liedTextTitel = lied.Titel; }}
                         >
@@ -294,11 +294,11 @@
 <!-- ═══════ LIEDTEXT-POPUP ═══════ -->
 <Modal title={liedTextTitel ?? ''} bind:open={liedTextModal} outsideclose size="lg">
   {#if liedText}
-    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-96 overflow-y-auto border border-gray-200 dark:border-gray-700">
+    <div class="bg-[#f0f5fb] dark:bg-[#1e3257] rounded-lg p-4 text-sm text-[#1e2a3a] dark:text-[#dce9f7] whitespace-pre-wrap max-h-96 overflow-y-auto border border-[#bcd0ed] dark:border-[#2c4a7c]">
       {liedText}
     </div>
   {:else}
-    <p class="text-gray-400 text-sm py-2">Kein Liedtext vorhanden.</p>
+    <p class="text-[#93b3e0] text-sm py-2">Kein Liedtext vorhanden.</p>
   {/if}
   {#snippet footer()}
     <Button color="alternative" onclick={() => (liedTextModal = false)}>Schließen</Button>

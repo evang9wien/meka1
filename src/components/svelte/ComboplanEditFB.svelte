@@ -245,10 +245,10 @@
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $authReady && $currentUser && !$userRoles.includes('comboedit') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Diese Seite ist nur für Benutzer mit der Rolle <strong>Combo Edit</strong> zugänglich.</p>
       </div>
     </Card>
@@ -259,7 +259,7 @@
 {#if $currentUser && ($userRoles.includes('comboedit') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
-      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
+      <h2 class="text-[#1e3257] dark:text-[#dce9f7] font-bold mb-4">Comboplan Eintragung</h2>
       <div class="flex flex-row">
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>

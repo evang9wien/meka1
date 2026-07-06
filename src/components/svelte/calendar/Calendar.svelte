@@ -63,7 +63,7 @@
       <TimelineItem title={item.summary} >        
         
         {#snippet orientationSlot()}
-          <span class="absolute bg-primary-200 dark:bg-primary-900 -start-10 flex h-6 w-6 items-center justify-center rounded-full ring-6 ring-white dark:ring-gray-900">
+          <span class="absolute bg-primary-200 dark:bg-primary-900 -start-10 flex h-6 w-6 items-center justify-center rounded-full ring-6 ring-[#f0f5fb] dark:ring-[#111d33]">
         
           
             {#if item.summary.includes('MEKA-Classic')}
@@ -78,10 +78,10 @@
           
             </span>
             {/snippet}        
-        <p class="mb-4 text-base font-normal text-gray-600 dark:text-gray-200">
+        <p class="mb-4 text-base font-normal text-[#2c4a7c] dark:text-[#bcd0ed]">
           {item.startDate}
         </p>
-        <p class="mb-4 text-base font-normal text-gray-400 dark:text-gray-400">
+        <p class="mb-4 text-base font-normal text-[#6a96d3] dark:text-[#6a96d3]">
           {item.description ? item.description : ''}
         </p>
       </TimelineItem>

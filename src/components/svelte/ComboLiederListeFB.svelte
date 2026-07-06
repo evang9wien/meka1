@@ -319,10 +319,10 @@
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !popupSpinnerModal && !comboListRole}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
       </div>
     </Card>
@@ -336,15 +336,15 @@
 
       <!-- Titel -->
       <div class="flex items-center gap-2 mb-4">
-        <MusicOutline class="text-blue-600" size="lg" />
-        <h2 class="text-gray-900 dark:text-white text-xl font-bold">Lieder Liste</h2>
+        <MusicOutline class="text-primary-600" size="lg" />
+        <h2 class="text-[#1e3257] dark:text-[#dce9f7] text-xl font-bold">Lieder Liste</h2>
       </div>
 
       <!-- Filter-Leiste -->
       <div class="flex flex-wrap gap-3 mb-2">
         <ButtonGroup class="flex-1 min-w-40">
           <InputAddon>
-            <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            <FileMusicOutline class="w-4 h-4 text-[#6a96d3] dark:text-[#93b3e0]" />
           </InputAddon>
           <Input
             bind:value={filterNoten}
@@ -355,7 +355,7 @@
 
         <ButtonGroup class="flex-1 min-w-40">
           <InputAddon>
-            <FileMusicOutline class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            <FileMusicOutline class="w-4 h-4 text-[#6a96d3] dark:text-[#93b3e0]" />
           </InputAddon>
           <Input
             bind:value={filterLiedtext}
@@ -366,13 +366,13 @@
 
         <Select class="flex-1 min-w-40" items={kategorien} bind:value={filterKat} onchange={markDirty} />
 
-        <Button color={filterDirty ? 'yellow' : 'blue'} onclick={handleSuchen} class="whitespace-nowrap">
+        <Button color={filterDirty ? 'yellow' : 'primary'} onclick={handleSuchen} class="whitespace-nowrap">
           Suchen{filterDirty ? ' ●' : ''}
         </Button>
       </div>
 
       {#if filterDirty}
-        <p class="mb-4 text-xs text-yellow-600 dark:text-yellow-400">
+        <p class="mb-4 text-xs text-[#b07d00] dark:text-[#f0c040]">
           Filter geändert – bitte auf „Suchen" klicken, um die Ergebnisse zu aktualisieren.
         </p>
       {:else}
@@ -380,26 +380,26 @@
       {/if}
 
       <!-- Anzahl -->
-      <div class="mb-3 text-sm text-gray-500 dark:text-gray-400">
+      <div class="mb-3 text-sm text-[#3a61a0] dark:text-[#93b3e0]">
         <strong>{liederListe.length}</strong> Lieder
       </div>
 
       {#if liederListe.length === 0}
-        <p class="text-gray-500 dark:text-gray-400">Keine Lieder gefunden.</p>
+        <p class="text-[#3a61a0] dark:text-[#93b3e0]">Keine Lieder gefunden.</p>
       {:else}
         <!-- Lieder-Liste -->
         <div class="space-y-2">
           {#each liederListe as lied}
             {@const stat = spielstatistikMap.get(lied.ID)}
-            <div class="flex items-center gap-3 p-3 rounded-lg border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:brightness-95 transition-all">
+            <div class="flex items-center gap-3 p-3 rounded-lg border bg-white dark:bg-[#1e3257] border-[#bcd0ed] dark:border-[#2c4a7c] hover:brightness-95 transition-all">
 
               <!-- Icon – klickbar für Detail-Popup -->
               <button
-                class="w-8 flex-shrink-0 flex justify-center p-0 bg-transparent border-none cursor-pointer hover:text-blue-600 transition-colors"
+                class="w-8 flex-shrink-0 flex justify-center p-0 bg-transparent border-none cursor-pointer hover:text-primary-600 transition-colors"
                 title="Details anzeigen"
                 onclick={() => openDetail(lied)}
               >
-                <MusicOutline class="text-blue-400" size="sm" />
+                <MusicOutline class="text-primary-400" size="sm" />
               </button>
 
               <!-- Name – klickbar für Detail-Popup -->
@@ -410,17 +410,17 @@
                 onclick={() => openDetail(lied)}
                 onkeydown={(e) => e.key === 'Enter' && openDetail(lied)}
               >
-                <div class="font-semibold text-gray-900 dark:text-white truncate">{lied.name}</div>
+                <div class="font-semibold text-[#1e3257] dark:text-[#dce9f7] truncate">{lied.name}</div>
                 <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5">
                   {#if lied.Aktiv}
-                    <span class="text-xs text-blue-500 dark:text-blue-400">Gesungenes Lied</span>
+                    <span class="text-xs text-primary-500 dark:text-primary-400">Gesungenes Lied</span>
                   {/if}
                   {#if stat}
-                    <span class="text-xs text-orange-500 dark:text-orange-400 flex items-center gap-0.5">
+                    <span class="text-xs text-[#c06000] dark:text-[#f0a040] flex items-center gap-0.5">
                       <FireSolid size="xs" />
                       {stat.count}× in {STATISTIK_MONATE} Mon.
                     </span>
-                    <span class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-0.5">
+                    <span class="text-xs text-[#6a96d3] dark:text-[#93b3e0] flex items-center gap-0.5">
                       <CalendarMonthOutline size="xs" />
                       Zuletzt: {stat.lastPlayed}
                     </span>
@@ -432,7 +432,7 @@
               <div class="flex items-center gap-1 flex-shrink-0">
                 <!-- Detail-Popup öffnen -->
                 <button
-                  class="p-1 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                  class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
                   title="Details anzeigen"
                   onclick={() => openDetail(lied)}
                 >
@@ -457,11 +457,11 @@
 >
   {#if detailLoading}
     <div class="flex justify-center items-center py-10">
-      <Spinner size="10" color="blue" />
+      <Spinner size="10" color="primary" />
     </div>
 
   {:else if detailDaten === false}
-    <p class="text-gray-500 dark:text-gray-400 py-4">
+    <p class="text-[#3a61a0] dark:text-[#93b3e0] py-4">
       Für dieses Lied sind keine weiteren Details vorhanden.
     </p>
 
@@ -471,34 +471,34 @@
       <!-- Badges: gesungen + Spielstatistik -->
       <div class="flex flex-wrap gap-2 items-center">
         {#if detailLied?.Aktiv}
-          <Badge color="blue">Gesungenes Lied</Badge>
+          <Badge color="primary">Gesungenes Lied</Badge>
         {:else}
           <Badge color="light">Nicht gesungen</Badge>
         {/if}
         {#if detailStat}
-          <Badge color="orange">{detailStat.count}× in {STATISTIK_MONATE} Monaten gespielt</Badge>
+          <Badge color="yellow">{detailStat.count}× in {STATISTIK_MONATE} Monaten gespielt</Badge>
         {/if}
       </div>
 
       <!-- Spielstatistik -->
       {#if detailStat}
-        <div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700">
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+        <div class="p-3 rounded-lg bg-[#fff3e0] dark:bg-[#2c1800]/40 border border-[#f0a040] dark:border-[#c06000]">
+          <p class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-2">
             Gespielt (letzte {STATISTIK_MONATE} Monate)
           </p>
           <div class="flex flex-wrap gap-4 text-sm">
-            <span class="flex items-center gap-1 text-orange-700 dark:text-orange-300 font-semibold">
-              <FireSolid size="sm" class="text-orange-500" />
+            <span class="flex items-center gap-1 text-[#c06000] dark:text-[#f0a040] font-semibold">
+              <FireSolid size="sm" class="text-[#c06000]" />
               {detailStat.count}× gespielt
             </span>
-            <span class="flex items-center gap-1 text-gray-600 dark:text-gray-300">
+            <span class="flex items-center gap-1 text-[#2c4a7c] dark:text-[#bcd0ed]">
               <CalendarMonthOutline size="sm" />
               Zuletzt: <strong>{detailStat.lastPlayed}</strong>
             </span>
           </div>
         </div>
       {:else}
-        <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-400">
+        <div class="p-3 rounded-lg bg-[#f0f5fb] dark:bg-[#1e3257] border border-[#bcd0ed] dark:border-[#2c4a7c] text-sm text-[#6a96d3]">
           In den letzten {STATISTIK_MONATE} Monaten nicht gespielt.
         </div>
       {/if}
@@ -506,9 +506,9 @@
       <!-- Noten -->
       {#if notenUrlPromise}
         <div>
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Noten</p>
+          <p class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-1">Noten</p>
           {#await notenUrlPromise}
-            <div class="flex items-center gap-2 text-sm text-gray-400">
+            <div class="flex items-center gap-2 text-sm text-[#93b3e0]">
               <Spinner size="4" /> Noten werden geladen …
             </div>
           {:then url}
@@ -516,13 +516,13 @@
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+              class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
             >
               <FileMusicOutline size="sm" />
               Noten öffnen (PDF)
             </a>
           {:catch}
-            <p class="text-xs text-gray-400">Noten nicht verfügbar.</p>
+            <p class="text-xs text-[#93b3e0]">Noten nicht verfügbar.</p>
           {/await}
         </div>
       {/if}
@@ -530,15 +530,15 @@
       <!-- MP3-Player – lazy, kein Traffic bis Popup öffnet -->
       {#if mp3UrlPromise}
         <div>
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Hörprobe</p>
+          <p class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-1">Hörprobe</p>
           {#await mp3UrlPromise}
-            <div class="flex items-center gap-2 text-sm text-gray-400">
+            <div class="flex items-center gap-2 text-sm text-[#93b3e0]">
               <Spinner size="4" /> Audio wird geladen …
             </div>
           {:then url}
             <audio controls src={url} class="w-full"></audio>
           {:catch}
-            <p class="text-xs text-gray-400">Hörprobe nicht verfügbar.</p>
+            <p class="text-xs text-[#93b3e0]">Hörprobe nicht verfügbar.</p>
           {/await}
         </div>
       {/if}
@@ -546,8 +546,8 @@
       <!-- Liedtext -->
       {#if detailDaten.Liedtext}
         <div>
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Liedtext</p>
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-700">
+          <p class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-1">Liedtext</p>
+          <div class="bg-[#f0f5fb] dark:bg-[#1e3257] rounded-lg p-4 text-sm text-[#1e2a3a] dark:text-[#dce9f7] whitespace-pre-wrap max-h-64 overflow-y-auto border border-[#bcd0ed] dark:border-[#2c4a7c]">
             {detailDaten.Liedtext}
           </div>
         </div>
@@ -555,10 +555,10 @@
 
       <!-- Bearbeiten -->
       <div>
-        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Bearbeiten</p>
+        <p class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-1">Bearbeiten</p>
         <a
           href="/combo/comboliedereditFBpage?lied_id={detailLied?.ID}"
-          class="inline-flex items-center gap-2 text-sm font-medium text-cyan-600 hover:underline dark:text-cyan-400"
+          class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
         >
           <EditOutline size="sm" />
           Lied bearbeiten

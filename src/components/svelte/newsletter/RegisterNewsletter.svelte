@@ -101,7 +101,7 @@
       <div class="mb-6">
         <Label for="EMAIL" class="block mb-2">Bitte geben Sie Ihre E-Mail-Adresse ein, um sich anzumelden</Label>
         <Input id="EMAIL" type="email" name="EMAIL" placeholder="email" bind:value={emailValue} required>
-          <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+          <EnvelopeSolid slot="left" class="w-5 h-5 text-[#6a96d3] dark:text-[#93b3e0]" />
         </Input>
       </div>
 
@@ -114,7 +114,7 @@
         bind:checked={optInChecked}
         >Ich möchte Ihren Newsletter erhalten und akzeptiere die Datenschutzerklärung</Checkbox
       >
-      <div class="mb-6 text-sm text-red-800">{errorText}</div>
+      <div class="mb-6 text-sm text-[#c0392b]">{errorText}</div>
 
       <div class="flex flex-row mt-4 space-x-3 rtl:space-x-reverse lg:mt-6 text-xs">
         <div class="flex-1">

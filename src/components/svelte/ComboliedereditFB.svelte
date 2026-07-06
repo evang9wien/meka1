@@ -246,10 +246,10 @@
 </script>
 {#if $currentUser && !popupSpinnerModal && roleCheckDone && !comboLiederEdit}
    <div class="flex justify-center p-8 ">
-    <Card class="border-2 border-red-600 bg-red-50 content-center">
-      <div class="p-8"    >
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a] content-center">
+      <div class="p-8">
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
       </div>  
     </Card>
@@ -268,7 +268,7 @@
       </div>
 
       <!-- <Section name="crudcreateform"> -->
-      <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Lied anlegen oder bearbeiten</h2>
+      <h2 class="mb-4 text-xl font-bold text-[#1e3257] dark:text-[#dce9f7]">Lied anlegen oder bearbeiten</h2>
       <form id="liedform" on:submit|preventDefault={handleSubmit}>
         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <div class="sm:col-span-2">
@@ -325,25 +325,25 @@
 <Modal bind:open={popupSpinnerUploadModal} size="sm" autoclose>
   <div class="text-center">
     <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <Spinner color="purple" size={8} />&nbsp;Lied wird gespeichert.
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Bitte warten ...</h3>
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
+      <Spinner color="primary" size={8} />&nbsp;Lied wird gespeichert.
     </h3>
   </div>
 </Modal>
 
 <Modal bind:open={popupErrorModal} size="xs" autoclose>
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Fehler beim Speichern: {responseData}</h3>
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Fehler beim Speichern: {responseData}</h3>
     <Button color="alternative">Abbrechen</Button>
   </div>
 </Modal>
 
 <Modal bind:open={popupLiedGespeichert} size="xs" autoclose>
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Lied wurde gespeichert</h3>
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Lied wurde gespeichert</h3>
     <Button color="alternative">Schließen</Button>
   </div>
 </Modal>

@@ -126,7 +126,7 @@
       bind:this={buttonEl}
       onclick={toggle}
       aria-label="Benutzerprofil"
-      class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+      class="text-muted dark:text-[#93b3e0] hover:bg-[#dce9f7] dark:hover:bg-[#1e3257] focus:outline-none focus:ring-4 focus:ring-[#bcd0ed] dark:focus:ring-[#2c4a7c] rounded-lg text-sm p-2.5 inline-flex items-center"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="8" r="4"/>
@@ -137,7 +137,7 @@
     {#if open}
       <div
         bind:this={popupEl}
-        class="absolute z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden"
+        class="absolute z-50 bg-white dark:bg-[#1e3257] border border-[#bcd0ed] dark:border-[#2c4a7c] rounded-xl shadow-xl overflow-hidden"
         style="min-width: 280px; {openUpward ? 'bottom: 100%; margin-bottom: 0.5rem; left: 0;' : 'top: 100%; margin-top: 0.5rem; right: 0;'}"
       >
 
@@ -145,7 +145,7 @@
           <!-- ── Eingeloggt: Profil ── -->
           <div class="p-4">
             <!-- Avatar + Name -->
-            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-[#bcd0ed] dark:border-[#2c4a7c]">
               {#if avatarUrl && !avatarError}
                 <img
                   src={avatarUrl}
@@ -155,25 +155,25 @@
                   onerror={() => { avatarError = true; }}
                 />
               {:else}
-                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-sm flex-shrink-0">
+                <div class="w-10 h-10 rounded-full bg-[#dce9f7] dark:bg-[#2c4a7c] flex items-center justify-center text-[#3a61a0] dark:text-[#bcd0ed] font-bold text-sm flex-shrink-0">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
               {/if}
               <div class="overflow-hidden">
-                <div class="font-semibold text-sm text-gray-900 dark:text-white truncate">
-                  {displayName}{#if $userProfile?.ShortName}&nbsp;<span class="font-normal text-gray-500 dark:text-gray-400">({$userProfile.ShortName})</span>{/if}
+                <div class="font-semibold text-sm text-[#1e3257] dark:text-[#dce9f7] truncate">
+                  {displayName}{#if $userProfile?.ShortName}&nbsp;<span class="font-normal text-[#6a96d3] dark:text-[#93b3e0]">({$userProfile.ShortName})</span>{/if}
                 </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400 truncate">{$currentUser.email ?? ''}</div>
+                <div class="text-xs text-[#6a96d3] dark:text-[#93b3e0] truncate">{$currentUser.email ?? ''}</div>
               </div>
             </div>
 
             <!-- Rollen -->
             {#if $userRoles.length > 0}
-              <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Rollen</div>
+              <div class="mb-4 pb-4 border-b border-[#bcd0ed] dark:border-[#2c4a7c]">
+                <div class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-2">Rollen</div>
                 <div class="flex flex-wrap gap-1">
                   {#each $userRoles as roleId}
-                    <span class="inline-block px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-medium">
+                    <span class="inline-block px-2 py-0.5 rounded-full bg-[#dce9f7] dark:bg-[#2c4a7c] text-[#3a61a0] dark:text-[#bcd0ed] text-xs font-medium">
                       {roleLabel(roleId)}
                     </span>
                   {/each}
@@ -184,7 +184,7 @@
             <!-- Abmelden -->
             <button
               onclick={logout}
-              class="w-full text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg px-3 py-2 font-medium transition-colors"
+              class="w-full text-left text-sm text-[#c0392b] dark:text-[#e87070] hover:bg-[#fce8e8] dark:hover:bg-[#3d1a1a] rounded-lg px-3 py-2 font-medium transition-colors"
             >
               Abmelden
             </button>
@@ -193,8 +193,8 @@
         {:else}
           <!-- ── Nicht eingeloggt: Login-Formular ── -->
           <div class="p-4">
-            <p class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-0.5">Mitarbeiter-Login</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Bitte anmelden um fortzufahren.</p>
+            <p class="text-sm font-semibold text-[#1e3257] dark:text-[#dce9f7] mb-0.5">Mitarbeiter-Login</p>
+            <p class="text-xs text-[#3a61a0] dark:text-[#93b3e0] mb-4">Bitte anmelden um fortzufahren.</p>
             <LoginFire loginReload={true} />
           </div>
         {/if}
