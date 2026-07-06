@@ -7,7 +7,7 @@ console.log('DevMode:', myDevMode);
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCCScuVEd_E1vQRPMkCuALcccPbly0JhPc',
-  authDomain: 'evang9-combo-4cb8e.firebaseapp.com',
+  authDomain: 'evang9.wien',
   databaseURL: 'https://evang9-combo-4cb8e-default-rtdb.europe-west1.firebasedatabase.app',
   projectId: 'evang9-combo-4cb8e',
   storageBucket: 'evang9-combo-4cb8e.appspot.com',
