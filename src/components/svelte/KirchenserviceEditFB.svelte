@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
   import { Label, Select } from 'flowbite-svelte';
@@ -16,14 +16,13 @@
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
 
   import LoginSimple from './auth/LoginSimpleModal.svelte';
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
-  import { getFirestore, collection, getDocs } from 'firebase/firestore';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { collection, getDocs } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -37,13 +36,39 @@
 
   import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string | number;
+    Verantwortlich?: string;
+    Veranstaltung?: string;
+    KS_Koordination?: string;
+    KS_Begruessung?: string;
+    KS_Abendmahl?: string;
+    KS_Bar?: string;
+    KS_Kuchen?: string;
+    Zusatzinfo?: string;
+    name: string;
+    value: string;
+  }
+
+  interface Member {
+    uid: string;
+    name: string;
+    value: string;
+    ShortName?: string;
+    roles?: string[];
+    VName?: string;
+    FName?: string;
+    [key: string]: unknown;
+  }
+
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
-  let termine;
-  let members;
-  let selectedmember;
+  let termine: Termin[] | undefined;
+  let members: Member[] | undefined;
+  let selectedmember: string | undefined;
   // let mySnackbar;
-  let dbRealtime;
+  let dbRealtime: ReturnType<typeof getDatabase>;
   let popupSimpleLogin = true;
   let dataLoaded = false;
 
@@ -92,7 +117,7 @@
     popupSpinnerModal = true;
     loadkirchenservice();
 
-    const dbFireStore = getFirestore(app);
+    const dbFireStore = getDb();
     const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
     members = accountsSnap.docs
       .map(d => ({ uid: d.id, ...d.data() }))
@@ -106,12 +131,12 @@
     console.log('Mitarbeiter (aus accounts): ', members);
   };
 
-  const formatDate = (date) => {
+  const formatDate = (date: Date) => {
     dayjs.locale('de');
     return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
   };
 
-  let kirchenservice = {};
+  let kirchenservice: Record<string, string[]> = {};
 
   const resetSelection = () => {
     kirchenservice.KS_Koordination = [];
@@ -121,7 +146,7 @@
     kirchenservice.KS_Kuchen = [];
   };
 
-  const checkEntries = (newEntry, oldEntry) => {
+  const checkEntries = (newEntry: string, oldEntry: string | undefined): string => {
     if (!oldEntry) {
       return newEntry;
     }
@@ -156,7 +181,7 @@
     }
   };
 
-  let handleSave = (event) => {
+  let handleSave = (_event?: unknown) => {
     // mySnackbar.open();
     let newEntries = [];
     Object.entries(kirchenservice).forEach(([key, values]) => {
@@ -201,7 +226,7 @@
 {#if !popupSimpleLogin && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
-      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Kirchenserviceplan Eintragung</h2>
+      <h2 class="text-[#1e3257] dark:text-[#dce9f7] font-bold mb-4">Kirchenserviceplan Eintragung</h2>
       <div class="flex flex-row">
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>

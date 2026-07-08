@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // Anlegen und bearbeiten der Liederauswahl für den nächsten Sonntag
   import { onMount } from 'svelte';
   import { Label, Select } from 'flowbite-svelte';
@@ -7,10 +7,8 @@
   import { Card } from 'flowbite-svelte';
   import {
     InfoCircleOutline,
-    MicrophoneOutline,
     FileMusicOutline,
-    PlaySolid,
-    PauseSolid,
+    ListMusicOutline,
     PlusOutline,
     TrashBinOutline,
   } from 'flowbite-svelte-icons';
@@ -18,20 +16,21 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
 
-  import { comboReihenfolge } from './combo/combo.js';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { comboReihenfolge } from './combo/combo.ts';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { doc, getDoc } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -47,34 +46,67 @@
 
   import dayjs from 'dayjs';
 
+  interface TerminItem {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    LiedAuswahl?: Array<Record<string, unknown>>;
+    name: string;
+    value: string;
+    [key: string]: unknown;
+  }
+
+  interface LiedEintrag {
+    name: string;
+    value: string;
+    ID: string;
+    [key: string]: unknown;
+  }
+
+  interface LiedReihenfolgeItem {
+    Reihenfolge: string;
+    Beschreibung?: string;
+    GD_mit_Abendmahl?: string;
+    GD_ohne_Abendmahl?: string;
+    duplicate?: boolean;
+    notvisible?: boolean;
+    selectedLied?: Record<string, unknown>;
+    selectedLiedID?: string;
+    Liedtext?: string;
+    [key: string]: unknown;
+  }
+
   let popupModal = false;
   let popupSpinnerModal = false;
-  let selectedTermin;
+  let liedTextModal = false;
+  let liedText = '';
+  let liedTextTitel = '';
+  let selectedTermin: string | undefined;
 
-  let termine;
+  let termine: TerminItem[] | undefined;
 
-  let verantwortlich;
+  let verantwortlich: string | undefined;
 
   // Entspricht der DB Tabelle lied_reihenfolge
-  let liederReihenfolgeDBTemplate;
+  let liederReihenfolgeDBTemplate: LiedReihenfolgeItem[];
   // Entspricht der DB Tabelle lied_auswahl für das selektierte Datum
-  let liederDBAuswahl = [];
+  let liederDBAuswahl: Array<Record<string, unknown>> = [];
   // Entspricht den den akteuell selektierten Liedern inklusive der geladenen Liedauswahl
-  let liedReihenfolgeSelected;
+  let liedReihenfolgeSelected: LiedReihenfolgeItem[];
 
-  let comboLieder;
+  let comboLieder: LiedEintrag[];
   const comboLiederDef = ['2', '3', '5', '6', '7', '8'];
-  let alleLieder;
+  let alleLieder: LiedEintrag[];
 
-  let storage;
-  let dbFireStore;
-  let dbRealtime;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: Firestore;
+  let dbRealtime: ReturnType<typeof getDatabase>;
 
   let dbRealtimeOnce = false;
 
   let showComboProben = false;
 
-  let alleTermine;
+  let alleTermine: TerminItem[];
 
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
@@ -139,14 +171,15 @@
     loadData($currentUser);
   }
 
-  const loadData = async (user) => {
+  const loadData = async (_user: unknown) => {
     const app = initAppCheck();
     storage = getStorage(app);
 
     console.log('onMount');
 
     popupSpinnerModal = true;
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
+    initPredigerStore(dbFireStore);
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
     comboLieder = [];
     for (const [key, value] of Object.entries(liederGes.data())) {
@@ -252,7 +285,7 @@
     });
   };
 
-  const handleSave = (ev, ev1, ev2) => {
+  const handleSave = (_ev?: unknown, _ev1?: unknown, _ev2?: unknown) => {
     window.setTimeout(async () => {
       console.log('Lieder Selected:', liedReihenfolgeSelected);
       for (const l of liedReihenfolgeSelected) {
@@ -362,7 +395,7 @@
     // console.log('Dupl: ', liedReihenfolgeSelected);
   };
 
-  let sendEmailHref;
+  let sendEmailHref: string | undefined;
   let isLiedSelected = false;
   const sendEmailHrefRefresh = () => {
     let body = 'Liebe Combo!%0D%0A%0D%0A';
@@ -391,11 +424,11 @@
     // anchor.click();
   };
 
-  const disableEmailButton = () => {
+  const disableEmailButton = (): boolean => {
     return !isLiedSelected;
-  }
+  };
 
-  const isComboLied = (lied) => {
+  const isComboLied = (lied: LiedReihenfolgeItem): boolean => {
     // console.log('Combolied: ', lied);
     // console.log('IsCombilied: ', comboLiederDef.includes(lied.Reihenfolge));
     // console.log('Def: ', comboLiederDef);
@@ -406,10 +439,10 @@
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !$userRoles.includes('liederauswahledit') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Diese Seite ist nur für Benutzer mit der Rolle „Liederauswahl Edit" zugänglich.</p>
       </div>
     </Card>
@@ -431,7 +464,7 @@
             <div class="space-y-1 font-medium dark:text-white">
               <div>Liederauswahl bearbeiten</div>
               {#if verantwortlich}
-                <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+                <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(verantwortlich)}</div>
               {/if}
             </div>
           </div>
@@ -480,7 +513,20 @@
               {#each liedReihenfolgeSelected as lied}
                 {#if !lied.notvisible}
                   <TableBodyRow>
-                    <TableBodyCell>{lied.Beschreibung}</TableBodyCell>
+                    <TableBodyCell>
+                      <div class="flex items-center gap-2">
+                        <span>{lied.Beschreibung}</span>
+                        {#if lied.selectedLied?.Liedtext}
+                          <button
+                            class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
+                            title="Liedtext anzeigen"
+                            onclick={() => { liedTextModal = true; liedText = lied.selectedLied.Liedtext; liedTextTitel = lied.selectedLied.Titel; }}
+                          >
+                            <ListMusicOutline size="sm" />
+                          </button>
+                        {/if}
+                      </div>
+                    </TableBodyCell>
 
                     <TableBodyCell class="w-4">
                       <div class="flex flex-row">
@@ -547,8 +593,8 @@
 
 <Modal bind:open={popupModal} size="xs" autoclose>
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
       Soll der geänderte Liederablauf für den Gottestdienst am {selectedTermin} gespeichert werden?
     </h3>
     <Button color="green" class="me-2" onclick={handleSaveDB}>Ja, ich bin mir sicher</Button>
@@ -558,3 +604,17 @@
 
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
 <LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
+
+<!-- ═══════ LIEDTEXT-POPUP ═══════ -->
+<Modal title={liedTextTitel} bind:open={liedTextModal} outsideclose size="lg">
+  {#if liedText}
+    <div class="bg-[#f0f5fb] dark:bg-[#1e3257] rounded-lg p-4 text-sm text-[#1e2a3a] dark:text-[#dce9f7] whitespace-pre-wrap max-h-96 overflow-y-auto border border-[#bcd0ed] dark:border-[#2c4a7c]">
+      {liedText}
+    </div>
+  {:else}
+    <p class="text-[#93b3e0] text-sm py-2">Kein Liedtext vorhanden.</p>
+  {/if}
+  {#snippet footer()}
+    <Button color="alternative" onclick={() => (liedTextModal = false)}>Schließen</Button>
+  {/snippet}
+</Modal>

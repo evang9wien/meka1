@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
   import { Label, Select, Toggle } from 'flowbite-svelte';
@@ -18,15 +18,15 @@
   import TerminAdmin from './calendar/TerminAdmin.svelte';
 
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
-  import { getUrl } from './url/url.js';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
+  import { getUrl } from './url/url.ts';
 
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-  import { initAppCheck } from './firebase/firebase.js';
-  import { getFirestore, getDocs, collection } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { getDocs, collection } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -40,12 +40,38 @@
 
   import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string | number;
+    Verantwortlich?: string;
+    Tasten?: string;
+    Melodie?: string;
+    Gitarre?: string;
+    Drums?: string;
+    Bass?: string;
+    Beamer?: string;
+    Zusatzinfo?: string;
+    name: string;
+    value: string;
+  }
+
+  interface Member {
+    uid: string;
+    name: string;
+    value: string;
+    ShortName?: string;
+    roles?: string[];
+    VName?: string;
+    FName?: string;
+    [key: string]: unknown;
+  }
+
   let popupUserAuthModal = false;
   let popupSpinnerModal = false;
-  let termine;
-  let members;
-  let selectedmember;
-  let dbRealtime;
+  let termine: Termin[] | undefined;
+  let members: Member[] | undefined;
+  let selectedmember: string | undefined;
+  let dbRealtime: ReturnType<typeof getDatabase>;
 
   let comboAdminModus = false;
 
@@ -88,13 +114,14 @@
 
   const loadData = async (user) => {
     const app = initAppCheck();
+    initPredigerStore(getDb());
     dbRealtime = getDatabase(app);
 
     popupSpinnerModal = true;
     loadCombo();
 
     // Mitgliederliste aus accounts laden (Rolle 'combo', ShortName vorhanden)
-    const dbFireStore = getFirestore(app);
+    const dbFireStore = getDb();
     const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
     members = accountsSnap.docs
       .map(d => ({ uid: d.id, ...d.data() }))
@@ -108,12 +135,12 @@
     console.log('Mitarbeiter (aus accounts): ', members);
   };
 
-  let formatDate = (date) => {
+  let formatDate = (date: string) => {
     dayjs.locale('de');
     return dayjs(date).format('dd. D.M. H:mm ');
   };
 
-  let combo = {};
+  let combo: Record<string, string[]> = {};
 
   const resetSelection = () => {
     combo.Tasten = [];
@@ -124,7 +151,7 @@
     combo.Gitarre = [];
   };
 
-  const checkEntries = (newEntry, oldEntry) => {
+  const checkEntries = (newEntry: string, oldEntry: string | undefined): string => {
     console.log('newEntry: ', newEntry);
     console.log('oldEntry: ', oldEntry);
     if (!oldEntry) {
@@ -170,7 +197,7 @@
     }
   };
 
-  let handleSave = (event) => {
+  let handleSave = (_event: unknown) => {
     console.log('ComboAdminModus: ', comboAdminModus);
     // mySnackbar.open();
     let newEntries = [];
@@ -216,23 +243,23 @@
 </script>
 
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
-{#if $currentUser && !$userRoles.includes('combo') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
+{#if $authReady && $currentUser && !$userRoles.includes('comboedit') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
-        <p>Diese Seite ist nur für Combo-Mitglieder zugänglich.</p>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
+        <p>Diese Seite ist nur für Benutzer mit der Rolle <strong>Combo Edit</strong> zugänglich.</p>
       </div>
     </Card>
   </div>
 {/if}
 
 <!-- ═══════ HAUPTINHALT ═══════ -->
-{#if $currentUser && ($userRoles.includes('combo') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
+{#if $currentUser && ($userRoles.includes('comboedit') || $userRoles.includes('comboadmin') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
-      <h2 class="text-gray-900 dark:text-white font-bold mb-4">Comboplan Eintragung</h2>
+      <h2 class="text-[#1e3257] dark:text-[#dce9f7] font-bold mb-4">Comboplan Eintragung</h2>
       <div class="flex flex-row">
         <Select class="mb-4 mr-4" items={members} bind:value={selectedmember} placeholder="Bitte wähle Deinen Namen"
         ></Select>

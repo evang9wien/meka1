@@ -1,5 +1,5 @@
-<script>
-  // Anlegen und bearbeitn eines Liedes
+<script lang="ts">
+  // Anlegen und bearbeiten eines Liedes
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Section } from 'flowbite-svelte-blocks';
@@ -19,22 +19,21 @@
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
 
-  import { getLongName } from './predigt/PredigtConstants.js';
-
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
+  import { openMp3, stopMp3 } from './mp3.ts';
+  import { openPdf } from './pdf.ts';
 
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
-  import { getUrl } from './url/url.js';
+  import { getUrl } from './url/url.ts';
 
-  import { comboKategorien } from './combo/combo.js';
-  import { initAuth, currentUser, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { comboKategorien } from './combo/combo.ts';
+  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
+  import { doc, getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import {
     getDatabase,
     set,
@@ -46,29 +45,43 @@
     endAt,
   } from 'firebase/database';
 
+  interface Lied {
+    ID?: string;
+    Titel?: string;
+    Dateiname?: string;
+    EG?: string;
+    Kategorie?: string;
+    Liedtext?: string;
+    Aktiv?: string;
+    PDF?: number;
+    MP3?: number;
+    [key: string]: unknown;
+  }
+
   let popupModal = false;
   let popupErrorModal = false;
   let comboLiederEdit = false;
-  let responseData;
+  let responseData: unknown;
   let popupSpinnerModal = false;
   let popupUserAuthModal = false;
   let popupSpinnerUploadModal = false;
   let popupLiedGespeichert = false;
-  let selectedLied;
-  let loadedLied = {};
-  let alleLieder;
+  let selectedLied: string | undefined;
+  let loadedLied: Lied = {};
+  let alleLieder: Array<{ name: string; value: string; ID: string }>;
   let liedGesungen = false;
 
-  let notenPdf;
-  let liedMp3;
+  let notenPdf: File | undefined;
+  let liedMp3: File | undefined;
 
-  let kategorien = [];
-  let kategorie;
+  let kategorien: Array<{ value: string; name: string; Typ: string }> = [];
+  let kategorie: string | undefined;
 
-  let storage;
-  let dbFireStore;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: Firestore;
 
   let dataLoaded = false;
+  let roleCheckDone = false;
 
   onMount(() => {
     console.log('onMount');
@@ -81,15 +94,16 @@
     loadData($currentUser);
   }
 
-  const loadData = async (user) => {
+  const loadData = async (user: { uid: string }) => {
     console.log('User Auth');
     const app = initAppCheck();
     storage = getStorage(app);
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
 
     // Rollencheck
     const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
     console.log('User Data: ', userDoc.data());
+    roleCheckDone = true;
     if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('liederedit')) {
       console.log('No liederedit role!');
       popupSpinnerModal = false;
@@ -230,12 +244,12 @@
     }
   };
 </script>
-{#if $currentUser && !popupSpinnerModal && !comboLiederEdit}
+{#if $currentUser && !popupSpinnerModal && roleCheckDone && !comboLiederEdit}
    <div class="flex justify-center p-8 ">
-    <Card class="border-2 border-red-600 bg-red-50 content-center">
-      <div class="p-8"    >
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a] content-center">
+      <div class="p-8">
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Du hast leider keine Berechtigung, um diese Seite zu sehen. Bitte wende dich an den Administrator.</p>
       </div>  
     </Card>
@@ -254,7 +268,7 @@
       </div>
 
       <!-- <Section name="crudcreateform"> -->
-      <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Lied anlegen oder bearbeiten</h2>
+      <h2 class="mb-4 text-xl font-bold text-[#1e3257] dark:text-[#dce9f7]">Lied anlegen oder bearbeiten</h2>
       <form id="liedform" on:submit|preventDefault={handleSubmit}>
         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <div class="sm:col-span-2">
@@ -280,12 +294,12 @@
           </div>
           <div class="sm:col-span-2">
             <Label class="pb-2">Noten*</Label>
-            <Fileupload id="noten" name="noten" onchange={(e) => (notenPdf = e.target.files[0])} class="mb-2" />
+            <Fileupload id="noten" name="noten" onchange={(e: Event) => { const t = e.target as HTMLInputElement; notenPdf = t.files?.[0]; }} class="mb-2" />
             <Helper class="mb-2">Bitte die Noten als pdf Datei auswählen!</Helper>
           </div>
           <div class="sm:col-span-2">
             <Label class="pb-2">Hörprobe</Label>
-            <Fileupload id="mp3" name="mp3" onchange={(e) => (liedMp3 = e.target.files[0])} class="mb-2" />
+            <Fileupload id="mp3" name="mp3" onchange={(e: Event) => { const t = e.target as HTMLInputElement; liedMp3 = t.files?.[0]; }} class="mb-2" />
             <Helper class="mb-2">Bitte die Hörprobe als mp3 Datei auswählen!</Helper>
           </div>
           <div class="sm:col-span-2">
@@ -311,25 +325,25 @@
 <Modal bind:open={popupSpinnerUploadModal} size="sm" autoclose>
   <div class="text-center">
     <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <Spinner color="purple" size={8} />&nbsp;Lied wird gespeichert.
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Bitte warten ...</h3>
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
+      <Spinner color="primary" size={8} />&nbsp;Lied wird gespeichert.
     </h3>
   </div>
 </Modal>
 
 <Modal bind:open={popupErrorModal} size="xs" autoclose>
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Fehler beim Speichern: {responseData}</h3>
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Fehler beim Speichern: {responseData}</h3>
     <Button color="alternative">Abbrechen</Button>
   </div>
 </Modal>
 
 <Modal bind:open={popupLiedGespeichert} size="xs" autoclose>
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Lied wurde gespeichert</h3>
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Lied wurde gespeichert</h3>
     <Button color="alternative">Schließen</Button>
   </div>
 </Modal>

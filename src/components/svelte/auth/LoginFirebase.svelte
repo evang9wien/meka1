@@ -9,8 +9,8 @@
 
 <Modal bind:open={popupFireBaseLogin} size="xs">
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#93b3e0] w-12 h-12 dark:text-[#bcd0ed]" />
+    <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
       Bitte erst in den Mitarbeiterbereich einloggen.
     </h3>
   </div>

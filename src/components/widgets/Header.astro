@@ -55,7 +55,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 <header
   class:list={[
     { sticky: isSticky, relative: !isSticky, dark: isDark },
-    'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out',
+    'top-0 z-40 flex-none mx-auto w-full border-b border-[#bcd0ed]/0 transition-[opacity] ease-in-out',
   ]}
   {...id ? { id } : {}}
 >
@@ -88,16 +88,16 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
             <li class={links?.length ? 'dropdown' : ''}>
               {links?.length ? (
                 <>
-                  <button class="hover:text-link dark:hover:text-white px-4 py-3 flex items-center">
+                  <button class="hover:text-link dark:hover:text-[#bcd0ed] px-4 py-3 flex items-center">
                     {text}{' '}
                     <Icon name="tabler:chevron-down" class="w-3.5 h-3.5 ml-0.5 rtl:ml-0 rtl:mr-0.5 hidden lg:inline" />
                   </button>
-                  <ul class="dropdown-menu lg:backdrop-blur-md dark:lg:bg-dark rounded lg:absolute pl-4 lg:pl-0 lg:hidden font-medium lg:bg-white/90 lg:min-w-[200px] drop-shadow-xl">
+                  <ul class="dropdown-menu lg:backdrop-blur-md dark:lg:bg-dark rounded lg:absolute pl-4 lg:pl-0 lg:hidden font-medium lg:bg-[#f0f5fb]/95 lg:min-w-[200px] drop-shadow-xl">
                     {links.map(({ text: text2, href: href2 }) => (
                       <li>
                         <a
                           class:list={[
-                            'first:rounded-t last:rounded-b lg:hover:bg-gray-100 hover:text-link dark:hover:text-white dark:hover:bg-gray-700 py-2 px-5 block whitespace-no-wrap',
+                            'first:rounded-t last:rounded-b lg:hover:bg-[#dce9f7] hover:text-link dark:hover:text-[#bcd0ed] dark:hover:bg-[#1e3257] py-2 px-5 block whitespace-no-wrap',
                             { 'aw-link-active': href2 === currentPath },
                           ]}
                           href={href2}
@@ -111,7 +111,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
               ) : (
                 <a
                   class:list={[
-                    'hover:text-link dark:hover:text-white px-4 py-3 flex items-centers',
+                    'hover:text-link dark:hover:text-[#bcd0ed] px-4 py-3 flex items-centers',
                     { 'aw-link-active': href === currentPath },
                   ]}
                   href={href}
@@ -137,7 +137,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
           {
             showRssFeed && (
               <a
-                class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+                class="text-muted dark:text-[#93b3e0] hover:bg-[#dce9f7] dark:hover:bg-[#1e3257] focus:outline-none focus:ring-4 focus:ring-[#bcd0ed] dark:focus:ring-[#2c4a7c] rounded-lg text-sm p-2.5 inline-flex items-center"
                 aria-label="RSS Feed"
                 href={getAsset('/rss.xml')}
               >

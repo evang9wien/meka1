@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import QRCode from 'qrcode';
 
-  let qrCodeDataUrl = '';
-  let loading = true;
+  let qrCodeDataUrl: string = '';
+  let loading: boolean = true;
 
   onMount(async () => {
     // SEPA-Überweisung QR-Code Daten (EPC QR-Code Format)
@@ -40,12 +40,12 @@ Spende für die Messiaskapelle`;
 
 <span class="flex flex-col items-center gap-4">
   {#if loading}
-    <div class="text-sm text-gray-500">QR-Code wird generiert...</div>
+    <div class="text-sm text-[#3a61a0]">QR-Code wird generiert...</div>
   {:else if qrCodeDataUrl}
     <img src={qrCodeDataUrl} alt="SEPA QR-Code für Spendenkonto" class="border border-gray-300 rounded" />
-    <p class="text-xs text-gray-600 text-center">SEPA-Überweisung mit QR-Code</p>
+    <p class="text-xs text-[#3a61a0] text-center">SEPA-Überweisung mit QR-Code</p>
   {:else}
-    <p class="text-sm text-gray-500">QR-Code konnte nicht generiert werden.</p>
+    <p class="text-sm text-[#3a61a0]">QR-Code konnte nicht generiert werden.</p>
   {/if}
 </span>
 

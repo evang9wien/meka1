@@ -64,7 +64,7 @@ const articleSchema = {
     <header class={post.image ? '' : ''}>
       <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
         <p>
-          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
+          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-[#93b3e0]" />
           <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
           {
             post.category && (
@@ -93,13 +93,13 @@ const articleSchema = {
         {post.title}
       </h1>
       <p
-        class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted dark:text-slate-400 text-justify"
+        class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted dark:text-[#93b3e0] text-justify"
         set:html={post.excerpt}
       />
     </header>
     {
       post.pdf && (
-        <p class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted dark:text-slate-400 text-justify">
+        <p class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted dark:text-[#93b3e0] text-justify">
           <a class="underline font-medium" target="_blank" href={post.pdf}>
             {' '}
             PDF
@@ -110,10 +110,10 @@ const articleSchema = {
 
     {
       post.image ? (
-      <div class="relative max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700">
+      <div class="relative max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-[#93b3e0] dark:bg-[#2c4a7c]">
         <Image
           src={post.image}
-          class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+          class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-[#93b3e0] dark:bg-[#2c4a7c]"
           widths={[400, 900]}
           sizes="(max-width: 900px) 400px, 900px"
           alt={post?.excerpt || ''}
@@ -126,18 +126,18 @@ const articleSchema = {
       </div>
       ) : (
         <div class="max-w-3xl mx-auto px-4 sm:px-6">
-          <div class="border-t dark:border-slate-700" />
+          <div class="border-t dark:border-[#2c4a7c]" />
         </div>
       )
     }
   </article>
   <div
-    class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-lg lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px]"
+    class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-lg lg:prose-xl dark:prose-invert dark:prose-headings:text-[#dce9f7] prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-[#93b3e0] prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px]"
   >
     {Content ? <Content /> : <Fragment set:html={post.content || ''} />}
   </div>
   <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
     <PostTags tags={post.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
-    <SocialShare url={url} text={post.title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
+    <SocialShare url={url} text={post.title} class="mt-5 sm:mt-1 align-middle text-[#3a61a0] dark:text-[#3a61a0]" />
   </div>
 </section>

@@ -1,10 +1,162 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Features from '~/components/widgets/Features.astro';
+import { getPermalink } from '~/utils/permalinks';
 
 const metadata = {
-  title: 'Combo',
+  title: 'Combo – Musikteam',
   ignoreTitleTemplate: true,
 };
 ---
 
-<Layout metadata={metadata} />
+<Layout metadata={metadata}>
+
+  <!-- ═══ HERO – Musiker ═══ -->
+  <Hero2
+    tagline="Musikteam"
+    title="Combo"
+    subtitle="<strong>Comboplan eintragen</strong> – wer spielt diesen Sonntag? Instrument und Verfügbarkeit eintragen.<br/><strong>Lieder für den Gottesdienst</strong> – aktuelle Liedauswahl mit Noten, Hörproben und Liedtexten."
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Comboplan eintragen',
+        href: getPermalink('/combo/comboplaneditFBpage'),
+        icon: 'tabler:calendar-plus',
+      },
+      {
+        text: 'Comboplan ansehen',
+        href: getPermalink('/combo/comboplanFBpage'),
+        icon: 'tabler:calendar-event',
+      },
+      {
+        text: 'Lieder für den Gottesdienst',
+        href: getPermalink('/combo/comboliederauswahlFBpage'),
+        icon: 'tabler:music',
+      },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1636367581920-d3468e1d220a?q=80&w=1063&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'Combo Musikteam',
+    }}
+  />
+
+  <!-- ═══ LEKTOREN / LIEDVERANTWORTLICHE ═══ -->
+  <Features2
+    id="lektoren"
+    tagline="Lektorinnen &amp; Lektoren"
+    title="Liederplanung"
+    columns={2}
+    items={[
+      {
+        title: 'Comboplan',
+        description: 'Wer spielt wann? Übersicht über alle Dienste und Besetzungen.',
+        icon: 'tabler:calendar-event',
+        callToAction: {
+          text: 'Öffnen →',
+          href: getPermalink('/combo/comboplanFBpage'),
+        },
+      },
+      {
+        title: 'Liederauswahl',
+        description: 'Lieder für den nächsten Gottesdienst auswählen und ans Team versenden.',
+        icon: 'tabler:pencil',
+        callToAction: {
+          text: 'Öffnen →',
+          href: getPermalink('/combo/comboliederauswahleditFBpage'),
+        },
+      },
+      {
+        title: 'Liederliste',
+        description: 'Vollständiges Archiv aller Lieder mit Noten, MP3 und Liedtexten.',
+        icon: 'tabler:playlist',
+        callToAction: {
+          text: 'Öffnen →',
+          href: getPermalink('/combo/comboliederlisteFBpage'),
+        },
+      },
+      {
+        title: 'Lieder-Hitliste',
+        description: 'Die meistgespielten Lieder der letzten Monate.',
+        icon: 'tabler:trophy',
+        callToAction: {
+          text: 'Öffnen →',
+          href: getPermalink('/combo/comboliederHitlisteFBpage'),
+        },
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- ═══ ADMINISTRATION – eingeklappt ═══ -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+    <details class="group">
+      <summary class="flex items-center gap-2 cursor-pointer list-none text-sm font-medium text-muted hover:text-primary transition-colors select-none w-fit">
+        <svg class="w-4 h-4 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        Combo-Administration
+      </summary>
+      <div class="mt-6">
+        <Features
+          id="administration"
+          tagline="Administration"
+          title="Combo-Admin"
+          columns={2}
+          items={[
+            {
+              title: 'Lieder anlegen &amp; bearbeiten',
+              description: 'Neue Lieder ins Archiv aufnehmen oder bestehende Einträge ändern.',
+              icon: 'tabler:file-music',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboliedereditFBpage'),
+              },
+            },
+            {
+              title: 'Liederchronik',
+              description: 'Welche Lieder wurden wann gespielt?',
+              icon: 'tabler:history',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboliederchronikFBpage'),
+              },
+            },
+            {
+              title: 'Combo Statistik',
+              description: 'Rangliste der Musikteam-Mitglieder nach Einsatzhäufigkeit.',
+              icon: 'tabler:chart-bar',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/combostatistikFBpage'),
+              },
+            },
+            {
+              title: 'Termin-Admin',
+              description: 'Gottesdienst-Termine anlegen, kopieren und verwalten.',
+              icon: 'tabler:settings',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboTerminCopyFBpage'),
+              },
+            },
+            {
+              title: 'Benutzerverwaltung',
+              description: 'Rollen und Zugriffsrechte für alle Combo-Apps verwalten.',
+              icon: 'tabler:users',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/adminUserspage'),
+              },
+            },
+          ]}
+        />
+      </div>
+    </details>
+  </div>
+
+</Layout>

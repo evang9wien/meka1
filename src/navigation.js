@@ -190,6 +190,10 @@ export const footerData = {
           href: getPermalink('/combo/comboliederchronikFBpage'),
         },
         {
+          text: 'Lieder-Hitliste',
+          href: getPermalink('/combo/comboliederHitlisteFBpage'),
+        },
+        {
           text: 'Combo Statistik',
           href: getPermalink('/combo/combostatistikFBpage'),
         },

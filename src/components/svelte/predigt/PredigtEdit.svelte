@@ -16,13 +16,13 @@
   import { Modal } from 'flowbite-svelte';
 
   import PredigtAvatar from './PredigtAvatar.svelte';
-  import { getImage, getLongName, getImageAvatar } from './PredigtConstants.js';
+  import { getLongNameFromStore, initPredigerStore } from '../stores/predigerStore.ts';
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { initAuth, currentUser, authReady } from './../stores/authStore.js';
-  import { initAppCheck } from './../firebase/firebase.js';
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './../firebase/firebase.js';
+  import { doc, getDoc } from 'firebase/firestore';
   import {
     getDatabase,
     ref as dbref,
@@ -48,6 +48,9 @@
   onMount(() => {
     console.log('FireBase');
     const app = initAppCheck();
+
+    // Prediger-Store initialisieren (lädt Firestore "prediger", einmaliger Seed wenn leer)
+    initPredigerStore(getDb());
 
     storage = getStorage(app);
 
@@ -115,9 +118,7 @@
   }
 
   function getName(termin) {
-    const langName = getLongName(termin.Verantwortlich);
-
-    return langName ? langName : termin.Verantwortlich;
+    return getLongNameFromStore(termin.Verantwortlich) || termin.Verantwortlich;
   }
 
   // function getImgAvatar(termin) {

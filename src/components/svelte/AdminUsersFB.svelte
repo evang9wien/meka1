@@ -1,15 +1,16 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { GradientButton, Button, Card, Badge, Input, Label, Spinner, Alert } from 'flowbite-svelte';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Modal } from 'flowbite-svelte';
   import { ExclamationCircleOutline, UserAddOutline, TrashBinOutline, CheckCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
 
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import LoginFirebase from './auth/LoginFirebase.svelte';
   import WaitPopup from './popup/WaitPopup.svelte';
-  import { initAppCheck } from './firebase/firebase.js';
-  import { getFirestore, collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
   // ─── Alle verfügbaren Rollen mit Beschreibung ─────────────────────────────
@@ -29,16 +30,26 @@
 
   // ─── State ────────────────────────────────────────────────────────────────
 
-  let dbFireStore;
-  let users = [];
+  interface UserRecord {
+    uid: string;
+    email?: string;
+    VName?: string;
+    FName?: string;
+    ShortName?: string;
+    roles: string[];
+    [key: string]: unknown;
+  }
+
+  let dbFireStore: Firestore;
+  let users: UserRecord[] = [];
   let popupSpinnerModal = false;
   let dataLoaded = false;
 
   // Rollen bearbeiten
-  let editUser = null;
-  let editRoles = [];
+  let editUser: UserRecord | null = null;
+  let editRoles: string[] = [];
   let editModalOpen = false;
-  let saveStatus = '';   // '' | 'saving' | 'error'
+  let saveStatus: '' | 'saving' | 'error' = '';
 
   // Neuer User
   let newModalOpen = false;
@@ -46,18 +57,18 @@
   let newEmail = '';
   let newVName = '';
   let newFName = '';
-  let newRoles = [];
-  let newStatus = '';    // '' | 'saving' | 'ok' | 'error' | 'exists'
+  let newRoles: string[] = [];
+  let newStatus: '' | 'saving' | 'ok' | 'error' | 'exists' = '';
 
   // Löschen
-  let deleteUser = null;
+  let deleteUser: UserRecord | null = null;
   let deleteModalOpen = false;
 
   // Toast
   let toastMsg = '';
-  let toastType = 'green';
+  let toastType: string = 'green';
   let toastVisible = false;
-  let toastTimeout;
+  let toastTimeout: ReturnType<typeof setTimeout>;
 
   // ─── Auth & Laden ─────────────────────────────────────────────────────────
 
@@ -70,7 +81,7 @@
 
   const loadData = async () => {
     const app = initAppCheck();
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
     popupSpinnerModal = true;
     await loadUsers();
     popupSpinnerModal = false;
@@ -83,7 +94,7 @@
       .sort((a, b) => fullName(a).localeCompare(fullName(b)));
   };
 
-  const fullName = (user) =>
+  const fullName = (user: UserRecord): string =>
     [user.VName, user.FName].filter(Boolean).join(' ') || user.email || user.uid;
 
   // ─── Benutzer bearbeiten (Rollen + Namen) ─────────────────────────────────
@@ -94,7 +105,7 @@
   let editEmail = '';
   let editShortName = '';
 
-  const openEdit = (user) => {
+  const openEdit = (user: UserRecord) => {
     editUser = user;
     editUid = user.uid;
     editRoles = [...user.roles];
@@ -106,7 +117,7 @@
     editModalOpen = true;
   };
 
-  const toggleEditRole = (roleId) => {
+  const toggleEditRole = (roleId: string) => {
     if (editRoles.includes(roleId)) {
       editRoles = editRoles.filter(r => r !== roleId);
     } else {
@@ -163,7 +174,7 @@
     newModalOpen = true;
   };
 
-  const toggleNewRole = (roleId) => {
+  const toggleNewRole = (roleId: string) => {
     if (newRoles.includes(roleId)) {
       newRoles = newRoles.filter(r => r !== roleId);
     } else {
@@ -205,7 +216,7 @@
 
   // ─── Passwort-Reset senden ────────────────────────────────────────────────
 
-  const sendReset = async (user) => {
+  const sendReset = async (user: UserRecord) => {
     if (!user.email) { showToast('Keine E-Mail-Adresse hinterlegt.', 'red'); return; }
     try {
       const app = initAppCheck();
@@ -213,13 +224,13 @@
       await sendPasswordResetEmail(auth, user.email);
       showToast(`Passwort-Reset an ${user.email} gesendet.`, 'green');
     } catch (e) {
-      showToast(`Fehler: ${e.message}`, 'red');
+      showToast(`Fehler: ${(e as Error).message}`, 'red');
     }
   };
 
   // ─── User löschen ─────────────────────────────────────────────────────────
 
-  const openDelete = (user) => {
+  const openDelete = (user: UserRecord) => {
     deleteUser = user;
     deleteModalOpen = true;
   };
@@ -239,7 +250,7 @@
 
   // ─── Toast ────────────────────────────────────────────────────────────────
 
-  const showToast = (msg, type = 'green') => {
+  const showToast = (msg: string, type = 'green') => {
     clearTimeout(toastTimeout);
     toastMsg = msg;
     toastType = type;
@@ -247,16 +258,16 @@
     toastTimeout = setTimeout(() => { toastVisible = false; }, 4000);
   };
 
-  const roleLabel = (roleId) => ALL_ROLES.find(r => r.id === roleId)?.label ?? roleId;
+  const roleLabel = (roleId: string): string => ALL_ROLES.find(r => r.id === roleId)?.label ?? roleId;
 </script>
 
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <Card class="border-2 border-red-600 bg-red-50">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
       <div class="p-8">
-        <ExclamationCircleOutline class="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</h1>
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
         <p>Diese Seite ist nur für Administratoren zugänglich.</p>
       </div>
     </Card>
@@ -269,7 +280,7 @@
     <Card class="lg:max-w-screen-lg md:max-w-screen-md sm:max-w-screen-sm p-4 w-full">
 
       <div class="flex flex-row items-center justify-between mb-6">
-        <h2 class="text-gray-900 dark:text-white font-bold text-xl">Benutzerverwaltung</h2>
+        <h2 class="text-[#1e3257] dark:text-[#dce9f7] font-bold text-xl">Benutzerverwaltung</h2>
         <GradientButton color="cyanToBlue" onclick={openNew}>
           <UserAddOutline class="w-4 h-4 mr-2" />
           Neuer Benutzer
@@ -284,7 +295,7 @@
       {/if}
 
       <!-- Rollentabelle Legende -->
-      <details class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+      <details class="mb-4 text-sm text-[#3a61a0] dark:text-[#93b3e0]">
         <summary class="cursor-pointer font-medium">Rollen-Übersicht anzeigen</summary>
         <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs">
           {#each ALL_ROLES as role}
@@ -303,19 +314,19 @@
           {#each users as user}
             <TableBodyRow>
               <TableBodyCell>
-                <div class="font-medium text-gray-900 dark:text-white">
-                  {fullName(user)}{#if user.ShortName}&nbsp;<span class="text-gray-400 font-normal">({user.ShortName})</span>{/if}
+                <div class="font-medium text-[#1e3257] dark:text-[#dce9f7]">
+                  {fullName(user)}{#if user.ShortName}&nbsp;<span class="text-[#6a96d3] font-normal">({user.ShortName})</span>{/if}
                 </div>
-                <div class="text-xs text-gray-500">{user.email || '—'}</div>
-                <div class="text-xs text-gray-400 font-mono">{user.uid}</div>
+                <div class="text-xs text-[#3a61a0]">{user.email || '—'}</div>
+                <div class="text-xs text-[#6a96d3] font-mono">{user.uid}</div>
               </TableBodyCell>
               <TableBodyCell>
                 <div class="flex flex-wrap gap-1">
                   {#each user.roles as roleId}
-                    <Badge color="blue" class="text-xs">{roleLabel(roleId)}</Badge>
+                    <Badge color="primary" class="text-xs">{roleLabel(roleId)}</Badge>
                   {/each}
                   {#if user.roles.length === 0}
-                    <span class="text-gray-400 text-xs italic">keine Rollen</span>
+                    <span class="text-[#93b3e0] text-xs italic">keine Rollen</span>
                   {/if}
                 </div>
               </TableBodyCell>
@@ -345,7 +356,7 @@
 <Modal title="Benutzer bearbeiten" bind:open={editModalOpen} size="md">
   {#if editUser}
     <div class="mb-4">
-      <Label for="edit-uid" class="mb-1 text-xs text-gray-500">Firebase UID</Label>
+      <Label for="edit-uid" class="mb-1 text-xs text-[#3a61a0] dark:text-[#93b3e0]">Firebase UID</Label>
       <Input
         id="edit-uid"
         bind:value={editUid}
@@ -376,10 +387,10 @@
       </div>
     </div>
 
-    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Rollen</p>
+    <p class="text-sm font-medium text-[#2c4a7c] dark:text-[#bcd0ed] mb-3">Rollen</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
       {#each ALL_ROLES as role}
-        <label class="flex items-start gap-3 p-2 rounded border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+        <label class="flex items-start gap-3 p-2 rounded border border-[#bcd0ed] dark:border-[#2c4a7c] cursor-pointer hover:bg-[#f0f5fb] dark:hover:bg-[#1e3257]">
           <input
             type="checkbox"
             class="mt-0.5"
@@ -387,8 +398,8 @@
             onchange={() => toggleEditRole(role.id)}
           />
           <div>
-            <div class="font-medium text-sm text-gray-800 dark:text-white">{role.label}</div>
-            <div class="text-xs text-gray-500">{role.desc}</div>
+            <div class="font-medium text-sm text-[#1e3257] dark:text-[#dce9f7]">{role.label}</div>
+            <div class="text-xs text-[#3a61a0] dark:text-[#93b3e0]">{role.desc}</div>
           </div>
         </label>
       {/each}
@@ -414,9 +425,9 @@
 <Modal title="Neuen Benutzer anlegen" bind:open={newModalOpen} size="md">
 
   <!-- Schritt-für-Schritt Anleitung -->
-  <div class="mb-5 p-3 bg-blue-50 dark:bg-blue-900 rounded border border-blue-200 dark:border-blue-700 text-sm">
-    <p class="font-semibold text-blue-800 dark:text-blue-200 mb-2">So geht's — 2 Schritte:</p>
-    <ol class="list-decimal list-inside space-y-1 text-blue-700 dark:text-blue-300">
+  <div class="mb-5 p-3 bg-[#dce9f7] dark:bg-[#1e3257] rounded border border-[#bcd0ed] dark:border-[#2c4a7c] text-sm">
+    <p class="font-semibold text-[#1e3257] dark:text-[#bcd0ed] mb-2">So geht's — 2 Schritte:</p>
+    <ol class="list-decimal list-inside space-y-1 text-[#2c4a7c] dark:text-[#93b3e0]">
       <li>
         <strong>Firebase Console</strong> →
         <a href="https://console.firebase.google.com/" target="_blank" class="underline">Authentication → Users</a>
@@ -427,7 +438,7 @@
         Hier unten die <strong>kopierte UID</strong> einfügen, Name, E-Mail und Rollen setzen → Anlegen.
       </li>
     </ol>
-    <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">
+    <p class="mt-2 text-xs text-[#3a61a0] dark:text-[#93b3e0]">
       Der User kann sich danach sofort einloggen und hat die zugewiesenen Rollen.
       Optional: "PW Reset" senden, damit er sein Passwort selbst setzen kann.
     </p>
@@ -441,7 +452,7 @@
       placeholder="z.B. XyZ1a2b3c4d5e6f7g8h9"
       class="font-mono text-sm"
     />
-    <p class="text-xs text-gray-500 mt-1">
+    <p class="text-xs text-[#3a61a0] dark:text-[#93b3e0] mt-1">
       Aus Firebase Console → Authentication → Users → erste Spalte (User UID)
     </p>
   </div>
@@ -468,10 +479,10 @@
     </div>
   </div>
 
-  <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Rollen</p>
+  <p class="text-sm font-medium text-[#2c4a7c] dark:text-[#bcd0ed] mb-3">Rollen</p>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
     {#each ALL_ROLES as role}
-      <label class="flex items-start gap-3 p-2 rounded border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+      <label class="flex items-start gap-3 p-2 rounded border border-[#bcd0ed] dark:border-[#2c4a7c] cursor-pointer hover:bg-[#f0f5fb] dark:hover:bg-[#1e3257]">
         <input
           type="checkbox"
           class="mt-0.5"
@@ -479,8 +490,8 @@
           onchange={() => toggleNewRole(role.id)}
         />
         <div>
-          <div class="font-medium text-sm text-gray-800 dark:text-white">{role.label}</div>
-          <div class="text-xs text-gray-500">{role.desc}</div>
+          <div class="font-medium text-sm text-[#1e3257] dark:text-[#dce9f7]">{role.label}</div>
+          <div class="text-xs text-[#3a61a0] dark:text-[#93b3e0]">{role.desc}</div>
         </div>
       </label>
     {/each}
@@ -518,9 +529,9 @@
 <!-- ═══════ MODAL: LÖSCHEN BESTÄTIGEN ═══════ -->
 <Modal bind:open={deleteModalOpen} size="xs">
   <div class="text-center">
-    <ExclamationCircleOutline class="mx-auto mb-4 text-red-500 w-12 h-12" />
-    <h3 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Benutzer entfernen?</h3>
-    <p class="mb-5 text-sm text-gray-500">
+    <ExclamationCircleOutline class="mx-auto mb-4 text-[#c0392b] w-12 h-12" />
+    <h3 class="mb-3 text-lg font-semibold text-[#1e3257] dark:text-[#dce9f7]">Benutzer entfernen?</h3>
+    <p class="mb-5 text-sm text-[#3a61a0] dark:text-[#93b3e0]">
       <strong>{fullName(deleteUser)}</strong> wird aus der Rollenverwaltung entfernt.
       Der Firebase Auth-Account bleibt erhalten und muss separat in der
       <a href="https://console.firebase.google.com/" target="_blank" class="underline">Firebase Console</a>

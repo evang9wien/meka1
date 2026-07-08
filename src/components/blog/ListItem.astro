@@ -25,11 +25,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
   {
     image && (
       <a class="relative block group" href={link ?? 'javascript:void(0)'}>
-        <div class="relative h-0 pb-[56.25%] md:pb-[75%] md:h-72 lg:pb-[56.25%]  bg-gray-400 dark:bg-slate-700 rounded shadow-lg">
+        <div class="relative h-0 pb-[56.25%] md:pb-[75%] md:h-72 lg:pb-[56.25%]  bg-[#93b3e0] dark:bg-[#2c4a7c] rounded shadow-lg">
           {image && (
             <Image
               src={image}
-              class="absolute inset-0 object-cover w-full h-full mb-6 rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+              class="absolute inset-0 object-cover w-full h-full mb-6 rounded shadow-lg bg-[#93b3e0] dark:bg-[#2c4a7c]"
               widths={[400, 900]}
               width={900}
               sizes="(max-width: 900px) 400px, 900px"
@@ -50,7 +50,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     <header>
       <div class="mb-1">
         <span class="text-sm">
-          <Icon name="tabler:clock" class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-gray-400" />
+          <Icon name="tabler:clock" class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-[#93b3e0]" />
           <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
           {
             post.category && (
@@ -65,10 +65,10 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
           }
         </span>
       </div>
-      <h2 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300">
+      <h2 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-[#dce9f7]">
         {
           link ? (
-            <a class="hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200" href={link}>
+            <a class="hover:text-primary dark:hover:text-[#4a7ac1] transition ease-in duration-200" href={link}>
               {post.title}
             </a>
           ) : (
@@ -78,12 +78,12 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
       </h2>
     </header>
 
-    {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-lg" set:html={post.excerpt} />}
+    {post.excerpt && <p class="flex-grow text-muted dark:text-[#93b3e0] text-lg" set:html={post.excerpt} />}
 
     <div class="inline">
       {
         post.pdf && (
-          <a href={post.pdf} class="text-muted dark:text-slate-400 text-lg underline font-medium" target="_blank">
+          <a href={post.pdf} class="text-muted dark:text-[#93b3e0] text-lg underline font-medium" target="_blank">
             PDF
           </a>
         )

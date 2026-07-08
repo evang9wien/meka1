@@ -6,8 +6,16 @@
 
   import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
-  import { getImageCalAvatar } from '../predigt/PredigtConstants.js';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
+  import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.ts';
+  import { initAppCheck, getDb } from '../firebase/firebase.ts';
+
+  // Reaktiv: gibt Kürzel zurück — list-Parameter zwingt Svelte zur Neuauswertung
+  // wenn sich $predigerList ändert
+  function getKuerzelForAvatar(description, list) {
+    if (!description) return '';
+    return getPredigerKuerzelFromStore(description);
+  }
 
   export let filter;
 
@@ -15,6 +23,9 @@
 
   onMount(async () => {
     dayjs.locale('de');
+    // Prediger-Store initialisieren (lädt Firestore "prediger", einmaliger Seed wenn leer)
+    const app = initAppCheck();
+    initPredigerStore(getDb());
     // console.log(dayjs(1316116057189).fromNow());
     axios
       .get(
@@ -52,25 +63,25 @@
       <TimelineItem title={item.summary} >        
         
         {#snippet orientationSlot()}
-          <span class="absolute bg-primary-200 dark:bg-primary-900 -start-10 flex h-6 w-6 items-center justify-center rounded-full ring-6 ring-white dark:ring-gray-900">
+          <span class="absolute bg-primary-200 dark:bg-primary-900 -start-10 flex h-6 w-6 items-center justify-center rounded-full ring-6 ring-[#f0f5fb] dark:ring-[#111d33]">
         
           
             {#if item.summary.includes('MEKA-Classic')}
               <PredigtAvatar clazz="w-6 h-6" title="meka classic" } />
             {:else if item.summary.includes('Comboprobe')}
-              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />  
-            {:else if getImageCalAvatar(item.description ? item.description.split(' ')[0] : '')}
-              <PredigtAvatar clazz="w-6 h-6" prediger={item.description.split(' ')[0]} />
-            {:else}            
+              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />
+            {:else if getKuerzelForAvatar(item.description, $predigerList)}
+              <PredigtAvatar clazz="w-6 h-6" prediger={getKuerzelForAvatar(item.description, $predigerList)} />
+            {:else}
               <CalendarWeekSolid class="text-primary-600 dark:text-primary-400 h-4 w-4" />
             {/if}
           
             </span>
             {/snippet}        
-        <p class="mb-4 text-base font-normal text-gray-600 dark:text-gray-200">
+        <p class="mb-4 text-base font-normal text-[#2c4a7c] dark:text-[#bcd0ed]">
           {item.startDate}
         </p>
-        <p class="mb-4 text-base font-normal text-gray-400 dark:text-gray-400">
+        <p class="mb-4 text-base font-normal text-[#6a96d3] dark:text-[#6a96d3]">
           {item.description ? item.description : ''}
         </p>
       </TimelineItem>

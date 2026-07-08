@@ -1,32 +1,28 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { Label, Select, Toggle } from 'flowbite-svelte';
-  import { Button, Modal } from 'flowbite-svelte';
-  import { Card } from 'flowbite-svelte';
-  import { A } from 'flowbite-svelte';
+  import { Label, Select, Toggle, Button, Modal, Spinner, Card, A } from 'flowbite-svelte';
 
-  import { MicrophoneOutline, FileMusicOutline, PlaySolid, PauseSolid, ListMusicOutline } from 'flowbite-svelte-icons';
+  import { FileMusicOutline, ListMusicOutline } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { Spinner } from 'flowbite-svelte';
-  import { Avatar, Popover } from 'flowbite-svelte';
 
-  import { getImageAvatar, getLongName } from './predigt/PredigtConstants.js';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
 
   import WaitPopup from './popup/WaitPopup.svelte';
   import LoginFirebase from './auth/LoginFirebase.svelte';
-  import { openMp3, stopMp3 } from './mp3.js';
-  import { openPdf } from './pdf.js';
+  import { openMp3, stopMp3 } from './mp3.ts';
+  import { openPdf } from './pdf.ts';
 
-  import { getUrl } from './url/url.js';
-  import { comboReihenfolge } from './combo/combo.js';
-  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { getUrl } from './url/url.ts';
+  import { comboReihenfolge } from './combo/combo.ts';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
+  import { initAppCheck, getDb } from './firebase/firebase.ts';
 
   import { getStorage, ref as stref, getDownloadURL } from 'firebase/storage';
   import { getFunctions, httpsCallable } from "firebase/functions";
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  import { doc, getDoc } from 'firebase/firestore';
+  import type { Firestore } from 'firebase/firestore';
   import {
     getDatabase,
     ref as dbref,
@@ -39,36 +35,47 @@
 
   import dayjs from 'dayjs';
 
-  let selectedTermin;
-  let lastSelectedTermin;
-  let liederauswahl;
-  let termine;
+  interface TerminItem {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    LiedAuswahl?: Array<Record<string, unknown>>;
+    name: string;
+    value: string;
+    [key: string]: unknown;
+  }
 
-  let verantwortlich;
+  let selectedTermin: string | undefined;
+  let lastSelectedTermin: string | undefined;
+  let liederauswahl: Record<string, unknown>[] | undefined;
+  let termine: TerminItem[] | undefined;
+
+  let verantwortlich: string | undefined;
   let popupSpinnerModal = false;
   let liedTextModal = false;
-  let liedText;
-  let liedTextTitel;
+  let liedText: string | undefined;
+  let liedTextTitel: string | undefined;
 
-  let storage;
-  let dbFireStore;
+  let storage: ReturnType<typeof getStorage>;
+  let dbFireStore: Firestore;
 
   let showComboProben = false;
 
-  let alleTermine;
+  let alleTermine: TerminItem[];
   let dataLoaded = false;
 
-  const loadLieder = async (termin) => {
+  const loadLieder = async (termin: TerminItem) => {
     console.log('Selected Termin: ', termin);
+
+    verantwortlich = termin.Verantwortlich;
+    selectedTermin = termin.Termin;
+    lastSelectedTermin = selectedTermin;
+
     if (!termin.LiedAuswahl) {
       console.log('Keine Liedauswahl vorhanden!');
       popupSpinnerModal = false;
       return;
     }
-
-    verantwortlich = termin.Verantwortlich;
-    selectedTermin = termin.Termin;
-    lastSelectedTermin = selectedTermin;
 
     // Sortiere die Lieder und füge Beschreibungen in einem Schritt hinzu
     const sortedLieder = termin.LiedAuswahl
@@ -94,7 +101,7 @@
     popupSpinnerModal = false;
   };
 
-  const testUrl = async (app) => {   
+  const testUrl = async (app: ReturnType<typeof initAppCheck>) => {
     const functions = getFunctions(app);
     // connectFunctionsEmulator(functions, "localhost", 5001);
     const getAudioUrl = httpsCallable(functions, 'getAudioUrl');
@@ -117,12 +124,13 @@
     loadData($currentUser);
   }
 
-  const loadData = (user) => {
+  const loadData = (_user: unknown) => {
     const app = initAppCheck();
     storage = getStorage(app);
     console.log('onMount');
     popupSpinnerModal = true;
-    dbFireStore = getFirestore(app);
+    dbFireStore = getDb();
+    initPredigerStore(dbFireStore);
 
     const dbRealtime = getDatabase(app);
     const fromDate = dayjs().subtract(4, 'weeks').format('YYYY-MM-DD');
@@ -162,8 +170,8 @@
     }, 300);
   };
 
-  const handleSelect = (sel) => {
-    console.log(sel);
+  const handleSelect = (_sel: unknown) => {
+    console.log(_sel);
     popupSpinnerModal = true;
     window.setTimeout(() => {
       // console.log('Sel: ', selectedTermin);
@@ -182,8 +190,8 @@
 <!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
 {#if $currentUser && !$userRoles.includes('combo') && !$userRoles.includes('comboadmin') && !$userRoles.includes('admin') && !popupSpinnerModal}
   <div class="flex justify-center p-8">
-    <div class="border-2 border-red-600 bg-red-50 rounded-lg p-8 text-center">
-      <p class="text-xl font-bold mb-4 text-red-700">Zugriff verweigert</p>
+    <div class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a] rounded-lg p-8 text-center">
+      <p class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</p>
       <p>Diese Seite ist nur für Combo-Mitglieder zugänglich.</p>
     </div>
   </div>
@@ -205,7 +213,7 @@
               <div class="space-y-1 font-medium dark:text-white">
                 <div>Lieder für den Gottesdienst</div>
                 {#if verantwortlich}
-                  <div class="text-sm text-gray-500 dark:text-gray-400">{getLongName(verantwortlich)}</div>
+                  <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(verantwortlich)}</div>
                 {/if}
               </div>
             </div>
@@ -233,17 +241,17 @@
               {#each liederauswahl as lied}
                 <TableBodyRow>
                   <TableBodyCell>
-                    <div class="flex flex-row">
-                      <A
-                        onclick={() => {
-                          liedTextModal = true;
-                          liedText = lied.Liedtext;
-                          liedTextTitel = lied.Titel;
-                        }}
-                      >
-                        <div class="mr-2">{lied.Beschreibung}</div>
-                        <ListMusicOutline size="md" class="mr-2" />
-                      </A>
+                    <div class="flex items-center gap-2">
+                      <span>{lied.Beschreibung}</span>
+                      {#if lied.Liedtext}
+                        <button
+                          class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
+                          title="Liedtext anzeigen"
+                          onclick={() => { liedTextModal = true; liedText = lied.Liedtext; liedTextTitel = lied.Titel; }}
+                        >
+                          <ListMusicOutline size="sm" />
+                        </button>
+                      {/if}
                     </div>
                   </TableBodyCell>
                   <TableBodyCell class="w-4">
@@ -282,7 +290,20 @@
 {/if}
 <WaitPopup {popupSpinnerModal} message="Liederauswahl wird geladen." />
 <LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
-<Modal title={liedTextTitel} bind:open={liedTextModal} autoclose outsideclose>{liedText}</Modal>
+
+<!-- ═══════ LIEDTEXT-POPUP ═══════ -->
+<Modal title={liedTextTitel ?? ''} bind:open={liedTextModal} outsideclose size="lg">
+  {#if liedText}
+    <div class="bg-[#f0f5fb] dark:bg-[#1e3257] rounded-lg p-4 text-sm text-[#1e2a3a] dark:text-[#dce9f7] whitespace-pre-wrap max-h-96 overflow-y-auto border border-[#bcd0ed] dark:border-[#2c4a7c]">
+      {liedText}
+    </div>
+  {:else}
+    <p class="text-[#93b3e0] text-sm py-2">Kein Liedtext vorhanden.</p>
+  {/if}
+  {#snippet footer()}
+    <Button color="alternative" onclick={() => (liedTextModal = false)}>Schließen</Button>
+  {/snippet}
+</Modal>
 
 <style>
   :global(html audio::-webkit-media-controls-panel) {

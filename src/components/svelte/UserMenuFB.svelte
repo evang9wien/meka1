@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { getAuth, signOut } from 'firebase/auth';
-  import { initAuth, currentUser, userRoles, userProfile, authReady } from './stores/authStore.js';
-  import { initAppCheck } from './firebase/firebase.js';
+  import { initAuth, currentUser, userRoles, userProfile, authReady } from './stores/authStore.ts';
+  import { initAppCheck } from './firebase/firebase.ts';
   import LoginFire from './auth/LoginFire.svelte';
 
   let open = false;
   let openUpward = false;
-  let buttonEl;
-  let popupEl;
+  let buttonEl: HTMLButtonElement;
+  let popupEl: HTMLDivElement;
 
   onMount(() => {
     initAuth();
@@ -40,7 +40,7 @@
   };
 
   // Rollen-Label aus bekannten IDs
-  const ROLE_LABELS = {
+  const ROLE_LABELS: Record<string, string> = {
     admin:             'Admin',
     combo:             'Combo',
     comboedit:         'Combo Edit',
@@ -52,13 +52,13 @@
     predigtedit:       'Predigt Edit',
     kirchenservice:    'Kirchenservice',
   };
-  const roleLabel = (id) => ROLE_LABELS[id] ?? id;
+  const roleLabel = (id: string): string => ROLE_LABELS[id] ?? id;
 
   $: displayName = $userProfile
     ? ([($userProfile.VName ?? ''), ($userProfile.FName ?? '')].filter(Boolean).join(' ') || $userProfile.email || $currentUser?.email || '')
     : ($currentUser?.email ?? '');
 
-  const gravatarUrl = (email) => {
+  const gravatarUrl = (email: string | null | undefined): string | null => {
     if (!email) return null;
     // MD5 via SubtleCrypto (async) ist zu aufwändig – wir nutzen eine kleine sync-Implementierung
     const hash = md5(email.trim().toLowerCase());
@@ -66,24 +66,24 @@
   };
 
   // Minimale sync MD5-Implementierung (kein externesPackage nötig)
-  function md5(str) {
-    function safeAdd(x, y) { const lsw = (x & 0xffff) + (y & 0xffff); return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xffff); }
-    function bitRotateLeft(num, cnt) { return (num << cnt) | (num >>> (32 - cnt)); }
-    function md5cmn(q, a, b, x, s, t) { return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
-    function md5ff(a,b,c,d,x,s,t){return md5cmn((b&c)|((~b)&d),a,b,x,s,t);}
-    function md5gg(a,b,c,d,x,s,t){return md5cmn((b&d)|(c&(~d)),a,b,x,s,t);}
-    function md5hh(a,b,c,d,x,s,t){return md5cmn(b^c^d,a,b,x,s,t);}
-    function md5ii(a,b,c,d,x,s,t){return md5cmn(c^(b|(~d)),a,b,x,s,t);}
-    function utf8Encode(s) { return decodeURIComponent(encodeURIComponent(s).replace(/%../g, (m) => String.fromCharCode(parseInt(m.slice(1), 16)))); }
-    function str2binl(str) {
-      const bin = []; for (let i=0;i<str.length*8;i+=8) bin[i>>5]|=(str.charCodeAt(i/8)&0xff)<<(i%32); return bin;
+  function md5(str: string): string {
+    function safeAdd(x: number, y: number): number { const lsw = (x & 0xffff) + (y & 0xffff); return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xffff); }
+    function bitRotateLeft(num: number, cnt: number): number { return (num << cnt) | (num >>> (32 - cnt)); }
+    function md5cmn(q: number, a: number, b: number, x: number, s: number, t: number): number { return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
+    function md5ff(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn((b&c)|((~b)&d),a,b,x,s,t);}
+    function md5gg(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn((b&d)|(c&(~d)),a,b,x,s,t);}
+    function md5hh(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn(b^c^d,a,b,x,s,t);}
+    function md5ii(a: number,b: number,c: number,d: number,x: number,s: number,t: number){return md5cmn(c^(b|(~d)),a,b,x,s,t);}
+    function utf8Encode(s: string): string { return decodeURIComponent(encodeURIComponent(s).replace(/%../g, (m) => String.fromCharCode(parseInt(m.slice(1), 16)))); }
+    function str2binl(str: string): number[] {
+      const bin: number[] = []; for (let i=0;i<str.length*8;i+=8) bin[i>>5]|=(str.charCodeAt(i/8)&0xff)<<(i%32); return bin;
     }
-    function binl2hex(binarray) {
+    function binl2hex(binarray: number[]): string {
       const hex='0123456789abcdef'; let str='';
       for(let i=0;i<binarray.length*4;i++) str+=hex[(binarray[i>>2]>>((i%4)*8+4))&0xf]+hex[(binarray[i>>2]>>((i%4)*8))&0xf];
       return str;
     }
-    function binlMD5(x, len) {
+    function binlMD5(x: number[], len: number): number[] {
       x[len>>5]|=0x80<<(len%32); x[(((len+64)>>>9)<<4)+14]=len;
       let a=1732584193,b=-271733879,c=-1732584194,d=271733878;
       for(let i=0;i<x.length;i+=16){
@@ -112,7 +112,7 @@
     return binl2hex(binlMD5(str2binl(s), s.length * 8));
   }
 
-  $: avatarUrl = $currentUser?.photoURL ?? gravatarUrl($currentUser?.email);
+  $: avatarUrl = $currentUser?.photoURL ?? gravatarUrl($currentUser?.email ?? null);
   let avatarError = false;
   $: if ($currentUser) avatarError = false; // reset on user change
 </script>
@@ -126,7 +126,7 @@
       bind:this={buttonEl}
       onclick={toggle}
       aria-label="Benutzerprofil"
-      class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+      class="text-muted dark:text-[#93b3e0] hover:bg-[#dce9f7] dark:hover:bg-[#1e3257] focus:outline-none focus:ring-4 focus:ring-[#bcd0ed] dark:focus:ring-[#2c4a7c] rounded-lg text-sm p-2.5 inline-flex items-center"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="8" r="4"/>
@@ -137,7 +137,7 @@
     {#if open}
       <div
         bind:this={popupEl}
-        class="absolute z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden"
+        class="absolute z-50 bg-white dark:bg-[#1e3257] border border-[#bcd0ed] dark:border-[#2c4a7c] rounded-xl shadow-xl overflow-hidden"
         style="min-width: 280px; {openUpward ? 'bottom: 100%; margin-bottom: 0.5rem; left: 0;' : 'top: 100%; margin-top: 0.5rem; right: 0;'}"
       >
 
@@ -145,7 +145,7 @@
           <!-- ── Eingeloggt: Profil ── -->
           <div class="p-4">
             <!-- Avatar + Name -->
-            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-[#bcd0ed] dark:border-[#2c4a7c]">
               {#if avatarUrl && !avatarError}
                 <img
                   src={avatarUrl}
@@ -155,25 +155,25 @@
                   onerror={() => { avatarError = true; }}
                 />
               {:else}
-                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-sm flex-shrink-0">
+                <div class="w-10 h-10 rounded-full bg-[#dce9f7] dark:bg-[#2c4a7c] flex items-center justify-center text-[#3a61a0] dark:text-[#bcd0ed] font-bold text-sm flex-shrink-0">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
               {/if}
               <div class="overflow-hidden">
-                <div class="font-semibold text-sm text-gray-900 dark:text-white truncate">
-                  {displayName}{#if $userProfile?.ShortName}&nbsp;<span class="font-normal text-gray-500 dark:text-gray-400">({$userProfile.ShortName})</span>{/if}
+                <div class="font-semibold text-sm text-[#1e3257] dark:text-[#dce9f7] truncate">
+                  {displayName}{#if $userProfile?.ShortName}&nbsp;<span class="font-normal text-[#6a96d3] dark:text-[#93b3e0]">({$userProfile.ShortName})</span>{/if}
                 </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400 truncate">{$currentUser.email ?? ''}</div>
+                <div class="text-xs text-[#6a96d3] dark:text-[#93b3e0] truncate">{$currentUser.email ?? ''}</div>
               </div>
             </div>
 
             <!-- Rollen -->
             {#if $userRoles.length > 0}
-              <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Rollen</div>
+              <div class="mb-4 pb-4 border-b border-[#bcd0ed] dark:border-[#2c4a7c]">
+                <div class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-2">Rollen</div>
                 <div class="flex flex-wrap gap-1">
                   {#each $userRoles as roleId}
-                    <span class="inline-block px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-medium">
+                    <span class="inline-block px-2 py-0.5 rounded-full bg-[#dce9f7] dark:bg-[#2c4a7c] text-[#3a61a0] dark:text-[#bcd0ed] text-xs font-medium">
                       {roleLabel(roleId)}
                     </span>
                   {/each}
@@ -184,7 +184,7 @@
             <!-- Abmelden -->
             <button
               onclick={logout}
-              class="w-full text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg px-3 py-2 font-medium transition-colors"
+              class="w-full text-left text-sm text-[#c0392b] dark:text-[#e87070] hover:bg-[#fce8e8] dark:hover:bg-[#3d1a1a] rounded-lg px-3 py-2 font-medium transition-colors"
             >
               Abmelden
             </button>
@@ -193,8 +193,8 @@
         {:else}
           <!-- ── Nicht eingeloggt: Login-Formular ── -->
           <div class="p-4">
-            <p class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-0.5">Mitarbeiter-Login</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Bitte anmelden um fortzufahren.</p>
+            <p class="text-sm font-semibold text-[#1e3257] dark:text-[#dce9f7] mb-0.5">Mitarbeiter-Login</p>
+            <p class="text-xs text-[#3a61a0] dark:text-[#93b3e0] mb-4">Bitte anmelden um fortzufahren.</p>
             <LoginFire loginReload={true} />
           </div>
         {/if}

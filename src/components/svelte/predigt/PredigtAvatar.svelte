@@ -1,32 +1,53 @@
 <script>
-  import stefan from '../../../assets/images/avatar/stefan-Avatar.png';
-  import harald from '../../../assets/images/avatar/Harald-Geschl-Avatar.png';
-  import mark from '../../../assets/images/avatar/Mark-Ruiz-Hellin-Avatar.png';
-  import tanja from '../../../assets/images/avatar/Tanja-Avatar.png';
-  import wolfgang from '../../../assets/images/avatar/Wolfgang-Avatar.png';
-  import mekaclassic from '../../../assets/images/avatar/meka-classic.png';
-  import musik from '../../../assets/images/avatar/musik.png';
+  import { Avatar, Tooltip } from 'flowbite-svelte';
+  import { predigerList } from '../stores/predigerStore.ts';
+  import { resolveLocalAvatarSrc } from './PredigtConstants.js';
 
-  import { Avatar } from 'flowbite-svelte';
-  import { TicketOutline } from 'flowbite-svelte-icons';
-
-  export let prediger;
+  export let prediger = '';
   export let clazz = '';
   export let title = '';
 
-  const getAvatar = () => {
-    console.log(title);
-    if (title && title.toLowerCase().includes('comboprobe')) return musik.src;
-    if (title && title.toLowerCase().includes('meka classic')) return mekaclassic.src;
-    
-    // console.log(prediger);
-    if (prediger == 'SFJ' || prediger == 'Stefan') return stefan.src;
-    if (prediger == 'MRH' || prediger == 'Mark') return mark.src;
-    if (prediger == 'TDH' || prediger == 'Tanja') return tanja.src;
-    if (prediger == 'WW' || prediger == 'Wolfgang') return wolfgang.src;
-    if (prediger == 'GH' || prediger == 'Harald') return harald.src;
-    if (prediger == 'COM') return musik.src;
-  };
+  const musikSrc     = resolveLocalAvatarSrc('musik.png')      ?? '';
+  const mekaclassicSrc = resolveLocalAvatarSrc('meka-classic.png') ?? '';
+
+  function getAvatar(list, p, t) {
+    // Sondertitel (Comboprobe, MEKA-Classic)
+    if (t?.toLowerCase().includes('comboprobe'))   return musikSrc;
+    if (t?.toLowerCase().includes('meka classic')) return mekaclassicSrc;
+
+    if (list && p) {
+      const entry = list.find((e) => e.kuerzel === p || e.vorname === p);
+      if (entry) {
+        // localImage: Dateiname → lokales Bild aus /assets/images/avatar/
+        if (entry.localImage) {
+          const local = resolveLocalAvatarSrc(entry.localImage);
+          if (local) return local;
+        }
+        // avatarUrl: Firebase Storage URL
+        if (entry.avatarUrl) return entry.avatarUrl;
+      }
+    }
+
+    // COM (Comboprobe ohne title-Hint)
+    if (p === 'COM') return musikSrc;
+
+    return '';
+  }
+
+  function getLongName(list, p) {
+    if (!p) return '';
+    if (list) {
+      const entry = list.find((e) => e.kuerzel === p || e.vorname === p);
+      if (entry?.langname) return entry.langname;
+    }
+    return '';
+  }
+
+  $: avatarSrc = getAvatar($predigerList, prediger, title);
+  $: longName  = getLongName($predigerList, prediger);
 </script>
 
-<Avatar size="md" class={clazz} src={getAvatar()} />
+<Avatar size="md" class="object-cover {clazz}" src={avatarSrc} />
+{#if longName}
+  <Tooltip>{longName}</Tooltip>
+{/if}
