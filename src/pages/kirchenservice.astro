@@ -1,5 +1,8 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import { getPermalink } from '~/utils/permalinks';
 
 const metadata = {
   title: 'Kirchenservice',
@@ -7,4 +10,55 @@ const metadata = {
 };
 ---
 
-<Layout metadata={metadata} />
+<Layout metadata={metadata}>
+
+  <Hero2
+    tagline="Gottesdienst"
+    title="Kirchenservice"
+    subtitle="<strong>Kirchenserviceplan ansehen</strong> – wer ist wann im Dienst?<br/><strong>Dienst eintragen</strong> – eigene Verfügbarkeit für den Kirchenservice eintragen."
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Kirchenserviceplan ansehen',
+        href: getPermalink('/kirchenservice/kirchenserviceFBpage'),
+        icon: 'tabler:calendar-event',
+      },
+      {
+        text: 'Dienst eintragen',
+        href: getPermalink('/kirchenservice/kirchenserviceeditFBpage'),
+        icon: 'tabler:calendar-plus',
+      },
+    ]}
+  />
+
+  <Features2
+    tagline="Kirchenservice"
+    title="Übersicht"
+    columns={2}
+    items={[
+      {
+        title: 'Kirchenserviceplan',
+        description: 'Wer ist wann im Dienst? Übersicht über alle eingetragenen Koordinationsdienste.',
+        icon: 'tabler:calendar-event',
+        callToAction: {
+          text: 'Öffnen →',
+          href: getPermalink('/kirchenservice/kirchenserviceFBpage'),
+        },
+      },
+      {
+        title: 'Dienst eintragen',
+        description: 'Eigene Verfügbarkeit für den Kirchenservice eintragen oder abmelden.',
+        icon: 'tabler:calendar-plus',
+        callToAction: {
+          text: 'Öffnen →',
+          href: getPermalink('/kirchenservice/kirchenserviceeditFBpage'),
+        },
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+</Layout>

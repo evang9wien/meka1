@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Kirchenservice from '~/components/svelte/KirchenserviceFB.svelte';
+
+const metadata = {
+  title: 'Kirchenserviceplan',
+};
+---
+
+<Layout metadata={metadata}>
+  <Kirchenservice client:load />
+</Layout>

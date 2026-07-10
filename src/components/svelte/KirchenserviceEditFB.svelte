@@ -7,7 +7,7 @@
   import { Checkbox } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
 
-  import { InfoCircleOutline, FileMusicOutline, PlaySolid, PauseSolid } from 'flowbite-svelte-icons';
+  import { InfoCircleOutline, FileMusicOutline, PlaySolid, PauseSolid, ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
   import { Avatar, Dropdown, DropdownHeader, DropdownItem, DropdownDivider } from 'flowbite-svelte';
@@ -17,10 +17,11 @@
   import 'dayjs/locale/de';
   import WaitPopup from './popup/WaitPopup.svelte';
   import PredigtAvatar from './predigt/PredigtAvatar.svelte';
+  import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
   import { getUrl } from './url/url.ts';
 
-  import LoginSimple from './auth/LoginSimpleModal.svelte';
-  import { initAuth, currentUser, authReady } from './stores/authStore.ts';
+  import LoginFirebase from './auth/LoginFirebase.svelte';
+  import { initAuth, currentUser, userRoles, authReady } from './stores/authStore.ts';
   import { initAppCheck, getDb } from './firebase/firebase.ts';
   import { collection, getDocs } from 'firebase/firestore';
   import {
@@ -69,13 +70,17 @@
   let selectedmember: string | undefined;
   // let mySnackbar;
   let dbRealtime: ReturnType<typeof getDatabase>;
-  let popupSimpleLogin = true;
   let dataLoaded = false;
 
   onMount(() => {
-    // Auth wird NICHT über Firebase für Kirchenservice genutzt (Dummy-Login bleibt bis Massnahme 3)
-    // initAuth() wird NICHT aufgerufen – login() wird via callback() des Dummy-Logins ausgelöst
+    initAuth();
   });
+
+  // Reaktiv: sobald User eingeloggt → Daten laden (einmalig)
+  $: if ($currentUser && !dataLoaded) {
+    dataLoaded = true;
+    login($currentUser);
+  }
 
   const loadkirchenservice = () => {
     popupSpinnerModal = true;
@@ -103,15 +108,9 @@
     });
   };
 
-  const callback = () => {
-    console.log('Dummy-Login: Callback');
-    popupSimpleLogin = false;
-    login();
-  };
-
-  const login = async () => {
+  const login = async (_user?: unknown) => {
     const app = initAppCheck();
-    let userAuth = true;
+    initPredigerStore(getDb());
     dbRealtime = getDatabase(app);
 
     popupSpinnerModal = true;
@@ -223,7 +222,21 @@
   };
 </script>
 
-{#if !popupSimpleLogin && !popupSpinnerModal}
+<!-- ═══════ ZUGRIFFSSCHUTZ ═══════ -->
+{#if $authReady && $currentUser && !$userRoles.includes('kirchenservice') && !$userRoles.includes('admin') && !popupSpinnerModal}
+  <div class="flex justify-center p-8">
+    <Card class="border-2 border-[#c0392b] bg-[#fce8e8] dark:bg-[#3d1a1a]">
+      <div class="p-8">
+        <ExclamationCircleOutline class="w-16 h-16 text-[#c0392b] mx-auto mb-4" />
+        <h1 class="text-xl font-bold mb-4 text-[#c0392b]">Zugriff verweigert</h1>
+        <p>Diese Seite ist nur für Benutzer mit der Rolle <strong>Kirchenservice</strong> zugänglich.</p>
+      </div>
+    </Card>
+  </div>
+{/if}
+
+<!-- ═══════ HAUPTINHALT ═══════ -->
+{#if $currentUser && ($userRoles.includes('kirchenservice') || $userRoles.includes('admin')) && !popupSpinnerModal}
   <div class="flex justify-center mb-6">
     <Card class="lg:max-w-screen-lg md:max-w-screen-md xs:max-w-screen-xs sm:max-w-screen-sm p-4">
       <h2 class="text-[#1e3257] dark:text-[#dce9f7] font-bold mb-4">Kirchenserviceplan Eintragung</h2>
@@ -259,6 +272,7 @@
               <TableBodyCell>
                 <div class="flex flex-col place-items-center">
                   <PredigtAvatar prediger={termin.Verantwortlich} />
+                  <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(termin.Verantwortlich)}</div>
                   {formatDate(dayjs(termin.Termin).toDate())}
                 </div>
               </TableBodyCell>
@@ -328,5 +342,4 @@
   </div>
 {/if}
 <WaitPopup {popupSpinnerModal} message="kirchenserviceplan wird neu geladen." />
-<!-- <LoginWarn {popupUserAuthModal} /> -->
-<LoginSimple {popupSimpleLogin} auth={false} {callback} />
+<LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />

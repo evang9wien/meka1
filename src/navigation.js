@@ -144,6 +144,16 @@ export const headerData = {
         {
           text: 'Kirchenservice',
           href: getPermalink('/kirchenservice'),
+          links: [
+            {
+              text: 'Kirchenserviceplan',
+              href: getPermalink('/kirchenservice/kirchenserviceFBpage'),
+            },
+            {
+              text: 'Dienst eintragen',
+              href: getPermalink('/kirchenservice/kirchenserviceeditFBpage'),
+            },
+          ],
         },
         {
           text: 'Combo',
@@ -211,7 +221,11 @@ export const footerData = {
       title: 'Kirchenservice',
       links: [
         {
-          text: 'Kirchenservice',
+          text: 'Kirchenserviceplan',
+          href: getPermalink('/kirchenservice/kirchenserviceFBpage'),
+        },
+        {
+          text: 'Dienst eintragen',
           href: getPermalink('/kirchenservice/kirchenserviceeditFBpage'),
         },
       ],
