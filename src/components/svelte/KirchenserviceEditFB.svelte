@@ -130,6 +130,14 @@
     console.log('Mitarbeiter (aus accounts): ', members);
   };
 
+  // Löst ein Leerzeichen-getrenntes Kürzel-String auf, z.B. "MS AB" → "Maria Sommer, Anna Berger"
+  const resolveMemberNames = (shortNames: string | undefined): string => {
+    if (!shortNames || !members) return shortNames ?? '';
+    return shortNames.trim().split(/\s+/)
+      .map(s => members.find(m => m.value === s)?.name.replace(/\s*\(.*?\)\s*$/, '') ?? s)
+      .join(', ');
+  };
+
   const formatDate = (date: Date) => {
     dayjs.locale('de');
     return dayjs(new Date(date)).format('dd., D. MMMM  YYYY, H:mm ');
@@ -283,7 +291,7 @@
                     bind:group={kirchenservice.KS_Koordination}
                     value={termin.Termin + ',' + termin.KS_Koordination}
                   />
-                  {termin.KS_Koordination}
+                  <span class="ml-2">{resolveMemberNames(termin.KS_Koordination)}</span>
                 </div>
               </TableBodyCell>
               <!--

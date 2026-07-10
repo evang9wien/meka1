@@ -10,6 +10,7 @@
   import { initPredigerStore, getLongNameFromStore } from './stores/predigerStore.ts';
 
   import { initAppCheck, getDb } from './firebase/firebase.ts';
+  import { collection, getDocs } from 'firebase/firestore';
   import {
     getDatabase,
     ref as dbref,
@@ -32,13 +33,29 @@
 
   let termine: Termin[] | undefined;
   let popupSpinnerModal = true;
+  // ShortName → Langname (z.B. "MS" → "Maria Sommer")
+  let memberNames: Record<string, string> = {};
 
-  onMount(() => {
+  onMount(async () => {
     const app = initAppCheck();
     initPredigerStore(getDb());
+    const dbFireStore = getDb();
     const dbRealtime = getDatabase(app);
-    const fromDate = dayjs().format('YYYY-MM-DD');
 
+    // Accounts laden für ShortName → Langname Auflösung (nur wenn erlaubt)
+    try {
+      const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
+      memberNames = Object.fromEntries(
+        accountsSnap.docs
+          .map(d => d.data())
+          .filter(a => a.ShortName)
+          .map(a => [a.ShortName, [a.VName, a.FName].filter(Boolean).join(' ')])
+      );
+    } catch {
+      // Ohne Login: Firestore accounts nicht lesbar → ShortNames als Fallback
+    }
+
+    const fromDate = dayjs().format('YYYY-MM-DD');
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate));
 
     onValue(dbRef, (snapshot) => {
@@ -56,6 +73,14 @@
       popupSpinnerModal = false;
     });
   });
+
+  // Löst ein Leerzeichen-getrenntes Kürzel-String auf, z.B. "MS AB" → "Maria Sommer, Anna Berger"
+  const resolveMemberNames = (shortNames: string | undefined): string => {
+    if (!shortNames) return '';
+    return shortNames.trim().split(/\s+/)
+      .map(s => memberNames[s] ?? s)
+      .join(', ');
+  };
 
   const formatDate = (date: string) => {
     dayjs.locale('de');
@@ -83,7 +108,7 @@
                   {formatDate(termin.Termin)}
                 </div>
               </TableBodyCell>
-              <TableBodyCell>{termin.KS_Koordination ?? ''}</TableBodyCell>
+              <TableBodyCell>{resolveMemberNames(termin.KS_Koordination)}</TableBodyCell>
               <TableBodyCell>
                 <div class="flex flex-col">
                   <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
