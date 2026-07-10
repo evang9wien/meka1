@@ -10,4 +10,4 @@ author: Hans
 ---
 Pfarrer Stefan auf Urlaub
 
-Pfarrer Stefan Fleischner-Janits ist bis 15. August auf Urlaub. In dringenden Fällen wenden Sie sich an unser Pfarrbüro: pfarramt@evang9.wien oder 01 512 83 92, Weiters steht die Telefonseelsorge unter der Nummer 142 gratis und rund um die Uhr zur Verfügung. Sollten Sie oder ein Angehöriger im Krankenhaus den Besuch einer Seelsorgerin oder eines Seelsorgers wünschen, nehmen Sie bitte Kontakt mit der Krankenhausseelsorge auf: https://www.evang-wien.at/khs. 
+Pfarrer Stefan Fleischner-Janits ist bis 15. August auf Urlaub. In dringenden Fällen wenden Sie sich an unser Pfarrbüro: pfarramt@evang9.wien oder 01 512 83 92. Weiters steht die Telefonseelsorge unter der Nummer 142 gratis und rund um die Uhr zur Verfügung. Sollten Sie oder ein Angehöriger im Krankenhaus den Besuch einer Seelsorgerin oder eines Seelsorgers wünschen, nehmen Sie bitte Kontakt mit der Krankenhausseelsorge auf: https://www.evang-wien.at/khs. 
