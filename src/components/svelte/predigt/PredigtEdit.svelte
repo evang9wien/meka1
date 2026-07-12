@@ -20,9 +20,8 @@
   import dayjs from 'dayjs';
   import 'dayjs/locale/de';
   import { getStorage, ref as stref, uploadBytes, getDownloadURL } from 'firebase/storage';
-  import { initAuth, currentUser, authReady } from './../stores/authStore.js';
-  import { initAppCheck, getDb } from './../firebase/firebase.js';
-  import { doc, getDoc } from 'firebase/firestore';
+  import { initAuth, userRoles } from './../stores/authStore.ts';
+  import { initAppCheck, getDb } from './../firebase/firebase.ts';
   import {
     getDatabase,
     ref as dbref,
@@ -38,7 +37,7 @@
   let selectedTermin;
   let predigten;
   let open = false;
-  let predigtEdit = false;
+  $: predigtEdit = $userRoles.includes('predigtedit');
 
   let storage;
 
@@ -78,21 +77,6 @@
     // Auth initialisieren – Rollencheck reaktiv via Store
     initAuth();
   });
-
-  // Reaktiv: Rollencheck sobald User bekannt
-  $: if ($currentUser) {
-    checkPredigtEditRole($currentUser);
-  }
-
-  const checkPredigtEditRole = async (user) => {
-    const app = initAppCheck();
-    const dbFireStore = getFirestore(app);
-    const userDoc = await getDoc(doc(dbFireStore, 'accounts', user.uid));
-    console.log('User Data: ', userDoc.data());
-    if (userDoc.exists() && userDoc.data().roles && userDoc.data().roles.includes('predigtedit')) {
-      predigtEdit = true;
-    }
-  };
 
   function submitForm() {
     console.log('submit form');
