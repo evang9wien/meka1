@@ -108,6 +108,16 @@
 
   let alleTermine: TerminItem[];
 
+  /** lied_liste_nummer → zuletzt gespieltes Datum (YYYY-MM-DD) */
+  let lastPlayedMap: Map<string, string> = new Map();
+
+  const weeksAgo = (dateStr: string | undefined): string => {
+    if (!dateStr) return 'vor mehr als 1 Jahr oder noch nie';
+    const weeks = dayjs().diff(dayjs(dateStr), 'week');
+    if (weeks > 52) return 'vor mehr als 1 Jahr oder noch nie';
+    return weeks === 0 ? 'diese Woche' : weeks === 1 ? 'vor 1 Woche' : `vor ${weeks} Wochen`;
+  };
+
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
     const liederDBAuswahlLoad = [];
@@ -204,6 +214,25 @@
     const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
 
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+
+    // Lade Historie (letzte 52 Wochen) für "zuletzt gespielt"-Berechnung
+    const historyFromDate = dayjs().subtract(52, 'weeks').format('YYYY-MM-DD');
+    const historyToDate = dayjs().format('YYYY-MM-DD');
+    const historyRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(historyFromDate), endAt(historyToDate));
+    onValue(historyRef, (snap) => {
+      if (!snap?.val()) return;
+      const newMap = new Map<string, string>();
+      for (const termin of Object.values(snap.val()) as TerminItem[]) {
+        if (termin.Verantwortlich === 'COM') continue;
+        if (!termin.LiedAuswahl || !Array.isArray(termin.LiedAuswahl)) continue;
+        for (const eintrag of termin.LiedAuswahl) {
+          const id = String(eintrag.lied_liste_nummer);
+          const prev = newMap.get(id);
+          if (!prev || termin.Termin > prev) newMap.set(id, termin.Termin);
+        }
+      }
+      lastPlayedMap = newMap;
+    }, { onlyOnce: true });
 
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
@@ -514,16 +543,23 @@
                 {#if !lied.notvisible}
                   <TableBodyRow>
                     <TableBodyCell>
-                      <div class="flex items-center gap-2">
-                        <span>{lied.Beschreibung}</span>
-                        {#if lied.selectedLied?.Liedtext}
-                          <button
-                            class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
-                            title="Liedtext anzeigen"
-                            onclick={() => { liedTextModal = true; liedText = lied.selectedLied.Liedtext; liedTextTitel = lied.selectedLied.Titel; }}
-                          >
-                            <ListMusicOutline size="sm" />
-                          </button>
+                      <div class="flex flex-col gap-0.5">
+                        <div class="flex items-center gap-2">
+                          <span>{lied.Beschreibung}</span>
+                          {#if lied.selectedLied?.Liedtext}
+                            <button
+                              class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
+                              title="Liedtext anzeigen"
+                              onclick={() => { liedTextModal = true; liedText = lied.selectedLied.Liedtext; liedTextTitel = lied.selectedLied.Titel; }}
+                            >
+                              <ListMusicOutline size="sm" />
+                            </button>
+                          {/if}
+                        </div>
+                        {#if lied.selectedLiedID}
+                          <span class="text-xs text-[#93b3e0] dark:text-[#6080a8]">
+                            zuletzt gespielt: {weeksAgo(lastPlayedMap.get(String(lied.selectedLiedID)))}
+                          </span>
                         {/if}
                       </div>
                     </TableBodyCell>

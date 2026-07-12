@@ -50,6 +50,16 @@
   let liederauswahl: Record<string, unknown>[] | undefined;
   let termine: TerminItem[] | undefined;
 
+  /** lied_liste_nummer → zuletzt gespieltes Datum (YYYY-MM-DD) */
+  let lastPlayedMap: Map<string, string> = new Map();
+
+  const weeksAgo = (dateStr: string | undefined): string => {
+    if (!dateStr) return 'vor mehr als 1 Jahr oder noch nie';
+    const weeks = dayjs().diff(dayjs(dateStr), 'week');
+    if (weeks > 52) return 'vor mehr als 1 Jahr oder noch nie';
+    return weeks === 0 ? 'diese Woche' : weeks === 1 ? 'vor 1 Woche' : `vor ${weeks} Wochen`;
+  };
+
   let verantwortlich: string | undefined;
   let popupSpinnerModal = false;
   let liedTextModal = false;
@@ -137,6 +147,25 @@
     const toDate = dayjs().add(4, 'weeks').format('YYYY-MM-DD');
 
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
+
+    // Lade Historie (letzte 52 Wochen) für "zuletzt gespielt"-Berechnung
+    const historyFromDate = dayjs().subtract(52, 'weeks').format('YYYY-MM-DD');
+    const historyToDate = dayjs().format('YYYY-MM-DD');
+    const historyRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(historyFromDate), endAt(historyToDate));
+    onValue(historyRef, (snap) => {
+      if (!snap?.val()) return;
+      const newMap = new Map<string, string>();
+      for (const termin of Object.values(snap.val()) as TerminItem[]) {
+        if (termin.Verantwortlich === 'COM') continue;
+        if (!termin.LiedAuswahl || !Array.isArray(termin.LiedAuswahl)) continue;
+        for (const eintrag of termin.LiedAuswahl) {
+          const id = String(eintrag.lied_liste_nummer);
+          const prev = newMap.get(id);
+          if (!prev || termin.Termin > prev) newMap.set(id, termin.Termin);
+        }
+      }
+      lastPlayedMap = newMap;
+    }, { onlyOnce: true });
 
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
@@ -241,33 +270,38 @@
               {#each liederauswahl as lied}
                 <TableBodyRow>
                   <TableBodyCell>
-                    <div class="flex items-center gap-2">
-                      <span>{lied.Beschreibung}</span>
-                      {#if lied.Liedtext}
-                        <button
-                          class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
-                          title="Liedtext anzeigen"
-                          onclick={() => { liedTextModal = true; liedText = lied.Liedtext; liedTextTitel = lied.Titel; }}
-                        >
-                          <ListMusicOutline size="sm" />
-                        </button>
-                      {/if}
-                    </div>
-                  </TableBodyCell>
-                  <TableBodyCell class="w-4">
-                    <div class="flex flex-row">
-                      {#await getDownloadURL(stref(storage, 'lieder/noten/' + lied.Dateiname + '.pdf'))}
-                        <p>loading</p>
-                      {:then url}
-                        <A href={url} target="_blank">
-                          <FileMusicOutline size="md" class="mr-2" />
-                          <div class="mr-2">
-                            {lied.Titel}
-                          </div>
-                        </A>
-                      {/await}
-                    </div>
-                  </TableBodyCell>
+                   <div class="flex items-center gap-2">
+                     <span>{lied.Beschreibung}</span>
+                     {#if lied.Liedtext}
+                       <button
+                         class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
+                         title="Liedtext anzeigen"
+                         onclick={() => { liedTextModal = true; liedText = lied.Liedtext; liedTextTitel = lied.Titel; }}
+                       >
+                         <ListMusicOutline size="sm" />
+                       </button>
+                     {/if}
+                   </div>
+                 </TableBodyCell>
+                 <TableBodyCell class="w-4">
+                   <div class="flex flex-col gap-1">
+                     <div class="flex flex-row">
+                       {#await getDownloadURL(stref(storage, 'lieder/noten/' + lied.Dateiname + '.pdf'))}
+                         <p>loading</p>
+                       {:then url}
+                         <A href={url} target="_blank">
+                           <FileMusicOutline size="md" class="mr-2" />
+                           <div class="mr-2">
+                             {lied.Titel}
+                           </div>
+                         </A>
+                       {/await}
+                     </div>
+                     <span class="text-xs text-[#93b3e0] dark:text-[#6080a8]">
+                       zuletzt gespielt: {weeksAgo(lastPlayedMap.get(String(lied.lied_liste_nummer)))}
+                     </span>
+                   </div>
+                 </TableBodyCell>
                   <TableBodyCell>
                     {#if lied.MP3 != '0'}
                       {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}

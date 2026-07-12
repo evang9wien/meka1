@@ -132,6 +132,13 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     >
       <div class="items-center flex justify-between w-full lg:w-auto">
         <div class="flex items-center">
+          <a
+            class="text-muted dark:text-[#93b3e0] hover:bg-[#dce9f7] dark:hover:bg-[#1e3257] focus:outline-none focus:ring-4 focus:ring-[#bcd0ed] dark:focus:ring-[#2c4a7c] rounded-lg text-sm p-2.5 inline-flex items-center"
+            aria-label="Combo"
+            href="/combo"
+          >
+            <Icon name="tabler:music" class="w-5 h-5" />
+          </a>
           {showUserMenu && <UserMenuFB client:load />}
           {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 lg:w-5 lg:h-5 lg:inline-block" />}
           {
