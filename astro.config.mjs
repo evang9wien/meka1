@@ -56,10 +56,8 @@ export default defineConfig({
     ),
     tasks(),
     compress({
-      CSS: true,
-      HTML: {
-        removeAttributeQuotes: false,
-      },
+      CSS: false,
+      HTML: false,
       Image: false,
       JavaScript: true,
       SVG: true,
