@@ -14,14 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Use Node.js 20
-        uses: actions/setup-node@v2
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
+          cache: 'npm'
       
       - name: 🔨 Build Project
         run: |
-          npm install
+          npm ci
           npm run astro build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
