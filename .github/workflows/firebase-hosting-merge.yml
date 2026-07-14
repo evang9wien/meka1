@@ -52,5 +52,5 @@ jobs:
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVANG9_COMBO_4CB8E }}' > $HOME/gcloud-service-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-service-key.json" >> $GITHUB_ENV
       
-      - name: 🔥 Deploy Functions (with automatic cleanup policy)
-        run: npx firebase-tools@15.19.1 deploy --only functions --project evang9-combo-4cb8e --force
+      - name: 🔥 Deploy Functions & Rules (Firestore + RTDB)
+        run: npx firebase-tools@15.19.1 deploy --only functions,firestore:rules,database --project evang9-combo-4cb8e --force

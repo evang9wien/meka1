@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "combo": {
+      "termine": {
+        ".read": "true",
+        "$termin": {
+          ".read": "true",
+          ".write": "auth !== null",
+          "KS_Koordination" : {
+            ".write": "auth !== null"
+          },
+          "KS_Begruessung" : {
+            ".write": "auth !== null"
+          },
+          "KS_Abendmahl" : {
+            ".write": "auth !== null"
+          },
+          "KS_Bar" : {
+            ".write": "auth !== null"
+          },
+          "KS_Kuchen" : {
+            ".write": "auth !== null"
+          }            
+        }        
+      }
+    }
+  }
+}

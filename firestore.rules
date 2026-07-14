@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper – returns the roles array of the calling user (empty if not found)
+    function userRoles() {
+      return get(/databases/$(database)/documents/accounts/$(request.auth.uid)).data.get('roles', []);
+    }
+
+    function hasRole(role) {
+      return request.auth != null && role in userRoles();
+    }
+
+    // ── Lieder ──────────────────────────────────────────────────────────────
+    match /lieder/{document=**} {
+      allow read:  if hasRole('combolist') || hasRole('combo');
+      allow write: if hasRole('liederedit');
+    }
+
+    // ── Accounts ────────────────────────────────────────────────────────────
+    match /accounts/{uid} {
+      allow read:  if request.auth != null;
+      allow write: if hasRole('admin');
+    }
+
+    // ── Allelieder (song index) ──────────────────────────────────────────────
+    match /allelieder/{document=**} {
+      allow read:  if hasRole('combolist') || hasRole('combo');
+      allow write: if hasRole('liederedit');
+    }
+
+    // ── Prediger (Stammdaten) ────────────────────────────────────────────────
+    // Lesen: jeder eingeloggte Nutzer (Calendar, PredigtEdit, TerminCopy)
+    // Schreiben: nur terminadmin (Verwaltungs-UI in TerminCopy)
+    match /prediger/{kuerzel} {
+      allow read: if true;
+      allow write: if hasRole('terminadmin');
+    }
+
+  }
+}

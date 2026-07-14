@@ -1,4 +1,10 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
   "hosting": {
     "site": "evang9-combo-4cb8e",
     "source": ".",
