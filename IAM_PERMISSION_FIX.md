@@ -1,135 +1,65 @@
-# 🔧 IAM Permission Fix für Firebase Functions Deployment
+# 🔧 IAM Permission Fix für Firebase Functions & Rules Deployment
 
-## ❌ Problem
+Dieses Dokument beschreibt die notwendigen IAM-Berechtigungen für den GitHub Actions Service Account, um Cloud Functions, Cloud Firestore Rules und Realtime Database Rules automatisiert deployen zu können.
 
-GitHub Actions kann Functions nicht deployen:
+---
+
+## ❌ Probleme & Fehlermeldungen
+
+### 1. Cloud Functions Deployment schlägt fehl
 ```
 Error: Missing permissions required for functions deploy. 
 You must have permission iam.serviceAccounts.ActAs on service account 
 evang9-combo-4cb8e@appspot.gserviceaccount.com
 ```
 
-## ✅ Lösung: Service Account User Role hinzufügen
+### 2. Realtime Database & Firestore Rules Deployment schlägt fehl
+```
+i  database: checking rules syntax...
+Error: Failed to get instance details for instance: evang9-combo-4cb8e-default-rtdb. See firebase-debug.log for more details.
+```
+
+---
+
+## ✅ Lösung: Rollen in der Google Cloud Console hinzufügen
 
 ### Schritt 1: Google Cloud Console öffnen
-
-Öffne diesen Link (du musst als Owner eingeloggt sein):
-```
-https://console.cloud.google.com/iam-admin/iam?project=evang9-combo-4cb8e
-```
+Öffne die IAM-Steuerung (du musst mit einem Account mit **Owner**-Rechten eingeloggt sein):
+[Google Cloud Console IAM - evang9-combo](https://console.cloud.google.com/iam-admin/iam?project=evang9-combo-4cb8e)
 
 ### Schritt 2: GitHub Actions Service Account finden
-
-Suche nach dem Service Account:
+Suche in der Liste nach dem Service Account für GitHub Actions:
 ```
-github-action-XXXXXX@evang9-combo-4cb8e.iam.gserviceaccount.com
-```
-
-Oder suche nach:
-```
-Firebase Admin SDK Service Agent
+github-action-724169839@evang9-combo-4cb8e.iam.gserviceaccount.com
 ```
 
-### Schritt 3: Role hinzufügen
+### Schritt 3: Rollen hinzufügen
+1. Klicke ganz rechts in der Zeile auf das **Bleistift-Symbol** (Mitglied bearbeiten).
+2. Klicke für jede fehlende Rolle auf **"ADD ANOTHER ROLE"** (Weitere Rolle hinzufügen).
+3. Weise dem Service Account die folgenden Rollen zu:
+   * 👤 **Service Account User** *(ermöglicht Functions-Deployments)*
+   * 🗄️ **Firebase Realtime Database-Administrator** *(für Realtime Database-Regeln)*
+   * 🛡️ **Firebase Rules-Administrator** *(für Cloud Firestore-Sicherheitsregeln)*
+4. Klicke auf **"SAVE"** (Speichern).
 
-1. Klicke auf den **Bleistift** (Edit) neben dem Service Account
-2. Klicke auf **"ADD ANOTHER ROLE"**
-3. Suche nach: **"Service Account User"**
-4. Wähle: **"Service Account User"** aus
-5. Klicke auf **"SAVE"**
+---
 
-### Alternative: Via gcloud CLI
+## 🔍 Welche Rollen muss der GitHub Actions Service Account haben?
 
-Falls du gcloud CLI installiert hast:
+Nach dem vollständigen Setup sollte der Service Account im IAM-Bereich die folgenden Rollen besitzen:
 
-```bash
-# 1. Finde den GitHub Actions Service Account
-gcloud iam service-accounts list --project=evang9-combo-4cb8e
+1. **API Keys Viewer**
+2. **Cloud Functions Admin**
+3. **Cloud Functions Developer**
+4. **Cloud Run Viewer**
+5. **Firebase Authentication Admin**
+6. **Firebase Hosting Admin**
+7. **Service Usage Consumer**
+8. **Service Account User** *(Neu für Functions)*
+9. **Firebase Realtime Database-Administrator** *(Neu für RTDB-Regeln)*
+10. **Firebase Rules-Administrator** *(Neu für Firestore-Regeln)*
 
-# 2. Füge die Role hinzu (ersetze EMAIL mit dem gefundenen Service Account)
-gcloud projects add-iam-policy-binding evang9-combo-4cb8e \
-  --member="serviceAccount:github-action-XXXXXX@evang9-combo-4cb8e.iam.gserviceaccount.com" \
-  --role="roles/iam.serviceAccountUser"
-```
+---
 
-## 🔍 Welche Roles braucht der GitHub Actions Service Account?
-
-### Minimal erforderlich:
-- ✅ **Firebase Admin** (bereits vorhanden)
-- ✅ **Cloud Functions Developer** (bereits vorhanden)
-- ❌ **Service Account User** (FEHLT - muss hinzugefügt werden!)
-
-### Nach dem Fix sollte der Service Account haben:
-```
-1. Firebase Admin
-2. Cloud Functions Developer  
-3. Service Account User  ← NEU
-```
-
-## 📋 Schritt-für-Schritt mit Screenshots
-
-### 1. IAM Seite öffnen
-![IAM Console](https://console.cloud.google.com/iam-admin/iam?project=evang9-combo-4cb8e)
-
-### 2. Service Account finden
-Suche nach: `github-action` oder `Firebase Admin SDK`
-
-### 3. Edit klicken
-Klicke auf das Bleistift-Symbol rechts
-
-### 4. Role hinzufügen
-- Klicke "ADD ANOTHER ROLE"
-- Suche: "Service Account User"
-- Wähle: "Service Account User"
-- Speichern
-
-## ✅ Testen
-
-Nach dem Hinzufügen der Role:
-
-```bash
-# 1. Neuer Commit (z.B. README ändern)
-echo "# Test" >> README.md
-git add README.md
-git commit -m "Test Functions deployment"
-git push origin main
-
-# 2. GitHub Actions beobachten
-# https://github.com/[dein-repo]/actions
-
-# 3. Sollte jetzt erfolgreich sein!
-```
-
-## 🎯 Warum ist diese Permission nötig?
-
-**Service Account User** erlaubt:
-- ✅ Functions als anderes Service Account ausführen
-- ✅ Cloud Run Services deployen
-- ✅ App Engine deployen
-
-**Ohne diese Permission:**
-- ❌ Functions Deployment schlägt fehl
-- ❌ "iam.serviceAccounts.ActAs" Error
-
-## 📞 Falls es nicht funktioniert
-
-### Prüfe:
-1. Bist du als **Owner** eingeloggt?
-2. Hast du die richtige **Service Account** ausgewählt?
-3. Hast du **"Service Account User"** (nicht "Service Account Admin") gewählt?
-4. Hast du auf **"SAVE"** geklickt?
-
-### Alternative Lösung:
-Falls du keinen Owner-Zugriff hast, bitte den Projekt-Owner:
-1. Gehe zu: https://console.cloud.google.com/iam-admin/iam?project=evang9-combo-4cb8e
-2. Finde: `github-action-...@evang9-combo-4cb8e.iam.gserviceaccount.com`
-3. Füge Role hinzu: "Service Account User"
-
-## 🚀 Nach dem Fix
-
-Sobald die Permission hinzugefügt ist:
-- ✅ GitHub Actions kann Functions deployen
-- ✅ Automatisches Deployment funktioniert
-- ✅ Keine manuellen Deployments mehr nötig
-
-**Viel Erfolg! 🎉**
+## 🚀 Testen & Deployment
+Nach dem Speichern der Rollen (dies kann bis zu 2 Minuten dauern) kannst du den GitHub Actions-Lauf neu starten. Das automatisierte Deployment wird nun sowohl die Webseite, die Cloud-Funktionen als auch alle Sicherheitsregeln reibungslos deployen.
