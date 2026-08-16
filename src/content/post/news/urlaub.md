@@ -3,7 +3,7 @@ title: Urlaub
 excerpt: Pfarrer Stefan Fleischner-Janits ist bis 15. August auf Urlaub. <a class="text-muted underline  font-medium" href="/news/urlaub">Mehr anzeigen</a>.
 category: news
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1783712205/Homepage/News/strandkorb_sm_q9vh9g.jpg
 publishDate: 2026-07-10T21:32:43.810Z
 author: Hans
