@@ -1,0 +1,50 @@
+---
+import Features2 from '~/components/widgets/Features2.astro';
+import { SITE } from '~/utils/config';
+import OpenStreetMap from '~/components/svelte/OpenStreetMap.svelte';
+import Verkehrsmittel from '~/parts/kontakt/verkehrsmittel.md';
+import Kurzparkzone from '~/parts/kontakt/kurzparkzone.md';
+
+
+const view = [48.2231769, 16.3641052];
+const zoom = 17;
+const minZoom = 12;
+const maxZoom = 19;
+const marker = [48.2231769, 16.3641052];
+const markerPopup = 'Evangelische Messiaskapelle<br>1090 Wien, Seegasse 16a';
+const imagePath = typeof SITE.base !== 'string' ? '/' : SITE.base.toString();
+const markerPath = imagePath + (imagePath.endsWith('/') ? '' : '/') + 'leaflet/images/';
+---
+
+<!-- Leitbild -->
+<Features2
+  id="adresse"
+  title="So kommen Sie zu uns"
+  tagline="Unsere Adresse"
+  classes={{ container: 'max-w-3xl' }}
+>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+  <Fragment slot="subtitle">
+    Evangelische Pfarrgemeinde A.B., Messiaskapelle<br/>
+    1090 Wien, Seegasse 16a
+    <br /><br />
+    <div class="h-fit pb-0 md:pb-0">
+        <OpenStreetMap
+          client:only
+          view={view}
+          zoom={zoom}
+          minZoom={minZoom}
+          maxZoom={maxZoom}
+          marker={marker}
+          markerPopup={markerPopup}
+          markerPath={markerPath}
+        />
+      </div>
+    <br /><br />
+    <Verkehrsmittel />
+    <br />
+    <Kurzparkzone />
+  </Fragment>
+</Features2>

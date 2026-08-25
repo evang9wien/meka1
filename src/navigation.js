@@ -34,6 +34,10 @@ export const headerData = {
           href: getPermalink('#gewaltschutz'),
         },
         {
+          text: 'Unsere Adresse',
+          href: getPermalink('#adresse'),
+        },
+        {
           text: 'Bilder aus der Messiaskapelle',
           href: getPermalink('/mekabilderpage'),
         },
