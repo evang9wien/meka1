@@ -3,9 +3,13 @@ title: Auf gutem (Alser)Grund wachsen
 excerpt: Gemeinsam denken. Gemeinsam gestalten.
  Welche Früchte wachsen in unserer Gemeinde?
  Was hilft, damit sie auch morgen wachsen?
+ <b>Gemeindeklausur</b><br/>
+ <b>Samstag, 10. Oktober 26</b><br/>
+ von 9 bis ca. 16:30 Uhr
+
 tags:
   - news
-image: https://res.cloudinary.com/dqjdjviob/image/upload/v1787683862/Homepage/News/260825_anku%CC%88ndigung_klausur_900x636_zz6wez.jpg
+image: https://res.cloudinary.com/dqjdjviob/image/upload/v1788095469/IMG_20260830_131006762_zqzjac.jpg
 publishDate: 2026-08-25T21:00:00.000Z
 author: stfj
 ---
