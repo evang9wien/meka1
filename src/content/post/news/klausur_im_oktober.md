@@ -2,7 +2,7 @@
 title: Auf gutem (Alser)Grund wachsen
 excerpt: Gemeinsam denken. Gemeinsam gestalten.
  Welche Früchte wachsen in unserer Gemeinde?
- Was hilft, damit sie auch morgen wachsen?
+ Was hilft, damit sie auch morgen wachsen?<br/>
  <b>Gemeindeklausur</b><br/>
  <b>Samstag, 10. Oktober 26</b><br/>
  von 9 bis ca. 16:30 Uhr
