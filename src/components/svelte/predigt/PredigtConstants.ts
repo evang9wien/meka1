@@ -14,7 +14,7 @@
 // Alle PNGs aus dem Avatar-Ordner per Glob importieren.
 // Vite verarbeitet damit automatisch jede neue Datei im Ordner.
 const avatarModules = import.meta.glob(
-  '../../../assets/images/avatar/*.png',
+  '../../../assets/images/avatar/*.{png,svg,webp}',
   { eager: true }
 ) as Record<string, { default?: { src?: string } | string }>;
 

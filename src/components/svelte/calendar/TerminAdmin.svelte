@@ -33,6 +33,11 @@
     EditOutline,
     CloseOutline,
   } from 'flowbite-svelte-icons';
+  import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
+  import { resolveLocalAvatarSrc } from '../predigt/PredigtConstants.ts';
+
+  const kreuzSrc = resolveLocalAvatarSrc('kreuz-bunt.svg') ?? '';
+  const musikSrc = resolveLocalAvatarSrc('musik.png') ?? '';
 
   import { getDatabase, ref as dbref, set, remove, query, orderByKey, startAt, onValue } from 'firebase/database';
   import { doc, getDoc } from 'firebase/firestore';
@@ -80,7 +85,8 @@
     datum: string;            // YYYY-MM-DD
     uhrzeit: string;          // HH:mm
     typ: TerminTyp;
-    lektor: string;           // Kürzel aus predigerList
+    lektor: string;           // Kürzel aus predigerList, oder 'GAST'
+    gastName: string;         // Freitext-Name bei lektor === 'GAST'
     abendmahl: boolean;
     kommentar: string;
     saved: boolean;           // wurde gerade erfolgreich gespeichert (neue Zeile)
@@ -102,6 +108,7 @@
       uhrzeit: defaultUhrzeit(typ),
       typ,
       lektor: '',
+      gastName: '',
       abendmahl: false,
       kommentar: '',
       saved: false,
@@ -113,18 +120,32 @@
     };
   }
 
+  // Extrahiert Gastnamen aus Zusatzinfo ("Gast: Max Mustermann, ..." → "Max Mustermann")
+  function extractGastName(zusatzinfo: string): string {
+    const m = zusatzinfo?.match(/^Gast:\s*([^,\n]+)/);
+    return m ? m[1].trim() : '';
+  }
+
+  // Entfernt den Gast-Präfix aus Zusatzinfo für Kommentar-Feld
+  function stripGastPrefix(zusatzinfo: string): string {
+    return (zusatzinfo ?? '').replace(/^Gast:\s*[^,\n]+(,\s*)?/, '').trim();
+  }
+
   function firebaseEntryToRow(entry: any): TerminRow {
     const ts: string = entry.Termin ?? '';
     const [datePart, timePart] = ts.split(' ');
     const uhrzeit = timePart ? timePart.substring(0, 5) : '10:00';
     const typ: TerminTyp = entry.Veranstaltung === 'CP' ? 'CP' : 'GD';
+    const rawLektor = entry.Verantwortlich === 'COM' ? '' : (entry.Verantwortlich ?? '');
+    const isGast = rawLektor === 'GAST';
     return {
       datum: datePart ?? '',
       uhrzeit,
       typ,
-      lektor: entry.Verantwortlich === 'COM' ? '' : (entry.Verantwortlich ?? ''),
+      lektor: rawLektor,
+      gastName: isGast ? extractGastName(entry.Zusatzinfo ?? '') : '',
       abendmahl: entry.Abendmahl === '1',
-      kommentar: entry.Zusatzinfo ?? '',
+      kommentar: isGast ? stripGastPrefix(entry.Zusatzinfo ?? '') : (entry.Zusatzinfo ?? ''),
       saved: false,
       error: '',
       isNew: false,
@@ -178,20 +199,27 @@
         Zusatzinfo: row.kommentar,
       };
     }
+    // Gast: Verantwortlich = 'GAST', Gastname vorne in Zusatzinfo
+    const zusatzinfo = row.lektor === 'GAST' && row.gastName
+      ? `Gast: ${row.gastName}${row.kommentar ? ', ' + row.kommentar : ''}`
+      : row.kommentar;
     return {
       ...instruments,
       Abendmahl: row.abendmahl ? '1' : '0',
       Termin: timestamp,
       Veranstaltung: 'GD',
-      Verantwortlich: row.lektor,
-      Zusatzinfo: row.kommentar,
+      Verantwortlich: row.lektor || '',
+      Zusatzinfo: zusatzinfo,
     };
   }
 
   function buildGoogleDescription(row: TerminRow): string {
     if (row.typ === 'CP') return '';
+    const isGast = row.lektor === 'GAST';
     const lektorEntry = ($predigerList ?? []).find((p) => p.kuerzel === row.lektor);
-    const lektorVariante = lektorEntry?.varianten?.[0] ?? row.lektor;
+    const lektorVariante = isGast
+      ? (row.gastName || 'Gast')
+      : (lektorEntry?.varianten?.[0] ?? row.lektor);
     const lines: string[] = [];
     if (lektorVariante) lines.push(lektorVariante);
     if (row.abendmahl) lines.push('~ Y');
@@ -295,6 +323,7 @@
 
     if (!row.datum) { row.error = 'Datum fehlt.'; rows = [...rows]; return; }
     if (row.typ === 'GD' && !row.lektor) { row.error = 'Bitte Lektor auswählen.'; rows = [...rows]; return; }
+    if (row.typ === 'GD' && row.lektor === 'GAST' && !row.gastName.trim()) { row.error = 'Bitte Gastname eingeben.'; rows = [...rows]; return; }
 
     const newTimestamp = toTimestamp(row.datum, row.uhrzeit);
 
@@ -495,14 +524,22 @@
         <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Anzeigen:</span>
         <ButtonGroup>
           <Button size="xs" color={filterTyp === 'ALL' ? 'blue' : 'alternative'} onclick={() => (filterTyp = 'ALL')}>Alle</Button>
-          <Button size="xs" color={filterTyp === 'GD' ? 'blue' : 'alternative'} onclick={() => (filterTyp = 'GD')}>☀️ Gottesdienste</Button>
-          <Button size="xs" color={filterTyp === 'CP' ? 'blue' : 'alternative'} onclick={() => (filterTyp = 'CP')}>🎸 Comboproben</Button>
+          <Button size="xs" color={filterTyp === 'GD' ? 'blue' : 'alternative'} onclick={() => (filterTyp = 'GD')}>
+            <img src={kreuzSrc} alt="GD" class="w-4 h-4 mr-1 inline-block" />Gottesdienste
+          </Button>
+          <Button size="xs" color={filterTyp === 'CP' ? 'blue' : 'alternative'} onclick={() => (filterTyp = 'CP')}>
+            <img src={musikSrc} alt="CP" class="w-4 h-4 mr-1 inline-block rounded-full" />Comboproben
+          </Button>
         </ButtonGroup>
 
         <span class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-4">Neue Zeilen setzen auf:</span>
         <ButtonGroup>
-          <Button size="xs" color={newRowsTyp === 'GD' ? 'blue' : 'alternative'} onclick={() => applyTypToAllNew('GD')}>☀️ Alle → GD</Button>
-          <Button size="xs" color={newRowsTyp === 'CP' ? 'blue' : 'alternative'} onclick={() => applyTypToAllNew('CP')}>🎸 Alle → CP</Button>
+          <Button size="xs" color={newRowsTyp === 'GD' ? 'blue' : 'alternative'} onclick={() => applyTypToAllNew('GD')}>
+            <img src={kreuzSrc} alt="GD" class="w-4 h-4 mr-1 inline-block" />Alle → GD
+          </Button>
+          <Button size="xs" color={newRowsTyp === 'CP' ? 'blue' : 'alternative'} onclick={() => applyTypToAllNew('CP')}>
+            <img src={musikSrc} alt="CP" class="w-4 h-4 mr-1 inline-block rounded-full" />Alle → CP
+          </Button>
         </ButtonGroup>
       </div>
     </Card>
@@ -572,7 +609,10 @@
                       ]}
                     />
                   {:else}
-                    <span class="text-sm">{row.typ === 'GD' ? '☀️ Gottesdienst' : '🎸 Comboprobe'}</span>
+                    <div class="flex items-center gap-2">
+                      <PredigtAvatar prediger={row.typ === 'GD' ? 'GD' : 'COM'} clazz="w-7 h-7 shrink-0 object-cover" />
+                      <span class="text-sm">{row.typ === 'GD' ? 'Gottesdienst' : 'Comboprobe'}</span>
+                    </div>
                   {/if}
                 </TableBodyCell>
 
@@ -590,13 +630,34 @@
                             .slice()
                             .sort((a, b) => (a.langname ?? a.kuerzel).localeCompare(b.langname ?? b.kuerzel))
                             .map((p) => ({ value: p.kuerzel, name: p.langname ?? p.kuerzel })),
+                          { value: 'GAST', name: '👤 Gast (Freitext)' },
                         ]}
                       />
+                      {#if row.lektor === 'GAST'}
+                        <Input
+                          bind:value={row.gastName}
+                          size="sm"
+                          placeholder="Name des Gastes…"
+                          class="w-full mt-1"
+                        />
+                      {/if}
                     {:else}
-                      <span class="text-sm">{($predigerList ?? []).find(p => p.kuerzel === row.lektor)?.langname ?? row.lektor ?? '–'}</span>
+                      <div class="flex items-center gap-2">
+                        <PredigtAvatar prediger={row.lektor === 'GAST' ? 'GD' : (row.lektor || 'GD')} clazz="w-7 h-7 shrink-0 object-cover" />
+                        <span class="text-sm">
+                          {#if row.lektor === 'GAST'}
+                            <span class="text-gray-500 text-xs">Gast:</span> {row.gastName || '–'}
+                          {:else}
+                            {($predigerList ?? []).find(p => p.kuerzel === row.lektor)?.langname ?? row.lektor ?? '–'}
+                          {/if}
+                        </span>
+                      </div>
                     {/if}
                   {:else}
-                    <span class="text-xs text-gray-400 italic">– Combo –</span>
+                    <div class="flex items-center gap-2">
+                      <PredigtAvatar prediger="COM" clazz="w-7 h-7 shrink-0 object-cover" />
+                      <span class="text-xs text-gray-400 italic">Combo</span>
+                    </div>
                   {/if}
                 </TableBodyCell>
 

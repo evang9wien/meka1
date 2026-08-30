@@ -7,8 +7,9 @@
   export let clazz = '';
   export let title = '';
 
-  const musikSrc     = resolveLocalAvatarSrc('musik.png')      ?? '';
+  const musikSrc       = resolveLocalAvatarSrc('musik.png')       ?? '';
   const mekaclassicSrc = resolveLocalAvatarSrc('meka-classic.png') ?? '';
+  const kreuzSrc       = resolveLocalAvatarSrc('kreuz-bunt.svg')   ?? '';
 
   function getAvatar(list, p, t) {
     // Sondertitel (Comboprobe, MEKA-Classic)
@@ -30,6 +31,8 @@
 
     // COM (Comboprobe ohne title-Hint)
     if (p === 'COM') return musikSrc;
+    // GD (Gottesdienst ohne bekannten Prediger)
+    if (p === 'GD')  return kreuzSrc;
 
     return '';
   }

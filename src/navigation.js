@@ -212,10 +212,6 @@ export const footerData = {
           href: getPermalink('/combo/combostatistikFBpage'),
         },
         {
-          text: 'Termin-Admin (Copy)',
-          href: getPermalink('/combo/comboTerminCopyFBpage'),
-        },
-        {
           text: 'Termine neu anlegen',
           href: getPermalink('/combo/comboTerminNeuFBpage'),
         },
