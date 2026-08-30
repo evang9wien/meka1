@@ -1,0 +1,12 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import TerminAdmin from '~/components/svelte/calendar/TerminAdmin.svelte';
+
+const metadata = {
+  title: 'Termine neu anlegen',
+};
+---
+
+<Layout metadata={metadata}>
+  <TerminAdmin client:load />
+</Layout>

@@ -136,8 +136,17 @@ const metadata = {
               },
             },
             {
-              title: 'Termin-Admin',
-              description: 'Gottesdienst-Termine anlegen, kopieren und verwalten.',
+              title: 'Termine neu anlegen',
+              description: 'Gottesdienst- und Comboprobe-Termine direkt eingeben und in Firebase & Google Calendar speichern.',
+              icon: 'tabler:calendar-plus',
+              callToAction: {
+                text: 'Öffnen →',
+                href: getPermalink('/combo/comboTerminNeuFBpage'),
+              },
+            },
+            {
+              title: 'Termin-Admin (Copy)',
+              description: 'Termine zwischen Google Calendar und Firebase abgleichen.',
               icon: 'tabler:settings',
               callToAction: {
                 text: 'Öffnen →',
