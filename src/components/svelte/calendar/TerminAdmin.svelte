@@ -231,10 +231,17 @@
     const lektorVariante = isGast
       ? (row.gastName || 'Gast')
       : (lektorEntry?.varianten?.[0] ?? row.lektor);
+    // For guest rows: strip the gastName from kommentar in case old data duplicated it there
+    const kommentar = isGast && row.gastName
+      ? row.kommentar
+          .replace(new RegExp(row.gastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*,?\\s*', 'gi'), '')
+          .replace(/^[\s,]+|[\s,]+$/g, '')
+          .trim()
+      : row.kommentar;
     const lines: string[] = [];
     if (lektorVariante) lines.push(lektorVariante);
     if (row.abendmahl) lines.push('~ Y');
-    if (row.kommentar) lines.push(row.kommentar);
+    if (kommentar) lines.push(kommentar);
     return lines.join('\n');
   }
 
@@ -410,11 +417,16 @@
     if (row.abendmahl !== gcalAbendmahl) {
       diffs.push(`Abendmahl: Firebase=${row.abendmahl ? 'Ja' : 'Nein'}, GCal=${gcalAbendmahl ? 'Ja' : 'Nein'}`);
     }
-    const fbKommentar = (row.lektor === 'GAST' && row.gastName
-      ? `Gast: ${row.gastName}${row.kommentar ? ', ' + row.kommentar : ''}`
-      : row.kommentar).trim();
-    if (fbKommentar !== gcalKommentar) {
-      diffs.push(`Kommentar: Firebase="${fbKommentar || '–'}", GCal="${gcalKommentar || '–'}"`);
+    // Normalize both sides: for GAST rows, strip gastName from both fbKommentar and gcalKommentar
+    // so old Firebase data with duplicated name doesn't cause a permanent false diff.
+    const stripGastName = (s: string) => row.lektor === 'GAST' && row.gastName
+      ? s.replace(new RegExp(row.gastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*,?\\s*', 'gi'), '')
+          .replace(/^[\s,]+|[\s,]+$/g, '').trim()
+      : s.trim();
+    const fbKommentar = stripGastName(row.kommentar);
+    const gcalKommentarNorm = stripGastName(gcalKommentar);
+    if (fbKommentar !== gcalKommentarNorm) {
+      diffs.push(`Kommentar: Firebase="${fbKommentar || '–'}", GCal="${gcalKommentarNorm || '–'}"`);
     }
     return diffs.join(' | ');
   }
@@ -650,6 +662,7 @@
 
   // Überschreibt Google Calendar mit den Firebase-Daten (Firebase = Quelle der Wahrheit)
   async function syncRowToGcal(gIdx: number) {
+    if (!googleSignedIn) { pendingAction = () => syncRowToGcal(gIdx); googleConnectModalOpen = true; return; }
     const row = rows[gIdx];
     rows[gIdx] = { ...rows[gIdx], error: '' };
     rows = [...rows];
@@ -663,6 +676,7 @@
 
   // Bereinigt alle Zeilen mit Abweichung in einem Durchgang
   async function syncAllToGcal() {
+    if (!googleSignedIn) { pendingAction = syncAllToGcal; googleConnectModalOpen = true; return; }
     for (let i = 0; i < rows.length; i++) {
       if (!rows[i].isNew && !rows[i].editing && gcalDiff(rows[i])) {
         await syncRowToGcal(i);

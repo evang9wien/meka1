@@ -118,7 +118,7 @@
               <TableBodyRow>
                 <TableBodyCell>
                   <div class="flex flex-col place-items-center">
-                    <PredigtAvatar prediger={termin.Verantwortlich} />
+                    <PredigtAvatar prediger={termin.Verantwortlich === 'GAST' ? 'GD' : termin.Verantwortlich} />
                     {formatDate(termin.Termin)}
                   </div>
                 </TableBodyCell>

@@ -31,10 +31,10 @@
 
     // COM (Comboprobe ohne title-Hint)
     if (p === 'COM') return musikSrc;
-    // GD (Gottesdienst ohne bekannten Prediger)
+    // GD (Gottesdienst ohne bekannten Prediger) — or default fallback
     if (p === 'GD')  return kreuzSrc;
 
-    return '';
+    return kreuzSrc;
   }
 
   function getLongName(list, p) {
@@ -48,9 +48,18 @@
 
   $: avatarSrc = getAvatar($predigerList, prediger, title);
   $: longName  = getLongName($predigerList, prediger);
+  // Local assets (kreuz, musik, meka-classic) need a plain <img> — flowbite Avatar
+  // shows a grey placeholder instead of rendering them correctly in the circle.
+  $: isLocalAsset = avatarSrc === kreuzSrc || avatarSrc === musikSrc || avatarSrc === mekaclassicSrc;
 </script>
 
-<Avatar size="md" class="object-cover {clazz}" src={avatarSrc} />
+{#if isLocalAsset}
+  <span class="inline-flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 ring-2 ring-gray-200 dark:ring-gray-600 {clazz || 'w-10 h-10'}">
+    <img src={avatarSrc} alt={prediger} class="w-3/4 h-3/4 object-contain" />
+  </span>
+{:else}
+  <Avatar size="md" class="object-cover {clazz}" src={avatarSrc} />
+{/if}
 {#if longName}
   <Tooltip>{longName}</Tooltip>
 {/if}

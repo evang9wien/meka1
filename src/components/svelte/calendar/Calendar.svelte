@@ -7,8 +7,11 @@
   import { Timeline, TimelineItem, Avatar } from 'flowbite-svelte';
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
+  import { resolveLocalAvatarSrc } from '../predigt/PredigtConstants.ts';
   import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.ts';
   import { initAppCheck, getDb } from '../firebase/firebase.ts';
+
+  const kreuzSrc = resolveLocalAvatarSrc('kreuz-bunt.svg') ?? '';
 
   // Reaktiv: gibt Kürzel zurück — list-Parameter zwingt Svelte zur Neuauswertung
   // wenn sich $predigerList ändert
@@ -67,13 +70,13 @@
         
           
             {#if item.summary.includes('MEKA-Classic')}
-              <PredigtAvatar clazz="w-6 h-6" title="meka classic" } />
+              <PredigtAvatar clazz="w-6 h-6" title="meka classic" />
             {:else if item.summary.includes('Comboprobe')}
-              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" } />
+              <PredigtAvatar clazz="w-6 h-6" title="comboprobe" />
             {:else if getKuerzelForAvatar(item.description, $predigerList)}
               <PredigtAvatar clazz="w-6 h-6" prediger={getKuerzelForAvatar(item.description, $predigerList)} />
             {:else}
-              <CalendarWeekSolid class="text-primary-600 dark:text-primary-400 h-4 w-4" />
+              <img src={kreuzSrc} alt="Termin" class="w-5 h-5 object-contain" />
             {/if}
           
             </span>
