@@ -22,6 +22,7 @@
     Alert,
     Spinner,
     ButtonGroup,
+    Modal,
   } from 'flowbite-svelte';
   import {
     TrashBinOutline,
@@ -71,6 +72,10 @@
   let googleTokenClient: any = null;
   let googleAccessToken: string = '';
   let googleSignedIn = false;
+  let googleConnectModalOpen = false;
+  let pendingAction: (() => void) | null = null;
+  let deleteConfirmIdx: number | null = null;
+  let deleteConfirmOpen = false;
   let savingIdx: number | null = null;
   let newRowsTyp: TerminTyp | null = null;
   // Google-Calendar-Events (ab heute) als Map timestamp → event, für Abgleich
@@ -290,6 +295,11 @@
         if (tokenResponse?.access_token) {
           googleAccessToken = tokenResponse.access_token;
           googleSignedIn = true;
+          if (pendingAction) {
+            const fn = pendingAction;
+            pendingAction = null;
+            fn();
+          }
         }
       },
     });
@@ -297,6 +307,7 @@
 
   function requestGoogleToken() {
     if (googleTokenClient) googleTokenClient.requestAccessToken({ prompt: '' });
+    googleConnectModalOpen = false;
   }
 
   // Lädt alle GCal-Events ab heute (read-only, API key) für Abgleich
@@ -610,6 +621,7 @@
   }
 
   function addRow() {
+    if (!googleSignedIn) { pendingAction = addRow; googleConnectModalOpen = true; return; }
     // Typ: wenn Filter aktiv ist, neue Zeile passend zum Filter anlegen
     const preferredTyp: TerminTyp = filterTyp !== 'ALL' ? filterTyp : (newRowsTyp ?? 'GD');
     // Letzten sichtbaren Eintrag als Referenz nehmen
@@ -658,9 +670,18 @@
     }
   }
 
-  async function deleteExistingRow(gIdx: number) {
+  function deleteExistingRow(gIdx: number) {
+    if (!googleSignedIn) { pendingAction = () => deleteExistingRow(gIdx); googleConnectModalOpen = true; return; }
+    deleteConfirmIdx = gIdx;
+    deleteConfirmOpen = true;
+  }
+
+  async function confirmDelete() {
+    const gIdx = deleteConfirmIdx;
+    deleteConfirmIdx = null;
+    deleteConfirmOpen = false;
+    if (gIdx === null) return;
     const row = rows[gIdx];
-    if (!confirm(`Termin ${row.originalTimestamp} wirklich löschen?\n\nDer Termin wird aus Firebase UND Google Calendar entfernt.`)) return;
     rows[gIdx] = { ...rows[gIdx], error: '' };
     rows = [...rows];
     try {
@@ -684,6 +705,7 @@
   }
 
   function startEdit(gIdx: number) {
+    if (!googleSignedIn) { pendingAction = () => startEdit(gIdx); googleConnectModalOpen = true; return; }
     rows[gIdx] = { ...rows[gIdx], editing: true, saved: false };
     rows = [...rows];
   }
@@ -784,19 +806,16 @@
           <p class="text-sm text-gray-500 mt-1">Bestehende und neue Termine direkt in Firebase und Google Calendar verwalten.</p>
         </div>
 
-        <!-- Google Calendar Verbindung (Pflicht) -->
+        <!-- Google Calendar Verbindung -->
         <div class="flex items-center gap-2">
           {#if googleSignedIn}
             <Badge color="green" class="flex items-center gap-1">
               <CheckCircleSolid class="w-3 h-3 mr-1" /> Google Calendar verbunden
             </Badge>
           {:else}
-            <div class="flex flex-col gap-1">
-              <Button color="blue" onclick={requestGoogleToken}>
-                <CalendarMonthOutline class="mr-1 h-4 w-4" /> Mit Google Calendar verbinden
-              </Button>
-              <span class="text-xs text-red-600 font-medium">⚠ Pflicht — ohne Verbindung kann nicht gespeichert werden.</span>
-            </div>
+            <Button color="blue" onclick={() => (googleConnectModalOpen = true)}>
+              <CalendarMonthOutline class="mr-1 h-4 w-4" /> Mit Google Calendar verbinden
+            </Button>
           {/if}
         </div>
       </div>
@@ -825,20 +844,6 @@
         </ButtonGroup>
       </div>
     </Card>
-
-    <!-- Google-Pflicht-Warnung oberhalb der Tabelle -->
-    {#if !googleSignedIn}
-      <Alert color="red" class="mb-4 flex flex-wrap items-center gap-3">
-        <div class="flex items-center gap-2 flex-1">
-          <ExclamationCircleOutline class="h-5 w-5 shrink-0" />
-          <span class="font-medium">Google Calendar Verbindung erforderlich</span>
-          <span class="text-sm">— Neue Termine anlegen und bearbeiten ist erst nach der Anmeldung möglich.</span>
-        </div>
-        <Button color="blue" size="sm" onclick={requestGoogleToken}>
-          <CalendarMonthOutline class="mr-2 h-4 w-4" /> Jetzt mit Google Calendar verbinden
-        </Button>
-      </Alert>
-    {/if}
 
     <!-- Tabelle -->
     <Card class="p-0 overflow-visible max-w-none">
@@ -894,16 +899,23 @@
                 <!-- Typ -->
                 <TableBodyCell class="align-top pt-2">
                   {#if row.editing}
-                    <Select
-                      bind:value={row.typ}
-                      size="sm"
-                      onchange={() => onTypChange(gIdx)}
-                      class="w-full"
-                      items={[
-                        { value: 'GD', name: '☀️ Gottesdienst' },
-                        { value: 'CP', name: '🎸 Comboprobe' },
-                      ]}
-                    />
+                    <div class="relative w-full">
+                      <select
+                        bind:value={row.typ}
+                        onchange={() => onTypChange(gIdx)}
+                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 pl-8 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                      >
+                        <option value="GD">Gottesdienst</option>
+                        <option value="CP">Comboprobe</option>
+                      </select>
+                      <div class="pointer-events-none absolute left-1.5 top-1/2 -translate-y-1/2">
+                        {#if row.typ === 'GD'}
+                          <img src={kreuzSrc} alt="GD" class="w-4 h-4 object-contain" />
+                        {:else}
+                          <img src={musikSrc} alt="CP" class="w-4 h-4 rounded-full object-cover" />
+                        {/if}
+                      </div>
+                    </div>
                   {:else}
                     <div class="flex items-center gap-2">
                       <PredigtAvatar prediger={row.typ === 'GD' ? 'GD' : 'COM'} clazz="w-7 h-7 shrink-0 object-cover" />
@@ -1027,16 +1039,16 @@
                           <strong>GCal weicht ab:</strong><br/>
                           {gcalDiff(row)}
                         </Alert>
-                        <Button size="xs" color="yellow" disabled={!googleSignedIn} onclick={() => syncRowToGcal(gIdx)}>
+                        <Button size="xs" color="yellow" onclick={() => syncRowToGcal(gIdx)}>
                           <ArrowsRepeatOutline class="mr-1 h-3 w-3" /> Bereinigen
                         </Button>
                       {/if}
                       <!-- Bearbeiten -->
-                      <Button size="xs" color="alternative" disabled={!googleSignedIn} onclick={() => startEdit(gIdx)}>
+                      <Button size="xs" color="alternative" onclick={() => startEdit(gIdx)}>
                         <EditOutline class="mr-1 h-3 w-3" /> Bearbeiten
                       </Button>
                       <!-- Löschen -->
-                      <Button size="xs" color="red" disabled={!googleSignedIn} onclick={() => deleteExistingRow(gIdx)}>
+                      <Button size="xs" color="red" onclick={() => deleteExistingRow(gIdx)}>
                         <TrashBinOutline class="h-3 w-3" />
                       </Button>
                     {/if}
@@ -1062,14 +1074,14 @@
 
       <!-- Footer -->
       <div class="flex flex-wrap items-center gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
-        <Button size="sm" color="alternative" onclick={addRow} disabled={!googleSignedIn}>
+        <Button size="sm" color="alternative" onclick={addRow}>
           <PlusOutline class="mr-1 h-4 w-4" /> Neue Zeile
         </Button>
         <GradientButton color="cyanToBlue" size="sm" onclick={saveAll} disabled={savingIdx !== null}>
           <FolderPlusOutline class="mr-1 h-4 w-4" /> Alle offenen speichern
         </GradientButton>
         {#if rows.some(r => !r.isNew && !r.editing && gcalDiff(r))}
-          <Button color="yellow" size="sm" disabled={!googleSignedIn} onclick={syncAllToGcal}>
+          <Button color="yellow" size="sm" onclick={syncAllToGcal}>
             <ArrowsRepeatOutline class="mr-1 h-4 w-4" /> Alle Abweichungen bereinigen
           </Button>
         {/if}
@@ -1079,6 +1091,59 @@
 
   </div>
 {/if}
+
+<!-- Google Calendar Verbindungs-Modal -->
+<Modal bind:open={googleConnectModalOpen} size="sm" title="Google Calendar Verbindung">
+  <div class="text-center py-2">
+    <CalendarMonthOutline class="mx-auto mb-4 w-14 h-14 text-blue-600" />
+    <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+      Google Calendar Verbindung erforderlich
+    </h3>
+    <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      Um Termine anzulegen, zu bearbeiten oder zu löschen,<br />
+      muss die App mit deinem Google-Konto verbunden sein.
+    </p>
+    <div class="flex gap-3 justify-center">
+      <Button color="blue" onclick={requestGoogleToken}>
+        <CalendarMonthOutline class="mr-2 h-4 w-4" /> Mit Google verbinden
+      </Button>
+      <Button color="alternative" onclick={() => { googleConnectModalOpen = false; pendingAction = null; }}>
+        Abbrechen
+      </Button>
+    </div>
+  </div>
+</Modal>
+
+<!-- Termin löschen Bestätigungs-Modal -->
+<Modal
+  bind:open={deleteConfirmOpen}
+  size="sm"
+  title="Termin löschen"
+>
+  {#if deleteConfirmIdx !== null}
+    <div class="text-center py-2">
+      <TrashBinOutline class="mx-auto mb-4 w-14 h-14 text-red-600" />
+      <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+        Termin wirklich löschen?
+      </h3>
+      <p class="mb-1 text-sm font-mono font-medium text-gray-800 dark:text-gray-200">
+        {rows[deleteConfirmIdx]?.originalTimestamp}
+      </p>
+      <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">
+        Der Termin wird unwiderruflich aus <strong>Firebase</strong> und
+        <strong>Google Calendar</strong> entfernt.
+      </p>
+      <div class="flex gap-3 justify-center">
+        <Button color="red" onclick={confirmDelete}>
+          <TrashBinOutline class="mr-2 h-4 w-4" /> Ja, löschen
+        </Button>
+        <Button color="alternative" onclick={() => { deleteConfirmOpen = false; deleteConfirmIdx = null; }}>
+          Abbrechen
+        </Button>
+      </div>
+    </div>
+  {/if}
+</Modal>
 
 <WaitPopup {popupSpinnerModal} message="Daten werden geladen…" />
 <LoginFirebase popupFireBaseLogin={$authReady && !$currentUser} auth={null} />
