@@ -32,6 +32,7 @@
     PlusOutline,
     EditOutline,
     CloseOutline,
+    ArrowsRepeatOutline,
   } from 'flowbite-svelte-icons';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
   import { resolveLocalAvatarSrc } from '../predigt/PredigtConstants.ts';
@@ -57,6 +58,7 @@
   const GOOGLE_CLIENT_ID =
     '110813316877-n4lna4ahat5ttf51mrvu22s8eb4dncdt.apps.googleusercontent.com';
   const GOOGLE_SCOPE = 'https://www.googleapis.com/auth/calendar.events';
+  const GOOGLE_API_KEY = 'AIzaSyBU0NT8Jy8m_2UkJdThdIs1Ee0lL9ZzVus';
 
   // ---------------------------------------------------------------------------
   // State
@@ -71,6 +73,10 @@
   let googleSignedIn = false;
   let savingIdx: number | null = null;
   let newRowsTyp: TerminTyp | null = null;
+  // Google-Calendar-Events (ab heute) als Map timestamp → event, für Abgleich
+  let gcalEvents: Map<string, any> = new Map();
+  let gcalLoading = false;
+  $: gcalTimestamps = new Set(gcalEvents.keys());
 
   // Filter: 'ALL' | 'GD' | 'CP'
   type FilterTyp = 'ALL' | 'GD' | 'CP';
@@ -293,6 +299,115 @@
     if (googleTokenClient) googleTokenClient.requestAccessToken({ prompt: '' });
   }
 
+  // Lädt alle GCal-Events ab heute (read-only, API key) für Abgleich
+  async function loadGcalTimestamps() {
+    gcalLoading = true;
+    try {
+      const timeMin = dayjs().startOf('day').toISOString();
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`
+        + `?key=${GOOGLE_API_KEY}&timeMin=${timeMin}&maxResults=500&singleEvents=true&orderBy=startTime`;
+      const resp = await fetch(url);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const map = new Map<string, any>();
+      for (const e of (data.items ?? [])) {
+        const start = e.start?.dateTime || e.start?.date;
+        if (!start) continue;
+        const ts = dayjs(start).tz('Europe/Vienna').format('YYYY-MM-DD HH:mm:ss');
+        map.set(ts, e);
+      }
+      gcalEvents = map;
+    } catch (e) { console.error('GCal fetch Fehler:', e); }
+    finally { gcalLoading = false; }
+  }
+
+  // ---------------------------------------------------------------------------
+  // GCal-Beschreibungs-Parser (identisch mit TerminCopy-Logik)
+  // ---------------------------------------------------------------------------
+
+  // Titel die aus der Beschreibung entfernt werden
+  const REMOVE_TITLES_DIFF = [
+    /Pf(?:arrer(?:in)?)?\.?\s*i\.?\s*[Rr]\.?\s*,?/gi,
+    /Pfarrerin\s*,?/gi,
+    /Pfarrer\s*,?/gi,
+    /Lektorin\s*,?/gi,
+    /Lektor\s*,?/gi,
+  ];
+
+  // Entfernt alle bekannten Prediger-Varianten und Titel aus einem Text
+  function stripPredigerAndTitlesDiff(text: string): string {
+    let result = text;
+    for (const p of ($predigerList ?? [])) {
+      for (const v of (p.varianten ?? [])) {
+        result = result.replace(
+          new RegExp(v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*,?', 'gi'), ' '
+        );
+      }
+    }
+    for (const re of REMOVE_TITLES_DIFF) {
+      result = result.replace(re, ' ');
+    }
+    return result.replace(/^[\s,]+|[\s,]+$/g, '').replace(/\s{2,}/g, ' ').trim();
+  }
+
+  // Parst eine GCal-Beschreibung → { abendmahl, kommentar }
+  function parseGcalDescription(desc: string): { abendmahl: boolean; kommentar: string } {
+    if (!desc) return { abendmahl: false, kommentar: '' };
+
+    // Zeilenweise (neues Format mit \n)
+    if (desc.includes('\n')) {
+      let abendmahl = false;
+      const zusatzLines: string[] = [];
+      for (const line of desc.split('\n').map(l => l.trim()).filter(Boolean)) {
+        if (/~\s*Y/i.test(line)) { abendmahl = true; continue; }
+        // Prediger-Zeile überspringen
+        const isPredigerLine = ($predigerList ?? []).some(p =>
+          (p.varianten ?? []).some(v => line.toUpperCase().includes(v.toUpperCase()))
+        );
+        if (isPredigerLine) {
+          const rest = stripPredigerAndTitlesDiff(line);
+          if (rest) zusatzLines.push(rest);
+          continue;
+        }
+        zusatzLines.push(line);
+      }
+      return { abendmahl, kommentar: zusatzLines.join(', ').trim() };
+    }
+
+    // Legacy-Einzeiler (komma-separiert): "Name, Titel, ~ Y, Kommentar"
+    const abendmahl = /~\s*Y/i.test(desc);
+    const kommentar = stripPredigerAndTitlesDiff(desc)
+      .replace(/~\s*Y\s*/gi, ' ')   // ~ Y entfernen
+      .replace(/\s{2,}/g, ' ')       // doppelte Leerzeichen
+      .replace(/^[\s,]+|[\s,]+$/g, '') // führende/abschließende Kommas nach allen Removes
+      .trim();
+    return { abendmahl, kommentar };
+  }
+
+  // Vergleicht Firebase-Zeile mit Google-Calendar-Event.
+  // Gibt Abweichungen als lesbaren String zurück, oder '' wenn alles gleich.
+  function gcalDiff(row: TerminRow): string {
+    if (row.isNew || row.editing) return '';
+    const gcalEvent = gcalEvents.get(row.originalTimestamp);
+    if (!gcalEvent) return '';
+    if (row.typ === 'CP') return ''; // Comboproben haben keine relevanten Felder
+
+    const { abendmahl: gcalAbendmahl, kommentar: gcalKommentar } =
+      parseGcalDescription(gcalEvent.description ?? '');
+
+    const diffs: string[] = [];
+    if (row.abendmahl !== gcalAbendmahl) {
+      diffs.push(`Abendmahl: Firebase=${row.abendmahl ? 'Ja' : 'Nein'}, GCal=${gcalAbendmahl ? 'Ja' : 'Nein'}`);
+    }
+    const fbKommentar = (row.lektor === 'GAST' && row.gastName
+      ? `Gast: ${row.gastName}${row.kommentar ? ', ' + row.kommentar : ''}`
+      : row.kommentar).trim();
+    if (fbKommentar !== gcalKommentar) {
+      diffs.push(`Kommentar: Firebase="${fbKommentar || '–'}", GCal="${gcalKommentar || '–'}"`);
+    }
+    return diffs.join(' | ');
+  }
+
   async function createGoogleCalendarEvent(row: TerminRow): Promise<string | null> {
     if (!googleAccessToken) return null;
     try {
@@ -305,8 +420,72 @@
         }
       );
       if (!resp.ok) { console.error('GCal Fehler:', await resp.json()); return null; }
-      return (await resp.json()).id as string;
+      const created = await resp.json();
+      // Event in lokale Map aufnehmen (damit Diff-Warnung sofort verschwindet)
+      gcalEvents.set(toTimestamp(row.datum, row.uhrzeit), created);
+      gcalEvents = new Map(gcalEvents);
+      return created.id as string;
     } catch (e) { console.error('GCal Fehler:', e); return null; }
+  }
+
+  async function updateGoogleCalendarEvent(row: TerminRow): Promise<boolean> {
+    if (!googleAccessToken) return false;
+    try {
+      const timeMin = dayjs.tz(`${row.datum} ${row.uhrzeit}`, 'Europe/Vienna').subtract(1, 'minute').toISOString();
+      const timeMax = dayjs.tz(`${row.datum} ${row.uhrzeit}`, 'Europe/Vienna').add(1, 'minute').toISOString();
+      const searchUrl = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`
+        + `?key=${GOOGLE_API_KEY}&timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true`;
+      const searchResp = await fetch(searchUrl);
+      if (!searchResp.ok) return false;
+      const searchData = await searchResp.json();
+      const existing = searchData.items?.[0];
+      if (!existing) {
+        return (await createGoogleCalendarEvent(row)) !== null;
+      }
+      const newEvent = buildGoogleEvent(row);
+      const patchResp = await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/${existing.id}`,
+        {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(newEvent),
+        }
+      );
+      if (!patchResp.ok) return false;
+      const updated = await patchResp.json();
+      // Map-Eintrag aktualisieren damit gcalDiff sofort passt
+      gcalEvents.set(toTimestamp(row.datum, row.uhrzeit), updated);
+      gcalEvents = new Map(gcalEvents);
+      return true;
+    } catch (e) { console.error('GCal Update Fehler:', e); return false; }
+  }
+
+  async function deleteGoogleCalendarEvent(timestamp: string): Promise<boolean> {
+    if (!googleAccessToken) return false;
+    try {
+      // Event per Timestamp suchen (±1 Minute, mit OAuth-Token)
+      const dt = dayjs(timestamp, 'YYYY-MM-DD HH:mm:ss');
+      const timeMin = dt.subtract(1, 'minute').toISOString();
+      const timeMax = dt.add(1, 'minute').toISOString();
+      const searchUrl = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`
+        + `?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true`;
+      const searchResp = await fetch(searchUrl, {
+        headers: { Authorization: `Bearer ${googleAccessToken}` },
+      });
+      if (!searchResp.ok) return false;
+      const searchData = await searchResp.json();
+      const existing = searchData.items?.[0];
+      if (!existing) {
+        console.warn('GCal Delete: Event nicht gefunden für', timestamp);
+        return true; // nicht in GCal → aus unserer Sicht ok
+      }
+      const delResp = await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/${existing.id}`,
+        { method: 'DELETE', headers: { Authorization: `Bearer ${googleAccessToken}` } }
+      );
+      // 204 No Content = erfolgreich gelöscht
+      return delResp.ok || delResp.status === 204;
+    } catch (e) { console.error('GCal Delete Fehler:', e); return false; }
   }
 
   // ---------------------------------------------------------------------------
@@ -317,56 +496,100 @@
   }
 
   async function saveRow(gIdx: number) {
-    const row = rows[gIdx];
-    row.error = '';
-    row.saved = false;
+    // Immer direkt auf rows[gIdx] arbeiten — nie auf filteredRows-Referenz
+    const snap = rows[gIdx];
 
-    if (!row.datum) { row.error = 'Datum fehlt.'; rows = [...rows]; return; }
-    if (row.typ === 'GD' && !row.lektor) { row.error = 'Bitte Lektor auswählen.'; rows = [...rows]; return; }
-    if (row.typ === 'GD' && row.lektor === 'GAST' && !row.gastName.trim()) { row.error = 'Bitte Gastname eingeben.'; rows = [...rows]; return; }
+    rows[gIdx] = { ...snap, error: '', saved: false };
+    rows = [...rows];
 
-    const newTimestamp = toTimestamp(row.datum, row.uhrzeit);
+    if (!snap.datum) { rows[gIdx] = { ...rows[gIdx], error: 'Datum fehlt.' }; rows = [...rows]; return; }
+    if (snap.typ === 'GD' && !snap.lektor) { rows[gIdx] = { ...rows[gIdx], error: 'Bitte Lektor auswählen.' }; rows = [...rows]; return; }
+    if (snap.typ === 'GD' && snap.lektor === 'GAST' && !snap.gastName.trim()) { rows[gIdx] = { ...rows[gIdx], error: 'Bitte Gastname eingeben.' }; rows = [...rows]; return; }
 
-    // Duplikatcheck nur für neue Zeilen (oder bei Timestamp-Änderung beim Edit)
-    if (row.isNew || newTimestamp !== row.originalTimestamp) {
+    const newTimestamp = toTimestamp(snap.datum, snap.uhrzeit);
+
+    // Duplikatcheck
+    if (snap.isNew || newTimestamp !== snap.originalTimestamp) {
       const conflict = rows.find(
         (r, i) => i !== gIdx && !r.isNew && toTimestamp(r.datum, r.uhrzeit) === newTimestamp
       ) || rows.find(
         (r, i) => i !== gIdx && r.isNew && r.saved && toTimestamp(r.datum, r.uhrzeit) === newTimestamp
       );
       if (conflict) {
-        row.error = `Timestamp ${newTimestamp} existiert bereits.`;
+        rows[gIdx] = { ...rows[gIdx], error: `Timestamp ${newTimestamp} existiert bereits.` };
         rows = [...rows];
         return;
       }
     }
 
+    // Google Login ist Pflicht
+    if (!googleSignedIn) {
+      rows[gIdx] = { ...rows[gIdx], error: 'Bitte zuerst mit Google Calendar verbinden.' };
+      rows = [...rows];
+      return;
+    }
+
     savingIdx = gIdx;
     try {
-      const payload = buildFirebasePayload(row);
+      const payload = buildFirebasePayload(snap);
 
       // Bei Edit + Timestamp-Änderung: alten Key löschen
-      if (!row.isNew && row.originalTimestamp && row.originalTimestamp !== newTimestamp) {
-        await remove(dbref(dbRealtime, `combo/termine/${row.originalTimestamp}`));
+      if (!snap.isNew && snap.originalTimestamp && snap.originalTimestamp !== newTimestamp) {
+        await remove(dbref(dbRealtime, `combo/termine/${snap.originalTimestamp}`));
       }
 
       await set(dbref(dbRealtime, `combo/termine/${newTimestamp}`), payload);
 
-      // Google Calendar nur für neue Einträge (kein Update-API implementiert)
-      if (row.isNew && googleSignedIn) {
-        const gcalId = await createGoogleCalendarEvent(row);
-        if (!gcalId) row.error = 'Firebase OK, Google Calendar Fehler.';
+      // Google Calendar: neu anlegen oder updaten
+      const gcalOk = snap.isNew
+        ? (await createGoogleCalendarEvent(snap)) !== null
+        : await updateGoogleCalendarEvent(snap);
+
+      if (!gcalOk) {
+        await remove(dbref(dbRealtime, `combo/termine/${newTimestamp}`));
+        rows[gIdx] = { ...rows[gIdx], error: 'Google Calendar Fehler — Termin wurde nicht gespeichert.' };
+        rows = [...rows];
+        return;
       }
 
-      row.originalTimestamp = newTimestamp;
-      row.saved = true;
-      row.editing = false;
-      row.isNew = false;
+      // Zeile als gespeichert markieren (neues Objekt → Svelte erkennt Änderung)
+      rows[gIdx] = { ...rows[gIdx], originalTimestamp: newTimestamp, saved: true, editing: false, isNew: false };
+
+      // Nach neuem Eintrag: bestehende offene NEU-Zeile aktualisieren (falls vorhanden),
+      // sonst neue Zeile anhängen
+      if (snap.isNew) {
+        const savedDatum = snap.datum;
+        const savedTyp = snap.typ;
+        const savedLektor = snap.lektor === 'GAST' ? '' : snap.lektor;
+        const nextDatum = savedTyp === 'GD' ? nextSunday(savedDatum) : dayjs(savedDatum).add(7, 'day').format('YYYY-MM-DD');
+        // Suche eine bereits existierende offene NEU-Zeile (die durch addRow-Klick entstanden ist)
+        const existingNewIdx = rows.findIndex((r, i) => i !== gIdx && r.isNew && !r.saved);
+        if (existingNewIdx >= 0) {
+          // Bereits eine offene Zeile → nur Datum, Lektor und Abendmahl korrigieren
+          rows[existingNewIdx] = {
+            ...rows[existingNewIdx],
+            datum: nextDatum,
+            uhrzeit: defaultUhrzeit(savedTyp),
+            typ: savedTyp,
+            lektor: savedLektor,
+            abendmahl: false,
+            kommentar: '',
+            error: '',
+          };
+        } else {
+          // Keine offene Zeile → neue anhängen
+          const newRow = createNewRow(nextDatum, savedTyp);
+          newRow.lektor = savedLektor;
+          rows = [...rows, newRow];
+        }
+      }
+
+      rows = [...rows];
     } catch (e: any) {
-      row.error = `Fehler: ${e?.message ?? e}`;
+      rows[gIdx] = { ...rows[gIdx], error: `Fehler: ${e?.message ?? e}` };
+      rows = [...rows];
     } finally {
       savingIdx = null;
-      rows = [...rows];
     }
   }
 
@@ -378,35 +601,90 @@
     }
   }
 
+  /** Nächsten Sonntag nach `fromDate` (oder ab heute wenn leer) */
+  function nextSunday(fromDate: string): string {
+    const base = fromDate ? dayjs(fromDate) : dayjs();
+    const dow = base.day(); // 0 = Sonntag
+    const daysUntilSunday = dow === 0 ? 7 : 7 - dow;
+    return base.add(daysUntilSunday, 'day').format('YYYY-MM-DD');
+  }
+
   function addRow() {
     // Typ: wenn Filter aktiv ist, neue Zeile passend zum Filter anlegen
     const preferredTyp: TerminTyp = filterTyp !== 'ALL' ? filterTyp : (newRowsTyp ?? 'GD');
-    // Datum: letztes sichtbares Datum + 7 Tage als Vorschlag
+    // Letzten sichtbaren Eintrag als Referenz nehmen
     const lastVisible = [...filteredRows].reverse().find((r) => r.datum);
     const lastDatum = lastVisible?.datum ?? '';
-    const nextDatum = lastDatum ? dayjs(lastDatum).add(7, 'day').format('YYYY-MM-DD') : '';
-    rows = [...rows, createNewRow(nextDatum, preferredTyp)];
+
+    // Datum: für GD → nächster Sonntag nach letztem Datum; für CP → +7 Tage
+    const nextDatum = preferredTyp === 'GD'
+      ? nextSunday(lastDatum)
+      : (lastDatum ? dayjs(lastDatum).add(7, 'day').format('YYYY-MM-DD') : '');
+
+    // Lektor vom letzten GD-Eintrag übernehmen, Abendmahl + Kommentar leer
+    const lastLektor = preferredTyp === 'GD'
+      ? ([...filteredRows].reverse().find((r) => r.typ === 'GD' && r.lektor)?.lektor ?? '')
+      : '';
+
+    const newRow = createNewRow(nextDatum, preferredTyp);
+    newRow.lektor = lastLektor;
+    // abendmahl und kommentar bleiben false/'' aus createNewRow
+    rows = [...rows, newRow];
   }
 
   function removeRow(gIdx: number) {
     rows = rows.filter((_, i) => i !== gIdx);
   }
 
+  // Überschreibt Google Calendar mit den Firebase-Daten (Firebase = Quelle der Wahrheit)
+  async function syncRowToGcal(gIdx: number) {
+    const row = rows[gIdx];
+    rows[gIdx] = { ...rows[gIdx], error: '' };
+    rows = [...rows];
+    const ok = await updateGoogleCalendarEvent(row);
+    if (!ok) {
+      rows[gIdx] = { ...rows[gIdx], error: 'Bereinigung fehlgeschlagen — Google Calendar Fehler.' };
+      rows = [...rows];
+    }
+    // gcalEvents wurde in updateGoogleCalendarEvent bereits aktualisiert
+  }
+
+  // Bereinigt alle Zeilen mit Abweichung in einem Durchgang
+  async function syncAllToGcal() {
+    for (let i = 0; i < rows.length; i++) {
+      if (!rows[i].isNew && !rows[i].editing && gcalDiff(rows[i])) {
+        await syncRowToGcal(i);
+      }
+    }
+  }
+
   async function deleteExistingRow(gIdx: number) {
     const row = rows[gIdx];
-    if (!confirm(`Termin ${row.originalTimestamp} wirklich löschen?`)) return;
+    if (!confirm(`Termin ${row.originalTimestamp} wirklich löschen?\n\nDer Termin wird aus Firebase UND Google Calendar entfernt.`)) return;
+    rows[gIdx] = { ...rows[gIdx], error: '' };
+    rows = [...rows];
     try {
+      // 1. Google Calendar zuerst löschen
+      const gcalOk = await deleteGoogleCalendarEvent(row.originalTimestamp);
+      if (!gcalOk) {
+        rows[gIdx] = { ...rows[gIdx], error: 'Google Calendar Fehler — Termin wurde nicht gelöscht.' };
+        rows = [...rows];
+        return;
+      }
+      // 2. Firebase löschen
       await remove(dbref(dbRealtime, `combo/termine/${row.originalTimestamp}`));
+      // Aus lokalem GCal-Map entfernen
+      gcalEvents.delete(row.originalTimestamp);
+      gcalEvents = new Map(gcalEvents);
       rows = rows.filter((_, i) => i !== gIdx);
     } catch (e: any) {
-      rows[gIdx].error = `Fehler: ${e?.message ?? e}`;
+      rows[gIdx] = { ...rows[gIdx], error: `Fehler: ${e?.message ?? e}` };
       rows = [...rows];
     }
   }
 
   function startEdit(gIdx: number) {
-    rows[gIdx].editing = true;
-    rows[gIdx].saved = false;
+    rows[gIdx] = { ...rows[gIdx], editing: true, saved: false };
     rows = [...rows];
   }
 
@@ -473,6 +751,8 @@
     } else {
       document.getElementById('google-gis-script')?.addEventListener('load', initGoogleSignIn);
     }
+    // GCal-Timestamps für Abgleich laden (read-only, kein Login nötig)
+    loadGcalTimestamps();
   };
 </script>
 
@@ -504,17 +784,19 @@
           <p class="text-sm text-gray-500 mt-1">Bestehende und neue Termine direkt in Firebase und Google Calendar verwalten.</p>
         </div>
 
-        <!-- Google Calendar Verbindung -->
+        <!-- Google Calendar Verbindung (Pflicht) -->
         <div class="flex items-center gap-2">
           {#if googleSignedIn}
             <Badge color="green" class="flex items-center gap-1">
               <CheckCircleSolid class="w-3 h-3 mr-1" /> Google Calendar verbunden
             </Badge>
           {:else}
-            <Button size="xs" color="alternative" onclick={requestGoogleToken}>
-              <CalendarMonthOutline class="mr-1 h-4 w-4" /> Mit Google Calendar verbinden
-            </Button>
-            <span class="text-xs text-gray-400">(optional)</span>
+            <div class="flex flex-col gap-1">
+              <Button color="blue" onclick={requestGoogleToken}>
+                <CalendarMonthOutline class="mr-1 h-4 w-4" /> Mit Google Calendar verbinden
+              </Button>
+              <span class="text-xs text-red-600 font-medium">⚠ Pflicht — ohne Verbindung kann nicht gespeichert werden.</span>
+            </div>
           {/if}
         </div>
       </div>
@@ -543,6 +825,20 @@
         </ButtonGroup>
       </div>
     </Card>
+
+    <!-- Google-Pflicht-Warnung oberhalb der Tabelle -->
+    {#if !googleSignedIn}
+      <Alert color="red" class="mb-4 flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2 flex-1">
+          <ExclamationCircleOutline class="h-5 w-5 shrink-0" />
+          <span class="font-medium">Google Calendar Verbindung erforderlich</span>
+          <span class="text-sm">— Neue Termine anlegen und bearbeiten ist erst nach der Anmeldung möglich.</span>
+        </div>
+        <Button color="blue" size="sm" onclick={requestGoogleToken}>
+          <CalendarMonthOutline class="mr-2 h-4 w-4" /> Jetzt mit Google Calendar verbinden
+        </Button>
+      </Alert>
+    {/if}
 
     <!-- Tabelle -->
     <Card class="p-0 overflow-visible max-w-none">
@@ -665,7 +961,15 @@
                 <TableBodyCell class="align-middle text-center">
                   {#if row.typ === 'GD'}
                     {#if row.editing}
-                      <Toggle bind:checked={row.abendmahl} size="small" />
+                      <label class="flex flex-col items-center gap-1 cursor-pointer select-none">
+                        <span class="text-xs text-gray-500 font-medium">Abendmahl</span>
+                        <input
+                          type="checkbox"
+                          class="w-5 h-5 accent-blue-600 cursor-pointer"
+                          checked={rows[gIdx].abendmahl}
+                          onchange={(e) => { rows[gIdx] = { ...rows[gIdx], abendmahl: (e.target as HTMLInputElement).checked }; rows = [...rows]; }}
+                        />
+                      </label>
                     {:else}
                       {#if row.abendmahl}
                         <Badge color="green">Ja</Badge>
@@ -710,12 +1014,29 @@
                           <CheckCircleSolid class="h-3 w-3 mr-1" /> Gespeichert
                         </Badge>
                       {/if}
+                      <!-- Abgleich-Warnung: fehlt in Google Calendar -->
+                      {#if !row.isNew && !gcalLoading && !gcalTimestamps.has(row.originalTimestamp)}
+                        <Alert color="red" class="p-1 text-xs mb-1 flex items-center gap-1">
+                          <ExclamationCircleOutline class="h-3 w-3 shrink-0" /> Fehlt in Google Calendar
+                        </Alert>
+                      {/if}
+                      <!-- Abgleich-Warnung: Inhalt weicht ab -->
+                      {#if !gcalLoading && gcalDiff(row)}
+                        <Alert color="yellow" class="p-1 text-xs mb-1">
+                          <ExclamationCircleOutline class="h-3 w-3 shrink-0 inline mr-1" />
+                          <strong>GCal weicht ab:</strong><br/>
+                          {gcalDiff(row)}
+                        </Alert>
+                        <Button size="xs" color="yellow" disabled={!googleSignedIn} onclick={() => syncRowToGcal(gIdx)}>
+                          <ArrowsRepeatOutline class="mr-1 h-3 w-3" /> Bereinigen
+                        </Button>
+                      {/if}
                       <!-- Bearbeiten -->
-                      <Button size="xs" color="alternative" onclick={() => startEdit(gIdx)}>
+                      <Button size="xs" color="alternative" disabled={!googleSignedIn} onclick={() => startEdit(gIdx)}>
                         <EditOutline class="mr-1 h-3 w-3" /> Bearbeiten
                       </Button>
                       <!-- Löschen -->
-                      <Button size="xs" color="red" onclick={() => deleteExistingRow(gIdx)}>
+                      <Button size="xs" color="red" disabled={!googleSignedIn} onclick={() => deleteExistingRow(gIdx)}>
                         <TrashBinOutline class="h-3 w-3" />
                       </Button>
                     {/if}
@@ -741,18 +1062,18 @@
 
       <!-- Footer -->
       <div class="flex flex-wrap items-center gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
-        <Button size="sm" color="alternative" onclick={addRow}>
+        <Button size="sm" color="alternative" onclick={addRow} disabled={!googleSignedIn}>
           <PlusOutline class="mr-1 h-4 w-4" /> Neue Zeile
         </Button>
         <GradientButton color="cyanToBlue" size="sm" onclick={saveAll} disabled={savingIdx !== null}>
           <FolderPlusOutline class="mr-1 h-4 w-4" /> Alle offenen speichern
         </GradientButton>
-
-        {#if !googleSignedIn}
-          <Alert color="yellow" class="py-1 px-2 text-xs">
-            Google Calendar nicht verbunden — Termine werden nur in Firebase gespeichert.
-          </Alert>
+        {#if rows.some(r => !r.isNew && !r.editing && gcalDiff(r))}
+          <Button color="yellow" size="sm" disabled={!googleSignedIn} onclick={syncAllToGcal}>
+            <ArrowsRepeatOutline class="mr-1 h-4 w-4" /> Alle Abweichungen bereinigen
+          </Button>
         {/if}
+
       </div>
     </Card>
 
