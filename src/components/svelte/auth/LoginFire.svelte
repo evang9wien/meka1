@@ -1,16 +1,16 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Button, GradientButton } from 'flowbite-svelte';
   import { Label, Input } from 'flowbite-svelte';
   import { Alert } from 'flowbite-svelte';
   import { InfoCircleSolid } from 'flowbite-svelte-icons';
-  import { initAppCheck } from "./../firebase/firebase.js";
+  import { initAppCheck } from "./../firebase/firebase.ts";
   
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, type Auth } from 'firebase/auth';
 
-  export let auth = null;
-  export let loginReload = true;
+  export let auth: Auth | null = null;
+  export let loginReload: boolean = true;
 
   let name = '';
   let password = '';
@@ -24,11 +24,15 @@
       passwordResetMsg = 'Bitte eine Email Adresse angeben.';
       return;
     }
+    if (auth == null) {
+      const app = initAppCheck();
+      auth = getAuth(app);
+    }
     sendPasswordResetEmail(auth, name)
       .then(() => {
         passwordResetMsg = `Es wurde erfolgreich eine Email an ${name} verschickt.`;
       })
-      .catch((error) => {
+      .catch((error: { code?: string; message?: string }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         passwordResetMsg = `Beim Versenden der Email ist ein Fehler aufgetreten: ${errorMessage} (${errorCode})`;
@@ -63,7 +67,7 @@
   {#if !loginSucess}
     {#if loginError}
       <Alert color="red" class="mb-4">
-        <InfoCircleSolid slot="icon" class="w-4 h-4" />
+        {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
         <div class="font-medium">Login Fehler!</div>
         E-Mail oder Passwort ist fehlerhaft.
       </Alert>
@@ -87,7 +91,7 @@
     {/if}
   {:else}
     <Alert color="green">
-      <InfoCircleSolid slot="icon" class="w-4 h-4" />
+      {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
       <div class="font-medium">Login erfolgreich!</div>
       Die Seiten im geschützen Bereich können nun geöffnet werden.
     </Alert>

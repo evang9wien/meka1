@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
   import { Label, Input, Checkbox } from 'flowbite-svelte';
@@ -10,19 +10,19 @@
   let registerFailed = false;
   let optInChecked = false;
   let emailValue = '';
-  let optInInput;
-  let emailInput;
+  let optInInput: HTMLInputElement;
+  let emailInput: HTMLInputElement;
   let errorText = '';
 
   let url =
     'https://dd82935b.sibforms.com/serve/MUIFABI1M965SxHkTk2d4-VW43vzmmDkFdalvRQrqctYApKtF64YRbk0oTY-_eGs6c8K0QCmRUp9SnitxzKzjt_c1FNuAtqyNIdU1lxaxrRnEPMlZ_c4MB3iG4Q3z7EBYwAAVmNezVxlLR5mpYWaCJP6vSXPf4V3DUaEN1uuMj1DD7JVRmCkp7KCPjvq6LHO5OYKoDVav8ISILIj';
-  let submitFrame;
+  let submitFrame: HTMLIFrameElement;
   let submitFrameDocStatus = 0; // 0 = not loaded. 1 = srcdoc set, 2 = submitted
 
   onMount(async () => {
-    emailInput = document.getElementById('EMAIL');
-    optInInput = document.getElementById('OPT_IN');
-    submitFrame = document.getElementById('submitFrame');
+    emailInput = document.getElementById('EMAIL') as HTMLInputElement;
+    optInInput = document.getElementById('OPT_IN') as HTMLInputElement;
+    submitFrame = document.getElementById('submitFrame') as HTMLIFrameElement;
   });
 
   function CheckAndSubmit() {
@@ -71,14 +71,14 @@
     // expect the load event to invoke SubFrameLoaded
   }
 
-  function SubFrameLoaded(event) {
+  function SubFrameLoaded(event: Event) {
     if (submitFrameDocStatus == 1) {
       // we updated srcdoc
       let subFrameDoc = submitFrame.contentDocument;
-      let submitForm = subFrameDoc.getElementById('subForm');
+      let submitForm = subFrameDoc?.getElementById('subForm') as HTMLFormElement | undefined;
 
       submitFrameDocStatus = 2;
-      submitForm.submit();
+      submitForm?.submit();
     } else if (submitFrameDocStatus == 2) {
       // received response
       let subFrameDoc = submitFrame.contentDocument;
@@ -101,7 +101,7 @@
       <div class="mb-6">
         <Label for="EMAIL" class="block mb-2">Bitte geben Sie Ihre E-Mail-Adresse ein, um sich anzumelden</Label>
         <Input id="EMAIL" type="email" name="EMAIL" placeholder="email" bind:value={emailValue} required>
-          <EnvelopeSolid slot="left" class="w-5 h-5 text-[#6a96d3] dark:text-[#93b3e0]" />
+          {#snippet left()}<EnvelopeSolid class="w-5 h-5 text-[#6a96d3] dark:text-[#93b3e0]" />{/snippet}
         </Input>
       </div>
 

@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { Modal, Button } from 'flowbite-svelte';
   import { Spinner } from 'flowbite-svelte';
-  export let popupSpinnerModal = false;
-  export let message = '';
+  export let popupSpinnerModal: boolean = false;
+  export let message: string = '';
 </script>
 
 <Modal bind:open={popupSpinnerModal} size="sm" autoclose>
@@ -10,7 +10,7 @@
     <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
     <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Bitte warten ...</h3>
     <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
-      <Spinner color="primary" size={8} />&nbsp;{message}
+      <Spinner color="primary" size="8" />&nbsp;{message}
     </h3>
   </div>
 </Modal>

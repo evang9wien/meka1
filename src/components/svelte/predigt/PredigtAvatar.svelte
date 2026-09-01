@@ -1,17 +1,17 @@
-<script>
+<script lang="ts">
   import { Avatar, Tooltip } from 'flowbite-svelte';
-  import { predigerList } from '../stores/predigerStore.ts';
-  import { resolveLocalAvatarSrc } from './PredigtConstants.js';
+  import { predigerList, type PredigerEntry } from '../stores/predigerStore.ts';
+  import { resolveLocalAvatarSrc } from './PredigtConstants.ts';
 
-  export let prediger = '';
-  export let clazz = '';
-  export let title = '';
+  export let prediger: string = '';
+  export let clazz: string = '';
+  export let title: string = '';
 
   const musikSrc       = resolveLocalAvatarSrc('musik.png')       ?? '';
   const mekaclassicSrc = resolveLocalAvatarSrc('meka-classic.png') ?? '';
   const kreuzSrc       = resolveLocalAvatarSrc('kreuz-bunt.svg')   ?? '';
 
-  function getAvatar(list, p, t) {
+  function getAvatar(list: PredigerEntry[] | null, p: string, t: string): string {
     // Sondertitel (Comboprobe, MEKA-Classic)
     if (t?.toLowerCase().includes('comboprobe'))   return musikSrc;
     if (t?.toLowerCase().includes('meka classic')) return mekaclassicSrc;
@@ -37,7 +37,7 @@
     return kreuzSrc;
   }
 
-  function getLongName(list, p) {
+  function getLongName(list: PredigerEntry[] | null, p: string): string {
     if (!p) return '';
     if (list) {
       const entry = list.find((e) => e.kuerzel === p || e.vorname === p);

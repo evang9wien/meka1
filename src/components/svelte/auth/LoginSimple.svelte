@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { Button, GradientButton } from 'flowbite-svelte';
@@ -8,9 +8,9 @@
   import { InfoCircleSolid } from 'flowbite-svelte-icons';
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 
-  export let auth;
-  export let callback;
-  export let popupSimpleLogin;
+  export let auth: boolean;
+  export let callback: () => void;
+  export let popupSimpleLogin: boolean;
 
   let name = '';
   let password = '';
@@ -43,7 +43,7 @@
     {#if !loginSucess}
       {#if loginError}
         <Alert color="red">
-          <InfoCircleSolid slot="icon" class="w-4 h-4" />
+          {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
           <div class="font-medium">Login Fehler!</div>
           Passwort ist fehlerhaft.
         </Alert>
@@ -61,7 +61,7 @@
       </div> -->
     {:else}
       <Alert color="green">
-        <InfoCircleSolid slot="icon" class="w-4 h-4" />
+        {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
         <div class="font-medium">Login erfolgreich!</div>
         Die Seiten im geschützen Bereich können nun geöffnet werden.
       </Alert>

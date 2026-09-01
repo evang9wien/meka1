@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import { Modal, Button } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginSimple from './LoginSimple.svelte';
 
-  export let popupSimpleLogin;
-  export let auth;
-  export let callback;
+  export let popupSimpleLogin: boolean;
+  export let auth: boolean;
+  export let callback: () => void;
 </script>
 
 <Modal bind:open={popupSimpleLogin} size="xs">

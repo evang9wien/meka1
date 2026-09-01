@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
   import dayjs from 'dayjs';
@@ -8,21 +8,29 @@
   import { CalendarWeekSolid, FilterOutline } from 'flowbite-svelte-icons';
   import PredigtAvatar from '../predigt/PredigtAvatar.svelte';
   import { resolveLocalAvatarSrc } from '../predigt/PredigtConstants.ts';
-  import { predigerList, getPredigerKuerzelFromStore, initPredigerStore } from '../stores/predigerStore.ts';
+  import { predigerList, getPredigerKuerzelFromStore, initPredigerStore, type PredigerEntry } from '../stores/predigerStore.ts';
   import { initAppCheck, getDb } from '../firebase/firebase.ts';
+
+  interface CalendarItem {
+    summary: string;
+    description?: string;
+    start: { dateTime: string };
+    startDate?: string;
+    [key: string]: unknown;
+  }
 
   const kreuzSrc = resolveLocalAvatarSrc('kreuz-bunt.svg') ?? '';
 
   // Reaktiv: gibt Kürzel zurück — list-Parameter zwingt Svelte zur Neuauswertung
   // wenn sich $predigerList ändert
-  function getKuerzelForAvatar(description, list) {
+  function getKuerzelForAvatar(description: string | undefined, list: PredigerEntry[] | null): string {
     if (!description) return '';
     return getPredigerKuerzelFromStore(description);
   }
 
-  export let filter;
+  export let filter: string | undefined = undefined;
 
-  let items = [];
+  let items: CalendarItem[] = [];
 
   onMount(async () => {
     dayjs.locale('de');
@@ -63,7 +71,7 @@
   
   <Timeline order="vertical">
     {#each items as item}
-      <TimelineItem title={item.summary} >        
+      <TimelineItem title={item.summary} date="">        
         
         {#snippet orientationSlot()}
           <span class="absolute bg-primary-200 dark:bg-primary-900 -start-10 flex h-6 w-6 items-center justify-center rounded-full ring-6 ring-[#f0f5fb] dark:ring-[#111d33]">

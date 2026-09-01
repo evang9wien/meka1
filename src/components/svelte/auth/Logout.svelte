@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { getAuth, signOut } from 'firebase/auth';
-  import { initAppCheck } from "../firebase/firebase.js";  
+  import { initAppCheck } from "../firebase/firebase.ts";  
   import { Alert } from 'flowbite-svelte';
   import { Card } from 'flowbite-svelte';
 
   
 
-  let result = '';
+  let result: string = '';
   onMount(async () => {
     const app = initAppCheck();
     const auth = getAuth(app);
@@ -16,9 +16,9 @@
         // Sign-out successful.
         result = 'Logout erfolgreich';
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         // An error happened.
-        result = error;
+        result = String(error);
       });
   });
 </script>

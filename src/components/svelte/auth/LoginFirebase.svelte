@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
   import { Modal, Button } from 'flowbite-svelte';
   import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
   import LoginFire from './LoginFire.svelte';
+  import type { Auth } from 'firebase/auth';
 
-  export let popupFireBaseLogin;
-  export let auth;
+  export let popupFireBaseLogin: boolean;
+  export let auth: Auth | null;
 </script>
 
 <Modal bind:open={popupFireBaseLogin} size="xs">

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // https://www.evang9.wien/root/predigten-editieren/
   import { onMount } from 'svelte';
   import axios from 'axios';
@@ -32,16 +32,26 @@
     endAt,
   } from 'firebase/database';
 
-  let files;
-  let termine;
-  let selectedTermin;
-  let predigten;
+  interface Termin {
+    Termin: string;
+    Abendmahl?: string;
+    Verantwortlich?: string;
+    name: string;
+    value: string;
+    url: string;
+    [key: string]: unknown;
+  }
+
+  let files: FileList | undefined;
+  let termine: Termin[] | undefined;
+  let selectedTermin: string | undefined;
+  let predigten: unknown;
   let open = false;
   $: predigtEdit = $userRoles.includes('predigtedit');
 
-  let storage;
+  let storage: ReturnType<typeof getStorage>;
 
-  let predigtMp3;
+  let predigtMp3: File | undefined;
   let popupSpinnerUploadModal = false;
 
   onMount(() => {
@@ -60,11 +70,11 @@
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endAt(toDate));
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
-        termine = Object.values(snapshot.val()).map((t) => ({
+        termine = Object.values(snapshot.val() as Record<string, Partial<Termin>>).map((t) => ({
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
-        }));
+        })) as Termin[];
         termine = termine.map((t) => {
           const url = 'predigten/' + t.Termin.replaceAll(':', '_') + '_Predigt.mp3';
           return { ...t, url: url };
@@ -87,13 +97,14 @@
       return;
     }
 
-    const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
+    const termin = termine?.filter((t) => t.Termin == selectedTermin)[0];
+    if (!termin) return;
 
     console.log('Sel Termin: ', termin);
 
     const predigtRef = stref(storage, termin.url);
     popupSpinnerUploadModal = true;
-    uploadBytes(predigtRef, predigtMp3).then((snapshot) => {
+    uploadBytes(predigtRef, predigtMp3).then(() => {
       popupSpinnerUploadModal = false;
       console.log('Uploaded file: ', termin.url);
       // trigger UI reload
@@ -101,8 +112,8 @@
     });
   }
 
-  function getName(termin) {
-    return getLongNameFromStore(termin.Verantwortlich) || termin.Verantwortlich;
+  function getName(termin: Termin): string {
+    return getLongNameFromStore(termin.Verantwortlich ?? '') || termin.Verantwortlich || '';
   }
 
   // function getImgAvatar(termin) {
@@ -113,7 +124,7 @@
   //   return getImageAvatar(name[0].Verantwortlich);
   // }
 
-  function getDate(date) {
+  function getDate(date: string): string {
     dayjs.locale('de');
     return dayjs(new Date(date)).format('dddd, D. MMMM  YYYY, H:mm ');
   }
@@ -144,7 +155,7 @@
               Administrator-Modus:
               {#if open}
                 <Alert border class="mb-2">
-                  <InfoCircleSolid slot="icon" class="w-4 h-4" color="red" />
+                  {#snippet icon()}<InfoCircleSolid class="w-4 h-4" color="red" />{/snippet}
                   <span class="font-medium">Achtung!</span>
                   Bitte den Termin und die Predigt (in mp3 Format) auswählen.
                 </Alert>
@@ -154,7 +165,7 @@
               <Fileupload
                 id="predigt"
                 name="predigt"
-                onchange={(e) => (predigtMp3 = e.target.files[0])}
+                onchange={(e: Event) => (predigtMp3 = (e.target as HTMLInputElement).files?.[0])}
                 class="mb-2"
               />
               <Helper class="mb-2">Bitte die Predigt als mp3 Datei auswählen!.</Helper>
@@ -208,7 +219,7 @@
     <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bitte warten ...</h3>
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <Spinner color="purple" size={8} />&nbsp;Predigt wird hochgeladen.
+      <Spinner color="purple" size="8" />&nbsp;Predigt wird hochgeladen.
     </h3>
   </div>
 </Modal>
