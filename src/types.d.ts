@@ -1,5 +1,6 @@
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import type { HTMLAttributes } from 'astro/types';
+import type { ImageMetadata } from 'astro';
 
 export interface Post {
   /** A unique ID number that identifies a post. */
@@ -21,7 +22,7 @@ export interface Post {
   /** Optional summary of post content. */
   excerpt?: string;
   /**  */
-  image?: string;
+  image?: string | ImageMetadata;
 
   /**  */
   category?: string;
@@ -138,7 +139,7 @@ export interface Item {
   icon?: string;
   classes?: Record<string, string>;
   callToAction?: CallToAction;
-  image?: Image;
+  image?: Image | string;
   qrCode?: boolean;
 }
 

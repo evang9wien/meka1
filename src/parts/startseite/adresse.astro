@@ -6,11 +6,11 @@ import Verkehrsmittel from '~/parts/kontakt/verkehrsmittel.md';
 import Kurzparkzone from '~/parts/kontakt/kurzparkzone.md';
 
 
-const view = [48.2231769, 16.3641052];
+const view: [number, number] = [48.2231769, 16.3641052];
 const zoom = 17;
 const minZoom = 12;
 const maxZoom = 19;
-const marker = [48.2231769, 16.3641052];
+const marker: [number, number] = [48.2231769, 16.3641052];
 const markerPopup = 'Evangelische Messiaskapelle<br>1090 Wien, Seegasse 16a';
 const imagePath = typeof SITE.base !== 'string' ? '/' : SITE.base.toString();
 const markerPath = imagePath + (imagePath.endsWith('/') ? '' : '/') + 'leaflet/images/';
@@ -32,7 +32,7 @@ const markerPath = imagePath + (imagePath.endsWith('/') ? '' : '/') + 'leaflet/i
     <br /><br />
     <div class="h-fit pb-0 md:pb-0">
         <OpenStreetMap
-          client:only
+          client:only="svelte"
           view={view}
           zoom={zoom}
           minZoom={minZoom}

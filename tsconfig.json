@@ -7,5 +7,5 @@
       "~/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "public", "typings/browser.d.ts", "typings/browser/**"]
+  "exclude": ["node_modules", "public", "dist", "typings/browser.d.ts", "typings/browser/**"]
 }

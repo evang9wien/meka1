@@ -67,7 +67,13 @@ const {
             {(image) && (
               
                 <figure>
-                  <Image src={image} alt="Logo" class="rounded-lg" width="400" height="400"/>
+                  <Image
+                    src={typeof image === "string" ? image : image.src}
+                    alt={(typeof image === "string" ? undefined : image.alt) || "Logo"}
+                    class="rounded-lg"
+                    width="400"
+                    height="400"
+                  />
                   {(description) && (                  
                   <figurecation class="w-full absolute pt-12 pb-3 px-1.5 bottom-0 left-1/2 transform -translate-x-1/2  text-xs text-center text-white bg-gradient-to-b from-transparent to-gray-900 rounded-lg">{description}</figurecation>
                   )}

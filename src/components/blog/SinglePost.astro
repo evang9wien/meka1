@@ -35,8 +35,8 @@ const articleSchema = {
   datePublished: post.publishDate?.toISOString(),
   dateModified: post.updateDate?.toISOString() || post.publishDate?.toISOString(),
   author: {
-    '@type': post.author?.name ? 'Person' : 'Organization',
-    name: post.author?.name || 'Evangelische Pfarrgemeinde am Alsergrund',
+    '@type': post.author ? 'Person' : 'Organization',
+    name: post.author || 'Evangelische Pfarrgemeinde am Alsergrund',
   },
   publisher: {
     '@type': 'Organization',

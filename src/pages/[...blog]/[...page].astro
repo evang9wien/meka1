@@ -1,4 +1,5 @@
 ---
+import type { GetStaticPaths, Page } from 'astro';
 import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
 import Headline from '~/components/blog/Headline.astro';
@@ -7,14 +8,15 @@ import PageScroll from '~/components/blog/PageScroll.astro';
 
 import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
 import { commonText } from '~/commontext';
+import type { Post } from '~/types';
 
 export const prerender = true;
 
-export async function getStaticPaths({ paginate }) {
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   return await getStaticPathsBlogList({ paginate });
-}
+};
 
-const { page } = Astro.props;
+const { page } = Astro.props as { page: Page<Post> };
 const currentPage = page.currentPage ?? 1;
 
 // const allCategories = await findCategories();
