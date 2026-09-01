@@ -90,6 +90,7 @@
     storage = getStorage(app);
 
     // Rollencheck
+    if (!$currentUser) return;
     const userDoc = await getDoc(doc(dbFireStore, 'accounts', $currentUser.uid));
     if (!userDoc.exists() || !userDoc.data().roles || !userDoc.data().roles.includes('combolist')) {
       popupSpinnerModal = false;
@@ -140,7 +141,7 @@
 
     unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot?.val()) {
-        const termine = Object.values(snapshot.val());
+        const termine = Object.values(snapshot.val()) as Record<string, unknown>[];
         hitliste = buildHitliste(termine, months);
       } else {
         hitliste = [];
@@ -171,8 +172,10 @@
           map.set(id, { count: 0, daten: new Set() });
         }
         const entry = map.get(id);
-        entry.daten.add(termin.Termin);
-        entry.count = entry.daten.size;
+        if (entry) {
+          entry.daten.add(String(termin.Termin));
+          entry.count = entry.daten.size;
+        }
       }
     }
 
@@ -242,6 +245,7 @@
     detailOpen = true;
 
     try {
+      if (!dbFireStore || !storage) return;
       const snap = await getDoc(doc(dbFireStore, 'lieder', lied.id));
       if (snap.exists()) {
         detailDaten = snap.data();
@@ -392,7 +396,7 @@
               <!-- Zählbadge + Stern für Top-3 + Detail-Button -->
               <div class="flex items-center gap-1 flex-shrink-0">
                 {#if i < 3}
-                  <StarSolid class="{rankColors[rank] ?? 'text-gray-400'}" size="sm" />
+                  <StarSolid class="{rankColors[rank ?? ''] ?? 'text-gray-400'}" size="sm" />
                 {/if}
                 <Badge color="yellow" class="text-sm font-bold px-3 py-1">
                   {lied.count}×
@@ -440,22 +444,22 @@
       <!-- Metadaten-Zeile -->
       <div class="flex flex-wrap gap-2 items-center">
         <Badge color="yellow">{detailLied?.count}× gespielt</Badge>
-        {#if detailLied?.daten?.length > 0}
+        {#if (detailLied?.daten?.length ?? 0) > 0}
           <span class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">
-            Zuletzt: <strong>{detailLied.daten[0]}</strong>
+            Zuletzt: <strong>{detailLied?.daten[0]}</strong>
           </span>
         {/if}
       </div>
 
       <!-- Alle Spieltermine -->
-      {#if detailLied?.daten?.length > 1}
+      {#if (detailLied?.daten?.length ?? 0) > 1}
         <div>
           <p class="text-xs font-semibold text-[#3a61a0] dark:text-[#93b3e0] uppercase tracking-wide mb-1">
             Alle Termine im gewählten Zeitraum
           </p>
           <div class="flex flex-wrap gap-1">
-            {#each detailLied.daten as datum}
-              <Badge color="light" class="text-xs">{datum}</Badge>
+            {#each detailLied?.daten ?? [] as datum}
+              <Badge color="gray" class="text-xs">{datum}</Badge>
             {/each}
           </div>
         </div>

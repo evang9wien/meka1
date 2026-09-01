@@ -20,7 +20,6 @@
   onMount(async () => {
     map = L.map('map', {
       dragging: !L.Browser.mobile,
-      tap: !L.Browser.mobile,
       scrollWheelZoom: false,
     }).setView(view, zoom);
 

@@ -154,7 +154,7 @@
         title="submitFrame"
         on:load={SubFrameLoaded}
         allow="fullscreen 'none'"
-      />
+      ></iframe>
     </div>
   {/if}
   {#if registerSuccessful}

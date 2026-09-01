@@ -226,7 +226,7 @@
 
     try {
       const response = await axios.get(url);
-      googleEvents = response.data.items.map((event) => {
+      googleEvents = response.data.items.map((event: any) => {
         const start = event.start.dateTime || event.start.date;
         const timestamp = dayjs(start).tz('Europe/Vienna').format('YYYY-MM-DD HH:mm:ss');
         return {
@@ -313,7 +313,7 @@
 
 
   // Felder, die aus Google Calendar abgeleitet werden
-  function googleDerivedFields(event) {
+  function googleDerivedFields(event: any) {
     const parsed = parseDescription(event.description, event.summary);
     return {
       Abendmahl: parsed.abendmahl,
@@ -324,7 +324,7 @@
     };
   }
 
-  async function syncToFirebase(event) {
+  async function syncToFirebase(event: any) {
     const existing = firebaseEvents.find((e) => e.Termin === event.timestamp);
     try {
       if (existing) {
@@ -350,7 +350,7 @@
   }
 
   // Gibt die konkreten Feldänderungen zurück (leer = kein Update nötig)
-  function getChanges(googleEvent): { field: string; old: string; new: string }[] {
+  function getChanges(googleEvent: any): { field: string; old: string; new: string }[] {
     const fb = firebaseEvents.find((e) => e.Termin === googleEvent.timestamp);
     if (!fb) return [];
     const derived = googleDerivedFields(googleEvent);
@@ -364,7 +364,7 @@
     return changes;
   }
 
-  function needsUpdate(googleEvent): boolean {
+  function needsUpdate(googleEvent: any): boolean {
     return getChanges(googleEvent).length > 0;
   }
 

@@ -45,9 +45,19 @@
     [key: string]: unknown;
   }
 
+  interface LiederauswahlItem {
+    Beschreibung?: string;
+    Liedtext?: string;
+    Titel?: string;
+    Dateiname?: string;
+    MP3?: string;
+    lied_liste_nummer?: string;
+    [key: string]: unknown;
+  }
+
   let selectedTermin: string | undefined;
   let lastSelectedTermin: string | undefined;
-  let liederauswahl: Record<string, unknown>[] | undefined;
+  let liederauswahl: LiederauswahlItem[] | undefined;
   let termine: TerminItem[] | undefined;
 
   /** lied_liste_nummer → zuletzt gespieltes Datum (YYYY-MM-DD) */
@@ -89,15 +99,15 @@
 
     // Sortiere die Lieder und füge Beschreibungen in einem Schritt hinzu
     const sortedLieder = termin.LiedAuswahl
-      .sort((a, b) => parseInt(a.lied_im_GD_nummer) - parseInt(b.lied_im_GD_nummer))
-      .map(l => ({
+      .sort((a: any, b: any) => parseInt(a.lied_im_GD_nummer) - parseInt(b.lied_im_GD_nummer))
+      .map((l: any) => ({
         ...l,
         Beschreibung: comboReihenfolge.find(f => f.Reihenfolge == l.lied_im_GD_nummer)?.Beschreibung
       }));
 
     // Lade alle Lieder parallel statt sequentiell
     try {
-      const liederPromises = sortedLieder.map(l => 
+      const liederPromises = sortedLieder.map((l: any) => 
         getDoc(doc(dbFireStore, 'lieder', l.lied_liste_nummer))
           .then(docSnap => docSnap.exists() ? { ...l, ...docSnap.data() } : null)
       );
@@ -169,7 +179,7 @@
 
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
-        alleTermine = Object.values(snapshot.val()).map((t) => ({
+        alleTermine = Object.values(snapshot.val() ?? {}).map((t: any) => ({
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
@@ -210,8 +220,8 @@
       lastSelectedTermin = selectedTermin;
       // console.log('SlTermin: ', JSON.stringify(selectedTermin));
       liederauswahl = undefined;
-      const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
-      loadLieder(termin);
+      const termin = termine?.filter((t) => t.Termin == selectedTermin)[0];
+      if (termin) loadLieder(termin);
     }, 300);
   };
 </script>
@@ -260,7 +270,7 @@
       
       <div>
         {#if liederauswahl}
-          <Table striped="true">
+          <Table striped={true}>
             <TableHead>
               <TableHeadCell>Lied</TableHeadCell>
               <TableHeadCell>Noten</TableHeadCell>
@@ -307,7 +317,7 @@
                       {#await getDownloadURL(stref(storage, 'lieder/mp3/' + lied.Dateiname + '.mp3'))}
                         <p>loading</p>
                       {:then url}
-                        <audio class="audio-border" src={url} controls="controls" preload="none" ></audio>
+                        <audio class="audio-border" src={url} controls preload="none" ></audio>
                       {/await}
                     {/if}
                   </TableBodyCell>

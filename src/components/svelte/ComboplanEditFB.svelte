@@ -90,7 +90,7 @@
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
         resetSelection();
-        termine = Object.values(snapshot.val()).map((t) => ({
+        termine = Object.values(snapshot.val() ?? {}).map((t: any) => ({
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
@@ -112,7 +112,7 @@
     loadData($currentUser);
   }
 
-  const loadData = async (user) => {
+  const loadData = async (user: unknown) => {
     const app = initAppCheck();
     initPredigerStore(getDb());
     dbRealtime = getDatabase(app);
@@ -124,12 +124,12 @@
     const dbFireStore = getDb();
     const accountsSnap = await getDocs(collection(dbFireStore, 'accounts'));
     members = accountsSnap.docs
-      .map(d => ({ uid: d.id, ...d.data() }))
+      .map(d => ({ uid: d.id, ...d.data() } as Member))
       .filter(a => Array.isArray(a.roles) && a.roles.includes('combo') && a.ShortName)
       .map(a => ({
         ...a,
         name: [a.VName, a.FName].filter(Boolean).join(' ') + ' (' + a.ShortName + ')',
-        value: a.ShortName,
+        value: a.ShortName as string,
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
     console.log('Mitarbeiter (aus accounts): ', members);
@@ -176,7 +176,7 @@
       .trim();
   };
 
-  const sendEmail = async (message, subject) => {
+  const sendEmail = async (message: string, subject: string) => {
     try {
       await emailjs.send(
         'service_rzebsaf',
@@ -200,20 +200,21 @@
   let handleSave = (_event: unknown) => {
     console.log('ComboAdminModus: ', comboAdminModus);
     // mySnackbar.open();
-    let newEntries = [];
+    let newEntries: { Termin: string; key: string; value: string }[] = [];
     Object.entries(combo).forEach(([key, values]) => {
       values.forEach((value) => {
         let data = value.split(',');
-        let termin = {};
-        termin.Termin = data[0];
-        termin.key = key;
-        termin.value = checkEntries(selectedmember, data[1]);
+        const termin = {
+          Termin: data[0],
+          key: key,
+          value: checkEntries(selectedmember ?? '', data[1]),
+        };
         newEntries.push(termin);
       });
     });
     let name = selectedmember;
 
-    const longName = members.filter((m) => m.value == name)[0].name;
+    const longName = members?.filter((m) => m.value == name)[0]?.name ?? '';
 
     let message = '';
 
@@ -221,7 +222,7 @@
       // const obj = {};
       // obj[entry.key] = entry.value;
       set(dbref(dbRealtime, 'combo/termine/' + entry.Termin + '/' + entry.key), entry.value);
-      const einaus = entry.value.includes(name) ? 'EIN' : 'AUS';
+      const einaus = entry.value.includes(name ?? '') ? 'EIN' : 'AUS';
       message += `${longName} hat sich am ${entry.Termin} in der Spalte ${entry.key} ${einaus}getragen !`;
       message += '\n';
     });

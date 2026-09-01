@@ -120,9 +120,9 @@
 
   const handleLiederDBAuswahl = async () => {
     // lieder nachladen
-    const liederDBAuswahlLoad = [];
+    const liederDBAuswahlLoad: Array<Record<string, unknown>> = [];
     for (let lied of liederDBAuswahl) {
-      const liedRef = doc(dbFireStore, 'lieder', lied.lied_liste_nummer);
+      const liedRef = doc(dbFireStore, 'lieder', lied.lied_liste_nummer as string);
       const docSnap = await getDoc(liedRef);
       if (docSnap.exists()) {
         liederDBAuswahlLoad.push({ ...lied, ...docSnap.data() });
@@ -133,7 +133,7 @@
     liederDBAuswahl = liederDBAuswahlLoad;
     console.log('LiederDBList Load: ', liederDBAuswahl);
 
-    const termin = termine.filter((t) => t.Termin == selectedTermin)[0];
+    const termin = termine?.filter((t) => t.Termin == selectedTermin)[0];
     console.log('Termin:', termin);
     if (!termin) return;
     liedReihenfolgeSelected = liederReihenfolgeDBTemplate
@@ -141,7 +141,7 @@
       .filter((l) => l[termin.Abendmahl == '1' ? 'GD_mit_Abendmahl' : 'GD_ohne_Abendmahl'] == '1')
 
       // Zusammenführen der vorgegebenen Liedelemente mit den Geladenen
-      .reduce(function (res, current) {
+      .reduce(function (res: LiedReihenfolgeItem[], current) {
         // Anzahl der selben LiederElemente in der DBAuswahl
         const liederElemente = liederDBAuswahl.filter((l) => l.lied_im_GD_nummer == current.Reihenfolge);
 
@@ -155,8 +155,8 @@
         const result = liederElemente.map((l) => ({
           ...current,
           selectedLied: l,
-          ID: l.ID,
-          selectedLiedID: l.lied_liste_nummer,
+          ID: l.ID as string,
+          selectedLiedID: l.lied_liste_nummer as string,
         }));
 
         return res.concat(result);
@@ -192,21 +192,21 @@
     initPredigerStore(dbFireStore);
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
     comboLieder = [];
-    for (const [key, value] of Object.entries(liederGes.data())) {
-      comboLieder.push({ name: value, value: key, ID: key });
+    for (const [key, value] of Object.entries(liederGes.data() ?? {})) {
+      comboLieder.push({ name: value as string, value: key, ID: key });
     }
     comboLieder = comboLieder.sort((a, b) => a.name.localeCompare(b.name));
 
     const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-    const nichtcomboLieder = [];
-    for (const [key, value] of Object.entries(liederNichtGes.data())) {
-      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    const nichtcomboLieder: LiedEintrag[] = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data() ?? {})) {
+      nichtcomboLieder.push({ name: value as string, value: key, ID: key });
     }
 
     alleLieder = comboLieder.concat(nichtcomboLieder);
     alleLieder = alleLieder.sort((a, b) => a.name.localeCompare(b.name));
 
-    liederReihenfolgeDBTemplate = comboReihenfolge;
+    liederReihenfolgeDBTemplate = comboReihenfolge as LiedReihenfolgeItem[];
     console.log('LiederReihenfolgeDBTemplate: ', liederReihenfolgeDBTemplate);
     dbRealtime = getDatabase(app);
 
@@ -237,7 +237,7 @@
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
         if (dbRealtimeOnce) return;
-        alleTermine = Object.values(snapshot.val()).map((t) => ({
+        alleTermine = Object.values(snapshot.val() ?? {}).map((t: any) => ({
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
@@ -266,8 +266,9 @@
 
       const now = dayjs().subtract(2, 'days').format('YYYY-MM-DD');
 
-      const termin = termine.filter((t) => new Date(t.Termin) > new Date(now))[0];
+      const termin = termine?.filter((t) => new Date(t.Termin) > new Date(now))[0];
       console.log('Termin: ', termin);
+      if (!termin) return;
       if (termin.LiedAuswahl) liederDBAuswahl = termin.LiedAuswahl;
       selectedTermin = termin.Termin;
       verantwortlich = termin.Verantwortlich;
@@ -297,7 +298,7 @@
       // console.log('Temine: ', dbRef);
 
       onValue(dbRefNow, async (snapshot) => {
-        const termin = Object.values(snapshot.val())[0];
+        const termin = Object.values(snapshot.val() ?? {})[0] as any;
         console.log('Termin: ', termin);
         liederDBAuswahl = termin.LiedAuswahl;
         if (!liederDBAuswahl) liederDBAuswahl = [];
@@ -337,7 +338,7 @@
       }
       // .forEach((l) => delete l.selected);
 
-      console.log('Save: ', liedReihenfolgeSelected, ev, ev1, ev2);
+      console.log('Save: ', liedReihenfolgeSelected, _ev, _ev1, _ev2);
       // workaround: force UI refresh
       liedReihenfolgeSelected = liedReihenfolgeSelected;
     });
@@ -365,9 +366,9 @@
     sendEmailHrefRefresh();
   };
 
-  const addLied = (lied) => {
+  const addLied = (lied: LiedReihenfolgeItem) => {
     console.log('Add: ', lied);
-    liedReihenfolgeSelected = liedReihenfolgeSelected.reduce((res, current) => {
+    liedReihenfolgeSelected = liedReihenfolgeSelected.reduce((res: LiedReihenfolgeItem[], current) => {
       if (lied.selectedLiedID && lied.selectedLiedID == current.selectedLiedID) {
         let toDel = { ...current };
         delete toDel.selectedLied;
@@ -381,7 +382,7 @@
     console.log('Dupl: ', liedReihenfolgeSelected);
   };
 
-  const removeLied = (lied) => {
+  const removeLied = (lied: LiedReihenfolgeItem) => {
     window.setTimeout(() => {
       if (lied.duplicate)
         liedReihenfolgeSelected = liedReihenfolgeSelected.map((l) => {
@@ -511,7 +512,7 @@
             >
             <InfoCircleOutline class="mb-4 mr-4" size="xl"></InfoCircleOutline>
             <Tooltip>Für die Liederauswahl den Termin <br /> und die Lieder auswählen und speichern.</Tooltip>
-            <A class="mb-4 mr-4" color="cyanToBlue" disabled={disableEmailButton()} on:click={(e) => {
+            <A class="mb-4 mr-4" color="cyan" disabled={disableEmailButton()} on:click={(e) => {
                 if (disableEmailButton()) {
                   e.preventDefault();
                   e.stopPropagation();
@@ -530,7 +531,7 @@
       </div>
       <div>
         {#if liedReihenfolgeSelected}
-          <Table striped="true">
+          <Table striped={true}>
             <TableHead>
               <TableHeadCell>Lied</TableHeadCell>
               <TableHeadCell></TableHeadCell>
@@ -550,7 +551,7 @@
                             <button
                               class="p-1 rounded-full text-[#93b3e0] hover:text-primary-500 hover:bg-[#dce9f7] dark:hover:bg-[#2c4a7c]/30 transition-colors"
                               title="Liedtext anzeigen"
-                              onclick={() => { liedTextModal = true; liedText = lied.selectedLied.Liedtext; liedTextTitel = lied.selectedLied.Titel; }}
+                              onclick={() => { liedTextModal = true; liedText = lied.selectedLied?.Liedtext as string; liedTextTitel = lied.selectedLied?.Titel as string; }}
                             >
                               <ListMusicOutline size="sm" />
                             </button>

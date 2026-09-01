@@ -60,7 +60,7 @@
 
     onValue(dbRef, (snapshot) => {
       if (snapshot?.val()) {
-        let alle: Termin[] = Object.values(snapshot.val()).map((t) => ({
+        let alle: Termin[] = Object.values(snapshot.val()).map((t: any) => ({
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
@@ -104,14 +104,14 @@
               <TableBodyCell>
                 <div class="flex flex-col place-items-center">
                   <PredigtAvatar prediger={termin.Verantwortlich} />
-                  <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(termin.Verantwortlich)}</div>
+                  <div class="text-sm text-[#3a61a0] dark:text-[#93b3e0]">{getLongNameFromStore(termin.Verantwortlich ?? '')}</div>
                   {formatDate(termin.Termin)}
                 </div>
               </TableBodyCell>
               <TableBodyCell>{resolveMemberNames(termin.KS_Koordination)}</TableBodyCell>
               <TableBodyCell>
                 <div class="flex flex-col">
-                  <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
+                  <div>{termin.Abendmahl == '1' ? 'Abendmahl' : ''}</div>
                   <div>{termin.Zusatzinfo ?? ''}</div>
                 </div>
               </TableBodyCell>

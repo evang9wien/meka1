@@ -65,8 +65,9 @@
   let deleteModalOpen = false;
 
   // Toast
+  type ToastColor = 'green' | 'red';
   let toastMsg = '';
-  let toastType: string = 'green';
+  let toastType: ToastColor = 'green';
   let toastVisible = false;
   let toastTimeout: ReturnType<typeof setTimeout>;
 
@@ -126,6 +127,7 @@
   };
 
   const saveUser = async () => {
+    if (!editUser) return;
     saveStatus = 'saving';
     const newUidTrimmed = editUid.trim();
     const data = {
@@ -140,13 +142,13 @@
         // UID geändert: altes Dokument löschen, neues anlegen
         await setDoc(doc(dbFireStore, 'accounts', newUidTrimmed), data);
         await deleteDoc(doc(dbFireStore, 'accounts', editUser.uid));
-        users = users.map(u => u.uid === editUser.uid
+        users = users.map(u => u.uid === editUser?.uid
           ? { ...u, uid: newUidTrimmed, ...data }
           : u
         );
       } else {
         await updateDoc(doc(dbFireStore, 'accounts', editUser.uid), data);
-        users = users.map(u => u.uid === editUser.uid
+        users = users.map(u => u.uid === editUser?.uid
           ? { ...u, ...data }
           : u
         );
@@ -236,11 +238,13 @@
   };
 
   const confirmDelete = async () => {
+    const userToDelete = deleteUser;
+    if (!userToDelete) return;
     try {
-      await deleteDoc(doc(dbFireStore, 'accounts', deleteUser.uid));
-      users = users.filter(u => u.uid !== deleteUser.uid);
+      await deleteDoc(doc(dbFireStore, 'accounts', userToDelete.uid));
+      users = users.filter(u => u.uid !== userToDelete.uid);
       deleteModalOpen = false;
-      showToast(`${fullName(deleteUser)} entfernt.`, 'green');
+      showToast(`${fullName(userToDelete)} entfernt.`, 'green');
     } catch (e) {
       console.error(e);
       showToast('Fehler beim Löschen.', 'red');
@@ -250,7 +254,7 @@
 
   // ─── Toast ────────────────────────────────────────────────────────────────
 
-  const showToast = (msg: string, type = 'green') => {
+  const showToast = (msg: string, type: ToastColor = 'green') => {
     clearTimeout(toastTimeout);
     toastMsg = msg;
     toastType = type;
@@ -289,7 +293,7 @@
 
       {#if toastVisible}
         <Alert color={toastType} class="mb-4">
-          <CheckCircleSolid slot="icon" class="w-4 h-4" />
+          {#snippet icon()}<CheckCircleSolid class="w-4 h-4" />{/snippet}
           {toastMsg}
         </Alert>
       {/if}
@@ -407,14 +411,14 @@
 
     {#if saveStatus === 'error'}
       <Alert color="red" class="mb-4">
-        <InfoCircleSolid slot="icon" class="w-4 h-4" />
+        {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
         Fehler beim Speichern. Bitte erneut versuchen.
       </Alert>
     {/if}
 
     <div class="flex gap-3 pt-2">
       <GradientButton color="cyanToBlue" onclick={saveUser} disabled={saveStatus === 'saving'}>
-        {#if saveStatus === 'saving'}<Spinner size={4} class="mr-2" />Speichern…{:else}Speichern{/if}
+        {#if saveStatus === 'saving'}<Spinner size="4" class="mr-2" />Speichern…{:else}Speichern{/if}
       </GradientButton>
       <Button color="alternative" onclick={() => (editModalOpen = false)}>Abbrechen</Button>
     </div>
@@ -499,17 +503,17 @@
 
   {#if newStatus === 'exists'}
     <Alert color="yellow" class="mb-3">
-      <InfoCircleSolid slot="icon" class="w-4 h-4" />
+      {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
       Diese UID existiert bereits in der Benutzerliste.
     </Alert>
   {:else if newStatus === 'error'}
     <Alert color="red" class="mb-3">
-      <InfoCircleSolid slot="icon" class="w-4 h-4" />
+      {#snippet icon()}<InfoCircleSolid class="w-4 h-4" />{/snippet}
       Fehler beim Anlegen. Bitte erneut versuchen.
     </Alert>
   {:else if newStatus === 'ok'}
     <Alert color="green" class="mb-3">
-      <CheckCircleSolid slot="icon" class="w-4 h-4" />
+      {#snippet icon()}<CheckCircleSolid class="w-4 h-4" />{/snippet}
       Benutzer erfolgreich angelegt.
     </Alert>
   {/if}
@@ -520,7 +524,7 @@
       onclick={createUser}
       disabled={newStatus === 'saving' || newStatus === 'ok'}
     >
-      {#if newStatus === 'saving'}<Spinner size={4} class="mr-2" />Anlegen…{:else}Anlegen{/if}
+      {#if newStatus === 'saving'}<Spinner size="4" class="mr-2" />Anlegen…{:else}Anlegen{/if}
     </GradientButton>
     <Button color="alternative" onclick={() => (newModalOpen = false)}>Abbrechen</Button>
   </div>
@@ -532,7 +536,7 @@
     <ExclamationCircleOutline class="mx-auto mb-4 text-[#c0392b] w-12 h-12" />
     <h3 class="mb-3 text-lg font-semibold text-[#1e3257] dark:text-[#dce9f7]">Benutzer entfernen?</h3>
     <p class="mb-5 text-sm text-[#3a61a0] dark:text-[#93b3e0]">
-      <strong>{fullName(deleteUser)}</strong> wird aus der Rollenverwaltung entfernt.
+      <strong>{deleteUser ? fullName(deleteUser) : ''}</strong> wird aus der Rollenverwaltung entfernt.
       Der Firebase Auth-Account bleibt erhalten und muss separat in der
       <a href="https://console.firebase.google.com/" target="_blank" class="underline">Firebase Console</a>
       gelöscht werden.

@@ -100,15 +100,15 @@
     ]);
     alleLiederTexte = alleLiederTexteSnap;
 
-    let comboLieder = [];
-    for (const [key, value] of Object.entries(liederGesDoc.data())) {
-      comboLieder.push({ name: value, value: key, ID: key });
+    let comboLieder: LiedEintrag[] = [];
+    for (const [key, value] of Object.entries(liederGesDoc.data() ?? {})) {
+      comboLieder.push({ name: value as string, value: key, ID: key });
     }
     comboLieder = comboLieder.map((cl) => ({ ...cl, Aktiv: 1 }));
 
-    const nichtcomboLieder = [];
-    for (const [key, value] of Object.entries(liederNichtGesDoc.data())) {
-      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    const nichtcomboLieder: LiedEintrag[] = [];
+    for (const [key, value] of Object.entries(liederNichtGesDoc.data() ?? {})) {
+      nichtcomboLieder.push({ name: value as string, value: key, ID: key });
     }
 
     liederListeAll = comboLieder.concat(nichtcomboLieder).sort((a, b) => a.name.localeCompare(b.name));
@@ -144,7 +144,7 @@
       /** @type {Map<string, { count: number, lastPlayed: string }>} */
       const map = new Map();
 
-      for (const termin of Object.values(snapshot.val())) {
+      for (const termin of Object.values(snapshot.val()) as any[]) {
         if (!termin.LiedAuswahl || !Array.isArray(termin.LiedAuswahl)) continue;
         for (const eintrag of termin.LiedAuswahl) {
           const id = String(eintrag.lied_liste_nummer);
@@ -243,7 +243,8 @@
       popupSpinnerModal = true;
       try {
         const result = await searchLiederFn({ searchTerm: filterLiedtext.trim() });
-        const ergebnisse: string[] = result.data.results.map((r: { ID: string }) => r.ID);
+        const data = result.data as { results: Array<{ ID: string }> };
+        const ergebnisse: string[] = data.results.map((r) => r.ID);
         basis = basis.filter((l) => ergebnisse.includes(l.ID));
       } catch {
         const ergebnisse = filterInLiedtext(filterLiedtext.trim());
@@ -473,7 +474,7 @@
         {#if detailLied?.Aktiv}
           <Badge color="primary">Gesungenes Lied</Badge>
         {:else}
-          <Badge color="light">Nicht gesungen</Badge>
+          <Badge color="gray">Nicht gesungen</Badge>
         {/if}
         {#if detailStat}
           <Badge color="yellow">{detailStat.count}× in {STATISTIK_MONATE} Monaten gespielt</Badge>

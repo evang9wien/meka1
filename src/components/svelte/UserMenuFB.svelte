@@ -13,8 +13,9 @@
   onMount(() => {
     initAuth();
 
-    const handleClickOutside = (e) => {
-      if (open && buttonEl && popupEl && !buttonEl.contains(e.target) && !popupEl.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+      if (open && buttonEl && popupEl && !buttonEl.contains(target) && !popupEl.contains(target)) {
         open = false;
       }
     };

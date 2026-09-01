@@ -117,14 +117,14 @@
     console.log(kategorien);
 
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-    const comboLieder = [];
-    for (const [key, value] of Object.entries(liederGes.data())) {
-      comboLieder.push({ name: value, value: key, ID: key });
+    const comboLieder: Array<{ name: string; value: string; ID: string }> = [];
+    for (const [key, value] of Object.entries(liederGes.data() ?? {})) {
+      comboLieder.push({ name: value as string, value: key, ID: key });
     }
     const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-    const nichtcomboLieder = [];
-    for (const [key, value] of Object.entries(liederNichtGes.data())) {
-      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    const nichtcomboLieder: Array<{ name: string; value: string; ID: string }> = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data() ?? {})) {
+      nichtcomboLieder.push({ name: value as string, value: key, ID: key });
     }
 
     alleLieder = comboLieder.concat(nichtcomboLieder);
@@ -135,7 +135,7 @@
     popupSpinnerModal = false;
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('lied_id')) {
-      selectedLied = urlParams.get('lied_id');
+      selectedLied = urlParams.get('lied_id') ?? undefined;
       console.log('Liedid: ', selectedLied);
       handleSelectLied();
     }
@@ -144,6 +144,7 @@
   const handleSelectLied = async () => {
     window.setTimeout(async () => {
       console.log('Sel: ', selectedLied);
+      if (!selectedLied) return;
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set('lied_id', selectedLied);
       window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
@@ -183,13 +184,13 @@
       // popupSpinnerUploadModal = true;
       if (!loadedLied.ID) {
         // neues Lied
-        const index = (await getDoc(doc(dbFireStore, 'lieder', 'currentindex'))).data().index;
+        const index = (await getDoc(doc(dbFireStore, 'lieder', 'currentindex'))).data()?.index;
         console.log('Index: ', index);
         loadedLied.ID = '' + index;
 
         await setDoc(doc(dbFireStore, 'lieder', 'currentindex'), { index: index + 1 });
 
-        loadedLied.Dateiname = loadedLied.Titel.replace(/[^A-Z0-9]/gi, '_');
+        loadedLied.Dateiname = (loadedLied.Titel ?? '').replace(/[^A-Z0-9]/gi, '_');
       }
 
       console.log('Loaded Lied:', loadedLied);
@@ -202,10 +203,10 @@
 
       const gesungenRef = doc(dbFireStore, 'allelieder', 'gesungen');
       const nichtgesungenRef = doc(dbFireStore, 'allelieder', 'nichtgesungen');
-      const obj = {};
+      const obj: Record<string, unknown> = {};
       obj[loadedLied.ID] = loadedLied.Titel;
 
-      const objDel = {};
+      const objDel: Record<string, unknown> = {};
       objDel[loadedLied.ID] = deleteField();
 
       console.log('Obj: ', obj);
@@ -283,7 +284,7 @@
             <Input type="text" id="egnummer" bind:value={loadedLied.EG} placeholder="Nummer im Gesangbuch" />
           </div>
           <div class="w-full">
-            <Label far="kategorie" class="mb-2">Kategorie</Label>
+            <Label for="kategorie" class="mb-2">Kategorie</Label>
             <Select
               id="kategorie"
               class="mt-2"
@@ -304,7 +305,7 @@
           </div>
           <div class="sm:col-span-2">
             <Label for="liedtext" class="mb-2">Liedtext</Label>
-            <Textarea id="liedtext" bind:value={loadedLied.Liedtext} placeholder="Liedtext" rows="6" name="liedtext" />
+            <Textarea id="liedtext" bind:value={loadedLied.Liedtext} placeholder="Liedtext" rows={6} name="liedtext" />
           </div>
           <div class="sm:col-span-2">
             <Label for="liedid" class="mb-2">Lied ID</Label>
@@ -327,7 +328,7 @@
     <!-- <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" /> -->
     <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">Bitte warten ...</h3>
     <h3 class="mb-5 text-lg font-normal text-[#3a61a0] dark:text-[#93b3e0]">
-      <Spinner color="primary" size={8} />&nbsp;Lied wird gespeichert.
+      <Spinner color="primary" size="8" />&nbsp;Lied wird gespeichert.
     </h3>
   </div>
 </Modal>

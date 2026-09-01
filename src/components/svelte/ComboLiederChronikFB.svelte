@@ -46,6 +46,7 @@
     Abendmahl?: string;
     Verantwortlich?: string;
     LiedAuswahl?: Array<{ lied_liste_nummer: string; lied_im_GD_nummer: string; Tasten?: string }>;
+    Titel?: LiedEintrag;
     [key: string]: unknown;
   }
 
@@ -77,7 +78,7 @@
     loadData($currentUser);
   }
 
-  const loadData = async (user) => {
+  const loadData = async (user: unknown) => {
     console.log('User Auth');
     const app = initAppCheck();
     storage = getStorage(app);
@@ -85,16 +86,16 @@
     popupSpinnerModal = true;
 
     const liederGes = await getDoc(doc(dbFireStore, 'allelieder', 'gesungen'));
-    let comboLieder = [];
-    for (const [key, value] of Object.entries(liederGes.data())) {
-      comboLieder.push({ name: value, value: key, ID: key });
+    let comboLieder: LiedEintrag[] = [];
+    for (const [key, value] of Object.entries(liederGes.data() ?? {})) {
+      comboLieder.push({ name: value as string, value: key, ID: key });
     }
 
     comboLieder = comboLieder.map((cl) => ({ ...cl, Aktiv: 1 }));
     const liederNichtGes = await getDoc(doc(dbFireStore, 'allelieder', 'nichtgesungen'));
-    const nichtcomboLieder = [];
-    for (const [key, value] of Object.entries(liederNichtGes.data())) {
-      nichtcomboLieder.push({ name: value, value: key, ID: key });
+    const nichtcomboLieder: LiedEintrag[] = [];
+    for (const [key, value] of Object.entries(liederNichtGes.data() ?? {})) {
+      nichtcomboLieder.push({ name: value as string, value: key, ID: key });
     }
 
     alleLieder = comboLieder.concat(nichtcomboLieder);
@@ -108,7 +109,7 @@
     popupSpinnerModal = false;
   };
 
-  const loadLieder = (year) => {
+  const loadLieder = (year: any) => {
     let y = year.value ? year.value : year;
     const fromDate = dayjs().set('year', y).set('month', 0).set('date', 1).format('YYYY-MM-DD');
     const toDate = dayjs()
@@ -122,7 +123,7 @@
     const dbRef = query(dbref(dbRealtime, 'combo/termine'), orderByKey(), startAt(fromDate), endBefore(toDate));
     onValue(dbRef, async (snapshot) => {
       if (snapshot) {
-        let termine = Object.values(snapshot.val()).map((t) => ({
+        let termine: any[] = Object.values(snapshot.val() ?? {}).map((t: any) => ({
           ...t,
           name: t.Termin + (t.Abendmahl == '1' ? ' (Y)' : ''),
           value: t.Termin,
@@ -133,7 +134,7 @@
         termine = termine
           .map((t) => {
             let res = t.LiedAuswahl;
-            return res.map((r) => ({ ...r, ...t }));
+            return res.map((r: any) => ({ ...r, ...t }));
           })
           .flat();
 
@@ -238,7 +239,7 @@
             <span slot="label">Combolied</span>                          
         </FormField> -->
 
-        <Table sortable bind:sort bind:sortDirection>
+        <Table>
           <TableHead>
             <TableHeadCell>Termin</TableHeadCell>
             <TableHeadCell>

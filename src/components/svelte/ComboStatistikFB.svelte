@@ -92,7 +92,7 @@
   }
 
   /** Lädt Mitglieder aus Firestore und danach die Statistik */
-  const loadAll = async (months) => {
+  const loadAll = async (months: number) => {
     popupSpinnerModal = true;
     const app = initAppCheck();
 
@@ -111,7 +111,7 @@
     loadStatistik(months);
   };
 
-  const loadStatistik = (months) => {
+  const loadStatistik = (months: number) => {
     popupSpinnerModal = true;
     if (unsubscribe) {
       unsubscribe();
@@ -133,7 +133,7 @@
 
     unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot?.val()) {
-        const alle = Object.values(snapshot.val());
+        const alle = Object.values(snapshot.val()) as Record<string, unknown>[];
         // Gesamtzahlen immer aus allen Terminen – unabhängig vom Toggle
         // Comboprobe-Erkennung: Verantwortlich === 'COM' (gleiche Logik wie ComboplanFB)
         totalGottesdienste = alle.filter((t) => t.Verantwortlich !== 'COM').length;
@@ -206,8 +206,10 @@
             map.set(sn, { dates: new Set(), instruments: new Set() });
           }
           const entry = map.get(sn);
-          entry.dates.add(date);          // Termin zählen (nur einmal pro Datum)
-          entry.instruments.add(inst.label); // Instrument merken
+          if (entry) {
+            entry.dates.add(date);          // Termin zählen (nur einmal pro Datum)
+            entry.instruments.add(inst.label); // Instrument merken
+          }
         }
       }
     }
@@ -395,7 +397,7 @@
              <!-- Zählbadge + Stern für Top-3 -->
              <div class="flex items-center gap-1 flex-shrink-0">
                {#if i < 3}
-                 <StarSolid class="{rankColors[rank] ?? 'text-gray-400'}" size="sm" />
+                 <StarSolid class="{rankColors[rank ?? ''] ?? 'text-gray-400'}" size="sm" />
                {/if}
                <Badge color="primary" class="text-sm font-bold px-3 py-1">
                  {entry.count}×

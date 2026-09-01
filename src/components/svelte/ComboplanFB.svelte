@@ -76,7 +76,7 @@
     termineSubscription = onValue(dbRef, (snapshot) => {
       if (snapshot?.val()) {
         termine = Object.entries(snapshot.val())
-          .map(([_, t]) => ({
+          .map(([_, t]: [string, any]) => ({
             ...t,
             name: `${t.Termin}${t.Abendmahl === '1' ? ' (Y)' : ''}`,
             value: t.Termin
@@ -130,7 +130,7 @@
                 <TableBodyCell>{termin.Beamer}</TableBodyCell>
                 <TableBodyCell>
                   <div class="flex flex-col">
-                    <div>{termin.Abendmahl == 1 ? 'Abendmahl' : ''}</div>
+                    <div>{termin.Abendmahl == '1' ? 'Abendmahl' : ''}</div>
                     <div>{termin.Zusatzinfo}</div>
                   </div>
                 </TableBodyCell>
