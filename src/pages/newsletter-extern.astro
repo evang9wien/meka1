@@ -2,7 +2,6 @@
 import Layout from '~/layouts/PageLayout.astro';
 import sanitizeHtml from 'sanitize-html';
 import { JSDOM } from 'jsdom';
-import { span } from 'flowbite-svelte';
 
 const metadata = {
   title: 'Newsletter',
@@ -41,11 +40,11 @@ const sanitizedHtml = sanitizeHtml(rawHtml, {
       rel: 'noopener noreferrer',
       target: '_blank',
     }),
-    span: (tagName, attribs) => {
+    span: (tagName: string, attribs: Record<string, string>) => {
       if (attribs.style) {
         attribs.style = attribs.style
           .split(';')
-          .filter(part => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
+          .filter((part: string) => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
           .join(';')
           .replace(/;;/g, ';')
           .trim();
@@ -53,11 +52,11 @@ const sanitizedHtml = sanitizeHtml(rawHtml, {
       }
       return { tagName, attribs };
     },
-    p: (tagName, attribs) => {
+    p: (tagName: string, attribs: Record<string, string>) => {
       if (attribs.style) {
         attribs.style = attribs.style
           .split(';')
-          .filter(part => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
+          .filter((part: string) => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
           .join(';')
           .replace(/;;/g, ';')
           .trim();
@@ -65,11 +64,11 @@ const sanitizedHtml = sanitizeHtml(rawHtml, {
       }
       return { tagName, attribs };
     },
-    h1: (tagName, attribs) => {
+    h1: (tagName: string, attribs: Record<string, string>) => {
       if (attribs.style) {
         attribs.style = attribs.style
           .split(';')
-          .filter(part => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
+          .filter((part: string) => !part.toLowerCase().trim().match(/^(font-family|font-size)/))
           .join(';')
           .replace(/;;/g, ';')
           .trim();
