@@ -19,7 +19,9 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-.bob
+.bob/**
+!.bob/skills/
+!.bob/skills/**
 
 .astro
 firebasescripts/serviceAccountKey.json
