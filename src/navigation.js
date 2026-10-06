@@ -93,8 +93,8 @@ export const headerData = {
           href: getPermalink('/angebote#graetzloase'),
         },
         {
-          text: 'Meka Classic',
-          href: getPermalink('/angebote#mekaclassic'),
+          text: 'Beziehungsweise Bibel',
+          href: getPermalink('/angebote#beziehungsweisebibel'),
         },
         {
           text: 'Gemeindezeitung',
