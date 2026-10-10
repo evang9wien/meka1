@@ -8,7 +8,7 @@ excerpt: Gemeinsam denken. Gemeinsam gestalten.
  von 9 bis ca. 16:30 Uhr
 
 tags:
-  - news
+  - old
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1788095469/IMG_20260830_131006762_zqzjac.jpg
 publishDate: 2026-08-25T21:00:00.000Z
 author: stfj
