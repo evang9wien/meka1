@@ -100,7 +100,7 @@
     <div class="space-y-6">
       <div class="mb-6">
         <Label for="EMAIL" class="block mb-2">Bitte geben Sie Ihre E-Mail-Adresse ein, um sich anzumelden</Label>
-        <Input id="EMAIL" type="email" name="EMAIL" placeholder="email" bind:value={emailValue} required>
+        <Input id="EMAIL" type="email" name="EMAIL" placeholder="email" class="ps-10" bind:value={emailValue} required>
           {#snippet left()}<EnvelopeSolid class="w-5 h-5 text-[#6a96d3] dark:text-[#93b3e0]" />{/snippet}
         </Input>
       </div>
