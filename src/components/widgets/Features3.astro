@@ -21,6 +21,9 @@ const {
   classes = {},
   bg = await Astro.slots.render('bg'),
 } = Astro.props as Features;
+
+const defaultImageClass = 'w-full h-60 object-cover rounded-xl mx-auto bg-[#93b3e0] shadow-lg';
+const imageClass = (classes?.image as string) ?? (typeof image === 'object' && (image as any)?.class ? (image as any).class : defaultImageClass);
 ---
 <div data-fade class="fade opacity-0 translate-y-12 transition-all duration-1000 ease-out">
   <WidgetWrapper
@@ -36,12 +39,12 @@ const {
     <div aria-hidden="true" class="aspect-w-16 aspect-h-7">
       {
         image && (
-          <div class="w-full h-60 object-cover rounded-xl mx-auto bg-[#93b3e0] shadow-lg">
+          <div class={imageClass}>
             {typeof image === 'string' ? (
               <Fragment set:html={image} />
             ) : (
               <Image
-                class="w-full h-60 object-cover rounded-xl mx-auto bg-[#93b3e0] shadow-lg"
+                class={imageClass}
                 width="auto"
                 height={[240,320]}
                 widths={[400, 768]}
@@ -52,7 +55,7 @@ const {
           </div>
         )
       }
-    </div>    
+    </div>
     <ItemGrid
       items={items}
       columns={columns}
