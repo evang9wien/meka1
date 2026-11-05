@@ -10,6 +10,7 @@ category: impuls
 tags:
   - impuls
 image: https://res.cloudinary.com/dqjdjviob/image/upload/v1792693458/Homepage/News/Titelbild_Vers2_900x536_hnxudp.png
+attribution: "Bild mit KI bearbeitet."
 publishDate: 2026-10-31T20:00:00.000Z
 author: stfj
 pdf: https://firebasestorage.googleapis.com/v0/b/evang9-combo-4cb8e.appspot.com/o/zeitung%2FGemeindezeitung202606.pdf?alt=media&token=3a0f3724-7de0-414d-9053-a9f546889344
