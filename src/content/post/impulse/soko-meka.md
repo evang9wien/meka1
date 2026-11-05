@@ -26,7 +26,7 @@ Enkeltochter wünscht, auch im Internet nicht erhältlich
 ist. Wenn die Schachtel mit den Christbaumkugeln, die
 schon am Baum hingen, als man selbst Kind war, im
 Keller einfach nicht auffindbar ist. Oder wenn plötzlich
-die halbe Familie aus Vegetarier*innen besteht und eine
+die halbe Familie aus Vegetarier\*innen besteht und eine
 ganze Gans zu viel ist für die Wenigen, die noch Fleisch
 essen. Und wenn einem dann noch der Teenager-Sohn
 kurz vorm Heiligen Abend offenbart, dass er heuer den
@@ -45,7 +45,7 @@ steht etwas ganz Einfaches:
 die Geburt eines Kindes. Aber mit
 diesem Kind verbinden Menschen
 seit 2000 Jahren etwas ganz Besonderes.
-Als Christ*innen glauben wir:
+Als Christ\*innen glauben wir:
 In Jesus kommt Gott selbst zur Welt.
 Er bleibt nicht auf Distanz, sondern
 wird Teil unseres menschlichen
